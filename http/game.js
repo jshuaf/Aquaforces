@@ -46,7 +46,7 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	document.getElementById('crewnodisplay').textContent = parseInt(document.getElementById('crewno').value);
 	setState('wait');
 });
-//TEMPORARY EVENT LISTENER FOR THE G KEY TO LEAD YOU TO THE GAME
+//TEMPORARY EVENT LISTENER FOR THE "G" KEY TO LEAD YOU TO THE GAME
 addEventListener('keypress', function(e) {
 	if (e.which == 103) {
 		e.preventDefault();
