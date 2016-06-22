@@ -47,8 +47,8 @@ module.exports = function(server) {
 							hp: 1,
 							members: [tws]
 						};
-					} else if (tws.game.crews[message.crewno].members.length >= 4) {
-						return tws.error('Crew cannot have more than 4 sailors.', 'crew');
+					} else if (tws.game.crews[message.crewno].members.length >= 6) {
+						return tws.error('Crew cannot have more than 6 sailors.', 'crew');
 					} else {
 						tws.game.crews[message.crewno].members.push(tws);
 					}
