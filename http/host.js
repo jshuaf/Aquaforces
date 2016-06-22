@@ -30,7 +30,7 @@ function uncrewUser() {
 	this.parentNode.removeChild(this);
 }
 socket.onmessage = function(m) {
-	console.log(m.data);
+	console.log("New socket message recieved from server", m.data);
 	try {
 		m = JSON.parse(m.data);
 	} catch (e) {
@@ -75,13 +75,11 @@ socket.onclose = function() {
 document.getElementById('dashboard').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'newgame'}));
-	setState('tgame');
 });
 document.getElementById('startgamebtn').addEventListener('click', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'startgame'}));
 	document.getElementById('lonelyfolks').classList.add('hide');
-	this.hidden = true;
 	document.getElementsByClassName('studentselect').forEach(function(e) {
 		e.classList.remove('studentselect');
 	});

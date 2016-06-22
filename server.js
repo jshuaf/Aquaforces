@@ -127,7 +127,7 @@ let server = http.createServer(serverHandler).listen(config.port);
 console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
 require('./sockets.js')(server);
 console.log('Sockets running on port 3000 over plain WS.'.cyan);
-if (process.argv.includes('--test')) {
+if (process.argv.indexOf('--test') >= 0) {
 	console.log('Running test, process will terminate when finished.'.yellow);
 	http.get({
 		port: config.port,
