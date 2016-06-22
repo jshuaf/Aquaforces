@@ -12,7 +12,7 @@ module.exports = function(server) {
 			} catch (e) {}
 		};
 		tws.error = function(body, state) {
-			return tws.trysend(JSON.stringify({event: 'err', body, state}));
+			return tws.trysend(JSON.stringify({event: 'error', body, state}));
 		};
 		if (tws.upgradeReq.url == '/') {
 			tws.on('message', function(message, raw) {
@@ -117,7 +117,7 @@ module.exports = function(server) {
 			});
 		} else {
 			tws.trysend(JSON.stringify({
-				event: 'err',
+				event: 'error',
 				body: 'Invalid upgrade URL.'
 			}));
 			tws.close();
