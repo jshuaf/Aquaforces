@@ -1,4 +1,7 @@
 'use strict';
+const config = {
+	port: 3000
+};
 require('./essentials.js');
 require('colors');
 const http = require('http'),
@@ -120,7 +123,33 @@ let serverHandler = o(function*(req, res) {
 		}
 	} else return errorNotFound(req, res);
 });
-let server = http.createServer(serverHandler).listen(3000);
+let server = http.createServer(serverHandler).listen(config.port);
 console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
 require('./sockets.js')(server);
 console.log('Sockets running on port 3000 over plain WS.'.cyan);
+if (process.argv.includes('--test')) {
+	console.log('Running test, process will terminate when finished.'.yellow);
+	http.get({
+		port: config.port,
+		headers: {host: 'localhost'}
+	}, function(testRes) {
+		testRes.on('data', function(d) {
+			console.log('Data received (' + d.length + ' char' + (d.length == 1 ? '' : 's') + '):' + ('\n> ' + d.toString().replaceAll('\n', '\n> ')).grey);
+		});
+		testRes.on('end', function() {
+			console.log('HTTP test passed, starting socket test.'.green);
+			let WS = require('ws');
+			let wsc = new WS('ws://localhost:' + config.port + '/test');
+			wsc.on('open', function() {
+				console.log('Connected to socket.');
+			});
+			wsc.on('data', function(d) {
+				console.log('Data received (' + d.length + ' char' + (d.length == 1 ? '' : 's') + '):' + ('\n> ' + d.toString().replaceAll('\n', '\n> ')).grey);
+			});
+			wsc.on('close', function() {
+				console.log('Things seem to work!'.green);
+				process.exit();
+			});
+		});
+	});
+}
