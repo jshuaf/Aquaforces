@@ -1,7 +1,8 @@
 'use strict';
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
-var cont = document.getElementById('cont'),
-	errorEl = document.getElementById('error');
+var cont = document.getElementById('cont');
+var errorEl = document.getElementById('error');
+
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -13,21 +14,39 @@ function setState(id) {
 	cont.classList.toggle('pregamescreen', id != 'game');
 }
 
+function throwError(error) {
+	errorEl.textContent = error;
+	console.log("Error: ", error);
+}
+
 socket.onmessage = function(m) {
-	console.log(m.data);
+	//Recieve and parse messages from the server.
+
+	console.log("New socket message recieved: ", m.data);
 	try {
 		m = JSON.parse(m.data);
 	} catch (e) {
 		console.log(e);
 		return alert('Socket error.');
 	}
-	if (m.state) setState(m.state);
-	if (m.event == 'notice' || m.event == 'error') alert(m.body);
-	if (m.event == 'err') errorEl.textContent = m.body;
+
+	if (m.state) {
+		setState(m.state);
+	}
+
+	if (m.event == 'notice') {
+		alert(m.body);
+	} else if (m.event == 'err') {
+		throwError(m.body);
+	}
 };
+
 socket.onclose = function() {
-	errorEl.textContent = 'Socket closed.';
+	throwError('Socket closed.');
 };
+
+//TEACHER CONSOLE
+
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
