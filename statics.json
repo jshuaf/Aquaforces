@@ -1,0 +1,8 @@
+{
+	"/": {
+		"path": "./html/index.html"
+	},
+	"/host/": {
+		"path": "./html/host.html"
+	}
+}

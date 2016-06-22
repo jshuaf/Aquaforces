@@ -1,0 +1,199 @@
+* {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-overflow-scrolling: touch;
+}
+html, body, main {
+	height: 100%;
+	width: 100%;
+	display: inline-block;
+	overflow: hidden;
+}
+body {
+	font: 100% sans-serif;
+	text-align: center;
+	margin: 0;
+	background-color: #000;
+	color: #eee;
+}
+[hidden] { display: none }
+main { position: relative }
+label {
+	font-size: 1.3em;
+	display: block;
+	margin: 0.5em 0.5em 0.5em 0;
+}
+form {
+	margin: 0 auto;
+	background: rgba(0, 0, 0, 0.5);
+	padding: 2em;
+}
+.centerbox {
+	text-align: left;
+	display: table;
+	margin: 0 auto;
+}
+.centerbox span { min-width: 7ch }
+.centerbox label {
+	display: flex;
+	align-items: center;
+}
+.centerbox input {
+	flex-basis: 0;
+	flex-grow: 1;
+}
+@media (max-width: 599px) {
+	.pregamescreen form {
+		width: 100%;
+		padding: 0 0.5em;
+	}
+}
+@media (min-width: 600px) {
+	.pregamescreen form { padding: 0 10% }
+}
+@media (min-height: 32em) {
+	.pregamescreen { margin-top: 50vh }
+	.pregamescreen form { transform: translateY(-50%) }
+}
+form:not([hidden]) {
+	transition: opacity 0.5s;
+	display: table;
+}
+form[hidden] {
+	opacity: 0;
+	height: 0;
+	display: block;
+	padding: 1px;
+	margin-bottom: -2px;
+}
+form:not([hidden]) + form[hidden] {
+	display: table;
+}
+form > :not(label) { text-align: center }
+input { font-size: 1.1em }
+nav, footer {
+	padding: 0.3em;
+	background: #ddd;
+}
+footer { margin-top: 2em }
+header { margin-bottom: 2em }
+button {
+	display: block;
+	margin: 1em auto;
+	padding: 0.2em 1em;
+	background: transparent;
+	font-size: 1.6em;
+	transition: background-color 0.1s;
+	border: 1px solid #aaa;
+	color: #fff;
+}
+button:hover { background: #09f }
+button:active { background: #06f }
+button[disabled] { background: #aaa }
+#error {
+	color: #f00;
+	transition: padding-top 0.3s, padding-bottom 0.3s, height 0.3s;
+	background: #fff;
+	padding: 1em;
+	margin: 0;
+}
+#error:empty {
+	padding: 0;
+	height: 0;
+}
+a {
+	color: #fff;
+	transition: color 0.1s;
+}
+a:hover { color: #6ff }
+a:active { color: #faa }
+ul, ol {
+	text-align: left;
+	font-size: 1.5em;
+}
+#tgame, #game { width: 100% }
+#game {
+	display: block;
+	background: transparent;
+}
+#game h1 {
+	background: #fff;
+	color: #000;
+	margin-top: 0;
+	padding-top: 0.3em;
+}
+#timebar {
+	height: 0.5em;
+	margin-top: 0.3em;
+}
+#game h1 ~ * { font-size: 1.3em }
+#prequestion {
+	position: absolute;
+	top: 0; right: 0; bottom: 0; left: 0;
+	mix-blend-mode: overlay;
+}
+#canoe {
+	width: 20vmin;
+	height: 40vmin;
+	border-radius: 50%;
+	background: #950;
+	margin: calc(5em + 20vh) auto 0;
+}
+#game input[type='text'] { width: 100% }
+#words span {
+	position: absolute;
+	top: 0;
+	padding: 0.2em 0.5em;
+	background: #ff0;
+	color: #000;
+	cursor: pointer;
+	max-width: 10em;
+}
+.half-divider { display: flex }
+.half {
+	width: 0;
+	flex-grow: 1;
+}
+.half:first-of-type { margin-right: 0.5em }
+#lonelyfolks { transition: flex-grow 0.3s }
+#lonelyfolks.hide {
+	flex-grow: 0;
+	overflow: hidden;
+}
+li { width: intrinsic }
+li:empty {
+	opacity: 0;
+	height: 0;
+}
+li[data-n='1'] { color: #f22 }
+ul.studentselect > li { cursor: pointer }
+ul.studentselect > li:hover { text-decoration: line-through }
+ol > li { line-height: 2 }
+ol > li > span {
+	display: inline-block;
+	background: #ff0;
+	color: #111;
+	padding: 0.1em 0.5em;
+	margin: 0 0.3em;
+	border-radius: 0.3em;
+	vertical-align: middle;
+	line-height: 1.3;
+}
+ol.studentselect > li > span { cursor: pointer }
+ol.studentselect > li > span::before {
+	content: '<';
+	display: inline-block;
+	color: #666;
+	width: 0;
+	overflow: hidden;
+	transition: width 0.1s;
+	vertical-align: top;
+	padding-bottom: 0.2em;
+}
+ol > li > span:hover::before { width: 2ch }
+canvas {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
