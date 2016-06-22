@@ -115,6 +115,8 @@ module.exports = function(server) {
 					});
 				}
 			});
+        } else if (tws.upgradeReq.url == '/host/') {
+            
 		} else {
 			tws.trysend(JSON.stringify({
 				event: 'err',

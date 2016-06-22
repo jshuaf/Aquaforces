@@ -1,30 +1,22 @@
 <p id="error"></p>
-<div id="cont" class="pregamescreen">
-	<form id="join">
-		<h1>Aquaforces!</h1>
-		<p><i><a href="host/">Host dashboard</a></i></p>
-		<div class="centerbox">
-			<label><span>Game #</span> <input type="number" id="code" autofocus="" min="0" max="1000000" /></label>
-			<label><span>Name</span> <input type="text" id="name" maxlength="24" /></label>
-		</div>
-		<button id="joinbtn">Join</button>
+<div id="cont">
+	<form id="dashboard">
+		<h1>Host dashboard</h1>
+		<button>New game</button>
 	</form>
-	<form id="crew" hidden="">
-		<label>Crew # <input type="number" id="crewno" min="1" max="12" /></label>
-		<button>Join crew</button>
+	<form id="tgame" hidden="">
+		<h1 id="game-code-cont">Game code: </h1>
+        <div class="half-divider">
+            <div class="half" id="lonelyfolks">
+                <h2>Available sailors</h2>
+                <ul class="studentselect" id="loneusers"></ul>
+            </div>
+            <div class="half">
+                <h2>Crews</h2>
+                <ol class="studentselect" id="crews"><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li></ol>
+            </div>
+        </div>
+		<button id="startgamebtn" disabled="">Start game</button>
 	</form>
-	<form id="wait" hidden="">
-		<h1>You're in crew <span id="crewnodisplay"></span>!</h1>
-		<p>Waiting for other sailors…</p>
-	</form>
-    <form id="game" hidden="">
-        <h1 id="question"><span> </span> <div id="timebar"></div></h1>
-		<div id="prequestion">
-			<div id="canoe"></div>
-			<div id="words"></div>
-		</div>
-    </form>
 </div>
-<canvas id="canvas"></canvas>
-<script async="" src="game.js"></script>
-<script async="" src="waves.js"></script>
+<script async="" src="/console.js"></script>
