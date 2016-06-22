@@ -12,7 +12,7 @@ module.exports = function(server) {
 			} catch (e) {}
 		};
 		tws.error = function(body, state) {
-			return tws.trysend(JSON.stringify({event: 'err', body, state}));
+			return tws.trysend(JSON.stringify({event: 'error', body, state}));
 		};
 		if (tws.upgradeReq.url == '/') {
 			tws.on('message', function(message, raw) {
@@ -47,8 +47,8 @@ module.exports = function(server) {
 							hp: 1,
 							members: [tws]
 						};
-					} else if (tws.game.crews[message.crewno].members.length >= 4) {
-						return tws.error('Crew cannot have more than 4 sailors.', 'crew');
+					} else if (tws.game.crews[message.crewno].members.length >= 6) {
+						return tws.error('Crew cannot have more than 6 sailors.', 'crew');
 					} else {
 						tws.game.crews[message.crewno].members.push(tws);
 					}
@@ -117,7 +117,7 @@ module.exports = function(server) {
 			});
 		} else {
 			tws.trysend(JSON.stringify({
-				event: 'err',
+				event: 'error',
 				body: 'Invalid upgrade URL.'
 			}));
 			tws.close();
