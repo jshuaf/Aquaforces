@@ -116,7 +116,7 @@ module.exports = function(server) {
 				}
 			});
         } else if (tws.upgradeReq.url == '/console/') {
-            
+
 		} else {
 			tws.trysend(JSON.stringify({
 				event: 'err',
