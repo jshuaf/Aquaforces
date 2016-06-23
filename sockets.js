@@ -2,6 +2,43 @@
 const ws = require('ws');
 let games = {};
 
+/*games object format:
+{
+	"game-code1":
+	{
+		"teams": [
+			"team-code1":
+			{
+				"people": ["name1", "name2", "name3"],
+				"position": integer,
+				"default-velocity": integer,
+				"hp": integer (null when has_died_once is true),
+				"state": "finished" / "drowning" (raft) / "whirlpool"
+				"has_died_once": bool,
+				"attempts":
+				[
+					{
+
+					}
+				]
+			},
+		],
+		"qa": [
+			{
+				"question": string,
+				"wrong_answers": [string, string, string, string],
+				"right_answer": string,
+			},
+			{
+				"question": string,
+				"wrong_answers": [string, string, string, string],
+				"right_answer": string,
+			},
+		]
+	},
+}
+*/
+
 module.exports = function(server) {
 	let wss = new ws.Server({server});
 	wss.on('connection', function(tws) {
@@ -12,7 +49,7 @@ module.exports = function(server) {
 			} catch (e) {}
 		};
 		tws.error = function(body, state) {
-			return tws.trysend(JSON.stringify({event: 'err', body, state}));
+			return tws.trysend(JSON.stringify({event: 'error', body, state}));
 		};
 		if (tws.upgradeReq.url == '/') {
 			tws.on('message', function(message, raw) {
@@ -22,13 +59,13 @@ module.exports = function(server) {
 				} catch (e) {
 					return tws.error('JSON error.');
 				}
-				if (message.event == 'user') {
+				if (message.event == 'new-user') {
 					let tgame = games[message.code];
 					if (!tgame) return tws.error('Invalid game code.', 'join');
 					if (!message.name) return tws.error('You must enter a username.', 'join');
 					if (message.name.length > 24) return tws.error('You must enter a username less than 24 characters.', 'join');
 					if (tgame.usernames.includes(message.name)) return tws.error('Your username has been taken', 'join');
-                    if (tgame.hasStarted) return tws.error('Game has started.', 'join');
+          if (tgame.hasStarted) return tws.error('Game has started.', 'join');
 					tws.user = message.name;
 					tws.game = tgame;
 					tws.game.usernames.push(message.name);
@@ -37,7 +74,7 @@ module.exports = function(server) {
 						event: 'add-loneuser',
 						user: tws.user
 					}));
-				} else if (message.event == 'crew') {
+				} else if (message.event == 'add-user-to-crew') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (!message.crewno || typeof message.crewno != 'number') return tws.error('You must enter a crew number.', 'crew');
 					if (!(message.crewno <= 12 && message.crewno >= 1)) return tws.error('crew number must be between 1 and 12, inclusive.', 'crew');
@@ -45,16 +82,17 @@ module.exports = function(server) {
 					if (!tws.game.crews[message.crewno]) {
 						tws.game.crews[message.crewno] = {
 							hp: 1,
+							position: 0,
 							members: [tws]
 						};
-					} else if (tws.game.crews[message.crewno].members.length >= 4) {
-						return tws.error('Crew cannot have more than 4 sailors.', 'crew');
+					} else if (tws.game.crews[message.crewno].members.length >= 6) {
+						return tws.error('Crew cannot have more than 6 sailors.', 'crew');
 					} else {
 						tws.game.crews[message.crewno].members.push(tws);
 					}
 					tws.crewno = message.crewno;
 					tws.game.host.trysend(JSON.stringify({
-						event: 'crewuser',
+						event: 'add-user-to-crew',
 						user: tws.user,
 						crew: message.crewno
 					}));
@@ -74,7 +112,7 @@ module.exports = function(server) {
 				} catch (e) {
 					return tws.error('JSON error.');
 				}
-				if (message.event == 'newgame') {
+				if (message.event == 'new-game') {
 					let id = Math.floor(Math.random() * 1e6);
 					games[id] = {
 						host: tws,
@@ -89,21 +127,21 @@ module.exports = function(server) {
                         hasStarted: false
 					};
 					tws.game = games[id];
-					return tws.trysend(JSON.stringify({event: 'startgame', id}));
-				} else if (message.event == 'uncrewuser') {
+					return tws.trysend(JSON.stringify({event: 'new-game', id}));
+				} else if (message.event == 'remove-user-from-crew') {
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(ttws) {
 							if (ttws.user == message.user) ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
 						});
 					});
-				} else if (message.event == 'removeuser') {
+				} else if (message.event == 'remove-user') {
 					tws.game.users.forEach(function(ttws, i) {
 						if (ttws.user == message.user) {
                             ttws.trysend(JSON.stringify({event: 'set-state', state: 'join'}));
                             tws.game.users.splice(i, 1);
                         }
 					});
-				} else if (message.event == 'startgame') {
+				} else if (message.event == 'start-game') {
 					if (tws.game.crews.length < 1) {
 						return tws.error('Need more crews to begin game.', 'game');
 					}
@@ -119,7 +157,7 @@ module.exports = function(server) {
 
 		} else {
 			tws.trysend(JSON.stringify({
-				event: 'err',
+				event: 'error',
 				body: 'Invalid upgrade URL.'
 			}));
 			tws.close();

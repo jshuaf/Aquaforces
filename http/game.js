@@ -22,8 +22,7 @@ socket.onmessage = function(m) {
 		return alert('Socket error.');
 	}
 	if (m.state) setState(m.state);
-	if (m.event == 'notice' || m.event == 'error') alert(m.body);
-	if (m.event == 'err') errorEl.textContent = m.body;
+	if (m.event == 'notice' || m.event == 'error') errorEl.textContent = m.body;
 };
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
@@ -31,16 +30,16 @@ socket.onclose = function() {
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
-		event: 'user',
-		code: parseInt(document.getElementById('code').value),
-		name: document.getElementById('name').value
+		event: 'new-user',
+		code: parseInt(document.getElementById('game-code').value),
+		name: document.getElementById('crewmember-name').value
 	}));
 	setState('crew');
 });
 document.getElementById('crew').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
-		event: 'crew',
+		event: 'add-user-to-crew',
 		crewno: parseInt(document.getElementById('crewno').value)
 	}));
 	document.getElementById('crewnodisplay').textContent = parseInt(document.getElementById('crewno').value);
@@ -120,7 +119,7 @@ function animationUpdate() {
 	lastTime = thisTime;
 	requestAnimationFrame(animationUpdate);
 }
-var keywords;
-request('/keywords.json', function(res) {
-	keywords = JSON.parse(res);
-});
+//var keywords;
+//request('/keywords.json', function(res) {
+//keywords = JSON.parse(res);
+//});
