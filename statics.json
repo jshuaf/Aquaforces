@@ -4,5 +4,8 @@
 	},
 	"/host/": {
 		"path": "./html/host.html"
-	}
+	},
+    "/console/": {
+        "path": "./html/console.html"
+    }
 }
