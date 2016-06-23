@@ -59,7 +59,7 @@ module.exports = function(server) {
 				} catch (e) {
 					return tws.error('JSON error.');
 				}
-				if (message.event == 'user') {
+				if (message.event == 'new-user') {
 					let tgame = games[message.code];
 					if (!tgame) return tws.error('Invalid game code.', 'join');
 					if (!message.name) return tws.error('You must enter a username.', 'join');
@@ -74,7 +74,7 @@ module.exports = function(server) {
 						event: 'add-loneuser',
 						user: tws.user
 					}));
-				} else if (message.event == 'crew') {
+				} else if (message.event == 'add-user-to-crew') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (!message.crewno || typeof message.crewno != 'number') return tws.error('You must enter a crew number.', 'crew');
 					if (!(message.crewno <= 12 && message.crewno >= 1)) return tws.error('crew number must be between 1 and 12, inclusive.', 'crew');
@@ -82,6 +82,7 @@ module.exports = function(server) {
 					if (!tws.game.crews[message.crewno]) {
 						tws.game.crews[message.crewno] = {
 							hp: 1,
+							position: 0,
 							members: [tws]
 						};
 					} else if (tws.game.crews[message.crewno].members.length >= 6) {
@@ -91,7 +92,7 @@ module.exports = function(server) {
 					}
 					tws.crewno = message.crewno;
 					tws.game.host.trysend(JSON.stringify({
-						event: 'crewuser',
+						event: 'add-user-to-crew',
 						user: tws.user,
 						crew: message.crewno
 					}));
@@ -111,7 +112,7 @@ module.exports = function(server) {
 				} catch (e) {
 					return tws.error('JSON error.');
 				}
-				if (message.event == 'newgame') {
+				if (message.event == 'new-game') {
 					let id = Math.floor(Math.random() * 1e6);
 					games[id] = {
 						host: tws,
@@ -126,21 +127,21 @@ module.exports = function(server) {
                         hasStarted: false
 					};
 					tws.game = games[id];
-					return tws.trysend(JSON.stringify({event: 'startgame', id}));
-				} else if (message.event == 'uncrewuser') {
+					return tws.trysend(JSON.stringify({event: 'new-game', id}));
+				} else if (message.event == 'remove-user-from-crew') {
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(ttws) {
 							if (ttws.user == message.user) ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
 						});
 					});
-				} else if (message.event == 'removeuser') {
+				} else if (message.event == 'remove-user') {
 					tws.game.users.forEach(function(ttws, i) {
 						if (ttws.user == message.user) {
                             ttws.trysend(JSON.stringify({event: 'set-state', state: 'join'}));
                             tws.game.users.splice(i, 1);
                         }
 					});
-				} else if (message.event == 'startgame') {
+				} else if (message.event == 'start-game') {
 					if (tws.game.crews.length < 1) {
 						return tws.error('Need more crews to begin game.', 'game');
 					}

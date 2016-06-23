@@ -11,14 +11,14 @@ function setState(id) {
 }
 function removeUser() {
 	socket.send(JSON.stringify({
-		event: 'removeuser',
+		event: 'remove-user',
 		user: this.dataset.username
 	}));
 	this.parentNode.removeChild(this);
 }
 function uncrewUser() {
 	socket.send(JSON.stringify({
-		event: 'uncrewuser',
+		event: 'remove-user-from-crew',
 		user: this.dataset.username
 	}));
 	var li = document.createElement('li');
@@ -30,7 +30,7 @@ function uncrewUser() {
 	this.parentNode.removeChild(this);
 }
 socket.onmessage = function(m) {
-	console.log("New socket message recieved from server", m.data);
+	console.log(m.data);
 	try {
 		m = JSON.parse(m.data);
 	} catch (e) {
@@ -38,10 +38,10 @@ socket.onmessage = function(m) {
 		return alert('Socket error.');
 	}
 	if (m.event == 'notice' || m.event == 'error') alert(m.body);
-	else if (m.event == 'err') {
+	else if (m.event == 'error') {
 		if (m.state) setState(m.state);
 		errorEl.textContent = m.body;
-	} else if (m.event == 'startgame') {
+	} else if (m.event == 'new-game') {
 		document.getElementById('game-code-cont').appendChild(document.createTextNode(m.id));
 	} else if (m.event == 'add-loneuser') {
 		var li = document.createElement('li');
@@ -49,7 +49,7 @@ socket.onmessage = function(m) {
 		li.appendChild(document.createTextNode(m.user));
 		li.onclick = removeUser;
 		document.getElementById('loneusers').appendChild(li);
-	} else if (m.event == 'crewuser') {
+	} else if (m.event == 'add-user-to-crew') {
 		document.getElementById('loneusers').childNodes.forEach(function(e) {
 			if (e.firstChild.nodeValue == m.user) e.parentNode.removeChild(e);
 		});
@@ -59,14 +59,14 @@ socket.onmessage = function(m) {
 		span.onclick = uncrewUser;
 		document.getElementById('crews').children[m.crew - 1].appendChild(span);
 		document.getElementById('crews').children[m.crew - 1].dataset.n++;
-		document.getElementById('startgamebtn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
-	} else if (m.event == 'removeuser') {
+		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
+	} else if (m.event == 'remove-user') {
 		var e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
 		if (e) {
 			e.parentNode.removeChild(e);
 			if (e.parentNode.dataset.n) e.parentNode.dataset.n--;
 		}
-		document.getElementById('startgamebtn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
+		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 	}
 };
 socket.onclose = function() {
@@ -74,12 +74,14 @@ socket.onclose = function() {
 };
 document.getElementById('dashboard').addEventListener('submit', function(e) {
 	e.preventDefault();
-	socket.send(JSON.stringify({event: 'newgame'}));
+	socket.send(JSON.stringify({event: 'new-game'}));
+	setState('tgame');
 });
-document.getElementById('startgamebtn').addEventListener('click', function(e) {
+document.getElementById('start-game-btn').addEventListener('click', function(e) {
 	e.preventDefault();
-	socket.send(JSON.stringify({event: 'startgame'}));
+	socket.send(JSON.stringify({event: 'start-game'}));
 	document.getElementById('lonelyfolks').classList.add('hide');
+	this.hidden = true;
 	document.getElementsByClassName('studentselect').forEach(function(e) {
 		e.classList.remove('studentselect');
 	});
