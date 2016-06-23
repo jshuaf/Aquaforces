@@ -47,7 +47,7 @@ socket.onclose = function() {
 	throwError('Socket closed.');
 };
 
-//TEACHER CONSOLE
+//JOINING A GAME
 
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
@@ -57,6 +57,7 @@ document.getElementById('join').addEventListener('submit', function(e) {
 		name: document.getElementById('name').value
 	}));
 });
+
 document.getElementById('crew').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({

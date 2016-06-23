@@ -2,6 +2,43 @@
 const ws = require('ws');
 let games = {};
 
+/*games object format:
+{
+	"game-code1":
+	{
+		"teams": [
+			"team-code1":
+			{
+				"people": ["name1", "name2", "name3"],
+				"position": integer,
+				"default-velocity": integer,
+				"hp": integer (null when has_died_once is true),
+				"state": "finished" / "drowning" (raft) / "whirlpool"
+				"has_died_once": bool,
+				"attempts":
+				[
+					{
+
+					}
+				]
+			},
+		],
+		"qa": [
+			{
+				"question": string,
+				"wrong_answers": [string, string, string, string],
+				"right_answer": string,
+			},
+			{
+				"question": string,
+				"wrong_answers": [string, string, string, string],
+				"right_answer": string,
+			},
+		]
+	},
+}
+*/
+
 module.exports = function(server) {
 	let wss = new ws.Server({server});
 	wss.on('connection', function(tws) {
@@ -28,7 +65,7 @@ module.exports = function(server) {
 					if (!message.name) return tws.error('You must enter a username.', 'join');
 					if (message.name.length > 24) return tws.error('You must enter a username less than 24 characters.', 'join');
 					if (tgame.usernames.includes(message.name)) return tws.error('Your username has been taken', 'join');
-                    if (tgame.hasStarted) return tws.error('Game has started.', 'join');
+          if (tgame.hasStarted) return tws.error('Game has started.', 'join');
 					tws.user = message.name;
 					tws.game = tgame;
 					tws.game.usernames.push(message.name);
