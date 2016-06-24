@@ -58,7 +58,7 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	setState('wait');
 });
 var timeBar = document.getElementById('timebar'),
-	timeTotal = 10,
+	timeTotal = 25,
 	timeProportion = 1,
 	lastTime,
 	hp = 1;
