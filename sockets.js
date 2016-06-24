@@ -126,7 +126,7 @@ module.exports = function(server) {
 						crew.members.forEach(function(member) {
 							let question = tws.game.questions[Math.floor(Math.random() * tws.game.questions.length)];
 							member.trysend(JSON.stringify({event: 'question', question: question.text}));
-							crew.members[Math.floor(Math.random() * crew.length)].trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+							crew.members[Math.floor(Math.random() * crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						});
 					});
 				}
