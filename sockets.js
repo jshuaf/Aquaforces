@@ -28,7 +28,7 @@ module.exports = function(server) {
 					if (!message.name) return tws.error('You must enter a username.', 'join');
 					if (message.name.length > 24) return tws.error('You must enter a username less than 24 characters.', 'join');
 					if (tgame.usernames.includes(message.name)) return tws.error('Your username has been taken', 'join');
-          if (tgame.hasStarted) return tws.error('Game has started.', 'join');
+					if (tgame.hasStarted) return tws.error('Game has started.', 'join');
 					tws.user = message.name;
 					tws.game = tgame;
 					tws.game.usernames.push(message.name);
@@ -41,7 +41,7 @@ module.exports = function(server) {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (!message.crewno || typeof message.crewno != 'number') return tws.error('You must enter a crew number.', 'crew');
 					if (!(message.crewno <= 12 && message.crewno >= 1)) return tws.error('crew number must be between 1 and 12, inclusive.', 'crew');
-                    if (tws.game.hasStarted) return tws.error('Game has started.', 'join');
+					if (tws.game.hasStarted) return tws.error('Game has started.', 'join');
 					if (!tws.game.crews[message.crewno]) {
 						tws.game.crews[message.crewno] = {
 							hp: 1,
@@ -87,7 +87,7 @@ module.exports = function(server) {
 							text: 'What\'s 1 + 1?',
 							answer: 2
 						}],
-                        hasStarted: false
+						hasStarted: false
 					};
 					tws.game = games[id];
 					return tws.trysend(JSON.stringify({event: 'new-game', id}));
@@ -100,15 +100,15 @@ module.exports = function(server) {
 				} else if (message.event == 'remove-user') {
 					tws.game.users.forEach(function(ttws, i) {
 						if (ttws.user == message.user) {
-                            ttws.trysend(JSON.stringify({event: 'set-state', state: 'join'}));
-                            tws.game.users.splice(i, 1);
-                        }
+							ttws.trysend(JSON.stringify({event: 'set-state', state: 'join'}));
+							tws.game.users.splice(i, 1);
+						}
 					});
 				} else if (message.event == 'start-game') {
 					if (tws.game.crews.length < 1) {
 						return tws.error('Need more crews to begin game.', 'game');
 					}
-                    tws.game.hasStarted = true;
+					tws.game.hasStarted = true;
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(socket) {
 							socket.trysend(JSON.stringify({event: 'set-state', state: 'game'}));
@@ -116,7 +116,7 @@ module.exports = function(server) {
 					});
 				}
 			});
-        } else if (tws.upgradeReq.url == '/console/') {
+		} else if (tws.upgradeReq.url == '/console/') {
 
 		} else {
 			tws.trysend(JSON.stringify({
