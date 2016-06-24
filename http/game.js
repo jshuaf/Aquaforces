@@ -86,9 +86,13 @@ var includeTimeBar = true;
 function startQuestion(question) {
 	document.getElementById('question').firstChild.firstChild.nodeValue = question;
 	timeProportion = 1;
+	includeTimeBar = true;
 }
 function failQuestion() {
-
+	socket.send(JSON.stringify({
+		event: 'timeout-question',
+		text: document.getElementById('question').firstChild.firstChild.nodeValue
+	}));
 }
 function animationUpdate() {
 	var thisTime = new Date().getTime(),

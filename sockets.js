@@ -74,7 +74,25 @@ module.exports = function(server) {
 							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						ttws.questionIDsDone.push(questionID);
-					}
+					} else tws.error('Invalid answer text.');
+				} else if (m.event == 'timeout-question') {
+					let qid;
+					tws.game.activeQuestionIDs.forEach(function(questionID) {
+						console.log(tws.game.questions[questionID].text);
+						if (tws.game.questions[questionID].text == m.text) qid = questionID;
+					});
+					if (qid) {
+						tws.game.activeQuestionIDs.splice(tws.game.activeQuestionIDs.indexOf(qid), 1);
+						let questionID = 0;
+						while (!questionID || tws.questionIDsDone.includes(questionID)) questionID = Math.floor(Math.random() * tws.game.questions.length);
+						let question = tws.game.questions[questionID];
+						tws.game.activeQuestionIDs.push(questionID);
+						tws.trysend(JSON.stringify({event: 'question', question: question.text}));
+						let crew = tws.game.crews[tws.crewno],
+							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+						ttws.questionIDsDone.push(questionID);
+					} else tws.error('Invalid question text.');
 				} else tws.error('Unknown socket event ' + m.event + ' recieved.');
 			});
 			tws.on('close', function() {
