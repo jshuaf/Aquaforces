@@ -26,13 +26,11 @@ socket.onmessage = function(m) {
 	if (m.event == 'notice' || m.event == 'error') errorEl.textContent = m.body;
 	if (m.event == 'start-game') {
 		answers = m.answers;
-		startQuestion();
+		lastTime = new Date().getTime();
+		animationUpdate();
+		setInterval(addWord, 700);
 	}
-	if (m.event == 'start-game') {
-		answers = m.answers;
-		startQuestion();
-	}
-	if (m.event == 'question') document.getElementById('question').firstChild.firstChild.nodeValue = m.question;
+	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
 	if (m.event == 'answer-status') bg(m.correct ? '#0f0' : '#f00');
 };
@@ -58,7 +56,7 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	setState('wait');
 });
 var timeBar = document.getElementById('timebar'),
-	timeTotal = 10,
+	timeTotal = 25,
 	timeProportion = 1,
 	lastTime,
 	hp = 1;
@@ -72,7 +70,7 @@ function wordClickListener() {
 function addWord() {
 	var word = document.createElement('span'),
 		answer;
-	if (correctAnswerQueue.length && Math.random() < 0.3) answer = correctAnswerQueue.shift();
+	if (correctAnswerQueue.length && Math.random() < 0.15) answer = correctAnswerQueue.shift();
 	else answer = answers[Math.floor(Math.random() * answers.length)];
 	word.appendChild(document.createTextNode(answer));
 	words.appendChild(word);
@@ -85,11 +83,9 @@ function addWord() {
 	word.addEventListener('click', wordClickListener);
 }
 var includeTimeBar = true;
-function startQuestion() {
-	//updateCommand();
-	lastTime = new Date().getTime();
-	animationUpdate();
-	setInterval(addWord, 1500);
+function startQuestion(question) {
+	document.getElementById('question').firstChild.firstChild.nodeValue = question;
+	timeProportion = 1;
 }
 function failQuestion() {
 
