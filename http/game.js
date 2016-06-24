@@ -12,7 +12,7 @@ function setState(id) {
 	if (e.length) e[e.length - 1].focus();
 	cont.classList.toggle('pregamescreen', id != 'game');
 }
-
+var answers = [];
 socket.onmessage = function(m) {
 	console.log(m.data);
 	try {
@@ -23,6 +23,10 @@ socket.onmessage = function(m) {
 	}
 	if (m.state) setState(m.state);
 	if (m.event == 'notice' || m.event == 'error') errorEl.textContent = m.body;
+	if (m.event == 'start-game') {
+		answers = m.answers;
+		startQuestion();
+	}
 };
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
@@ -61,7 +65,7 @@ function updateCommand() {
 var words = document.getElementById('words');
 function addWord() {
 	var word = document.createElement('span');
-	word.appendChild(document.createTextNode(keywords[Math.floor(Math.random() * keywords.length)].ob));
+	word.appendChild(document.createTextNode(answers[Math.floor(Math.random() * answers.length)]));
 	words.appendChild(word);
 	word.dataset.x = Math.random() * (innerWidth - word.offsetWidth - 8) + 4;
 	word.dataset.y = -100;
@@ -72,7 +76,7 @@ function addWord() {
 }
 var includeTimeBar = true;
 function startQuestion() {
-	updateCommand();
+	//updateCommand();
 	lastTime = new Date().getTime();
 	animationUpdate();
 	setInterval(addWord, 1500);

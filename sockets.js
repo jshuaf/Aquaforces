@@ -101,9 +101,7 @@ module.exports = function(server) {
 							if (!answers.includes(answer)) answers.push(answer);
 						}
 					}
-					tws.users.forEach(function(ttws) {
-						ttws.trysend(JSON.stringify({event: 'answers', answers}));
-					});
+					tws.game.answers = answers;
 				} else if (message.event == 'remove-user-from-crew') {
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(ttws) {
@@ -118,14 +116,10 @@ module.exports = function(server) {
 						}
 					});
 				} else if (message.event == 'start-game') {
-					if (tws.game.crews.length < 1) {
-						return tws.error('Need more crews to begin game.', 'game');
-					}
+					if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
 					tws.game.hasStarted = true;
-					tws.game.crews.forEach(function(crew) {
-						crew.members.forEach(function(socket) {
-							socket.trysend(JSON.stringify({event: 'set-state', state: 'game'}));
-						});
+					tws.game.users.forEach(function(ttws) {
+						ttws.trysend(JSON.stringify({event: 'start-game', state: 'game', answers: tws.game.answers}));
 					});
 				}
 			});
