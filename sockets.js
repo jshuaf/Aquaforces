@@ -57,6 +57,12 @@ module.exports = function(server) {
 						user: tws.user,
 						crew: m.crewno
 					}));
+				} else if (m.event == 'answer-chosen') {
+					let correct = false;
+					tws.game.activeQuestionIDs.forEach(function(questionID) {
+						if (tws.game.questions[questionID].answer == m.text) correct = true;
+					});
+					tws.trysend(JSON.stringify({event: 'answer-status', correct}));
 				} else tws.error('Unknown socket event ' + m.event + ' recieved.');
 			});
 			tws.on('close', function() {
@@ -81,6 +87,7 @@ module.exports = function(server) {
 						usernames: [],
 						users: [],
 						questions: [],
+						activeQuestionIDs: [],
 						hasStarted: false
 					};
 					for (let i = 0; i < 100; i++) {
@@ -125,7 +132,9 @@ module.exports = function(server) {
 					});
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(member) {
-							let question = tws.game.questions[Math.floor(Math.random() * tws.game.questions.length)];
+							let questionID = Math.floor(Math.random() * tws.game.questions.length),
+								question = tws.game.questions[questionID];
+							tws.game.activeQuestionIDs.push(questionID);
 							member.trysend(JSON.stringify({event: 'question', question: question.text}));
 							crew.members[Math.floor(Math.random() * crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						});
