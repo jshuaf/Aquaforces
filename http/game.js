@@ -34,6 +34,7 @@ socket.onmessage = function(m) {
 	}
 	if (m.event == 'question') document.getElementById('question').firstChild.firstChild.nodeValue = m.question;
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
+	if (m.event == 'answer-status') bg(m.correct ? '#0f0' : '#f00');
 };
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
@@ -62,6 +63,12 @@ var timeBar = document.getElementById('timebar'),
 	lastTime,
 	hp = 1;
 var words = document.getElementById('words');
+function wordClickListener() {
+	socket.send(JSON.stringify({
+		event: 'answer-chosen',
+		text: this.firstChild.nodeValue
+	}));
+}
 function addWord() {
 	var word = document.createElement('span'),
 		answer;
@@ -72,9 +79,10 @@ function addWord() {
 	word.dataset.x = Math.random() * (innerWidth - word.offsetWidth - 8) + 4;
 	word.dataset.y = -100;
 	word.dataset.vx = (Math.random() - 0.5) / 100;
-	word.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 5000;
+	word.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
 	word.style.left = '0';
 	word.style.transform = 'translate(0, -100px)';
+	word.addEventListener('click', wordClickListener);
 }
 var includeTimeBar = true;
 function startQuestion() {

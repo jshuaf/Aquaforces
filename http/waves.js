@@ -118,4 +118,10 @@ function hsl(h, s, l, a) {
 function rect(x, y, w, h) {
 	ctx.fillRect(x, y, w, h);
 }
+function bg() {
+	var oldFill = ctx.fillStyle;
+	fill.apply(this, arguments);
+	ctx.fillRect(0, 0, width, height);
+	fill(oldFill);
+}
 resizeHandler();
