@@ -103,7 +103,10 @@ module.exports = function(server) {
 				} else if (message.event == 'remove-user-from-crew') {
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(ttws) {
-							if (ttws.user == message.user) ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
+							if (ttws.user == message.user) {
+								ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
+								crew.splice(crew.indexOf(ttws), 1);
+							}
 						});
 					});
 				} else if (message.event == 'remove-user') {
