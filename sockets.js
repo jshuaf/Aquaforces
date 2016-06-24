@@ -85,7 +85,7 @@ module.exports = function(server) {
 						questions: [],
 						hasStarted: false
 					};
-					for (var i = 0; i < 100; i++) {
+					for (let i = 0; i < 100; i++) {
 						games[id].questions.push({
 							text: 'What\'s ' + i + ' + ' + i + '?',
 							answer: (2 * i).toString(),
@@ -93,7 +93,15 @@ module.exports = function(server) {
 						});
 					}
 					tws.game = games[id];
-					return tws.trysend(JSON.stringify({event: 'new-game', id}));
+					tws.trysend(JSON.stringify({event: 'new-game', id}));
+					var answers = [];
+					for (let question of tws.game.questions) {
+						if (!answers.includes(question.answer)) answers.push(question.answer);
+						for (let answer of question.incorrectAnswers) {
+							if (!answers.includes(answer)) answers.push(answer);
+						}
+					}
+					tws.game.answers = answers;
 				} else if (message.event == 'remove-user-from-crew') {
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(ttws) {
@@ -108,14 +116,10 @@ module.exports = function(server) {
 						}
 					});
 				} else if (message.event == 'start-game') {
-					if (tws.game.crews.length < 1) {
-						return tws.error('Need more crews to begin game.', 'game');
-					}
+					if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
 					tws.game.hasStarted = true;
-					tws.game.crews.forEach(function(crew) {
-						crew.members.forEach(function(socket) {
-							socket.trysend(JSON.stringify({event: 'set-state', state: 'game'}));
-						});
+					tws.game.users.forEach(function(ttws) {
+						ttws.trysend(JSON.stringify({event: 'start-game', state: 'game', answers: tws.game.answers}));
 					});
 				}
 			});

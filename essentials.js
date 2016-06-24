@@ -39,7 +39,7 @@ global.addVersionNonces = o(function*(str, pn, cb) {
 		if (str.substr(i).match(/^\.[A-z]{1,8}"/)) {
 			while (str[i] && str[i] != '"') i++;
 			let substr = str.substr(0, i).match(/"[^"]+?$/)[0].substr(1);
-			if (substr.includes(':')) continue;
+			if (substr.includes(':')) throw new Error('Invalid version nonce URI.');
 			try {
 				str = str.substr(0, i) + '?v=' + (yield getVersionNonce(pn, substr, yield)) + str.substr(i);
 			} catch (e) {
