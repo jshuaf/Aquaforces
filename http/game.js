@@ -26,13 +26,11 @@ socket.onmessage = function(m) {
 	if (m.event == 'notice' || m.event == 'error') errorEl.textContent = m.body;
 	if (m.event == 'start-game') {
 		answers = m.answers;
-		startQuestion();
+		lastTime = new Date().getTime();
+		animationUpdate();
+		setInterval(addWord, 700);
 	}
-	if (m.event == 'start-game') {
-		answers = m.answers;
-		startQuestion();
-	}
-	if (m.event == 'question') document.getElementById('question').firstChild.firstChild.nodeValue = m.question;
+	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
 	if (m.event == 'answer-status') bg(m.correct ? '#0f0' : '#f00');
 };
@@ -85,11 +83,9 @@ function addWord() {
 	word.addEventListener('click', wordClickListener);
 }
 var includeTimeBar = true;
-function startQuestion() {
-	//updateCommand();
-	lastTime = new Date().getTime();
-	animationUpdate();
-	setInterval(addWord, 1000);
+function startQuestion(question) {
+	document.getElementById('question').firstChild.firstChild.nodeValue = question;
+	timeProportion = 1;
 }
 function failQuestion() {
 

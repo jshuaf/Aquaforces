@@ -37,7 +37,7 @@ module.exports = function(server) {
 						event: 'add-loneuser',
 						user: tws.user
 					}));
-					tws.questionsIDsDone = [];
+					tws.questionIDsDone = [];
 				} else if (m.event == 'add-user-to-crew') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (!m.crewno || typeof m.crewno != 'number') return tws.error('You must enter a crew number.', 'crew');
@@ -58,11 +58,23 @@ module.exports = function(server) {
 						crew: m.crewno
 					}));
 				} else if (m.event == 'answer-chosen') {
-					let correct = false;
+					let qid;
 					tws.game.activeQuestionIDs.forEach(function(questionID) {
-						if (tws.game.questions[questionID].answer == m.text) correct = true;
+						if (tws.game.questions[questionID].answer == m.text) qid = questionID;
 					});
-					tws.trysend(JSON.stringify({event: 'answer-status', correct}));
+					tws.trysend(JSON.stringify({event: 'answer-status', correct: !!qid}));
+					if (qid) {
+						tws.game.activeQuestionIDs.splice(tws.game.activeQuestionIDs.indexOf(qid), 1);
+						let questionID = 0;
+						while (!questionID || tws.questionIDsDone.includes(questionID)) questionID = Math.floor(Math.random() * tws.game.questions.length);
+						let question = tws.game.questions[questionID];
+						tws.game.activeQuestionIDs.push(questionID);
+						tws.trysend(JSON.stringify({event: 'question', question: question.text}));
+						let crew = tws.game.crews[tws.crewno],
+							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+						ttws.questionIDsDone.push(questionID);
+					}
 				} else tws.error('Unknown socket event ' + m.event + ' recieved.');
 			});
 			tws.on('close', function() {
@@ -136,7 +148,9 @@ module.exports = function(server) {
 								question = tws.game.questions[questionID];
 							tws.game.activeQuestionIDs.push(questionID);
 							member.trysend(JSON.stringify({event: 'question', question: question.text}));
-							crew.members[Math.floor(Math.random() * crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+							let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+							ttws.questionIDsDone.push(questionID);
 						});
 					});
 				} else tws.error('Unknown socket event ' + m.event + ' recieved.');
