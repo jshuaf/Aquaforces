@@ -60,27 +60,27 @@ var timeBar = document.getElementById('timebar'),
 	timeProportion = 1,
 	lastTime,
 	hp = 1;
-var words = document.getElementById('words');
-function wordClickListener() {
+var answersEl = document.getElementById('answers');
+function answerClickListener() {
 	socket.send(JSON.stringify({
 		event: 'answer-chosen',
 		text: this.firstChild.nodeValue
 	}));
 }
 function addWord() {
-	var word = document.createElement('span'),
+	var answer = document.createElement('span'),
 		answer;
 	if (correctAnswerQueue.length && Math.random() < 0.15) answer = correctAnswerQueue.shift();
 	else answer = answers[Math.floor(Math.random() * answers.length)];
-	word.appendChild(document.createTextNode(answer));
-	words.appendChild(word);
-	word.dataset.x = Math.random() * (innerWidth - word.offsetWidth - 8) + 4;
-	word.dataset.y = -100;
-	word.dataset.vx = (Math.random() - 0.5) / 100;
-	word.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
-	word.style.left = '0';
-	word.style.transform = 'translate(0, -100px)';
-	word.addEventListener('click', wordClickListener);
+	answer.appendChild(document.createTextNode(answer));
+	answersEl.appendChild(answer);
+	answer.dataset.x = Math.random() * (innerWidth - answer.offsetWidth - 8) + 4;
+	answer.dataset.y = -100;
+	answer.dataset.vx = (Math.random() - 0.5) / 100;
+	answer.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
+	answer.style.left = '0';
+	answer.style.transform = 'translate(0, -100px)';
+	answer.addEventListener('click', answerClickListener);
 }
 var includeTimeBar = true;
 function startQuestion(question) {
@@ -109,7 +109,7 @@ function animationUpdate() {
 		timeBar.style.width = '0';
 		timeBar.style.background = 'hsl(0, 100%, 50%)';
 	}
-	words.children.forEach(function(e) {
+	answersEl.children.forEach(function(e) {
 		if (parseFloat(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
 			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth * 0.38) / 100)) || 0);
 		} else {
@@ -121,7 +121,7 @@ function animationUpdate() {
 		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
 		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
-		if (parseFloat(e.dataset.y) > innerHeight) words.removeChild(e);
+		if (parseFloat(e.dataset.y) > innerHeight) answersEl.removeChild(e);
 	});
 	lastTime = thisTime;
 	requestAnimationFrame(animationUpdate);
