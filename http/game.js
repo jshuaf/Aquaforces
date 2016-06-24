@@ -72,7 +72,7 @@ function wordClickListener() {
 function addWord() {
 	var word = document.createElement('span'),
 		answer;
-	if (correctAnswerQueue.length && Math.random() < 0.3) answer = correctAnswerQueue.shift();
+	if (correctAnswerQueue.length && Math.random() < 0.15) answer = correctAnswerQueue.shift();
 	else answer = answers[Math.floor(Math.random() * answers.length)];
 	word.appendChild(document.createTextNode(answer));
 	words.appendChild(word);
@@ -89,7 +89,7 @@ function startQuestion() {
 	//updateCommand();
 	lastTime = new Date().getTime();
 	animationUpdate();
-	setInterval(addWord, 1500);
+	setInterval(addWord, 1000);
 }
 function failQuestion() {
 
