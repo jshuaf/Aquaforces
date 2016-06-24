@@ -101,7 +101,9 @@ module.exports = function(server) {
 							if (!answers.includes(answer)) answers.push(answer);
 						}
 					}
-					console.log(answers);
+					tws.users.forEach(function(ttws) {
+						ttws.trysend(JSON.stringify({event: 'answers', answers}));
+					});
 				} else if (message.event == 'remove-user-from-crew') {
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(ttws) {
