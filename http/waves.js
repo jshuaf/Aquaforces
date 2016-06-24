@@ -25,10 +25,15 @@ function resizeHandler() {
 }
 addEventListener('resize', resizeHandler);
 function size() {
-	var x = innerWidth * devicePixelRatio;
-	var y = innerHeight * devicePixelRatio;
-	canvas.width = width = x;
-	canvas.height = height = y;
+	if (location.href.indexOf('host') != -1) {
+		height = innerWidth * devicePixelRatio;
+		width = innerHeight * devicePixelRatio * 0.2;
+	} else {
+		width = innerWidth * devicePixelRatio;
+		height = innerHeight * devicePixelRatio;
+	}
+	canvas.width = width;
+	canvas.height = height;
 }
 var frameRate = 20;
 var values = [];
@@ -72,7 +77,7 @@ function draw() {
 		}
 		lastRow.push(values[x][values[x].length - 1]);
 	}
-	if (frameCount % 2) {
+	if (frameCount % (location.href.indexOf('host') != -1 ? 8 : 3) == 0) {
 		for (var x = 0; x < values.length; x++) {
 			values[x].pop();
 			values[x].unshift(lastRow[x]);

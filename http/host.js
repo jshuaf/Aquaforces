@@ -85,4 +85,5 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 	document.getElementsByClassName('studentselect').forEach(function(e) {
 		e.classList.remove('studentselect');
 	});
+	canvas.hidden = false;
 });
