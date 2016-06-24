@@ -27,6 +27,11 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		startQuestion();
 	}
+	if (m.event == 'start-game') {
+		answers = m.answers;
+		startQuestion();
+	}
+	if (m.event == 'question') document.getElementById('question').firstChild.firstChild.nodeValue = m.question;
 };
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
@@ -54,14 +59,6 @@ var timeBar = document.getElementById('timebar'),
 	timeProportion = 1,
 	lastTime,
 	hp = 1;
-function updateCommand() {
-	var pkeywords = [];
-	for (var i = 0; i < keywords.length; i++) {
-		if (keywords[i].lower <= hp && keywords[i].upper >= hp) pkeywords.push(keywords[i]);
-	}
-	var keyword = pkeywords[Math.floor(Math.random() * pkeywords.length)];
-	document.getElementById('question').firstChild.firstChild.nodeValue = keyword.vf + (keyword.noThe ? ' ' : ' the ') + keyword.ob;
-}
 var words = document.getElementById('words');
 function addWord() {
 	var word = document.createElement('span');
