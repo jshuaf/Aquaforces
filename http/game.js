@@ -45,14 +45,6 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	document.getElementById('crewnodisplay').textContent = parseInt(document.getElementById('crewno').value);
 	setState('wait');
 });
-//TEMPORARY EVENT LISTENER FOR THE "G" KEY TO LEAD YOU TO THE GAME
-addEventListener('keypress', function(e) {
-	if (e.which == 103) {
-		e.preventDefault();
-		setState('game');
-		startQuestion();
-	}
-});
 var timeBar = document.getElementById('timebar'),
 	timeTotal = 10,
 	timeProportion = 1,
@@ -119,7 +111,3 @@ function animationUpdate() {
 	lastTime = thisTime;
 	requestAnimationFrame(animationUpdate);
 }
-//var keywords;
-//request('/keywords.json', function(res) {
-//keywords = JSON.parse(res);
-//});

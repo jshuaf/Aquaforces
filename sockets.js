@@ -2,43 +2,6 @@
 const ws = require('ws');
 let games = {};
 
-/*games object format:
-{
-	"game-code1":
-	{
-		"teams": [
-			"team-code1":
-			{
-				"people": ["name1", "name2", "name3"],
-				"position": integer,
-				"default-velocity": integer,
-				"hp": integer (null when has_died_once is true),
-				"state": "finished" / "drowning" (raft) / "whirlpool"
-				"has_died_once": bool,
-				"attempts":
-				[
-					{
-
-					}
-				]
-			},
-		],
-		"qa": [
-			{
-				"question": string,
-				"wrong_answers": [string, string, string, string],
-				"right_answer": string,
-			},
-			{
-				"question": string,
-				"wrong_answers": [string, string, string, string],
-				"right_answer": string,
-			},
-		]
-	},
-}
-*/
-
 module.exports = function(server) {
 	let wss = new ws.Server({server});
 	wss.on('connection', function(tws) {

@@ -85,13 +85,6 @@ function draw() {
 			ellipse(+x * +dx + +sx, +y * +dy + +sy, r, r);
 		}
 	}
-	//var thisTime = new Date().getTime();
-	//fill('#000');
-	//rect(0, 0, 200, 50);
-	//fill('#fff');
-	//font('40px sans-serif');
-	//text(20, 40, (1000 / (thisTime - lastTime)).toFixed(0) + ' fps');
-	//lastTime = thisTime;
 	frameCount++;
 }
 (function drawLoop() {
