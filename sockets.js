@@ -82,13 +82,16 @@ module.exports = function(server) {
 						crews: [],
 						usernames: [],
 						users: [],
-						questions: [{
-							type: 'number',
-							text: 'What\'s 1 + 1?',
-							answer: 2
-						}],
+						questions: [],
 						hasStarted: false
 					};
+					for (var i = 0; i < 100; i++) {
+						games[id].questions.push({
+							text: 'What\'s ' + i + ' + ' + i + '?',
+							answer: (2 * i).toString(),
+							incorrectAnswers: [i.toString(), i.toString() + i.toString(), (2 * i + 1).toString(), (2 * i - 1).toString()]
+						});
+					}
 					tws.game = games[id];
 					return tws.trysend(JSON.stringify({event: 'new-game', id}));
 				} else if (message.event == 'remove-user-from-crew') {
