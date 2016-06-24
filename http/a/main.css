@@ -16,7 +16,10 @@ body {
 	background-color: #000;
 	color: #eee;
 }
-[hidden] { display: none }
+[hidden] {
+	display: none;
+	pointer-events: none;
+}
 main { position: relative }
 label {
 	font-size: 1.3em;
