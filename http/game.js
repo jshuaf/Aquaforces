@@ -62,6 +62,12 @@ var timeBar = document.getElementById('timebar'),
 	lastTime,
 	hp = 1;
 var words = document.getElementById('words');
+function wordClickListener() {
+	socket.send(JSON.stringify({
+		event: 'answer-chosen',
+		text: this.firstChild.nodeValue
+	}));
+}
 function addWord() {
 	var word = document.createElement('span'),
 		answer;
@@ -75,6 +81,7 @@ function addWord() {
 	word.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 5000;
 	word.style.left = '0';
 	word.style.transform = 'translate(0, -100px)';
+	word.addEventListener('click', wordClickListener);
 }
 var includeTimeBar = true;
 function startQuestion() {
