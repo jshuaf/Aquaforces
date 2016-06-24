@@ -61,7 +61,7 @@ module.exports = function(server) {
 			});
 			tws.on('close', function() {
 				if (tws.game) tws.game.host.trysend(JSON.stringify({
-					event: 'removeuser',
+					event: 'remove-user',
 					user: tws.user
 				}));
 			});
