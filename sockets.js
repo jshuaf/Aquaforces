@@ -105,6 +105,7 @@ module.exports = function(server) {
 						crew.members.forEach(function(ttws) {
 							if (ttws.user == m.user) {
 								ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
+								let crew = ttws.game.crews[ttws.crewno].members;
 								crew.splice(crew.indexOf(ttws), 1);
 							}
 						});
