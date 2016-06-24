@@ -103,7 +103,10 @@ module.exports = function(server) {
 				} else if (message.event == 'remove-user-from-crew') {
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(ttws) {
-							if (ttws.user == message.user) ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
+							if (ttws.user == message.user) {
+								ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
+								crew.splice(crew.indexOf(ttws), 1);
+							}
 						});
 					});
 				} else if (message.event == 'remove-user') {
@@ -121,7 +124,9 @@ module.exports = function(server) {
 					});
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(member) {
-							member.trysend(JSON.stringify({event: 'question', question: tws.game.questions[Math.floor(Math.random() * tws.game.questions.length)].text}));
+							let question = tws.game.questions[Math.floor(Math.random() * tws.game.questions.length)];
+							member.trysend(JSON.stringify({event: 'question', question: question.text}));
+							crew.members[Math.floor(Math.random() * crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						});
 					});
 				}
