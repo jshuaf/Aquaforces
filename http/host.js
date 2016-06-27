@@ -107,7 +107,7 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 	socket.send(JSON.stringify({event: 'start-game'}));
 	playing = true;
 	document.getElementById('lonelyfolks').classList.add('hide');
-	this.hidden = true;
+	document.getElementById('game-code-cont').hidden = document.getElementById('crew-header').hidden = this.hidden = true;
 	crewsEl.classList.remove('studentselect');
 	crewsEl.children.forEach(function(e, i) {
 		if (e.dataset.n != 0) {
