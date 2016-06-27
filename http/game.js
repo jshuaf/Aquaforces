@@ -29,7 +29,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addAnswer, 700);
+		setInterval(addAnswer, 1200);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -70,7 +70,7 @@ function answerClickListener() {
 }
 function addAnswer() {
 	var answerEl = document.createElement('span'), answer;
-	if (correctAnswerQueue.length && Math.random() < 0.1) answer = correctAnswerQueue.shift();
+	if (correctAnswerQueue.length && Math.random() < 0.15) answer = correctAnswerQueue.shift();
 	else answer = answers[Math.floor(Math.random() * answers.length)];
 	answerEl.appendChild(document.createTextNode(answer));
 	answersEl.appendChild(answerEl);
