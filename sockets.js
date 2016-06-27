@@ -63,6 +63,7 @@ module.exports = function(server) {
 						if (tws.game.questions[questionID].answer == m.text) qid = questionID;
 					});
 					tws.trysend(JSON.stringify({event: 'answer-status', correct: !!qid}));
+					tws.game.host.trysend(JSON.stringify({event: 'answer', correct: !!qid, crewnum: tws.crewnum}));
 					if (qid) {
 						tws.game.activeQuestionIDs.splice(tws.game.activeQuestionIDs.indexOf(qid), 1);
 						let questionID = 0;
@@ -78,9 +79,9 @@ module.exports = function(server) {
 				} else if (m.event == 'timeout-question') {
 					let qid;
 					tws.game.activeQuestionIDs.forEach(function(questionID) {
-						console.log(tws.game.questions[questionID].text);
 						if (tws.game.questions[questionID].text == m.text) qid = questionID;
 					});
+					tws.game.host.trysend(JSON.stringify({event: 'no-answer', crewnum: tws.crewnum}));
 					if (qid) {
 						tws.game.activeQuestionIDs.splice(tws.game.activeQuestionIDs.indexOf(qid), 1);
 						let questionID = 0;
