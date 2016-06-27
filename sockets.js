@@ -74,7 +74,7 @@ module.exports = function(server) {
 							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						ttws.questionIDsDone.push(questionID);
-					} else tws.error('Invalid answer text.');
+					}
 				} else if (m.event == 'timeout-question') {
 					let qid;
 					tws.game.activeQuestionIDs.forEach(function(questionID) {

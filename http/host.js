@@ -16,7 +16,9 @@ function removeUser() {
 	}));
 	this.parentNode.removeChild(this);
 }
+var playing = false;
 function uncrewUser() {
+	if (playing) return;
 	socket.send(JSON.stringify({
 		event: 'remove-user-from-crew',
 		user: this.dataset.username
@@ -29,6 +31,7 @@ function uncrewUser() {
 	this.parentNode.dataset.n--;
 	this.parentNode.removeChild(this);
 }
+var crewsEl = document.getElementById('crews');
 socket.onmessage = function(m) {
 	console.log(m.data);
 	try {
@@ -57,14 +60,14 @@ socket.onmessage = function(m) {
 		span.dataset.username = m.user;
 		span.appendChild(document.createTextNode(m.user));
 		span.onclick = uncrewUser;
-		document.getElementById('crews').children[m.crew - 1].appendChild(span);
-		document.getElementById('crews').children[m.crew - 1].dataset.n++;
+		crewsEl.children[m.crew - 1].appendChild(span);
+		crewsEl.children[m.crew - 1].dataset.n++;
 		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 	} else if (m.event == 'remove-user') {
 		var e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
 		if (e) {
-			e.parentNode.removeChild(e);
 			if (e.parentNode.dataset.n) e.parentNode.dataset.n--;
+			e.parentNode.removeChild(e);
 		}
 		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 	}
@@ -77,13 +80,24 @@ document.getElementById('dashboard').addEventListener('submit', function(e) {
 	socket.send(JSON.stringify({event: 'new-game'}));
 	setState('tgame');
 });
+var progress = document.getElementById('progress');
 document.getElementById('start-game-btn').addEventListener('click', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'start-game'}));
+	playing = true;
 	document.getElementById('lonelyfolks').classList.add('hide');
 	this.hidden = true;
-	document.getElementsByClassName('studentselect').forEach(function(e) {
-		e.classList.remove('studentselect');
+	crewsEl.classList.remove('studentselect');
+	crewsEl.children.forEach(function(e, i) {
+		if (e.dataset.n != 0) {
+			progress.appendChild(document.createElement('div'));
+			progress.lastChild.appendChild(document.createTextNode(i + 1));
+		}
+	});
+	var n = progress.childElementCount - 1 || 1;
+	progress.childNodes.forEach(function(canoe, i) {
+		canoe.style.top = 'calc(' + (50 + 50 * i / n) + '% - ' + (1.6 * (2 * i / n - 0.5)) + 'em)';
+		canoe.style.background = crewsEl.children[canoe.firstChild.nodeValue - 1].style.color = 'hsl(' + (-45 + 100 * i / n) + ', 80%, 40%)';
 	});
 	canvas.hidden = false;
 });

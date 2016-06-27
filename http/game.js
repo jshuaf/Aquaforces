@@ -68,19 +68,18 @@ function answerClickListener() {
 	}));
 }
 function addAnswer() {
-	var answer = document.createElement('span'),
-		answer;
-	if (correctAnswerQueue.length && Math.random() < 0.15) answer = correctAnswerQueue.shift();
+	var answerEl = document.createElement('span'), answer;
+	if (correctAnswerQueue.length && Math.random() < 0.1) answer = correctAnswerQueue.shift();
 	else answer = answers[Math.floor(Math.random() * answers.length)];
-	answer.appendChild(document.createTextNode(answer));
-	answersEl.appendChild(answer);
-	answer.dataset.x = Math.random() * (innerWidth - answer.offsetWidth - 8) + 4;
-	answer.dataset.y = -100;
-	answer.dataset.vx = (Math.random() - 0.5) / 100;
-	answer.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
-	answer.style.left = '0';
-	answer.style.transform = 'translate(0, -100px)';
-	answer.addEventListener('click', answerClickListener);
+	answerEl.appendChild(document.createTextNode(answer));
+	answersEl.appendChild(answerEl);
+	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
+	answerEl.dataset.y = -100;
+	answerEl.dataset.vx = (Math.random() - 0.5) / 100;
+	answerEl.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
+	answerEl.style.left = '0';
+	answerEl.style.transform = 'translate(0, -100px)';
+	answerEl.addEventListener('click', answerClickListener);
 }
 var includeTimeBar = true;
 function startQuestion(question) {
@@ -117,7 +116,7 @@ function animationUpdate() {
 		}
 		e.dataset.vx /= 1.05;
 		e.dataset.vy = parseFloat(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
-		if (parseFloat(e.dataset.vy) < 0.05) e.dataset.vy = 1.1 * parseFloat(e.dataset.vy);
+		if (parseFloat(e.dataset.vy) < 0.05) e.dataset.vy++;
 		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
 		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
