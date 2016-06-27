@@ -50,9 +50,9 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'add-user-to-crew',
-		crewno: parseInt(document.getElementById('crewno').value)
+		crewnum: parseInt(document.getElementById('crewnum').value)
 	}));
-	document.getElementById('crewnodisplay').textContent = parseInt(document.getElementById('crewno').value);
+	document.getElementById('crewnumdisplay').textContent = parseInt(document.getElementById('crewnum').value);
 	setState('wait');
 });
 var timeBar = document.getElementById('timebar'),
