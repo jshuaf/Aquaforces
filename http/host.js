@@ -5,7 +5,7 @@ var cont = document.getElementById('cont'),
 isFlowing = true;
 var boats = {},
 	boatProto = {
-		p: 0,
+		p: -0.5,
 		v: 0,
 		dv: 10,
 		maxdv: 10,
@@ -15,7 +15,9 @@ var boats = {},
 		cf: 0.003,
 		vf: 0.00001,
 		raft: false
-	};
+	},
+	cameraP = 0,
+	cameraS = 1;
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -126,12 +128,27 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 });
 function animationUpdate() {
 	var thisTime = new Date().getTime(),
-		dt = thisTime - lastTime;
+		dt = thisTime - lastTime,
+		meanP = 0,
+		minP = Infinity,
+		maxP = -Infinity;
 	for (var id in boats) {
 		var b = boats[id];
 		b.v += (b.c - b.v) * b.cf * dt;
 		b.p += b.v * b.vf * dt;
-		document.getElementById('boat' + id).style.transform = 'translateX(' + b.p * innerWidth + 'px)';
+		meanP += b.p;
+		minP = Math.min(minP, b.p);
+		maxP = Math.min(maxP, b.p);
+	}
+	meanP /= progress.childElementCount;
+	var pRange = Math.max(meanP - minP, maxP - minP) * 3 / innerWidth,
+		cfCP = 0.00005,
+		cfCS = 0.0001;
+	cameraP = (1 - dt * cfCP) * cameraP + dt * cfCP * meanP;
+	if (pRange > cameraS) cameraS = (1 - dt * cfCS) * cameraS + dt * cfCS * pRange;
+	for (var id in boats) {
+		var b = boats[id];
+		document.getElementById('boat' + id).style.transform = 'translateX(' + (b.p - cameraP + 0.5) * innerWidth * cameraS + 'px)';
 	}
 	lastTime = thisTime;
 	requestAnimationFrame(animationUpdate);
