@@ -69,9 +69,13 @@ function answerClickListener() {
 	}));
 }
 function addAnswer() {
-	var answerEl = document.createElement('span'), answer;
-	if (correctAnswerQueue.length && Math.random() < 0.15) answer = correctAnswerQueue.shift();
-	else answer = answers[Math.floor(Math.random() * answers.length)];
+	var answerEl = document.createElement('span'),
+		answer,
+		correctAnswer = false;
+	if (correctAnswerQueue.length && Math.random() < 0.15) {
+		answer = correctAnswerQueue.shift();
+		correctAnswer = true;
+	} else answer = answers[Math.floor(Math.random() * answers.length)];
 	answerEl.appendChild(document.createTextNode(answer));
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
@@ -81,6 +85,7 @@ function addAnswer() {
 	answerEl.style.left = '0';
 	answerEl.style.transform = 'translate(0, -100px)';
 	answerEl.addEventListener('click', answerClickListener);
+	if (correctAnswer) answerEl.classList.add('correct-answer');
 }
 var includeTimeBar = true;
 function startQuestion(question) {
@@ -118,11 +123,19 @@ function animationUpdate() {
 		}
 		e.dataset.vx /= 1.05;
 		e.dataset.vy = parseFloat(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
-		if (parseFloat(e.dataset.vy) < 0.05) e.dataset.vy++;
+		if (parseFloat(e.dataset.vy) < 0.05) e.dataset.vy = +e.dataset.vy + 0.1;
 		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
 		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
-		if (parseFloat(e.dataset.y) > innerHeight) answersEl.removeChild(e);
+		if (parseFloat(e.dataset.y) > innerHeight) {
+			if (e.classList.contains('correct-answer')) {
+				socket.send(JSON.stringify({
+					event: 'resend-answer',
+					text: e.firstChild.nodeValue
+				}));
+			}
+			answersEl.removeChild(e);
+		}
 	});
 	lastTime = thisTime;
 	requestAnimationFrame(animationUpdate);

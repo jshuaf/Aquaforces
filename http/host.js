@@ -107,7 +107,7 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 	socket.send(JSON.stringify({event: 'start-game'}));
 	playing = true;
 	document.getElementById('lonelyfolks').classList.add('hide');
-	this.hidden = true;
+	document.getElementById('game-code-cont').hidden = document.getElementById('crew-header').hidden = this.hidden = true;
 	crewsEl.classList.remove('studentselect');
 	crewsEl.children.forEach(function(e, i) {
 		if (e.dataset.n != 0) {
@@ -142,8 +142,8 @@ function animationUpdate() {
 	}
 	meanP /= progress.childElementCount;
 	var pRange = Math.max(meanP - minP, maxP - minP) * 3 / innerWidth,
-		cfCP = 0.00005,
-		cfCS = 0.0001;
+		cfCP = 0.0002,
+		cfCS = 0.0005;
 	cameraP = (1 - dt * cfCP) * cameraP + dt * cfCP * meanP;
 	if (pRange > cameraS) cameraS = (1 - dt * cfCS) * cameraS + dt * cfCS * pRange;
 	for (var id in boats) {
