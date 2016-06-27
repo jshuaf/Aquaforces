@@ -92,6 +92,10 @@ module.exports = function(server) {
 						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 					ttws.questionIDsDone.push(questionID);
+				} else if (m.event == 'resend-answer' && m.text) {
+					let crew = tws.game.crews[tws.crewnum],
+						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: m.text}));
 				} else tws.error('Unknown socket event ' + m.event + ' received.');
 			});
 			tws.on('close', function() {

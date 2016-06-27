@@ -127,7 +127,15 @@ function animationUpdate() {
 		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
 		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
-		if (parseFloat(e.dataset.y) > innerHeight) answersEl.removeChild(e);
+		if (parseFloat(e.dataset.y) > innerHeight) {
+			if (e.classList.contains('correct-answer')) {
+				socket.send(JSON.stringify({
+					event: 'resend-answer',
+					text: e.firstChild.nodeValue
+				}));
+			}
+			answersEl.removeChild(e);
+		}
 	});
 	lastTime = thisTime;
 	requestAnimationFrame(animationUpdate);
