@@ -58,6 +58,8 @@ module.exports = function(server) {
 						crew: m.crewnum
 					}));
 				} else if (m.event == 'answer-chosen') {
+					if (!tws.game) return tws.error('Game not found.', 'join');
+					if (!m.text) return tws.error('No question text sent.', 'join');
 					let qid;
 					tws.game.activeQuestionIDs.forEach(function(questionID) {
 						if (tws.game.questions[questionID].answer == m.text) qid = questionID;
@@ -77,6 +79,8 @@ module.exports = function(server) {
 						ttws.questionIDsDone.push(questionID);
 					}
 				} else if (m.event == 'timeout-question') {
+					if (!tws.game) return tws.error('Game not found.', 'join');
+					if (!m.text) return tws.error('No question text sent.', 'join');
 					let qid;
 					tws.game.activeQuestionIDs.forEach(function(questionID) {
 						if (tws.game.questions[questionID].text == m.text) qid = questionID;
@@ -92,7 +96,9 @@ module.exports = function(server) {
 						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 					ttws.questionIDsDone.push(questionID);
-				} else if (m.event == 'resend-answer' && m.text) {
+				} else if (m.event == 'resend-answer') {
+					if (!tws.game) return tws.error('Game not found.', 'join');
+					if (typeof m.text != 'string') return tws.error('No answer text sent.', 'join');
 					let crew = tws.game.crews[tws.crewnum],
 						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: m.text}));
@@ -141,6 +147,7 @@ module.exports = function(server) {
 					}
 					tws.game.answers = answers;
 				} else if (m.event == 'remove-user-from-crew') {
+					if (!tws.game) return tws.error('Game not found.', 'join');
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(ttws) {
 							if (ttws.user == m.user) {
@@ -151,6 +158,7 @@ module.exports = function(server) {
 						});
 					});
 				} else if (m.event == 'remove-user') {
+					if (!tws.game) return tws.error('Game not found.', 'join');
 					tws.game.users.forEach(function(ttws, i) {
 						if (ttws.user == m.user) {
 							ttws.trysend(JSON.stringify({event: 'set-state', state: 'join'}));
@@ -158,6 +166,7 @@ module.exports = function(server) {
 						}
 					});
 				} else if (m.event == 'start-game') {
+					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
 					tws.game.hasStarted = true;
 					tws.game.users.forEach(function(ttws) {
