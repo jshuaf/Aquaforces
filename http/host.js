@@ -3,6 +3,19 @@ var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') +
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
 isFlowing = true;
+var boats = {},
+	boatProto = {
+		p: 0,
+		v: 0,
+		dv: 10,
+		maxdv: 10,
+		hp: 1,
+		dhp: -0.1,
+		c: -0.1,
+		cf: 0.003,
+		vf: 0.00001,
+		raft: false
+	};
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -71,6 +84,11 @@ socket.onmessage = function(m) {
 			e.parentNode.removeChild(e);
 		}
 		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
+	} else if (m.event == 'answer') {
+		var b = boats[m.crewnum];
+		if (m.correct) b.v += b.dv;
+		else if (m.raft) b.dv *= 0.95;
+		else b.hp += b.dhp;
 	}
 };
 socket.onclose = function() {
@@ -81,7 +99,7 @@ document.getElementById('dashboard').addEventListener('submit', function(e) {
 	socket.send(JSON.stringify({event: 'new-game'}));
 	setState('tgame');
 });
-var progress = document.getElementById('progress');
+var progress = document.getElementById('progress'), lastTime;
 document.getElementById('start-game-btn').addEventListener('click', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'start-game'}));
@@ -93,6 +111,8 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 		if (e.dataset.n != 0) {
 			progress.appendChild(document.createElement('div'));
 			progress.lastChild.appendChild(document.createTextNode(i + 1));
+			progress.lastChild.id = 'boat' + (i + 1);
+			boats[i + 1] = boatProto;
 		}
 	});
 	var n = progress.childElementCount - 1 || 1;
@@ -101,4 +121,18 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 		canoe.style.background = crewsEl.children[canoe.firstChild.nodeValue - 1].style.color = 'hsl(' + (-45 + 100 * i / n) + ', 80%, 40%)';
 	});
 	canvas.hidden = false;
+	lastTime = new Date().getTime();
+	animationUpdate();
 });
+function animationUpdate() {
+	var thisTime = new Date().getTime(),
+		dt = thisTime - lastTime;
+	for (var id in boats) {
+		var b = boats[id];
+		b.v += (b.c - b.v) * b.cf * dt;
+		b.p += b.v * b.vf * dt;
+		document.getElementById('boat' + id).style.transform = 'translateX(' + b.p * innerWidth + 'px)';
+	}
+	lastTime = thisTime;
+	requestAnimationFrame(animationUpdate);
+}
