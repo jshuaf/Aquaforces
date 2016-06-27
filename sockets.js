@@ -82,18 +82,16 @@ module.exports = function(server) {
 						if (tws.game.questions[questionID].text == m.text) qid = questionID;
 					});
 					tws.game.host.trysend(JSON.stringify({event: 'no-answer', crewnum: tws.crewnum}));
-					if (qid) {
-						tws.game.activeQuestionIDs.splice(tws.game.activeQuestionIDs.indexOf(qid), 1);
-						let questionID = 0;
-						while (!questionID || tws.questionIDsDone.includes(questionID)) questionID = Math.floor(Math.random() * tws.game.questions.length);
-						let question = tws.game.questions[questionID];
-						tws.game.activeQuestionIDs.push(questionID);
-						tws.trysend(JSON.stringify({event: 'question', question: question.text}));
-						let crew = tws.game.crews[tws.crewnum],
-							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
-						ttws.questionIDsDone.push(questionID);
-					} else tws.error('Invalid question text.');
+					if (qid) tws.game.activeQuestionIDs.splice(tws.game.activeQuestionIDs.indexOf(qid), 1);
+					let questionID = 0;
+					while (!questionID || tws.questionIDsDone.includes(questionID)) questionID = Math.floor(Math.random() * tws.game.questions.length);
+					let question = tws.game.questions[questionID];
+					tws.game.activeQuestionIDs.push(questionID);
+					tws.trysend(JSON.stringify({event: 'question', question: question.text}));
+					let crew = tws.game.crews[tws.crewnum],
+						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+					ttws.questionIDsDone.push(questionID);
 				} else tws.error('Unknown socket event ' + m.event + ' received.');
 			});
 			tws.on('close', function() {
