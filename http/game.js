@@ -69,9 +69,13 @@ function answerClickListener() {
 	}));
 }
 function addAnswer() {
-	var answerEl = document.createElement('span'), answer;
-	if (correctAnswerQueue.length && Math.random() < 0.15) answer = correctAnswerQueue.shift();
-	else answer = answers[Math.floor(Math.random() * answers.length)];
+	var answerEl = document.createElement('span'),
+		answer,
+		correctAnswer = false;
+	if (correctAnswerQueue.length && Math.random() < 0.15) {
+		answer = correctAnswerQueue.shift();
+		correctAnswer = true;
+	} else answer = answers[Math.floor(Math.random() * answers.length)];
 	answerEl.appendChild(document.createTextNode(answer));
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
@@ -81,6 +85,7 @@ function addAnswer() {
 	answerEl.style.left = '0';
 	answerEl.style.transform = 'translate(0, -100px)';
 	answerEl.addEventListener('click', answerClickListener);
+	if (correctAnswer) answerEl.classList.add('correct-answer');
 }
 var includeTimeBar = true;
 function startQuestion(question) {
