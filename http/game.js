@@ -28,7 +28,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addWord, 700);
+		setInterval(addAnswer, 700);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -67,7 +67,7 @@ function answerClickListener() {
 		text: this.firstChild.nodeValue
 	}));
 }
-function addWord() {
+function addAnswer() {
 	var answer = document.createElement('span'),
 		answer;
 	if (correctAnswerQueue.length && Math.random() < 0.15) answer = correctAnswerQueue.shift();
