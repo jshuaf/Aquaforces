@@ -142,8 +142,8 @@ function animationUpdate() {
 	}
 	meanP /= progress.childElementCount;
 	var pRange = Math.max(meanP - minP, maxP - minP) * 3 / innerWidth,
-		cfCP = 0.00005,
-		cfCS = 0.0001;
+		cfCP = 0.0002,
+		cfCS = 0.0005;
 	cameraP = (1 - dt * cfCP) * cameraP + dt * cfCP * meanP;
 	if (pRange > cameraS) cameraS = (1 - dt * cfCS) * cameraS + dt * cfCS * pRange;
 	for (var id in boats) {
