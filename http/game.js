@@ -25,10 +25,11 @@ socket.onmessage = function(m) {
 	if (m.state) setState(m.state);
 	if (m.event == 'notice' || m.event == 'error') errorEl.textContent = m.body;
 	if (m.event == 'start-game') {
+		isFlowing = true;
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addWord, 700);
+		setInterval(addAnswer, 700);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -50,9 +51,9 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'add-user-to-crew',
-		crewno: parseInt(document.getElementById('crewno').value)
+		crewnum: parseInt(document.getElementById('crewnum').value)
 	}));
-	document.getElementById('crewnodisplay').textContent = parseInt(document.getElementById('crewno').value);
+	document.getElementById('crewnumdisplay').textContent = parseInt(document.getElementById('crewnum').value);
 	setState('wait');
 });
 var timeBar = document.getElementById('timebar'),
@@ -60,27 +61,26 @@ var timeBar = document.getElementById('timebar'),
 	timeProportion = 1,
 	lastTime,
 	hp = 1;
-var words = document.getElementById('words');
-function wordClickListener() {
+var answersEl = document.getElementById('answers');
+function answerClickListener() {
 	socket.send(JSON.stringify({
 		event: 'answer-chosen',
 		text: this.firstChild.nodeValue
 	}));
 }
-function addWord() {
-	var word = document.createElement('span'),
-		answer;
-	if (correctAnswerQueue.length && Math.random() < 0.15) answer = correctAnswerQueue.shift();
+function addAnswer() {
+	var answerEl = document.createElement('span'), answer;
+	if (correctAnswerQueue.length && Math.random() < 0.1) answer = correctAnswerQueue.shift();
 	else answer = answers[Math.floor(Math.random() * answers.length)];
-	word.appendChild(document.createTextNode(answer));
-	words.appendChild(word);
-	word.dataset.x = Math.random() * (innerWidth - word.offsetWidth - 8) + 4;
-	word.dataset.y = -100;
-	word.dataset.vx = (Math.random() - 0.5) / 100;
-	word.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
-	word.style.left = '0';
-	word.style.transform = 'translate(0, -100px)';
-	word.addEventListener('click', wordClickListener);
+	answerEl.appendChild(document.createTextNode(answer));
+	answersEl.appendChild(answerEl);
+	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
+	answerEl.dataset.y = -100;
+	answerEl.dataset.vx = (Math.random() - 0.5) / 100;
+	answerEl.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
+	answerEl.style.left = '0';
+	answerEl.style.transform = 'translate(0, -100px)';
+	answerEl.addEventListener('click', answerClickListener);
 }
 var includeTimeBar = true;
 function startQuestion(question) {
@@ -109,7 +109,7 @@ function animationUpdate() {
 		timeBar.style.width = '0';
 		timeBar.style.background = 'hsl(0, 100%, 50%)';
 	}
-	words.children.forEach(function(e) {
+	answersEl.children.forEach(function(e) {
 		if (parseFloat(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
 			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth * 0.38) / 100)) || 0);
 		} else {
@@ -117,11 +117,11 @@ function animationUpdate() {
 		}
 		e.dataset.vx /= 1.05;
 		e.dataset.vy = parseFloat(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
-		if (parseFloat(e.dataset.vy) < 0.05) e.dataset.vy = 1.1 * parseFloat(e.dataset.vy);
+		if (parseFloat(e.dataset.vy) < 0.05) e.dataset.vy++;
 		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
 		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
-		if (parseFloat(e.dataset.y) > innerHeight) words.removeChild(e);
+		if (parseFloat(e.dataset.y) > innerHeight) answersEl.removeChild(e);
 	});
 	lastTime = thisTime;
 	requestAnimationFrame(animationUpdate);

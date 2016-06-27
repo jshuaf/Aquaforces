@@ -40,22 +40,22 @@ module.exports = function(server) {
 					tws.questionIDsDone = [];
 				} else if (m.event == 'add-user-to-crew') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
-					if (!m.crewno || typeof m.crewno != 'number') return tws.error('You must enter a crew number.', 'crew');
-					if (!(m.crewno <= 12 && m.crewno >= 1)) return tws.error('crew number must be between 1 and 12, inclusive.', 'crew');
+					if (!m.crewnum || typeof m.crewnum != 'number') return tws.error('You must enter a crew number.', 'crew');
+					if (!(m.crewnum <= 12 && m.crewnum >= 1)) return tws.error('Crew number must be between 1 and 12, inclusive.', 'crew');
 					if (tws.game.hasStarted) return tws.error('Game has started.', 'join');
-					if (!tws.game.crews[m.crewno]) {
-						tws.game.crews[m.crewno] = {
+					if (!tws.game.crews[m.crewnum]) {
+						tws.game.crews[m.crewnum] = {
 							hp: 1,
 							position: 0,
 							members: [tws]
 						};
-					} else if (tws.game.crews[m.crewno].members.length >= 6) return tws.error('Crew cannot have more than 6 sailors.', 'crew');
-					else tws.game.crews[m.crewno].members.push(tws);
-					tws.crewno = m.crewno;
+					} else if (tws.game.crews[m.crewnum].members.length >= 6) return tws.error('Crew cannot have more than 6 sailors.', 'crew');
+					else tws.game.crews[m.crewnum].members.push(tws);
+					tws.crewnum = m.crewnum;
 					tws.game.host.trysend(JSON.stringify({
 						event: 'add-user-to-crew',
 						user: tws.user,
-						crew: m.crewno
+						crew: m.crewnum
 					}));
 				} else if (m.event == 'answer-chosen') {
 					let qid;
@@ -70,11 +70,11 @@ module.exports = function(server) {
 						let question = tws.game.questions[questionID];
 						tws.game.activeQuestionIDs.push(questionID);
 						tws.trysend(JSON.stringify({event: 'question', question: question.text}));
-						let crew = tws.game.crews[tws.crewno],
+						let crew = tws.game.crews[tws.crewnum],
 							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						ttws.questionIDsDone.push(questionID);
-					} else tws.error('Invalid answer text.');
+					}
 				} else if (m.event == 'timeout-question') {
 					let qid;
 					tws.game.activeQuestionIDs.forEach(function(questionID) {
@@ -88,12 +88,12 @@ module.exports = function(server) {
 						let question = tws.game.questions[questionID];
 						tws.game.activeQuestionIDs.push(questionID);
 						tws.trysend(JSON.stringify({event: 'question', question: question.text}));
-						let crew = tws.game.crews[tws.crewno],
+						let crew = tws.game.crews[tws.crewnum],
 							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						ttws.questionIDsDone.push(questionID);
 					} else tws.error('Invalid question text.');
-				} else tws.error('Unknown socket event ' + m.event + ' recieved.');
+				} else tws.error('Unknown socket event ' + m.event + ' received.');
 			});
 			tws.on('close', function() {
 				if (tws.game) tws.game.host.trysend(JSON.stringify({
@@ -142,7 +142,7 @@ module.exports = function(server) {
 						crew.members.forEach(function(ttws) {
 							if (ttws.user == m.user) {
 								ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
-								let crew = ttws.game.crews[ttws.crewno].members;
+								let crew = ttws.game.crews[ttws.crewnum].members;
 								crew.splice(crew.indexOf(ttws), 1);
 							}
 						});
@@ -171,7 +171,7 @@ module.exports = function(server) {
 							ttws.questionIDsDone.push(questionID);
 						});
 					});
-				} else tws.error('Unknown socket event ' + m.event + ' recieved.');
+				} else tws.error('Unknown socket event ' + m.event + ' received.');
 			});
 		} else if (tws.upgradeReq.url == '/console/') {
 
