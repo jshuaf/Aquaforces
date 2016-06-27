@@ -93,6 +93,7 @@ function failQuestion() {
 		event: 'timeout-question',
 		text: document.getElementById('question').firstChild.firstChild.nodeValue
 	}));
+	bg('#ff0');
 }
 function animationUpdate() {
 	var thisTime = new Date().getTime(),
