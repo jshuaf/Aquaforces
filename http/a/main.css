@@ -172,7 +172,14 @@ li[data-n='1'] { color: #f22 }
 ul.studentselect > li { cursor: pointer }
 ul.studentselect > li:hover { text-decoration: line-through }
 ol > li { line-height: 2 }
-ol > li > span {
+#progress > div {
+	position: absolute;
+	left: 0;
+	height: 3.2em; width: 6.4em;
+	padding: 0.5em 1em;
+	border-radius: 50%;
+}
+ol > li > span, #progress > div > span {
 	display: inline-block;
 	background: #ff0;
 	color: #111;
@@ -200,8 +207,8 @@ canvas {
 	left: 0;
 	z-index: -1;
 }
-.host + canvas {
+.host ~ canvas {
 	left: 50%;
-	top: 50%;
+	top: 75%;
 	transform: translate(-50%, -50%) rotate(90deg);
 }

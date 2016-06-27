@@ -27,7 +27,7 @@ addEventListener('resize', resizeHandler);
 function size() {
 	if (location.href.indexOf('host') != -1) {
 		height = innerWidth * devicePixelRatio;
-		width = innerHeight * devicePixelRatio * 0.2;
+		width = innerHeight * devicePixelRatio * 0.5;
 	} else {
 		width = innerWidth * devicePixelRatio;
 		height = innerHeight * devicePixelRatio;
@@ -37,8 +37,8 @@ function size() {
 }
 var frameRate = 20;
 var values = [];
-var nx = 20;
-var ny = 20;
+var nx = location.href.indexOf('host') != -1 ? 15 : 20;
+var ny = location.href.indexOf('host') != -1 ? 40 : 20;
 for (var i = 0; i < nx; i++) {
 	var v = [];
 	for (var j = 0; j < ny; j++) v.push([0, +rand(-5, 5)]);
@@ -56,7 +56,7 @@ function draw() {
 	var bent = +2e4 * +nx * +ny;
 	var sa = +0.002;
 	var sv = +0.6;
-	var sd = +1;
+	var sd = location.href.indexOf('host') != -1 ? +0.6 : +1;
 	var radius = max(dx, max(dy, min(dx, dy) * 1.5));
 	var lastTime = new Date().getTime();
 	oent = +ent;
@@ -77,7 +77,7 @@ function draw() {
 		}
 		lastRow.push(values[x][values[x].length - 1]);
 	}
-	if (frameCount % (location.href.indexOf('host') != -1 ? 8 : 3) == 0) {
+	if (frameCount % 3 == 0) {
 		for (var x = 0; x < values.length; x++) {
 			values[x].pop();
 			values[x].unshift(lastRow[x]);
