@@ -2,6 +2,8 @@
 const ws = require('ws');
 let games = {};
 
+const maxFuzzyTime = 10000;
+
 module.exports = function(server) {
 	let wss = new ws.Server({server});
 	wss.on('connection', function(tws) {
@@ -45,9 +47,8 @@ module.exports = function(server) {
 					if (tws.game.hasStarted) return tws.error('Game has started.', 'join');
 					if (!tws.game.crews[m.crewnum]) {
 						tws.game.crews[m.crewnum] = {
-							hp: 1,
-							position: 0,
-							members: [tws]
+							members: [tws],
+							recentAnswers: []
 						};
 					} else if (tws.game.crews[m.crewnum].members.length >= 6) return tws.error('Crew cannot have more than 6 sailors.', 'crew');
 					else tws.game.crews[m.crewnum].members.push(tws);
@@ -59,7 +60,13 @@ module.exports = function(server) {
 					}));
 				} else if (m.event == 'answer-chosen') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
-					if (!m.text) return tws.error('No question text sent.', 'join');
+					if (!m.text) return tws.error('No answer text sent.', 'join');
+					let crew = tws.game.crews[tws.crewnum];
+					crew.recentAnswers.forEach(function(pastAnswer) {
+						if (pastAnswer.text == m.text && new Date().getTime() - pastAnswer.time < maxFuzzyTime) {
+							return ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+						}
+					});
 					let qid;
 					tws.game.activeQuestionIDs.forEach(function(questionID) {
 						if (tws.game.questions[questionID].answer == m.text) qid = questionID;
@@ -73,10 +80,13 @@ module.exports = function(server) {
 						let question = tws.game.questions[questionID];
 						tws.game.activeQuestionIDs.push(questionID);
 						tws.trysend(JSON.stringify({event: 'question', question: question.text}));
-						let crew = tws.game.crews[tws.crewnum],
-							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+						let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						ttws.questionIDsDone.push(questionID);
+						crew.recentAnswers.push({
+							text: m.text,
+							time: new Date().getTime()
+						});
 					}
 				} else if (m.event == 'timeout-question') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
