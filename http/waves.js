@@ -77,7 +77,7 @@ function draw() {
 		}
 		lastRow.push(values[x][values[x].length - 1]);
 	}
-	if (frameCount % 3 == 0) {
+	if (isFlowing && frameCount % 3 == 0) {
 		for (var x = 0; x < values.length; x++) {
 			values[x].pop();
 			values[x].unshift(lastRow[x]);

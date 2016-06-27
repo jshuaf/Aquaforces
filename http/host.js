@@ -2,6 +2,7 @@
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/');
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
+isFlowing = true;
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {

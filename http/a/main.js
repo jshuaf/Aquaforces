@@ -30,3 +30,4 @@ function request(uri, callback, params) {
 	};
 	return i;
 }
+var isFlowing = false;

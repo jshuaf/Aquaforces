@@ -25,6 +25,7 @@ socket.onmessage = function(m) {
 	if (m.state) setState(m.state);
 	if (m.event == 'notice' || m.event == 'error') errorEl.textContent = m.body;
 	if (m.event == 'start-game') {
+		isFlowing = true;
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
