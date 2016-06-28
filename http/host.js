@@ -129,7 +129,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	animationUpdate();
 });
 var timeStart,
-	timeTotal = 6000;
+	timeTotal = 600000;
 function zeroPad(t) {
 	if (t < 10) return '0' + t;
 	return t;
