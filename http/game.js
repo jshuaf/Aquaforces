@@ -1,7 +1,8 @@
 'use strict';
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
 var cont = document.getElementById('cont'),
-	errorEl = document.getElementById('error');
+	errorEl = document.getElementById('error'),
+	gameHasEnded = false;
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -34,6 +35,7 @@ socket.onmessage = function(m) {
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
 	if (m.event == 'answer-status') bg(m.correct ? '#0f0' : '#f00');
+	if (m.event == 'end-game') gameHasEnded = true;
 };
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
@@ -138,5 +140,5 @@ function animationUpdate() {
 		}
 	});
 	lastTime = thisTime;
-	requestAnimationFrame(animationUpdate);
+	if (!gameHasEnded) requestAnimationFrame(animationUpdate);
 }
