@@ -3,19 +3,14 @@
 	-moz-box-sizing: border-box;
 	-webkit-overflow-scrolling: touch;
 }
-html, body, main {
-	height: 100%;
-	width: 100%;
-	display: inline-block;
-	overflow: hidden;
-}
-body {
+html {
 	font: 100% sans-serif;
 	text-align: center;
-	margin: 0;
-	background-color: #000;
+	background-color: #39f;
 	color: #eee;
 }
+body { margin: 0 }
+html, body, main, #progress, #cont { height: 100% }
 @keyframes flash-red {
 	0% { background: #f00 }
 }
@@ -40,9 +35,9 @@ label {
 }
 form {
 	margin: 0 auto;
-	background: rgba(0, 0, 0, 0.5);
 	padding: 2em;
 }
+.pregamescreen form { background: rgba(0, 0, 0, 0.5) }
 .centerbox {
 	text-align: left;
 	display: table;
@@ -126,15 +121,18 @@ ul, ol {
 	text-align: left;
 	font-size: 1.5em;
 }
-#tgame, #game {
+#game, #tgame {
+	padding: 0;
+	background: transparent;
 	width: 100%;
 	display: block;
-	background: transparent;
 }
-#game { padding: 0 }
 #game h1 {
 	background: #fff;
 	color: #000;
+	position: absolute;
+	z-index: 1;
+	right: 0; left: 0;
 	margin-top: 0;
 	padding-top: 0.3em;
 }
@@ -146,7 +144,6 @@ ul, ol {
 #prequestion {
 	position: absolute;
 	top: 0; right: 0; bottom: 0; left: 0;
-	mix-blend-mode: overlay;
 }
 #canoe {
 	width: 20vmin;
@@ -158,7 +155,7 @@ ul, ol {
 #game input[type='text'] { width: 100% }
 #answers > div {
 	position: absolute;
-	top: 0;
+	top: 0; left: 0;
 	cursor: pointer;
 	padding: 0.8em;
 }
@@ -189,18 +186,6 @@ li[data-n='1'] { color: #f22 }
 ul.studentselect > li { cursor: pointer }
 ul.studentselect > li:hover { text-decoration: line-through }
 ol > li { line-height: 2 }
-#progress > div {
-	position: absolute;
-	left: 0;
-	height: 1.6em; width: 3.2em;
-	padding: 0.25em 0.5em;
-	color: #fff;
-	font-size: 2em;
-	background: url('/img/3boat.png') no-repeat;
-	background-size: contain;
-	text-shadow: 1px 1px 3px #000;
-}
-#progress > div.raft { background: #950 }
 ol > li > span, #progress > div > span {
 	display: inline-block;
 	background: #ff0;
@@ -223,24 +208,8 @@ ol.studentselect > li > span::before {
 	padding-bottom: 0.2em;
 }
 ol > li > span:hover::before { width: 2ch }
-canvas {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: -1;
-}
 .host ~ canvas {
 	left: 50%;
 	top: 75%;
 	transform: translate(-50%, -50%) rotate(90deg);
-}
-#content.hostgame {
-	background: url('/img/background.png') no-repeat;
-	background-size: contain;
-	color: #000;
-}
-#content.hostgame h1 { text-align: left }
-#progress.hide {
-	opacity: 0;
-	transition: opacity 0.5s;
 }

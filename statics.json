@@ -3,7 +3,8 @@
 		"path": "./html/index.html"
 	},
 	"/host/": {
-		"path": "./html/host.html"
+		"path": "./html/host.html",
+		"inhead": "<link rel=\"stylesheet\" href=\"/host.css\" />"
 	},
 	"/console/": {
 		"path": "./html/console.html"

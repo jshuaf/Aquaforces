@@ -32,7 +32,6 @@ socket.onmessage = function(m) {
 	if (m.state) setState(m.state);
 	if (m.event == 'notice' || m.event == 'error') errorEl.textContent = m.body;
 	if (m.event == 'start-game') {
-		isFlowing = true;
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
@@ -89,11 +88,9 @@ function addAnswer() {
 	answerEl.appendChild(answerInner);
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
-	answerEl.dataset.y = -100;
+	answerEl.dataset.y = 0;
 	answerEl.dataset.vx = (Math.random() - 0.5) / 100;
 	answerEl.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
-	answerEl.style.left = '0';
-	answerEl.style.transform = 'translate(0, -100px)';
 	answerEl.addEventListener('click', answerClickListener);
 	if (correctAnswer) answerEl.classList.add('correct-answer');
 }

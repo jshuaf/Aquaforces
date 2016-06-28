@@ -2,7 +2,6 @@
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/');
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
-isFlowing = true;
 var boats = {},
 	boatProto = {
 		p: 0,
@@ -113,7 +112,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'start-game'}));
 	playing = true;
-	document.getElementById('content').classList.add('hostgame');
+	document.documentElement.classList.add('hostgame');
 	document.getElementById('lonelyfolks').classList.add('hide');
 	document.getElementById('crew-header').hidden = document.getElementById('start-game-btn').hidden = true;
 	crewsEl.classList.remove('studentselect');
@@ -129,7 +128,6 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	progress.childNodes.forEach(function(canoe, i) {
 		canoe.style.top = 'calc(' + (50 + 50 * i / n) + '% - ' + (1.6 * (2 * i / n - 0.5)) + 'em)';
 	});
-	canvas.hidden = false;
 	header.removeChild(header.lastChild);
 	lastTime = timeStart = new Date().getTime();
 	animationUpdate();
