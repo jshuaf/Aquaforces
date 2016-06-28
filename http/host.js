@@ -109,7 +109,7 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 	playing = true;
 	document.getElementById('content').classList.add('hostgame');
 	document.getElementById('lonelyfolks').classList.add('hide');
-	document.getElementById('crew-header').hidden = this.hidden = true;
+	document.getElementById('crew-header').hidden = document.getElementById('start-game-btn').hidden = true;
 	crewsEl.classList.remove('studentselect');
 	crewsEl.children.forEach(function(e, i) {
 		if (e.dataset.n != 0) {
