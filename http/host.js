@@ -107,6 +107,7 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'start-game'}));
 	playing = true;
+	document.getElementById('content').classList.add('hostgame');
 	document.getElementById('lonelyfolks').classList.add('hide');
 	document.getElementById('crew-header').hidden = this.hidden = true;
 	crewsEl.classList.remove('studentselect');
@@ -121,7 +122,6 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 	var n = progress.childElementCount - 1 || 1;
 	progress.childNodes.forEach(function(canoe, i) {
 		canoe.style.top = 'calc(' + (50 + 50 * i / n) + '% - ' + (1.6 * (2 * i / n - 0.5)) + 'em)';
-		canoe.style.background = crewsEl.children[canoe.firstChild.nodeValue - 1].style.color = 'hsl(' + (-45 + 100 * i / n) + ', 80%, 40%)';
 	});
 	canvas.hidden = false;
 	header.removeChild(header.lastChild);
