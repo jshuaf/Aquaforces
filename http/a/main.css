@@ -183,6 +183,7 @@ ol > li { line-height: 2 }
 	background-size: contain;
 	text-shadow: 1px 1px 3px #000;
 }
+#progress > div.raft { background: #950 }
 ol > li > span, #progress > div > span {
 	display: inline-block;
 	background: #ff0;
