@@ -91,7 +91,13 @@ socket.onmessage = function(m) {
 		var b = boats[m.crewnum];
 		if (m.correct) b.v += b.dv;
 		else if (m.raft) b.dv *= 0.95;
-		else b.hp += b.dhp;
+		else {
+			b.hp += b.dhp;
+			if (!b.raft && b.hp <= 0) {
+				b.raft = true;
+				document.getElementById('boat' + m.crewnum).classList.add('raft');
+			}
+		}
 	}
 };
 socket.onclose = function() {
