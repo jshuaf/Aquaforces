@@ -47,7 +47,8 @@ function uncrewUser() {
 	this.parentNode.dataset.n--;
 	this.parentNode.removeChild(this);
 }
-var crewsEl = document.getElementById('crews');
+var crewsEl = document.getElementById('crews'),
+	header = document.getElementById('header');
 socket.onmessage = function(m) {
 	console.log(m.data);
 	try {
@@ -61,7 +62,7 @@ socket.onmessage = function(m) {
 		if (m.state) setState(m.state);
 		errorEl.textContent = m.body;
 	} else if (m.event == 'new-game') {
-		document.getElementById('game-code-cont').appendChild(document.createTextNode(m.id));
+		header.appendChild(document.createTextNode(m.id));
 	} else if (m.event == 'add-loneuser') {
 		var li = document.createElement('li');
 		li.dataset.username = m.user;
@@ -107,7 +108,7 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 	socket.send(JSON.stringify({event: 'start-game'}));
 	playing = true;
 	document.getElementById('lonelyfolks').classList.add('hide');
-	document.getElementById('game-code-cont').hidden = document.getElementById('crew-header').hidden = this.hidden = true;
+	document.getElementById('crew-header').hidden = this.hidden = true;
 	crewsEl.classList.remove('studentselect');
 	crewsEl.children.forEach(function(e, i) {
 		if (e.dataset.n != 0) {
@@ -123,9 +124,16 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 		canoe.style.background = crewsEl.children[canoe.firstChild.nodeValue - 1].style.color = 'hsl(' + (-45 + 100 * i / n) + ', 80%, 40%)';
 	});
 	canvas.hidden = false;
-	lastTime = new Date().getTime();
+	header.removeChild(header.lastChild);
+	lastTime = timeStart = new Date().getTime();
 	animationUpdate();
 });
+var timeStart,
+	timeTotal = 600000;
+function zeroPad(t) {
+	if (t < 10) return '0' + t;
+	return t;
+}
 function animationUpdate() {
 	var thisTime = new Date().getTime(),
 		dt = thisTime - lastTime,
@@ -151,5 +159,10 @@ function animationUpdate() {
 		document.getElementById('boat' + id).style.transform = 'translateX(' + (b.p - cameraP + 0.5) * innerWidth * cameraS + 'px)';
 	}
 	lastTime = thisTime;
+	var ms = timeTotal - new Date().getTime() + timeStart + 1000, t = '';
+	if (ms < 0) t = 'End';
+	else if (ms < 10000) t = Math.floor(ms / 60000) + ':0' + (ms / 1000).toFixed(2);
+	else t = Math.floor(ms / 60000) + ':' + zeroPad(Math.floor(ms / 1000 % 60));
+	header.firstChild.nodeValue = t;
 	requestAnimationFrame(animationUpdate);
 }
