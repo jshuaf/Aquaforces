@@ -114,8 +114,8 @@ ul, ol {
 	text-align: left;
 	font-size: 1.5em;
 }
-#tgame, #game { width: 100% }
-#game {
+#tgame, #game {
+	width: 100%;
 	display: block;
 	background: transparent;
 }
@@ -177,10 +177,11 @@ ol > li { line-height: 2 }
 	left: 0;
 	height: 1.6em; width: 3.2em;
 	padding: 0.25em 0.5em;
-	border-radius: 50%;
 	color: #fff;
 	font-size: 2em;
-	box-shadow: -1px 1px 20px #000;
+	background: url('/img/3boat.png') no-repeat;
+	background-size: contain;
+	text-shadow: 1px 1px 3px #000;
 }
 ol > li > span, #progress > div > span {
 	display: inline-block;
@@ -215,3 +216,9 @@ canvas {
 	top: 75%;
 	transform: translate(-50%, -50%) rotate(90deg);
 }
+#content.hostgame {
+	background: url('/img/background.png') no-repeat;
+	background-size: contain;
+	color: #000;
+}
+#content.hostgame h1 { text-align: left }
