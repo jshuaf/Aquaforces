@@ -5,7 +5,7 @@ var cont = document.getElementById('cont'),
 isFlowing = true;
 var boats = {},
 	boatProto = {
-		p: -0.5,
+		p: 0,
 		v: 0,
 		dv: 10,
 		maxdv: 10,
@@ -103,7 +103,7 @@ document.getElementById('dashboard').addEventListener('submit', function(e) {
 	setState('tgame');
 });
 var progress = document.getElementById('progress'), lastTime;
-document.getElementById('start-game-btn').addEventListener('click', function(e) {
+document.getElementById('tgame').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'start-game'}));
 	playing = true;
@@ -160,9 +160,15 @@ function animationUpdate() {
 	}
 	lastTime = thisTime;
 	var ms = timeTotal - new Date().getTime() + timeStart + 1000, t = '';
-	if (ms < 0) t = 'End';
+	if (ms < 0) t = 'Time\'s up!';
 	else if (ms < 10000) t = Math.floor(ms / 60000) + ':0' + (ms / 1000).toFixed(2);
 	else t = Math.floor(ms / 60000) + ':' + zeroPad(Math.floor(ms / 1000 % 60));
 	header.firstChild.nodeValue = t;
-	requestAnimationFrame(animationUpdate);
+	if (ms < 0) endGame();
+	else requestAnimationFrame(animationUpdate);
+}
+function endGame() {
+	crewsEl.children.forEach(function(e, i) {
+		if (boats[i + 1]) e.appendChild(document.createTextNode(boats[i + 1].p.toFixed(1) + '\u2006km'));
+	});
 }
