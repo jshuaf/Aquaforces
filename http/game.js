@@ -13,6 +13,12 @@ function setState(id) {
 	if (e.length) e[e.length - 1].focus();
 	cont.classList.toggle('pregamescreen', id != 'game');
 }
+function flash(color) {
+	document.body.className = '';
+	requestAnimationFrame(function() {
+		document.body.classList.add('flash-' + color);
+	});
+}
 var answers = [],
 	correctAnswerQueue = [];
 socket.onmessage = function(m) {
@@ -26,7 +32,6 @@ socket.onmessage = function(m) {
 	if (m.state) setState(m.state);
 	if (m.event == 'notice' || m.event == 'error') errorEl.textContent = m.body;
 	if (m.event == 'start-game') {
-		isFlowing = true;
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
@@ -34,7 +39,7 @@ socket.onmessage = function(m) {
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
-	if (m.event == 'answer-status') bg(m.correct ? '#0f0' : '#f00');
+	if (m.event == 'answer-status') flash(m.correct ? 'green' : 'red');
 	if (m.event == 'end-game') gameHasEnded = true;
 };
 socket.onclose = function() {
@@ -83,11 +88,9 @@ function addAnswer() {
 	answerEl.appendChild(answerInner);
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
-	answerEl.dataset.y = -100;
+	answerEl.dataset.y = 0;
 	answerEl.dataset.vx = (Math.random() - 0.5) / 100;
 	answerEl.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
-	answerEl.style.left = '0';
-	answerEl.style.transform = 'translate(0, -100px)';
 	answerEl.addEventListener('click', answerClickListener);
 	if (correctAnswer) answerEl.classList.add('correct-answer');
 }
@@ -102,7 +105,7 @@ function failQuestion() {
 		event: 'timeout-question',
 		text: document.getElementById('question').firstChild.firstChild.nodeValue
 	}));
-	bg('#ff0');
+	flash('yellow');
 }
 function animationUpdate() {
 	var thisTime = new Date().getTime(),
