@@ -143,13 +143,17 @@ ul, ol {
 	margin: calc(5em + 20vh) auto 0;
 }
 #game input[type='text'] { width: 100% }
-#answers span {
+#answers > div {
 	position: absolute;
 	top: 0;
+	cursor: pointer;
+	padding: 0.8em;
+}
+#answers > div:hover { background: #aa0 }
+#answers > div > div {
 	padding: 0.2em 0.5em;
 	background: #ff0;
 	color: #000;
-	cursor: pointer;
 	max-width: 10em;
 }
 .half-divider { display: flex }
