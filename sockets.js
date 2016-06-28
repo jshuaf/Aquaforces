@@ -60,7 +60,7 @@ module.exports = function(server) {
 					}));
 				} else if (m.event == 'answer-chosen') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
-					if (!m.text) return tws.error('No answer text sent.', 'join');
+					if (!m.text) return tws.error('No answer text sent.');
 					let crew = tws.game.crews[tws.crewnum];
 					crew.recentAnswers.forEach(function(pastAnswer) {
 						if (pastAnswer.text == m.text && new Date().getTime() - pastAnswer.time < maxFuzzyTime) {
@@ -90,7 +90,7 @@ module.exports = function(server) {
 					}
 				} else if (m.event == 'timeout-question') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
-					if (!m.text) return tws.error('No question text sent.', 'join');
+					if (!m.text) return tws.error('No question text sent.');
 					let qid;
 					tws.game.activeQuestionIDs.forEach(function(questionID) {
 						if (tws.game.questions[questionID].text == m.text) qid = questionID;
@@ -108,7 +108,7 @@ module.exports = function(server) {
 					ttws.questionIDsDone.push(questionID);
 				} else if (m.event == 'resend-answer') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
-					if (typeof m.text != 'string') return tws.error('No answer text sent.', 'join');
+					if (typeof m.text != 'string') return tws.error('No answer text sent.');
 					let crew = tws.game.crews[tws.crewnum],
 						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: m.text}));
