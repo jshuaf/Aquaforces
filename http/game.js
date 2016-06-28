@@ -67,18 +67,20 @@ var answersEl = document.getElementById('answers');
 function answerClickListener() {
 	socket.send(JSON.stringify({
 		event: 'answer-chosen',
-		text: this.firstChild.nodeValue
+		text: this.firstChild.firstChild.nodeValue
 	}));
 }
 function addAnswer() {
-	var answerEl = document.createElement('span'),
+	var answerEl = document.createElement('div'),
 		answer,
 		correctAnswer = false;
 	if (correctAnswerQueue.length && Math.random() < 0.15) {
 		answer = correctAnswerQueue.shift();
 		correctAnswer = true;
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
-	answerEl.appendChild(document.createTextNode(answer));
+	var answerInner = document.createElement('div');
+	answerInner.appendChild(document.createTextNode(answer));
+	answerEl.appendChild(answerInner);
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
 	answerEl.dataset.y = -100;
@@ -133,7 +135,7 @@ function animationUpdate() {
 			if (e.classList.contains('correct-answer')) {
 				socket.send(JSON.stringify({
 					event: 'resend-answer',
-					text: e.firstChild.nodeValue
+					text: e.firstChild.firstChild.nodeValue
 				}));
 			}
 			answersEl.removeChild(e);
