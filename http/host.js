@@ -129,7 +129,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	animationUpdate();
 });
 var timeStart,
-	timeTotal = 600000;
+	timeTotal = 6000;
 function zeroPad(t) {
 	if (t < 10) return '0' + t;
 	return t;
@@ -171,4 +171,8 @@ function endGame() {
 	crewsEl.children.forEach(function(e, i) {
 		if (boats[i + 1]) e.appendChild(document.createTextNode(boats[i + 1].p.toFixed(1) + '\u2006km'));
 	});
+	progress.classList.add('hide');
+	socket.send(JSON.stringify({
+		event: 'end-game'
+	}));
 }

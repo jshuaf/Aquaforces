@@ -193,6 +193,11 @@ module.exports = function(server) {
 							ttws.questionIDsDone.push(questionID);
 						});
 					});
+				} else if (m.event == 'end-game') {
+					if (!tws.game) return tws.error('Game not found.', 'join');
+					tws.game.users.forEach(function(ttws) {
+						ttws.trysend(JSON.stringify({event: 'set-state', state: 'game-ended'}));
+					});
 				} else tws.error('Unknown socket event ' + m.event + ' received.');
 			});
 		} else if (tws.upgradeReq.url == '/console/') {

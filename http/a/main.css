@@ -222,3 +222,7 @@ canvas {
 	color: #000;
 }
 #content.hostgame h1 { text-align: left }
+#progress.hide {
+	opacity: 0;
+	transition: opacity 0.5s;
+}
