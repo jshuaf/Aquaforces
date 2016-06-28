@@ -64,7 +64,7 @@ module.exports = function(server) {
 					let crew = tws.game.crews[tws.crewnum];
 					crew.recentAnswers.forEach(function(pastAnswer) {
 						if (pastAnswer.text == m.text && new Date().getTime() - pastAnswer.time < maxFuzzyTime) {
-							return ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+							return tws.trysend(JSON.stringify({event: 'answer-status', correct: true}));
 						}
 					});
 					let qid;
