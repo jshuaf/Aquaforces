@@ -13,6 +13,12 @@ function setState(id) {
 	if (e.length) e[e.length - 1].focus();
 	cont.classList.toggle('pregamescreen', id != 'game');
 }
+function flash(color) {
+	document.body.className = '';
+	requestAnimationFrame(function() {
+		document.body.classList.add('flash-' + color);
+	});
+}
 var answers = [],
 	correctAnswerQueue = [];
 socket.onmessage = function(m) {
@@ -34,7 +40,7 @@ socket.onmessage = function(m) {
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
-	if (m.event == 'answer-status') bg(m.correct ? '#0f0' : '#f00');
+	if (m.event == 'answer-status') flash(m.correct ? 'green' : 'red');
 	if (m.event == 'end-game') gameHasEnded = true;
 };
 socket.onclose = function() {
@@ -102,7 +108,7 @@ function failQuestion() {
 		event: 'timeout-question',
 		text: document.getElementById('question').firstChild.firstChild.nodeValue
 	}));
-	bg('#ff0');
+	flash('yellow');
 }
 function animationUpdate() {
 	var thisTime = new Date().getTime(),

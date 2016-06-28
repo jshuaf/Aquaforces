@@ -16,6 +16,18 @@ body {
 	background-color: #000;
 	color: #eee;
 }
+@keyframes flash-red {
+	0% { background: #f00 }
+}
+@keyframes flash-yellow {
+	0% { background: #ff0 }
+}
+@keyframes flash-green {
+	0% { background: #0f0 }
+}
+.flash-red { animation: flash-red 0.3s }
+.flash-yellow { animation: flash-yellow 0.3s }
+.flash-green { animation: flash-green 0.3s }
 [hidden] {
 	display: none;
 	pointer-events: none;
@@ -84,14 +96,14 @@ button {
 	display: block;
 	margin: 1em auto;
 	padding: 0.2em 1em;
-	background: transparent;
+	background: #07f;
 	font-size: 1.6em;
 	transition: background-color 0.1s;
 	border: 1px solid #aaa;
 	color: #fff;
 }
 button:hover { background: #09f }
-button:active { background: #06f }
+button:active { background: #05f }
 button[disabled] { background: #aaa }
 #error {
 	color: #f00;
@@ -119,6 +131,7 @@ ul, ol {
 	display: block;
 	background: transparent;
 }
+#game { padding: 0 }
 #game h1 {
 	background: #fff;
 	color: #000;
