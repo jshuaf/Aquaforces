@@ -89,6 +89,7 @@ function addAnswer() {
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
 	var answerInner = document.createElement('div');
 	answerInner.appendChild(document.createTextNode(answer));
+	if (Math.random() < 0.4) answerEl.classList.add('alt');
 	answerEl.appendChild(answerInner);
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
