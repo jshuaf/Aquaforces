@@ -126,7 +126,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	});
 	var n = progress.childElementCount - 1 || 1;
 	progress.childNodes.forEach(function(canoe, i) {
-		canoe.style.top = 'calc(' + (50 + 50 * i / n) + '% - ' + (1.6 * (2 * i / n - 0.5)) + 'em)';
+		canoe.style.top = 'calc(' + (50 + 50 * (i + 1) / (n + 2)) + '% - ' + (1.6 * (2 * i / n - 0.5)) + 'em)';
 	});
 	header.removeChild(header.lastChild);
 	lastTime = timeStart = new Date().getTime();
