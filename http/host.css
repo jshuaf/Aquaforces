@@ -18,11 +18,11 @@ html.hostgame h1 {
 #progress > div {
 	position: absolute;
 	left: 0;
-	height: 1.6em; width: 3.2em;
+	width: 3.2em;
 	padding: 0.25em 0.5em;
 	color: #fff;
 	font-size: 2em;
-	background: url('/img/3boat.png') no-repeat;
+	background: url('/img/canoeside.svg') no-repeat;
 	background-size: contain;
 	text-shadow: 1px 1px 3px #000;
 }
