@@ -67,19 +67,23 @@ module.exports = function(server) {
 							return tws.trysend(JSON.stringify({event: 'answer-status', correct: true}));
 						}
 					});
-					let qid;
-					tws.game.activeQuestionIDs.forEach(function(questionID) {
-						if (tws.game.questions[questionID].answer == m.text) qid = questionID;
+					let tquestion;
+					tws.game.activeQuestions.forEach(function(question) {
+						if (question.answer == m.text) tquestion = question;
 					});
-					tws.trysend(JSON.stringify({event: 'answer-status', correct: !!qid}));
-					tws.game.host.trysend(JSON.stringify({event: 'answer', correct: !!qid, crewnum: tws.crewnum}));
-					if (qid) {
-						tws.game.activeQuestionIDs.splice(tws.game.activeQuestionIDs.indexOf(qid), 1);
+					tws.trysend(JSON.stringify({event: 'answer-status', correct: !!tquestion}));
+					tws.game.host.trysend(JSON.stringify({event: 'answer', correct: !!tquestion, crewnum: tws.crewnum}));
+					if (tquestion) {
+						tws.game.activeQuestions.splice(tws.game.activeQuestions.indexOf(tquestion), 1);
 						let questionID = 0;
 						while (!questionID || tws.questionIDsDone.includes(questionID)) questionID = Math.floor(Math.random() * tws.game.questions.length);
 						let question = tws.game.questions[questionID];
-						tws.game.activeQuestionIDs.push(questionID);
-						tws.trysend(JSON.stringify({event: 'question', question: question.text}));
+						tws.game.activeQuestions.push({
+							text: question.text,
+							answer: question.answer,
+							owner: tquestion.owner
+						});
+						tquestion.owner.trysend(JSON.stringify({event: 'question', question: question.text}));
 						let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						ttws.questionIDsDone.push(questionID);
@@ -91,16 +95,20 @@ module.exports = function(server) {
 				} else if (m.event == 'timeout-question') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (!m.text) return tws.error('No question text sent.');
-					let qid;
-					tws.game.activeQuestionIDs.forEach(function(questionID) {
-						if (tws.game.questions[questionID].text == m.text) qid = questionID;
+					let tquestion;
+					tws.game.activeQuestions.forEach(function(question) {
+						if (question.text == m.text) tquestion = question;
 					});
 					tws.game.host.trysend(JSON.stringify({event: 'no-answer', crewnum: tws.crewnum}));
-					if (qid) tws.game.activeQuestionIDs.splice(tws.game.activeQuestionIDs.indexOf(qid), 1);
+					if (tquestion) tws.game.activeQuestions.splice(tws.game.activeQuestions.indexOf(tquestion), 1);
 					let questionID = 0;
 					while (!questionID || tws.questionIDsDone.includes(questionID)) questionID = Math.floor(Math.random() * tws.game.questions.length);
 					let question = tws.game.questions[questionID];
-					tws.game.activeQuestionIDs.push(questionID);
+					tws.game.activeQuestions.push({
+						text: question.text,
+						answer: question.answer,
+						owner: tws
+					});
 					tws.trysend(JSON.stringify({event: 'question', question: question.text}));
 					let crew = tws.game.crews[tws.crewnum],
 						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
@@ -136,7 +144,7 @@ module.exports = function(server) {
 						usernames: [],
 						users: [],
 						questions: [],
-						activeQuestionIDs: [],
+						activeQuestions: [],
 						hasStarted: false
 					};
 					for (let i = 0; i < 100; i++) {
@@ -186,7 +194,11 @@ module.exports = function(server) {
 						crew.members.forEach(function(member) {
 							let questionID = Math.floor(Math.random() * tws.game.questions.length),
 								question = tws.game.questions[questionID];
-							tws.game.activeQuestionIDs.push(questionID);
+							tws.game.activeQuestions.push({
+								text: question.text,
+								answer: question.answer,
+								owner: member
+							});
 							member.trysend(JSON.stringify({event: 'question', question: question.text}));
 							let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
