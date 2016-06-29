@@ -161,8 +161,11 @@ ul, ol {
 	cursor: pointer;
 	padding: 0.7em 1.2em;
 	background: url('/img/leaf1.svg') no-repeat center;
+	text-shadow: 1px 1px 5px #fff;
 }
-#answers > div.alt { background: url('/img/leaf2.svg') no-repeat center }
+#answers > div.a-style2 { background: url('/img/leaf2.svg') no-repeat center }
+#answers > div.a-style3 { background: url('/img/log1.svg') no-repeat center }
+#answers > div.a-style4 { background: url('/img/log2.svg') no-repeat center }
 @media (pointer: fine) {
 	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
 }
