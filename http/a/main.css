@@ -27,6 +27,7 @@ html, body, main, #progress, #cont { height: 100% }
 	display: none;
 	pointer-events: none;
 }
+[hidden] > * { display: none }
 main { position: relative }
 label {
 	font-size: 1.3em;
@@ -62,6 +63,7 @@ form {
 	.pregamescreen form { padding: 0 10% }
 }
 @media (min-height: 32em) {
+	html { overflow: hidden }
 	.pregamescreen { margin-top: 50vh }
 	.pregamescreen form { transform: translateY(-50%) }
 }
@@ -146,11 +148,11 @@ ul, ol {
 	top: 0; right: 0; bottom: 0; left: 0;
 }
 #canoe {
-	width: 20vmin;
-	height: 40vmin;
-	border-radius: 50%;
-	background: #950;
-	margin: calc(5em + 20vh) auto 0;
+	width: 24.52vmin;
+	height: 39.18vmin;
+	background: url('/img/canoetop.svg');
+	background-size: cover;
+	margin: calc(5em + 20vh) auto 0
 }
 #game input[type='text'] { width: 100% }
 #answers > div {

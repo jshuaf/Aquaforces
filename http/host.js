@@ -3,20 +3,20 @@ var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') +
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
 var boats = {},
-	boatProto = {
-		p: 0,
-		v: 0,
-		dv: 10,
-		maxdv: 10,
-		hp: 1,
-		dhp: -0.1,
-		c: -0.1,
-		cf: 0.003,
-		vf: 0.00001,
-		raft: false
-	},
 	cameraP = 0,
 	cameraS = 1;
+function Boat() {
+	this.p = 0;
+	this.v = 0;
+	this.dv = 10;
+	this.maxdv = 10;
+	this.hp = 1;
+	this.dhp = -0.1;
+	this.c = -0.1;
+	this.cf = 0.003;
+	this.vf = 0.00001;
+	this.raft = false;
+}
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -121,12 +121,12 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 			progress.appendChild(document.createElement('div'));
 			progress.lastChild.appendChild(document.createTextNode(i + 1));
 			progress.lastChild.id = 'boat' + (i + 1);
-			boats[i + 1] = boatProto;
+			boats[i + 1] = new Boat();
 		}
 	});
 	var n = progress.childElementCount - 1 || 1;
 	progress.childNodes.forEach(function(canoe, i) {
-		canoe.style.top = 'calc(' + (50 + 50 * i / n) + '% - ' + (1.6 * (2 * i / n - 0.5)) + 'em)';
+		canoe.style.top = 'calc(' + (50 + 50 * (i + 1) / (n + 2)) + '% - ' + (1.6 * (2 * i / n - 0.5)) + 'em)';
 	});
 	header.removeChild(header.lastChild);
 	lastTime = timeStart = new Date().getTime();

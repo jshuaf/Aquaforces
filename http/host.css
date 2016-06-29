@@ -1,11 +1,10 @@
 html { background-color: #148 }
 html.hostgame {
-	background: url('/img/background.png') no-repeat;
-	background-size: cover;
+	background: #4af url('/img/beachscape.svg') repeat-x;
 	color: #000;
 }
 html.hostgame h1 {
-	text-align: left;
+	float: right;
 	padding: 0 1em;
 }
 #progress {
