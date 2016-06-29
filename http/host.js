@@ -133,7 +133,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	animationUpdate();
 });
 var timeStart,
-	timeTotal = 600000;
+	timeTotal = 300000;
 function zeroPad(t) {
 	if (t < 10) return '0' + t;
 	return t;
