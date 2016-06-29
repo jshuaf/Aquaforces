@@ -79,7 +79,7 @@ function addAnswer() {
 	var answerEl = document.createElement('div'),
 		answer,
 		correctAnswer = false;
-	if (correctAnswerQueue.length && Math.random() < 0.15) {
+	if (correctAnswerQueue.length && Math.random() < 0.2) {
 		answer = correctAnswerQueue.shift();
 		correctAnswer = true;
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
