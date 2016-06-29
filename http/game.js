@@ -30,7 +30,10 @@ socket.onmessage = function(m) {
 		return alert('Socket error.');
 	}
 	if (m.state) setState(m.state);
-	if (m.event == 'notice' || m.event == 'error') errorEl.textContent = m.body;
+	if (m.event == 'notice' || m.event == 'error') {
+		errorEl.textContent = m.body;
+		errorEl.scrollIntoView();
+	}
 	if (m.event == 'start-game') {
 		answers = m.answers;
 		lastTime = new Date().getTime();
@@ -44,6 +47,7 @@ socket.onmessage = function(m) {
 };
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
+	errorEl.scrollIntoView();
 };
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
@@ -85,6 +89,7 @@ function addAnswer() {
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
 	var answerInner = document.createElement('div');
 	answerInner.appendChild(document.createTextNode(answer));
+	if (Math.random() < 0.4) answerEl.classList.add('alt');
 	answerEl.appendChild(answerInner);
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;

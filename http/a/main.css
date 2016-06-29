@@ -62,7 +62,7 @@ form {
 @media (min-width: 600px) {
 	.pregamescreen form { padding: 0 10% }
 }
-@media (min-height: 32em) {
+@media (min-height: 32em) and (pointer: fine) {
 	html { overflow: hidden }
 	.pregamescreen { margin-top: 50vh }
 	.pregamescreen form { transform: translateY(-50%) }
@@ -159,12 +159,15 @@ ul, ol {
 	position: absolute;
 	top: 0; left: 0;
 	cursor: pointer;
-	padding: 0.8em;
+	padding: 0.7em 1.2em;
+	background: url('/img/leaf1.svg') no-repeat center;
 }
-#answers > div:hover { background: #aa0 }
+#answers > div.alt { background: url('/img/leaf2.svg') no-repeat center }
+@media (pointer: fine) {
+	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
+}
 #answers > div > div {
 	padding: 0.2em 0.5em;
-	background: #ff0;
 	color: #000;
 	max-width: 10em;
 }
