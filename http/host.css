@@ -1,0 +1,29 @@
+html { background-color: #148 }
+html.hostgame {
+	background: #4af url('/img/beachscape.svg') repeat-x;
+	color: #000;
+}
+html.hostgame h1 {
+	float: right;
+	padding: 0 1em;
+}
+#progress {
+	position: absolute;
+	top: 0;
+}
+#progress.hide {
+	opacity: 0;
+	transition: opacity 0.5s;
+}
+#progress > div {
+	position: absolute;
+	left: 0;
+	width: 3.2em;
+	padding: 0.25em 0.5em;
+	color: #fff;
+	font-size: 2em;
+	background: url('/img/canoeside.svg') no-repeat;
+	background-size: contain;
+	text-shadow: 1px 1px 3px #000;
+}
+#progress > div.raft { background: #950 }

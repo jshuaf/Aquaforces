@@ -4,6 +4,10 @@ const config = {
 };
 require('./essentials.js');
 require('colors');
+global.dbcs = {};
+const usedDBCs = [
+	'questions'
+];
 const http = require('http'),
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
@@ -13,10 +17,9 @@ const http = require('http'),
 	url = require('url'),
 	querystring = require('querystring'),
 	cookie = require('cookie'),
-	crypto = require('crypto');
+	crypto = require('crypto'),
+	mongo = require('mongodb').MongoClient;
 let statics = JSON.parse(fs.readFileSync('./statics.json'));
-global.dbcs = {};
-const usedDBCs = ['questions'];
 global.errorForbidden = function(req, res, msg) {
 	respondPage('403', req, res, o(function*() {
 		res.write('<h1>Error 403</h1>');
@@ -123,33 +126,44 @@ let serverHandler = o(function*(req, res) {
 		}
 	} else return errorNotFound(req, res);
 });
-let server = http.createServer(serverHandler).listen(config.port);
-console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
-require('./sockets.js')(server);
-console.log('Sockets running on port 3000 over plain WS.'.cyan);
-if (process.argv.indexOf('--test') >= 0) {
-	console.log('Running test, process will terminate when finished.'.yellow);
-	http.get({
-		port: config.port,
-		headers: {host: 'localhost'}
-	}, function(testRes) {
-		testRes.on('data', function(d) {
-			console.log('Data received (' + d.length + ' char' + (d.length == 1 ? '' : 's') + '):' + ('\n> ' + d.toString().replaceAll('\n', '\n> ')).grey);
-		});
-		testRes.on('end', function() {
-			console.log('HTTP test passed, starting socket test.'.green);
-			let WS = require('ws');
-			let wsc = new WS('ws://localhost:' + config.port + '/test');
-			wsc.on('open', function() {
-				console.log('Connected to socket.');
-			});
-			wsc.on('data', function(d) {
+console.log('Connecting to mongodb…'.cyan);
+mongo.connect('mongodb://localhost:27017/DevDoodle', function(err, db) {
+	if (err) throw err;
+	let i = usedDBCs.length;
+	function handleCollection(err, collection) {
+		if (err) throw err;
+		dbcs[usedDBCs[i]] = collection;
+	}
+	while (i--) db.collection(usedDBCs[i], handleCollection);
+	console.log('Connected to mongodb.'.cyan);
+	let server = http.createServer(serverHandler).listen(config.port);
+	console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
+	require('./sockets.js')(server);
+	console.log('Sockets running on port 3000 over plain WS.'.cyan);
+	if (process.argv.indexOf('--test') >= 0) {
+		console.log('Running test, process will terminate when finished.'.yellow);
+		http.get({
+			port: config.port,
+			headers: {host: 'localhost'}
+		}, function(testRes) {
+			testRes.on('data', function(d) {
 				console.log('Data received (' + d.length + ' char' + (d.length == 1 ? '' : 's') + '):' + ('\n> ' + d.toString().replaceAll('\n', '\n> ')).grey);
 			});
-			wsc.on('close', function() {
-				console.log('Things seem to work!'.green);
-				process.exit();
+			testRes.on('end', function() {
+				console.log('HTTP test passed, starting socket test.'.green);
+				let WS = require('ws');
+				let wsc = new WS('ws://localhost:' + config.port + '/test');
+				wsc.on('open', function() {
+					console.log('Connected to socket.');
+				});
+				wsc.on('data', function(d) {
+					console.log('Data received (' + d.length + ' char' + (d.length == 1 ? '' : 's') + '):' + ('\n> ' + d.toString().replaceAll('\n', '\n> ')).grey);
+				});
+				wsc.on('close', function() {
+					console.log('Things seem to work!'.green);
+					process.exit();
+				});
 			});
 		});
-	});
-}
+	}
+});

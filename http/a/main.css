@@ -3,20 +3,31 @@
 	-moz-box-sizing: border-box;
 	-webkit-overflow-scrolling: touch;
 }
-html, body, main {
-	height: 100%;
-	width: 100%;
-	display: inline-block;
-	overflow: hidden;
-}
-body {
+html {
 	font: 100% sans-serif;
 	text-align: center;
-	margin: 0;
-	background-color: #000;
+	background-color: #39f;
 	color: #eee;
 }
-[hidden] { display: none }
+body { margin: 0 }
+html, body, main, #progress, #cont { height: 100% }
+@keyframes flash-red {
+	0% { background: #f00 }
+}
+@keyframes flash-yellow {
+	0% { background: #ff0 }
+}
+@keyframes flash-green {
+	0% { background: #0f0 }
+}
+.flash-red { animation: flash-red 0.3s }
+.flash-yellow { animation: flash-yellow 0.3s }
+.flash-green { animation: flash-green 0.3s }
+[hidden] {
+	display: none;
+	pointer-events: none;
+}
+[hidden] > * { display: none }
 main { position: relative }
 label {
 	font-size: 1.3em;
@@ -25,9 +36,9 @@ label {
 }
 form {
 	margin: 0 auto;
-	background: rgba(0, 0, 0, 0.5);
 	padding: 2em;
 }
+.pregamescreen form { background: rgba(0, 0, 0, 0.5) }
 .centerbox {
 	text-align: left;
 	display: table;
@@ -51,7 +62,8 @@ form {
 @media (min-width: 600px) {
 	.pregamescreen form { padding: 0 10% }
 }
-@media (min-height: 32em) {
+@media (min-height: 32em) and (pointer: fine) {
+	html { overflow: hidden }
 	.pregamescreen { margin-top: 50vh }
 	.pregamescreen form { transform: translateY(-50%) }
 }
@@ -81,14 +93,14 @@ button {
 	display: block;
 	margin: 1em auto;
 	padding: 0.2em 1em;
-	background: transparent;
+	background: #07f;
 	font-size: 1.6em;
 	transition: background-color 0.1s;
 	border: 1px solid #aaa;
 	color: #fff;
 }
 button:hover { background: #09f }
-button:active { background: #06f }
+button:active { background: #05f }
 button[disabled] { background: #aaa }
 #error {
 	color: #f00;
@@ -111,14 +123,18 @@ ul, ol {
 	text-align: left;
 	font-size: 1.5em;
 }
-#tgame, #game { width: 100% }
-#game {
-	display: block;
+#game, #tgame {
+	padding: 0;
 	background: transparent;
+	width: 100%;
+	display: block;
 }
 #game h1 {
 	background: #fff;
 	color: #000;
+	position: absolute;
+	z-index: 1;
+	right: 0; left: 0;
 	margin-top: 0;
 	padding-top: 0.3em;
 }
@@ -130,23 +146,32 @@ ul, ol {
 #prequestion {
 	position: absolute;
 	top: 0; right: 0; bottom: 0; left: 0;
-	mix-blend-mode: overlay;
 }
 #canoe {
-	width: 20vmin;
-	height: 40vmin;
-	border-radius: 50%;
-	background: #950;
-	margin: calc(5em + 20vh) auto 0;
+	width: 24.52vmin;
+	height: 39.18vmin;
+	background: url('/img/canoetop.svg');
+	background-size: cover;
+	margin: calc(5em + 20vh) auto 0
 }
 #game input[type='text'] { width: 100% }
-#words span {
+#answers > div {
 	position: absolute;
-	top: 0;
-	padding: 0.2em 0.5em;
-	background: #ff0;
-	color: #000;
+	top: 0; left: 0;
 	cursor: pointer;
+	padding: 0.7em 1.2em;
+	background: url('/img/leaf1.svg') no-repeat center;
+	text-shadow: 1px 1px 5px #fff;
+}
+#answers > div.a-style2 { background: url('/img/leaf2.svg') no-repeat center }
+#answers > div.a-style3 { background: url('/img/log1.svg') no-repeat center }
+#answers > div.a-style4 { background: url('/img/log2.svg') no-repeat center }
+@media (pointer: fine) {
+	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
+}
+#answers > div > div {
+	padding: 0.2em 0.5em;
+	color: #000;
 	max-width: 10em;
 }
 .half-divider { display: flex }
@@ -169,7 +194,7 @@ li[data-n='1'] { color: #f22 }
 ul.studentselect > li { cursor: pointer }
 ul.studentselect > li:hover { text-decoration: line-through }
 ol > li { line-height: 2 }
-ol > li > span {
+ol > li > span, #progress > div > span {
 	display: inline-block;
 	background: #ff0;
 	color: #111;
@@ -191,9 +216,8 @@ ol.studentselect > li > span::before {
 	padding-bottom: 0.2em;
 }
 ol > li > span:hover::before { width: 2ch }
-canvas {
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: -1;
+.host ~ canvas {
+	left: 50%;
+	top: 75%;
+	transform: translate(-50%, -50%) rotate(90deg);
 }
