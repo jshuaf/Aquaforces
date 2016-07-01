@@ -38,7 +38,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addAnswer, 1200);
+		setInterval(addAnswer, 700);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -75,6 +75,7 @@ var timeBar = document.getElementById('timebar'),
 	hp = 1;
 var answersEl = document.getElementById('answers');
 function answerClickListener() {
+	this.parentNode.removeChild(this);
 	socket.send(JSON.stringify({
 		event: 'answer-chosen',
 		text: this.firstChild.firstChild.nodeValue
@@ -103,11 +104,9 @@ function addAnswer() {
 	answerEl.addEventListener('click', answerClickListener);
 	if (correctAnswer) answerEl.classList.add('correct-answer');
 }
-var includeTimeBar = true;
 function startQuestion(question) {
 	document.getElementById('question').firstChild.firstChild.nodeValue = question;
 	timeProportion = 1;
-	includeTimeBar = true;
 }
 function failQuestion() {
 	socket.send(JSON.stringify({
@@ -119,18 +118,10 @@ function failQuestion() {
 function animationUpdate() {
 	var thisTime = new Date().getTime(),
 		dt = thisTime - lastTime;
-	if (includeTimeBar) {
-		timeBar.style.width = 100 * timeProportion + '%';
-		timeBar.style.background = 'hsl(' + 110 * timeProportion + ', 100%, 50%)';
-		timeProportion -= dt / timeTotal / 1000;
-		if (timeProportion < 0) {
-			includeTimeBar = false;
-			failQuestion();
-		}
-	} else {
-		timeBar.style.width = '0';
-		timeBar.style.background = 'hsl(0, 100%, 50%)';
-	}
+	timeBar.style.width = 100 * timeProportion + '%';
+	timeBar.style.background = 'hsl(' + 110 * timeProportion + ', 100%, 50%)';
+	timeProportion -= dt / timeTotal / 1000;
+	if (timeProportion < 0) failQuestion();
 	answersEl.children.forEach(function(e) {
 		const leftBoundary = 0.42;
 		const rightBoundary = 0.58;

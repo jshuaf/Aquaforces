@@ -11,6 +11,7 @@ const usedDBCs = [
 const http = require('http'),
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
+	babel = require('babel-core'),
 	zlib = require('zlib'),
 	fs = require('fs'),
 	path = require('path'),
@@ -85,7 +86,7 @@ let serverHandler = o(function*(req, res) {
 					return;
 				}
 				switch (path.extname(req.url.pathname)) {
-					case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
+					case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
 					break;
 					case '.css': data = new CleanCSS().minify(data).styles;
 					break;
@@ -105,7 +106,7 @@ let serverHandler = o(function*(req, res) {
 				return errorNotFound(req, res);
 			}
 			switch (path.extname(req.url.pathname)) {
-				case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
+				case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
 				break;
 				case '.css': data = new CleanCSS().minify(data).styles;
 				break;
