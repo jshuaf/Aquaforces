@@ -74,6 +74,7 @@ var timeBar = document.getElementById('timebar'),
 	hp = 1;
 var answersEl = document.getElementById('answers');
 function answerClickListener() {
+	this.parentNode.removeChild(this);
 	socket.send(JSON.stringify({
 		event: 'answer-chosen',
 		text: this.firstChild.firstChild.nodeValue
