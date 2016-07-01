@@ -47,8 +47,8 @@
   \******************/
 /***/ function(module, exports, __webpack_require__) {
 
-	(function webpackMissingModule() { throw new Error("Cannot find module \"/Users/Alex/Documents/Programming/Aquaforces/http/game/game_components.jsx\""); }());
-	(function webpackMissingModule() { throw new Error("Cannot find module \"/Users/Alex/Documents/Programming/Aquaforces/http/game/game.jsx\""); }());
+	(function webpackMissingModule() { throw new Error("Cannot find module \"/Users/Alexander/Documents/Aquaforces/http/game/game_components.jsx\""); }());
+	(function webpackMissingModule() { throw new Error("Cannot find module \"/Users/Alexander/Documents/Aquaforces/http/game/game.jsx\""); }());
 
 
 /***/ }
