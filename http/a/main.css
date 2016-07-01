@@ -1,4 +1,134 @@
 * {
+	font-family: 'Source Sans Pro', sans-serif;
+	color: #2c3e50;
+}
+strong, b {
+	font-weight: bold
+}
+body {
+	background: #4ca9d6 url('/img/background.svg') repeat-x center top;
+	background-size: cover;
+}
+.navbar {
+	background-color: white;
+	border-radius: 2rem;
+	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+	padding: 20px 45px;
+	margin-bottom: 2rem;
+}
+.navbar > .columns > * {
+	margin-bottom: 0;
+	font-weight: normal;
+}
+.navbar > .columns > p, a {
+	line-height: 3.125rem;
+	vertical-align: center;
+}
+.navbar > .columns > .navbar-logo {
+	font-weight: bold;
+}
+h1 {
+	font-size: 5rem;
+	margin-top: 0;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+h2 {
+	font-size: 2.5rem;
+	font-weight: bold;
+}
+input {
+	font-size: 1.5rem;
+}
+span, span > * {
+	background-color: #26a65b;
+	border-radius: 0.5rem;
+	padding: 0 1rem;
+	color: white;
+}
+span > span {
+	display: none;
+}
+span:hover > span {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	border-radius: 0;
+	line-height: 1;
+}
+span[.clickable]:hover {
+	background-color: #16964b;
+}
+.panel {
+	background-color: white;
+	border-radius: 2rem;
+	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+	padding: 45px;
+	margin-bottom: 40px;
+}
+.answers > span {
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: #34495e;
+	padding: 2rem;
+	border-radius: 1rem;
+	font-size: 20px;
+}
+@media (min-width: 700px) {
+	.navbar > .columns > p, a {
+		text-align: right;
+	}
+}
+.studentselect > li {
+	font-size: 2rem;
+}
+.river {
+	background: #00aadb no-repeat center top;
+	width: 100%;
+	height: 75vh;
+	text-align: center;
+	border-radius: 0 0 2rem 2rem;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+.answers {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+.panel-group {
+	margin-top: 15px;
+}
+.panel-group > .panel-top {
+	background-color: white;
+	border-radius: 2rem 2rem 0 0;
+	padding: 15px;
+	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+}
+.panel-group > .panel-bottom {
+	background-color: white;
+}
+.panel-group > .panel-bottom > * {
+	background-color: #26a65b;
+	border-radius: 0;
+	padding: 5px;
+}
+#question {
+	margin-bottom: 0;
+}
+.button-primary {
+	margin-top: 10px;
+}
+/*
+The below is code from Brian
+* {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-overflow-scrolling: touch;
@@ -221,3 +351,4 @@ ol > li > span:hover::before { width: 2ch }
 	top: 75%;
 	transform: translate(-50%, -50%) rotate(90deg);
 }
+*/
