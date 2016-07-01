@@ -1,3 +1,4 @@
+'use strict';
 const config = {
 	port: 3000
 };
@@ -80,7 +81,7 @@ let serverHandler = o(function*(req, res) {
 			if (cache[req.url.pathname].updated < stats.mtime) {
 				let data;
 				try {
-					data = yield fs.readFile('http' + req.url.pathname, yield);
+					data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
 				} catch (e) {
 					return;
 				}
@@ -113,7 +114,7 @@ let serverHandler = o(function*(req, res) {
 			cache[req.url.pathname] = {
 				raw: data,
 				gzip: yield zlib.gzip(data, yield),
-				hash: yield getVersionNonce('/', req.url.pathname, yield),
+				hash: yield getVersionNonce('/', req.url.pathname.replaceAll('.js', '.jsx'), yield),
 				updated: stats.mtime
 			};
 			res.writeHead(200, {

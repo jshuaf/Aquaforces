@@ -1,35 +1,32 @@
-<form id="join">
-	<h1>Aquaforces!</h1>
-	<a href="host/">Host dashboard</a>
-	<div class="row">
-		<div class="one-third column">
-			<label for="game-code">Game number</label>
-			<input class="u-full-width" type="number" id="game-code" autofocus="" min="0" max="1000000" autocomplete="off"/>
+<p id="error"></p>
+<div id="cont" class="pregamescreen">
+	<form id="join">
+		<h1>Aquaforces!</h1>
+		<p><i><a href="host/">Host dashboard</a></i></p>
+		<div class="centerbox">
+			<label><span>Game #</span> <input type="number" id="game-code" autofocus="" min="0" max="1000000" /></label>
+			<label><span>Name</span> <input type="text" id="crewmember-name" autocomplete="username" maxlength="24" /></label>
 		</div>
-		<div class="one-third column">
-			<label for="crewmember-name">User name</label>
-			<input class="u-full-width" type="text" id="crewmember-name" maxlength="24" autocomplete="off"/>
+		<button id="joinbtn">Join</button>
+	</form>
+	<form id="crew" hidden="">
+		<label>Crew # <input type="number" id="crewnum" min="1" max="12" /></label>
+		<button>Join crew</button>
+	</form>
+	<form id="wait" hidden="">
+		<h1>You're in crew <span id="crewnumdisplay"></span>!</h1>
+		<p>Waiting for other sailors…</p>
+	</form>
+	<form id="game" hidden="">
+		<h1 id="question"><span> </span> <div id="timebar"></div></h1>
+		<div id="prequestion">
+			<div id="canoe"></div>
+			<div id="answers"></div>
 		</div>
-	</div>
-	<div class="row">
-		<input class="button-primary" type="submit" value="Join"></input>
-	</div>
-</form>
-<form id="crew" hidden="">
-	<div class="row">
-		<div class="one-third column">
-			<label for="crewno">Crew #</label>
-			<input type="number" id="crewno" min="1" max="12" autofocus="" class="u-full-width" autocomplete="off"></input>
-		<input class="button-primary" type="submit" value="Submit">Join crew</input>
-		</div>
-	</div>
-</form>
-<form id="wait" hidden="">
-	<h1>You're in crew <span id="crewnumdisplay"></span>!</h1>
-	<p>Waiting for other sailors…</p>
-</form>
-<form id="game-ended" hidden="">
-	<h1>Good work!</h1>
-	<p><a href="">Play again</a></p>
-</form>
+	</form>
+	<form id="game-ended" hidden="">
+		<h1>Good work!</h1>
+		<p><a href="">Play again</a></p>
+	</form>
+</div>
 <script async="" src="game.js"></script>
