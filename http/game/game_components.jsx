@@ -16,12 +16,17 @@ const Game = React.createClass({
 			answerData: this.props.initialAnswers,
 			answerPositions: {},
 			// Canoe
-			canoePosition: 0
+			canoePosition: 0,
+			canoeBounds: {
+				left: 0.42,
+				right: 0.58
+			}
 		};
 	},
 
 	componentWillMount() {
 		setInterval(() => {
+			// MARK: add checking for relooping
 			const currentAnswers = this.state.answers;
 			/* KEEP THIS COMMENTED OUT
 			for (let currentAnswer in currentAnswers) {
@@ -63,10 +68,11 @@ const Game = React.createClass({
 
 	generateAnswerComponent(answer) {
 		return (<Answer
-  text={answer}
-  onClick={this.answerSelected.bind(this, answer)}
-  initialX={this.generateAnswerPosition()}
-  />);
+			text={answer}
+			onClick={this.answerSelected.bind(this, answer)}
+			initialX={this.generateAnswerPosition()}
+			canoeBounds={this.state.canoeBounds}
+		/>);
 	},
 
 	generateAnswerPosition() {
@@ -176,31 +182,51 @@ const Answer = React.createClass({
 				y: initialY
 			},
 			velocity: {
-				vx: 0,
-				vy: 50 + Math.random() * 20
+				vx: (Math.random() - 0.5) / 150,
+				vy: (Math.random() - 0.5) / 150 + innerHeight / 15000
 			},
 			disappeared: false,
-			hasCrossedThreshold: false,
-			initialPosition: {
-				x: this.props.initialX,
-				y: initialY
-			}
+			hasCrossedThreshold: false
 		};
 	},
 
 	setPosition() {
 		const timeAtAnimation = (new Date()).getTime();
-		const timeSinceStart = timeAtAnimation - this.state.startTime;
-		const newX = this.state.initialPosition.x + this.state.velocity.vx * timeSinceStart / 1000;
-		const newY = this.state.initialPosition.y + this.state.velocity.vy * timeSinceStart / 1000;
+		const vt = timeAtAnimation - this.state.lastAnimationTime;
+
+		const leftBoundary = this.props.canoeBounds.left;
+		const rightBoundary = this.props.canoeBounds.right;
+
+		let positionX = this.state.position.x;
+		let positionY = this.state.position.y;
+		let velocityX = this.state.velocity.vx;
+		let velocityY = this.state.velocity.vy;
+		let offsetWidth = this.state.offsetWidth;
+
+		// ugly physics code beware
+		if (+(positionX) + offsetWidth / 2 < innerWidth / 2) {
+			velocityX = +(velocityX) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(positionX)) / 100) - Math.min(0.001, Math.exp(+(positionX) + offsetWidth - innerWidth * leftBoundary) / 100)) || 0);
+		} else {
+			velocityX = +(velocityX) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(positionX) + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp(+(positionX) + offsetWidth - innerWidth) / 100)) || 0);
+		}
+		velocityX /= 1.05;
+		velocityY = +(velocityY) + dt * ((Math.random() - 0.5) / 10000);
+		if (+(velocityY) < 0.03) velocityY = +velocityY + 0.03;
+		positionX = +(positionX) + +(velocityX) * dt;
+		positionY = +(positionY) + +(velocityY) * dt;
+
 		this.setState({
-			position: {x: newX, y: newY}
+			position: {x: positionX, y: positionY},
+			velocity: {vx: velocityX, vy: velocityY}
 		});
 	},
 
 	componentDidMount() {
+		const currentTime = (new Date()).getTime();
 		this.setState({
-			startTime: (new Date()).getTime()
+			startTime: currentTime,
+			lastAnimationTime: currentTime,
+			offsetWidth: this.refs.answer.getDOMNode().offsetWidth
 		});
 		this.animate(new Date());
 	},
@@ -222,7 +248,7 @@ const Answer = React.createClass({
 			transform: 'translate(' + this.state.position.x + 'px, ' + this.state.position.y + 'px)'
 		};
 		if (!this.state.disappeared)
-			return <span style={style} onClick={this.handleClick}>{this.props.text}</span>;
+			return <span style={style} onClick={this.handleClick} ref = "answer">{this.props.text}</span>;
 		else {
 			return null;
 		}

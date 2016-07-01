@@ -132,18 +132,20 @@ function animationUpdate() {
 		timeBar.style.background = 'hsl(0, 100%, 50%)';
 	}
 	answersEl.children.forEach(function(e) {
-		if (parseFloat(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
-			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth * 0.42) / 100)) || 0);
+		const leftBoundary = 0.42;
+		const rightBoundary = 0.58;
+		if (+(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
+			e.dataset.vx = +(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(+(e.dataset.x) + e.offsetWidth - innerWidth * leftBoundary) / 100)) || 0);
 		} else {
-			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x) + innerWidth * 0.58) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth) / 100)) || 0);
+			e.dataset.vx = +(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(e.dataset.x) + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp(+(e.dataset.x) + e.offsetWidth - innerWidth) / 100)) || 0);
 		}
 		e.dataset.vx /= 1.05;
-		e.dataset.vy = parseFloat(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
-		if (parseFloat(e.dataset.vy) < 0.03) e.dataset.vy = +e.dataset.vy + 0.03;
-		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
-		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
+		e.dataset.vy = +(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
+		if (+(e.dataset.vy) < 0.03) e.dataset.vy = +e.dataset.vy + 0.03;
+		e.dataset.x = +(e.dataset.x) + +(e.dataset.vx) * dt;
+		e.dataset.y = +(e.dataset.y) + +(e.dataset.vy) * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
-		if (parseFloat(e.dataset.y) > innerHeight) {
+		if (+(e.dataset.y) > innerHeight) {
 			if (e.classList.contains('correct-answer')) {
 				socket.send(JSON.stringify({
 					event: 'resend-answer',
