@@ -100,7 +100,7 @@ document.getElementById('crew').addEventListener('submit', (e) => {
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'addUserToCrew',
-		crewno: parseInt(document.getElementById('crewno').value, 10)
+		crewNumber: parseInt(document.getElementById('crewno').value, 10)
 	}));
 	document.getElementById('crewnodisplay').textContent =
 		parseInt(document.getElementById('crewno').value, 10);

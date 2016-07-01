@@ -217,7 +217,8 @@ const Answer = React.createClass({
 
 		this.setState({
 			position: {x: positionX, y: positionY},
-			velocity: {vx: velocityX, vy: velocityY}
+			velocity: {vx: velocityX, vy: velocityY},
+			lastAnimationTime: timeAtAnimation
 		});
 	},
 
