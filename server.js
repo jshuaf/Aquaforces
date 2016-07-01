@@ -63,7 +63,7 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname.includes('.')) {
 		let stats;
 		try {
-			stats = yield fs.stat('./http/' + req.url.pathname, yield);
+			stats = yield fs.stat('./http/' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
 		} catch (e) {
 			return errorNotFound(req, res);
 		}
@@ -101,7 +101,7 @@ let serverHandler = o(function*(req, res) {
 		} else {
 			let data;
 			try {
-				data = yield fs.readFile('http' + req.url.pathname, yield);
+				data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
 			} catch (e) {
 				return errorNotFound(req, res);
 			}
@@ -114,7 +114,7 @@ let serverHandler = o(function*(req, res) {
 			cache[req.url.pathname] = {
 				raw: data,
 				gzip: yield zlib.gzip(data, yield),
-				hash: yield getVersionNonce('/', req.url.pathname.replaceAll('.js', '.jsx'), yield),
+				hash: yield getVersionNonce('/', req.url.pathname, yield),
 				updated: stats.mtime
 			};
 			res.writeHead(200, {
