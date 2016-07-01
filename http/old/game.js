@@ -34,16 +34,16 @@ socket.onmessage = function(m) {
 		errorEl.textContent = m.body;
 		errorEl.scrollIntoView();
 	}
-	if (m.event == 'start-game') {
+	if (m.event == 'startGame') {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
 		setInterval(addAnswer, 700);
 	}
 	if (m.event == 'question') startQuestion(m.question);
-	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
-	if (m.event == 'answer-status') flash(m.correct ? 'green' : 'red');
-	if (m.event == 'end-game') gameHasEnded = true;
+	if (m.event == 'correctAnswer') correctAnswerQueue.push(m.answer);
+	if (m.event == 'answerStatus') flash(m.correct ? 'green' : 'red');
+	if (m.event == 'endGame') gameHasEnded = true;
 };
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
@@ -52,7 +52,7 @@ socket.onclose = function() {
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
-		event: 'new-user',
+		event: 'newUser',
 		code: parseInt(document.getElementById('game-code').value),
 		name: document.getElementById('crewmember-name').value
 	}));
@@ -61,7 +61,7 @@ document.getElementById('join').addEventListener('submit', function(e) {
 document.getElementById('crew').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
-		event: 'add-user-to-crew',
+		event: 'addUserToCrew',
 		crewnum: parseInt(document.getElementById('crewnum').value)
 	}));
 	document.getElementById('crewnumdisplay').textContent = parseInt(document.getElementById('crewnum').value);
@@ -110,7 +110,7 @@ function startQuestion(question) {
 }
 function failQuestion() {
 	socket.send(JSON.stringify({
-		event: 'timeout-question',
+		event: 'timeoutQuestion',
 		text: document.getElementById('question').firstChild.firstChild.nodeValue
 	}));
 	flash('yellow');
@@ -139,7 +139,7 @@ function animationUpdate() {
 		if (+(e.dataset.y) > innerHeight) {
 			if (e.classList.contains('correct-answer')) {
 				socket.send(JSON.stringify({
-					event: 'resend-answer',
+					event: 'resendAnswer',
 					text: e.firstChild.firstChild.nodeValue
 				}));
 			}
