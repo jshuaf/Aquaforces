@@ -1,8 +1,8 @@
-'use strict';
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error'),
 	gameHasEnded = false;
+
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -38,7 +38,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addAnswer, 1200);
+		setInterval(addAnswer, 700);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correctAnswer') correctAnswerQueue.push(m.answer);
@@ -67,6 +67,7 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	document.getElementById('crewnumdisplay').textContent = parseInt(document.getElementById('crewnum').value);
 	setState('wait');
 });
+
 var timeBar = document.getElementById('timebar'),
 	timeTotal = 25,
 	timeProportion = 1,
@@ -74,6 +75,7 @@ var timeBar = document.getElementById('timebar'),
 	hp = 1;
 var answersEl = document.getElementById('answers');
 function answerClickListener() {
+	this.parentNode.removeChild(this);
 	socket.send(JSON.stringify({
 		event: 'answer-chosen',
 		text: this.firstChild.firstChild.nodeValue
@@ -102,11 +104,9 @@ function addAnswer() {
 	answerEl.addEventListener('click', answerClickListener);
 	if (correctAnswer) answerEl.classList.add('correct-answer');
 }
-var includeTimeBar = true;
 function startQuestion(question) {
 	document.getElementById('question').firstChild.firstChild.nodeValue = question;
 	timeProportion = 1;
-	includeTimeBar = true;
 }
 function failQuestion() {
 	socket.send(JSON.stringify({
@@ -118,31 +118,25 @@ function failQuestion() {
 function animationUpdate() {
 	var thisTime = new Date().getTime(),
 		dt = thisTime - lastTime;
-	if (includeTimeBar) {
-		timeBar.style.width = 100 * timeProportion + '%';
-		timeBar.style.background = 'hsl(' + 110 * timeProportion + ', 100%, 50%)';
-		timeProportion -= dt / timeTotal / 1000;
-		if (timeProportion < 0) {
-			includeTimeBar = false;
-			failQuestion();
-		}
-	} else {
-		timeBar.style.width = '0';
-		timeBar.style.background = 'hsl(0, 100%, 50%)';
-	}
+	timeBar.style.width = 100 * timeProportion + '%';
+	timeBar.style.background = 'hsl(' + 110 * timeProportion + ', 100%, 50%)';
+	timeProportion -= dt / timeTotal / 1000;
+	if (timeProportion < 0) failQuestion();
 	answersEl.children.forEach(function(e) {
-		if (parseFloat(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
-			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth * 0.42) / 100)) || 0);
+		const leftBoundary = 0.42;
+		const rightBoundary = 0.58;
+		if (+(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
+			e.dataset.vx = +(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(+(e.dataset.x) + e.offsetWidth - innerWidth * leftBoundary) / 100)) || 0);
 		} else {
-			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x) + innerWidth * 0.58) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth) / 100)) || 0);
+			e.dataset.vx = +(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(e.dataset.x) + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp(+(e.dataset.x) + e.offsetWidth - innerWidth) / 100)) || 0);
 		}
 		e.dataset.vx /= 1.05;
-		e.dataset.vy = parseFloat(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
-		if (parseFloat(e.dataset.vy) < 0.03) e.dataset.vy = +e.dataset.vy + 0.03;
-		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
-		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
+		e.dataset.vy = +(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
+		if (+(e.dataset.vy) < 0.03) e.dataset.vy = +e.dataset.vy + 0.03;
+		e.dataset.x = +(e.dataset.x) + +(e.dataset.vx) * dt;
+		e.dataset.y = +(e.dataset.y) + +(e.dataset.vy) * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
-		if (parseFloat(e.dataset.y) > innerHeight) {
+		if (+(e.dataset.y) > innerHeight) {
 			if (e.classList.contains('correct-answer')) {
 				socket.send(JSON.stringify({
 					event: 'resendAnswer',
