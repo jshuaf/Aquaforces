@@ -117,6 +117,9 @@ socket.onmessage = function(message) {
 			};
 		}
 		break;
+	case 'answerSelected':
+		gameHost.answerSelected(message.wasCorrectAnswer, message.crewNumber);
+		break;
 	case 'removeUser':
 		var e = document.querySelector('[data-username=' + JSON.stringify(message.user) + ']');
 		if (e) {
@@ -147,3 +150,12 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 	console.log(crews);
 	gameHost = reactDOM.render(<GameHost initialCrews={crews} />, document.getElementById('mountNode'));
 });
+function endGame() {
+    crewsEl.children.forEach(function(e, i) {
+        if (boats[i + 1]) e.appendChild(document.createTextNode(boats[i + 1].p.toFixed(1) + '\u2006km'));
+    });
+    progress.classList.add('hide');
+    socket.send(JSON.stringify({
+        event: 'end-game'
+    }));
+}
