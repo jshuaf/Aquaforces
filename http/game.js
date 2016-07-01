@@ -38,7 +38,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addAnswer, 1200);
+		setInterval(addAnswer, 700);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
