@@ -19,6 +19,11 @@ const GameHost = React.createClass({
 		};
 	},
 
+	answerSelected(wasCorrectAnswer, crewNumber) {
+		const crewToPassFunctionTo = this.refs[crewNumber.toString()];
+		crewToPassFunctionTo.answerSelected(wasCorrectAnswer, crewNumber);
+	},
+
 	updateCrewPosition(crewNumber, increment) {
 		// MARK: move the camera around
 
@@ -55,7 +60,7 @@ const GameHost = React.createClass({
 								{
 									Object.keys(this.state.crews).map(function(crewNumber, i) {
 										const crew = this.state.crews[crewNumber];
-										return <Crew position={crew.position} status={crew.status} boat={crew.boat} crewNumber={crewNumber} key={i} />;
+										return <Crew position={crew.position} status={crew.status} boat={crew.boat} crewNumber={crewNumber} key={i} ref={crewNumber.toString()}/>;
 									}.bind(this))
 								}
 							</div>
@@ -69,8 +74,34 @@ const GameHost = React.createClass({
 const Crew = React.createClass({
 	getInitialState() {
 		return {
-			position: 0.2
+			position: 0,
+			velocity: 0,
+			deltaVelocity: 10,
+			maximumDeltaVelocity: 10,
+			hp: 1,
+			current: -0.1,
+			isRaft: false
 		};
+	},
+
+	getDefaultProps() {
+		return {
+			currentConstant: 0.003,
+			velocityConstant: 0.00001,
+			deltaHPConstant: -0.1
+		};
+	},
+
+	processAnswer(correctAnswerBoolean) {
+		if (correctAnswerBoolean) this.setState({velocity: this.state.velocity + this.state.deltaVelocity});
+		//MESSAGE RAFT => ISRAFT
+		else if (this.state.isRaft) this.setState({deltaVelocity: this.state.deltaVelocity * 0.95});
+		else {
+				this.setState({hp: this.state.hp + this.props.deltaHPConstant});
+				if (!this.state.isRaft && this.state.hp <= 0) {
+						this.setState({isRaft: true});
+				}
+		}
 	},
 
 	render() {
@@ -81,8 +112,14 @@ const Crew = React.createClass({
 			height: '3rem'
 
 		};
+		if (this.state.isRaft) {
+			const classNames = 'raft';
+		}
+		else {
+			const classNames = '';
+		}
 		console.log(style);
-		return <div style={style}></div>;
+		return <div className={classNames} style={style}></div>;
 	}
 });
 
