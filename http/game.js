@@ -1,8 +1,8 @@
-'use strict';
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error'),
 	gameHasEnded = false;
+
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -67,6 +67,7 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	document.getElementById('crewnumdisplay').textContent = parseInt(document.getElementById('crewnum').value);
 	setState('wait');
 });
+
 var timeBar = document.getElementById('timebar'),
 	timeTotal = 25,
 	timeProportion = 1,
