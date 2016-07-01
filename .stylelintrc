@@ -82,7 +82,6 @@
 		"at-rule-semicolon-newline-after": "always",
 		"comment-empty-line-before": "never",
 		"comment-whitespace-inside": "always",
-		"comment-word-blacklist": ["/./"],
 		"indentation": "tab",
 		"max-empty-lines": 0,
 		"no-duplicate-selectors": true,
