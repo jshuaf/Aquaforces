@@ -85,7 +85,7 @@ let serverHandler = o(function*(req, res) {
 					return;
 				}
 				switch (path.extname(req.url.pathname)) {
-					case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
+					case '.js': data = uglifyJS.minify(require("babel-core").transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
 					break;
 					case '.css': data = new CleanCSS().minify(data).styles;
 					break;
@@ -105,7 +105,7 @@ let serverHandler = o(function*(req, res) {
 				return errorNotFound(req, res);
 			}
 			switch (path.extname(req.url.pathname)) {
-				case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
+				case '.js': data = uglifyJS.minify(require("babel-core").transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
 				break;
 				case '.css': data = new CleanCSS().minify(data).styles;
 				break;
