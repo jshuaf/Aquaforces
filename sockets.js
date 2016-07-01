@@ -1,3 +1,4 @@
+'use strict';
 const ws = require('ws');
 let games = {};
 
@@ -50,26 +51,26 @@ module.exports = function(server) {
 					tws.questionIDsDone = [];
 				} else if (m.event == 'addUserToCrew') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
-					if (!m.crewNumber || typeof m.crewNumber != 'number') return tws.error('You must enter a crew number.', 'crew');
-					if (!(m.crewNumber <= 12 && m.crewNumber >= 1)) return tws.error('Crew number must be between 1 and 12, inclusive.', 'crew');
+					if (!m.crewnum || typeof m.crewnum != 'number') return tws.error('You must enter a crew number.', 'crew');
+					if (!(m.crewnum <= 12 && m.crewnum >= 1)) return tws.error('Crew number must be between 1 and 12, inclusive.', 'crew');
 					if (tws.game.hasStarted) return tws.error('Game has started.', 'join');
-					if (!tws.game.crews[m.crewNumber]) {
-						tws.game.crews[m.crewNumber] = {
+					if (!tws.game.crews[m.crewnum]) {
+						tws.game.crews[m.crewnum] = {
 							members: [tws],
 							recentAnswers: []
 						};
-					} else if (tws.game.crews[m.crewNumber].members.length >= 6) return tws.error('Crew cannot have more than 6 sailors.', 'crew');
-					else tws.game.crews[m.crewNumber].members.push(tws);
-					tws.crewNumber = m.crewNumber;
+					} else if (tws.game.crews[m.crewnum].members.length >= 6) return tws.error('Crew cannot have more than 6 sailors.', 'crew');
+					else tws.game.crews[m.crewnum].members.push(tws);
+					tws.crewnum = m.crewnum;
 					tws.game.host.trysend(JSON.stringify({
 						event: 'addUserToCrew',
 						user: tws.user,
-						crew: m.crewNumber
+						crew: m.crewnum
 					}));
 				} else if (m.event == 'answerSelected') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (!m.text) return tws.error('No answer text sent.');
-					let crew = tws.game.crews[tws.crewNumber];
+					let crew = tws.game.crews[tws.crewnum];
 					crew.recentAnswers.forEach(function(pastAnswer) {
 						if (pastAnswer.text == m.text && new Date().getTime() - pastAnswer.time < maxFuzzyTime) {
 							return tws.trysend(JSON.stringify({event: 'answer-status', correct: true}));
@@ -118,14 +119,14 @@ module.exports = function(server) {
 						owner: tws
 					});
 					tws.trysend(JSON.stringify({event: 'question', question: question.text}));
-					let crew = tws.game.crews[tws.crewNumber],
+					let crew = tws.game.crews[tws.crewnum],
 						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 					ttws.trysend(JSON.stringify({event: 'correctAnswer', answer: question.answer}));
 					ttws.questionIDsDone.push(questionID);
 				} else if (m.event == 'resendAnswer') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (typeof m.text != 'string') return tws.error('No answer text sent.');
-					let crew = tws.game.crews[tws.crewNumber],
+					let crew = tws.game.crews[tws.crewnum],
 						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 					ttws.trysend(JSON.stringify({event: 'correctAnswer', answer: m.text}));
 				} else tws.error('Unknown socket event ' + m.event + ' received.');

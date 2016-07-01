@@ -1,3 +1,4 @@
+'use strict';
 const crypto = require('crypto'),
 	fs = require('fs'),
 	path = require('path');
@@ -28,7 +29,7 @@ global.html = function(input) {
 };
 global.getVersionNonce = o(function*(pn, file, cb) {
 	try {
-		return cb(null, crypto.createHash('md5').update(yield fs.readFile('http' + path.resolve(pn, pn[pn.length - 1] == '/' ? '' : '..', file), yield)).digest('hex'));
+		return cb(null, crypto.createHash('md5').update(yield fs.readFile('http' + path.resolve(pn, pn[pn.length - 1] == '/' ? '' : '..', file.replaceAll('.js', '.jsx')), yield)).digest('hex'));
 	} catch (e) {
 		return cb(e);
 	}
