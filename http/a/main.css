@@ -6,7 +6,7 @@ strong, b {
 	font-weight: bold
 }
 body {
-	background: #4ca9d6 url('/img/background.png') repeat-x center top;
+	background: #4ca9d6 url('/img/beachscape.svg') repeat-x center top;
 	background-size: cover;
 }
 .navbar {
