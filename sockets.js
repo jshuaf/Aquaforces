@@ -24,6 +24,11 @@ module.exports = function(server) {
 		tws.error = function(body, state) {
 			return tws.trysend(JSON.stringify({event: 'error', body, state}));
 		};
+
+		tws.checkGameExists = () => {
+			if (!tws.game) return tws.error('Game not found.', 'join');
+		};
+
 		if (tws.upgradeReq.url == '/') {
 			tws.on('message', function(m, raw) {
 				console.log(m);
@@ -49,7 +54,7 @@ module.exports = function(server) {
 					}));
 					tws.questionIDsDone = [];
 				} else if (m.event == 'add-user-to-crew') {
-					if (!tws.game) return tws.error('Game not found.', 'join');
+					tws.checkGameExists();
 					if (!m.crewNumber || typeof m.crewNumber != 'number') return tws.error('You must enter a crew number.', 'crew');
 					if (!(m.crewNumber <= 12 && m.crewNumber >= 1)) return tws.error('Crew number must be between 1 and 12, inclusive.', 'crew');
 					if (tws.game.hasStarted) return tws.error('Game has started.', 'join');
@@ -67,7 +72,7 @@ module.exports = function(server) {
 						crew: m.crewNumber
 					}));
 				} else if (m.event == 'answer-chosen') {
-					if (!tws.game) return tws.error('Game not found.', 'join');
+					tws.checkGameExists();
 					if (!m.text) return tws.error('No answer text sent.');
 					let crew = tws.game.crews[tws.crewNumber];
 					crew.recentAnswers.forEach(function(pastAnswer) {
@@ -101,7 +106,7 @@ module.exports = function(server) {
 						});
 					}
 				} else if (m.event == 'timeout-question') {
-					if (!tws.game) return tws.error('Game not found.', 'join');
+					tws.checkGameExists();
 					if (!m.text) return tws.error('No question text sent.');
 					let tquestion;
 					tws.game.activeQuestions.forEach(function(question) {
@@ -123,7 +128,7 @@ module.exports = function(server) {
 					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 					ttws.questionIDsDone.push(questionID);
 				} else if (m.event == 'resend-answer') {
-					if (!tws.game) return tws.error('Game not found.', 'join');
+					tws.checkGameExists();
 					if (typeof m.text != 'string') return tws.error('No answer text sent.');
 					let crew = tws.game.crews[tws.crewNumber],
 						ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
@@ -138,14 +143,14 @@ module.exports = function(server) {
 			});
 		} else if (tws.upgradeReq.url == '/host/') {
 			tws.on('message', function(m, raw) {
-				console.log(m);
 				try {
 					m = JSON.parse(m);
 				} catch (e) {
 					return tws.error('JSON error.');
 				}
-				if (m.event == 'new-game') {
-					let id = Math.floor(Math.random() * 1e6);
+
+				if (m.event == 'newGame') {
+					const id = Math.floor(Math.random() * 1e6);
 					games[id] = {
 						host: tws,
 						crews: [],
@@ -155,73 +160,88 @@ module.exports = function(server) {
 						activeQuestions: [],
 						hasStarted: false
 					};
+
+					// generate random math questions
+					// MARK: pull data from database
 					for (let i = 0; i < 100; i++) {
 						games[id].questions.push({
 							text: 'What\'s ' + i + ' + ' + i + '?',
 							answer: (2 * i).toString(),
-							incorrectAnswers: [i.toString(), i.toString() + i.toString(), (2 * i + 1).toString(), (2 * i - 1).toString()]
+							incorrectAnswers: [i.toString(), i.toString() + i.toString(),
+								(2 * i + 1).toString(), (2 * i - 1).toString()]
 						});
 					}
+
 					tws.game = games[id];
 					tws.trysend(JSON.stringify({event: 'new-game', id}));
-					var answers = [];
-					for (let question of tws.game.questions) {
-						if (!answers.includes(question.answer)) answers.push(question.answer);
-						for (let answer of question.incorrectAnswers) {
-							if (!answers.includes(answer)) answers.push(answer);
+					const answers = [];
+					for (const question of tws.game.questions) {
+						if (!answers.includes(question.answer)) {
+							answers.push(question.answer);
 						}
 					}
+					for (const answer of question.incorrectAnswers) {
+						if (!answers.includes(answer)) answers.push(answer);
+					}
 					tws.game.answers = answers;
-				} else if (m.event == 'remove-user-from-crew') {
-					if (!tws.game) return tws.error('Game not found.', 'join');
-					tws.game.crews.forEach(function(crew) {
-						crew.members.forEach(function(ttws) {
+				} else if (m.event == 'removeUserFromCrew') {
+					tws.checkGameExists();
+					tws.game.crews.forEach((crew) => {
+						crew.members.forEach((ttws) => {
 							if (ttws.user == m.user) {
 								ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
-								let crew = ttws.game.crews[ttws.crewNumber].members;
-								crew.splice(crew.indexOf(ttws), 1);
+								crew.members.splice(crew.members.indexOf(ttws), 1);
 							}
 						});
 					});
-				} else if (m.event == 'remove-user') {
-					if (!tws.game) return tws.error('Game not found.', 'join');
-					tws.game.users.forEach(function(ttws, i) {
+				} else if (m.event == 'removeUser') {
+					if (!tws.game) {
+						return tws.error('Game not found.', 'join');
+					}
+					tws.game.users.forEach((ttws, i) => {
 						if (ttws.user == m.user) {
 							ttws.trysend(JSON.stringify({event: 'set-state', state: 'join'}));
 							tws.game.users.splice(i, 1);
 						}
 					});
-				} else if (m.event == 'start-game') {
-					if (!tws.game) return tws.error('Game not found.', 'join');
+				} else if (m.event == 'startGame') {
+					tws.checkGameExists();
 					if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
 					tws.game.hasStarted = true;
-					tws.game.users.forEach(function(ttws) {
-						ttws.trysend(JSON.stringify({event: 'start-game', state: 'game', answers: tws.game.answers}));
+					tws.game.users.forEach((ttws) => {
+						ttws.trysend(JSON.stringify({event: 'startGame', state: 'game', answers: tws.game.answers}));
 					});
-					tws.game.crews.forEach(function(crew) {
-						crew.members.forEach(function(member) {
-							let questionID = Math.floor(Math.random() * tws.game.questions.length),
-								question = tws.game.questions[questionID];
+					tws.game.crews.forEach((crew) => {
+						crew.members.forEach((member) => {
+							const questionID = Math.floor(Math.random() * tws.game.questions.length);
+							const question = tws.game.questions[questionID];
 							tws.game.activeQuestions.push({
 								text: question.text,
 								answer: question.answer,
 								owner: member
 							});
-							member.trysend(JSON.stringify({event: 'question', question: question.text}));
-							let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+							member.trysend(JSON.stringify({
+								event: 'newQuestion',
+								question: question.text
+							}));
+							const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+							ttws.trysend(JSON.stringify({
+								event: 'correctAnswer', answer: question.answer
+							}));
 							ttws.questionIDsDone.push(questionID);
 						});
 					});
-				} else if (m.event == 'end-game') {
-					if (!tws.game) return tws.error('Game not found.', 'join');
-					tws.game.users.forEach(function(ttws) {
-						ttws.trysend(JSON.stringify({event: 'end-game', state: 'game-ended'}));
+				} else if (m.event == 'endGame') {
+					tws.checkGameExists();
+					tws.game.users.forEach((ttws) => {
+						ttws.trysend(JSON.stringify({event: 'endGame', state: 'game-ended'}));
 					});
-				} else tws.error('Unknown socket event ' + m.event + ' received.');
+				} else {
+					tws.error('Unknown socket event ' + m.event + ' received.');
+				}
 			});
 		} else if (tws.upgradeReq.url == '/console/') {
-
+			// MARK: console sockets
 		} else {
 			tws.trysend(JSON.stringify({
 				event: 'error',
