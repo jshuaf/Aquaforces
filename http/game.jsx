@@ -2,7 +2,6 @@ var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') +
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error'),
 	gameHasEnded = false;
-
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -67,7 +66,6 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	document.getElementById('crewnumdisplay').textContent = parseInt(document.getElementById('crewnum').value);
 	setState('wait');
 });
-
 var timeBar = document.getElementById('timebar'),
 	timeTotal = 25,
 	timeProportion = 1,
@@ -123,20 +121,18 @@ function animationUpdate() {
 	timeProportion -= dt / timeTotal / 1000;
 	if (timeProportion < 0) failQuestion();
 	answersEl.children.forEach(function(e) {
-		const leftBoundary = 0.42;
-		const rightBoundary = 0.58;
-		if (+(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
-			e.dataset.vx = +(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(+(e.dataset.x) + e.offsetWidth - innerWidth * leftBoundary) / 100)) || 0);
+		if (parseFloat(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
+			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth * 0.42) / 100)) || 0);
 		} else {
-			e.dataset.vx = +(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(e.dataset.x) + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp(+(e.dataset.x) + e.offsetWidth - innerWidth) / 100)) || 0);
+			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x) + innerWidth * 0.58) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth) / 100)) || 0);
 		}
 		e.dataset.vx /= 1.05;
-		e.dataset.vy = +(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
-		if (+(e.dataset.vy) < 0.03) e.dataset.vy = +e.dataset.vy + 0.03;
-		e.dataset.x = +(e.dataset.x) + +(e.dataset.vx) * dt;
-		e.dataset.y = +(e.dataset.y) + +(e.dataset.vy) * dt;
+		e.dataset.vy = parseFloat(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
+		if (parseFloat(e.dataset.vy) < 0.03) e.dataset.vy = +e.dataset.vy + 0.03;
+		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
+		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
-		if (+(e.dataset.y) > innerHeight) {
+		if (parseFloat(e.dataset.y) > innerHeight) {
 			if (e.classList.contains('correct-answer')) {
 				socket.send(JSON.stringify({
 					event: 'resendAnswer',
