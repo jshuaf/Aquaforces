@@ -11,6 +11,7 @@ function getValuesOfObject(object) {
 }
 
 const GameHost = React.createClass({
+	// MARK: ADD END GAME
 	getInitialState() {
 		return {
 			gameStatus: 'hasNotStarted',
