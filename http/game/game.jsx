@@ -2,7 +2,7 @@ import React from 'react';
 import reactDOM from 'react-dom';
 import Game from './game_components.jsx';
 
-let socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/game/');
+let socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
 const cont = document.getElementById('cont');
 const errorEl = document.getElementById('error');
 let gameHasEnded = false;
@@ -33,19 +33,23 @@ function setupGameEnvironment() {
 		repeat-x center top; background-size: cover;`;
 }
 
-socket.onmessage = function(messageData) {
-	console.log('Client recieved message: ', message.data);
-	const message = JSON.parse(messageData.data);
+socket.onmessage = function(m) {
+	try {
+		m = JSON.parse(m.data);
+	} catch (e) {
+		console.log(e);
+		return alert('Socket error.');
+	}
 
-	if (message.state) setState(message.state);
+	if (m.state) setState(m.state);
 
-	switch (message.event) {
+	switch (m.event) {
 	case 'notice':
-		errorEl.textContent = message.body;
+		errorEl.textContent = m.body;
 		errorEl.scrollIntoView();
 		break;
 	case 'error':
-		errorEl.textContent = message.body;
+		errorEl.textContent = m.body;
 		errorEl.scrollIntoView();
 		break;
 	case 'addUser':
@@ -54,31 +58,31 @@ socket.onmessage = function(messageData) {
 	case 'startGame':
 		setState('mountNode');
 		setupGameEnvironment();
-		answers = message.answers;
+		answers = m.answers;
 		game = reactDOM.render(<Game
   socket={socket} username={username}
-  crewNumber={crewNumber} initialAnswers={message.answers}
+  crewNumber={crewNumber} initialAnswers={m.answers}
   />,
 			document.getElementById('mountNode'));
 		break;
 	case 'answerSelected':
-		if (message.wasCorrectAnswer) {
+		if (m.wasCorrectAnswer) {
 			game.correctAnswer();
 		} else {
 			game.incorrectAnswer();
 		}
 		break;
 	case 'correctAnswer':
-		game.addCorrectAnswer(message.answer);
+		game.addCorrectAnswer(m.answer);
 		break;
 	case 'newQuestion':
-		game.newQuestion(message.question);
+		game.newQuestion(m.question);
 		break;
 	case 'endGame':
 		gameHasEnded = true;
 		break;
 	default:
-		console.log('Game recieved unknown event: ', message.event);
+		console.log('Game recieved unknown event: ', m.event);
 		break;
 	}
 };

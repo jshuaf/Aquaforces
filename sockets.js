@@ -84,7 +84,7 @@ module.exports = function(server) {
 					tws.game.host.trysend(JSON.stringify({
 						event: 'addUserToCrew',
 						user: tws.user,
-						crew: m.crewnum
+						crew: m.crewNumber
 					}));
 				} else if (m.event == 'answerSelected') {
 					tws.checkGameExists();
@@ -224,6 +224,7 @@ module.exports = function(server) {
 				}
 
 				if (m.event == 'newGame') {
+					console.log("recieved");
 					const id = Math.floor(Math.random() * 1e6);
 					games[id] = {
 						host: tws,
@@ -247,16 +248,17 @@ module.exports = function(server) {
 					}
 
 					tws.game = games[id];
-					tws.trysend(JSON.stringify({event: 'new-game', id}));
+					tws.trysend(JSON.stringify({event: 'newGame', id}));
 					const answers = [];
 					for (const question of tws.game.questions) {
 						if (!answers.includes(question.answer)) {
 							answers.push(question.answer);
 						}
+						for (const answer of question.incorrectAnswers) {
+							if (!answers.includes(answer)) answers.push(answer);
+						}
 					}
-					for (const answer of question.incorrectAnswers) {
-						if (!answers.includes(answer)) answers.push(answer);
-					}
+
 					tws.game.answers = answers;
 				} else if (m.event == 'removeUserFromCrew') {
 					tws.checkGameExists();
