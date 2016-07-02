@@ -1,3 +1,4 @@
+'use strict';
 const ws = require('ws');
 let games = {};
 
@@ -83,7 +84,7 @@ module.exports = function(server) {
 					tws.game.host.trysend(JSON.stringify({
 						event: 'addUserToCrew',
 						user: tws.user,
-						crew: m.crewNumber
+						crew: m.crewnum
 					}));
 				} else if (m.event == 'answerSelected') {
 					tws.checkGameExists();
