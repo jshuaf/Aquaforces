@@ -1,3 +1,4 @@
+'use strict';
 const ws = require('ws');
 let games = {};
 
@@ -5,11 +6,11 @@ const maxFuzzyTime = 10000;
 const correctAnswerIncrement = 0.1;
 
 // event names to change from GAME:
-// new-user goes to addUser
-// add-user-to-crew goes to addUserToCrew
-// answer-chosen goes to answerSelected
-// text within answer-chosen goes to answer
-// timeout-question goes to questionTimeout
+// addUser goes to addUser
+// addUserToCrew goes to addUserToCrew
+// answerSelected goes to answerSelected
+// text within answerSelected goes to answer
+// questionTimeout goes to questionTimeout
 // text goes to question
 // resend-answer needs to be implemented
 
@@ -83,7 +84,7 @@ module.exports = function(server) {
 					tws.game.host.trysend(JSON.stringify({
 						event: 'addUserToCrew',
 						user: tws.user,
-						crew: m.crewNumber
+						crew: m.crewnum
 					}));
 				} else if (m.event == 'answerSelected') {
 					tws.checkGameExists();
@@ -273,7 +274,7 @@ module.exports = function(server) {
 					}
 					tws.game.users.forEach((ttws, i) => {
 						if (ttws.user == m.user) {
-							ttws.trysend(JSON.stringify({event: 'set-state', state: 'join'}));
+							ttws.trysend(JSON.stringify({event: 'setState', state: 'join'}));
 							tws.game.users.splice(i, 1);
 						}
 					});
