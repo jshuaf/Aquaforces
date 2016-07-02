@@ -13,7 +13,7 @@
   "author": "BoniO Interns",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bjb568/bonio-intern"
+    "url": "https://github.com/bjb568/Aquaforces"
   },
   "dependencies": {
     "colors": "^1.1.2",
