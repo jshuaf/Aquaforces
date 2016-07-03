@@ -89,8 +89,8 @@
 				// Canoe
 				canoePosition: 0,
 				canoeBounds: {
-					left: 0.42,
-					right: 0.58
+					left: 0.48,
+					right: 0.52
 				}
 			};
 		},
@@ -119,7 +119,7 @@
 				_this.setState({
 					answers: currentAnswers
 				});
-			}, 2000);
+			}, 2500);
 		},
 		answerSelected: function answerSelected(answerText) {
 			this.props.socket.send(JSON.stringify({
@@ -243,14 +243,16 @@
 		displayName: 'Answer',
 		getInitialState: function getInitialState() {
 			var initialY = Math.random() * 100 - 100;
+			var vx = (Math.random() - 0.5) / 300;
+			var vy = (Math.random() - 0.5) / 150 + innerHeight / 15000;
 			return {
 				position: {
 					x: this.props.initialX,
 					y: initialY
 				},
 				velocity: {
-					vx: (Math.random() - 0.5) / 150,
-					vy: (Math.random() - 0.5) / 150 + innerHeight / 15000
+					vx: vx,
+					vy: vy
 				},
 				disappeared: false,
 				hasCrossedThreshold: false
@@ -258,7 +260,7 @@
 		},
 		setPosition: function setPosition() {
 			var timeAtAnimation = new Date().getTime();
-			var vt = timeAtAnimation - this.state.lastAnimationTime;
+			var dt = timeAtAnimation - this.state.lastAnimationTime;
 	
 			var leftBoundary = this.props.canoeBounds.left;
 			var rightBoundary = this.props.canoeBounds.right;
@@ -267,19 +269,21 @@
 			var positionY = this.state.position.y;
 			var velocityX = this.state.velocity.vx;
 			var velocityY = this.state.velocity.vy;
-			var offsetWidth = this.state.offsetWidth;
+			var offsetWidth = this.refs.answer.offsetWidth;
 	
 			// ugly physics code beware
-			if (+positionX + offsetWidth / 2 < innerWidth / 2) {
-				velocityX = +velocityX + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+positionX) / 100) - Math.min(0.001, Math.exp(+positionX + offsetWidth - innerWidth * leftBoundary) / 100)) || 0);
+			if (positionX + offsetWidth / 2 < innerWidth / 2) {
+				velocityX += dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-positionX) / 100) - Math.min(0.001, Math.exp(positionX + offsetWidth - innerWidth * leftBoundary) / 100)) || 0;
 			} else {
-				velocityX = +velocityX + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+positionX + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp(+positionX + offsetWidth - innerWidth) / 100)) || 0);
+				velocityX += dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-positionX + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp(positionX + offsetWidth - innerWidth) / 100)) || 0;
 			}
 			velocityX /= 1.05;
-			velocityY = +velocityY + dt * ((Math.random() - 0.5) / 10000);
-			if (+velocityY < 0.03) velocityY = +velocityY + 0.03;
-			positionX = +positionX + +velocityX * dt;
-			positionY = +positionY + +velocityY * dt;
+	
+			velocityY += dt * ((Math.random() - 0.5) / 10000);
+			if (velocityY < 0.03) velocityY = +velocityY + 0.03;
+	
+			positionX += velocityX * dt;
+			positionY += velocityY * dt;
 	
 			this.setState({
 				position: { x: positionX, y: positionY },
@@ -291,10 +295,10 @@
 			var currentTime = new Date().getTime();
 			this.setState({
 				startTime: currentTime,
-				lastAnimationTime: currentTime,
-				offsetWidth: this.refs.answer.getDOMNode().offsetWidth
+				lastAnimationTime: currentTime
+			}, function () {
+				this.animate(new Date());
 			});
-			this.animate(new Date());
 		},
 		handleClick: function handleClick() {
 			this.setState({
@@ -4794,7 +4798,7 @@
 	
 	function setupGameEnvironment() {
 		document.getElementById('content').hidden = true;
-		document.getElementById('body').style = 'background: #e3d393 url(\'/assets/beach-background.png\')\n\t\trepeat-x center top; background-size: cover;';
+		document.body.style = 'background: #e3d393 url(\'/assets/beach-background.png\')\n\t\trepeat-x center top; background-size: cover;';
 	}
 	
 	socket.onmessage = function (m) {

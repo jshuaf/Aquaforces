@@ -18,8 +18,8 @@ const Game = React.createClass({
 			// Canoe
 			canoePosition: 0,
 			canoeBounds: {
-				left: 0.42,
-				right: 0.58
+				left: 0.48,
+				right: 0.52
 			}
 		};
 	},
@@ -48,7 +48,7 @@ const Game = React.createClass({
 			this.setState({
 				answers: currentAnswers
 			});
-		}, 2000);
+		}, 2500);
 	},
 
 	answerSelected(answerText) {
@@ -176,14 +176,16 @@ const Game = React.createClass({
 const Answer = React.createClass({
 	getInitialState() {
 		let initialY = Math.random() * 100 - 100;
+		let vx = (Math.random() - 0.5) / 300;
+		let vy = (Math.random() - 0.5) / 150 + innerHeight / 15000;
 		return {
 			position: {
 				x: this.props.initialX,
 				y: initialY
 			},
 			velocity: {
-				vx: (Math.random() - 0.5) / 150,
-				vy: (Math.random() - 0.5) / 150 + innerHeight / 15000
+				vx,
+				vy
 			},
 			disappeared: false,
 			hasCrossedThreshold: false
@@ -192,7 +194,7 @@ const Answer = React.createClass({
 
 	setPosition() {
 		const timeAtAnimation = (new Date()).getTime();
-		const vt = timeAtAnimation - this.state.lastAnimationTime;
+		const dt = timeAtAnimation - this.state.lastAnimationTime;
 
 		const leftBoundary = this.props.canoeBounds.left;
 		const rightBoundary = this.props.canoeBounds.right;
@@ -201,19 +203,21 @@ const Answer = React.createClass({
 		let positionY = this.state.position.y;
 		let velocityX = this.state.velocity.vx;
 		let velocityY = this.state.velocity.vy;
-		let offsetWidth = this.state.offsetWidth;
+		let offsetWidth = this.refs.answer.offsetWidth;
 
 		// ugly physics code beware
-		if (+(positionX) + offsetWidth / 2 < innerWidth / 2) {
-			velocityX = +(velocityX) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(positionX)) / 100) - Math.min(0.001, Math.exp(+(positionX) + offsetWidth - innerWidth * leftBoundary) / 100)) || 0);
+		if ((positionX) + offsetWidth / 2 < innerWidth / 2) {
+			velocityX += (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-(positionX)) / 100) - Math.min(0.001, Math.exp((positionX) + offsetWidth - innerWidth * leftBoundary) / 100)) || 0);
 		} else {
-			velocityX = +(velocityX) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-+(positionX) + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp(+(positionX) + offsetWidth - innerWidth) / 100)) || 0);
+			velocityX += (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-(positionX) + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp((positionX) + offsetWidth - innerWidth) / 100)) || 0);
 		}
 		velocityX /= 1.05;
-		velocityY = +(velocityY) + dt * ((Math.random() - 0.5) / 10000);
-		if (+(velocityY) < 0.03) velocityY = +velocityY + 0.03;
-		positionX = +(positionX) + +(velocityX) * dt;
-		positionY = +(positionY) + +(velocityY) * dt;
+
+		velocityY += dt * ((Math.random() - 0.5) / 10000);
+		if ((velocityY) < 0.03) velocityY = +velocityY + 0.03;
+
+		positionX += (velocityX) * dt;
+		positionY += (velocityY) * dt;
 
 		this.setState({
 			position: {x: positionX, y: positionY},
@@ -226,10 +230,10 @@ const Answer = React.createClass({
 		const currentTime = (new Date()).getTime();
 		this.setState({
 			startTime: currentTime,
-			lastAnimationTime: currentTime,
-			offsetWidth: this.refs.answer.getDOMNode().offsetWidth
+			lastAnimationTime: currentTime
+		}, function() {
+			this.animate(new Date());
 		});
-		this.animate(new Date());
 	},
 
 	handleClick() {

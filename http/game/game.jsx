@@ -28,7 +28,7 @@ function setState(id) {
 
 function setupGameEnvironment() {
 	document.getElementById('content').hidden = true;
-	document.getElementById('body').style =
+	document.body.style =
 		`background: #e3d393 url('/assets/beach-background.png')
 		repeat-x center top; background-size: cover;`;
 }

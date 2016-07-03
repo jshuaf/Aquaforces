@@ -169,7 +169,7 @@ module.exports = function(server) {
 							while (!newQuestionID || tws.questionsDone.includes(tws.game.questions[newQuestionID])) {
 								newQuestionID = Math.floor(Math.random() * tws.game.questions.length);
 							}
-							const question = tws.game.questions[newQuestionID];
+							const newQuestion = tws.game.questions[newQuestionID];
 							tws.game.activeQuestions.push({
 								text: newQuestion.text,
 								answer: newQuestion.answer,
