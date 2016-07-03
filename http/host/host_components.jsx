@@ -21,8 +21,8 @@ const GameHost = React.createClass({
 	},
 
 	answerSelected(wasCorrectAnswer, crewNumber) {
-		const crewToPassFunctionTo = this.refs[crewNumber.toString()];
-		crewToPassFunctionTo.answerSelected(wasCorrectAnswer, crewNumber);
+		const crew = this.refs[crewNumber.toString()];
+		crew.processAnswer(wasCorrectAnswer);
 	},
 
 	updateCrewPosition(crewNumber, increment) {
@@ -93,15 +93,20 @@ const Crew = React.createClass({
 		};
 	},
 
-	processAnswer(correctAnswerBoolean) {
-		if (correctAnswerBoolean) this.setState({velocity: this.state.velocity + this.state.deltaVelocity});
-		//MESSAGE RAFT => ISRAFT
-		else if (this.state.isRaft) this.setState({deltaVelocity: this.state.deltaVelocity * 0.95});
-		else {
-				this.setState({hp: this.state.hp + this.props.deltaHPConstant});
-				if (!this.state.isRaft && this.state.hp <= 0) {
-						this.setState({isRaft: true});
-				}
+	processAnswer(wasCorrectAnswer) {
+		if (wasCorrectAnswer) {
+			this.setState({
+				velocity: this.state.velocity + this.state.deltaVelocity
+			});
+		} else if (this.state.isRaft) {
+			this.setState({deltaVelocity: this.state.deltaVelocity * 0.95});
+		} else {
+			this.setState({
+				hp: this.state.hp + this.props.deltaHPConstant
+			});
+			if (!this.state.isRaft && this.state.hp <= 0) {
+					this.setState({isRaft: true});
+			}
 		}
 	},
 
@@ -111,16 +116,9 @@ const Crew = React.createClass({
 			transform: 'translate(' + (this.state.position * 200) + ' px, 0 px)',
 			backgroundColor: 'red',
 			height: '3rem'
-
 		};
-		if (this.state.isRaft) {
-			const classNames = 'raft';
-		}
-		else {
-			const classNames = '';
-		}
-		console.log(style);
-		return <div className={classNames} style={style}></div>;
+		const className = this.state.isRaft ? 'raft' : '';
+		return <div className={className} style={style}></div>;
 	}
 });
 

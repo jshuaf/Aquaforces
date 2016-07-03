@@ -99,6 +99,7 @@ socket.onmessage = function(m) {
 		span.dataset.username = m.user;
 		span.className = 'clickable';
 		span.onclick = removeUserFromCrew;
+		span.appendChild(document.createTextNode(m.user));
 		document.getElementById('crews').children[m.crew - 1].appendChild(span);
 		document.getElementById('crews').children[m.crew - 1].dataset.n++;
 		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');

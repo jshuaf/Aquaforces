@@ -20891,8 +20891,8 @@
 			};
 		},
 		answerSelected: function answerSelected(wasCorrectAnswer, crewNumber) {
-			var crewToPassFunctionTo = this.refs[crewNumber.toString()];
-			crewToPassFunctionTo.answerSelected(wasCorrectAnswer, crewNumber);
+			var crew = this.refs[crewNumber.toString()];
+			crew.processAnswer(wasCorrectAnswer);
 		},
 		updateCrewPosition: function updateCrewPosition(crewNumber, increment) {
 			// MARK: move the camera around
@@ -20966,15 +20966,21 @@
 				deltaHPConstant: -0.1
 			};
 		},
-		processAnswer: function processAnswer(correctAnswerBoolean) {
-			if (correctAnswerBoolean) this.setState({ velocity: this.state.velocity + this.state.deltaVelocity });
-			//MESSAGE RAFT => ISRAFT
-			else if (this.state.isRaft) this.setState({ deltaVelocity: this.state.deltaVelocity * 0.95 });else {
-					this.setState({ hp: this.state.hp + this.props.deltaHPConstant });
-					if (!this.state.isRaft && this.state.hp <= 0) {
-						this.setState({ isRaft: true });
-					}
+		processAnswer: function processAnswer(wasCorrectAnswer) {
+			if (wasCorrectAnswer) {
+				this.setState({
+					velocity: this.state.velocity + this.state.deltaVelocity
+				});
+			} else if (this.state.isRaft) {
+				this.setState({ deltaVelocity: this.state.deltaVelocity * 0.95 });
+			} else {
+				this.setState({
+					hp: this.state.hp + this.props.deltaHPConstant
+				});
+				if (!this.state.isRaft && this.state.hp <= 0) {
+					this.setState({ isRaft: true });
 				}
+			}
 		},
 		render: function render() {
 			var style = {
@@ -20982,15 +20988,9 @@
 				transform: 'translate(' + this.state.position * 200 + ' px, 0 px)',
 				backgroundColor: 'red',
 				height: '3rem'
-	
 			};
-			if (this.state.isRaft) {
-				var _classNames = 'raft';
-			} else {
-				var _classNames2 = '';
-			}
-			console.log(style);
-			return _react2.default.createElement('div', { className: classNames, style: style });
+			var className = this.state.isRaft ? 'raft' : '';
+			return _react2.default.createElement('div', { className: className, style: style });
 		}
 	});
 	
@@ -21173,6 +21173,7 @@
 				span.dataset.username = m.user;
 				span.className = 'clickable';
 				span.onclick = removeUserFromCrew;
+				span.appendChild(document.createTextNode(m.user));
 				document.getElementById('crews').children[m.crew - 1].appendChild(span);
 				document.getElementById('crews').children[m.crew - 1].dataset.n++;
 				document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');

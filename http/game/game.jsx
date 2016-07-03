@@ -41,8 +41,6 @@ socket.onmessage = function(m) {
 		return alert('Socket error.');
 	}
 
-	if (m.state) setState(m.state);
-
 	switch (m.event) {
 	case 'notice':
 		errorEl.textContent = m.body;

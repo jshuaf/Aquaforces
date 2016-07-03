@@ -41,7 +41,6 @@ module.exports = function(server) {
 				if (m.event == 'addUser') {
 					const tgame = games[m.code];
 					if (!tgame) return tws.error('Invalid game code.', 'join');
-					// MARK: remove states from messages
 					if (!m.name) {
 						return tws.error('You must enter a username.', 'join');
 					} else if (m.name.length > 24) {
@@ -224,7 +223,6 @@ module.exports = function(server) {
 				}
 
 				if (m.event == 'newGame') {
-					console.log("recieved");
 					const id = Math.floor(Math.random() * 1e6);
 					games[id] = {
 						host: tws,
@@ -265,7 +263,6 @@ module.exports = function(server) {
 					tws.game.crews.forEach((crew) => {
 						crew.members.forEach((ttws) => {
 							if (ttws.user == m.user) {
-								ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
 								crew.members.splice(crew.members.indexOf(ttws), 1);
 							}
 						});
@@ -276,7 +273,6 @@ module.exports = function(server) {
 					}
 					tws.game.users.forEach((ttws, i) => {
 						if (ttws.user == m.user) {
-							ttws.trysend(JSON.stringify({event: 'setState', state: 'join'}));
 							tws.game.users.splice(i, 1);
 						}
 					});
@@ -285,7 +281,7 @@ module.exports = function(server) {
 					if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
 					tws.game.hasStarted = true;
 					tws.game.users.forEach((ttws) => {
-						ttws.trysend(JSON.stringify({event: 'startGame', state: 'game', answers: tws.game.answers}));
+						ttws.trysend(JSON.stringify({event: 'startGame', answers: tws.game.answers}));
 					});
 					tws.game.crews.forEach((crew) => {
 						crew.members.forEach((member) => {
@@ -304,15 +300,14 @@ module.exports = function(server) {
 							ttws.trysend(JSON.stringify({
 								event: 'correctAnswer', answer: question.answer
 							}));
-							ttws.questionIDsDone.push(questionID);
+							ttws.questionsDone.push(tws.game.questions[questionID]);
 						});
 					});
 				} else if (m.event == 'endGame') {
 					tws.checkGameExists();
 					tws.game.users.forEach((ttws) => {
 						ttws.trysend(JSON.stringify({
-							event: 'endGame',
-							state: 'gameEnded'
+							event: 'endGame'
 						}));
 					});
 				} else {
