@@ -1,7 +1,3 @@
-import React from 'react';
-import reactDOM from 'react-dom';
-import Game from './game_components.jsx';
-
 let socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
 const cont = document.getElementById('cont');
 const errorEl = document.getElementById('error');

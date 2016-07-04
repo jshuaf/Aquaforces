@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Game = React.createClass({
 	getInitialState() {
 		return {

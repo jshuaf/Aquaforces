@@ -1,6 +1,3 @@
-import React from 'react';
-import reactDOM from 'react-dom';
-
 function getValuesOfObject(object) {
 	let values = [];
 	for (let key in object) {
