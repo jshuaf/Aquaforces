@@ -385,4 +385,3 @@ const GameTimer = React.createClass({
 		return <p hidden={this.state.finished}>Time remaining: {this.state.time}</p>;
 	}
 });
-export default Game;

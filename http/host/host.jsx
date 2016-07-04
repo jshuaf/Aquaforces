@@ -143,7 +143,7 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 	document.getElementById('cont').hidden = true;
 	setState('mountNode');
 	gameHasStarted = true;
-	gameHost = reactDOM.render(<GameHost initialCrews={crews} />, document.getElementById('mountNode'));
+	gameHost = ReactDOM.render(<GameHost initialCrews={crews} />, document.getElementById('mountNode'));
 });
 function endGame() {
     socket.send(JSON.stringify({

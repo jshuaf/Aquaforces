@@ -53,7 +53,7 @@ socket.onmessage = function(m) {
 		setState('mountNode');
 		setupGameEnvironment();
 		answers = m.answers;
-		game = reactDOM.render(<Game
+		game = ReactDOM.render(<Game
   socket={socket} username={username}
   crewNumber={crewNumber} initialAnswers={m.answers}
   />,

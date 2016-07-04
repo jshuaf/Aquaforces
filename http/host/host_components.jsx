@@ -154,5 +154,3 @@ const LeaderboardEntry = React.createClass({
 		</div>);
 	}
 });
-
-export default GameHost;
