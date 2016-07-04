@@ -70,7 +70,15 @@ const Game = React.createClass({
 			onClick={this.answerSelected.bind(this, answer)}
 			initialX={this.generateAnswerPosition()}
 			canoeBounds={this.state.canoeBounds}
+			passedThreshold={this.answerPassedThreshold}
 		/>);
+	},
+
+	answerPassedThreshold(answerText) {
+		this.props.socket.send(JSON.stringify({
+			event: 'answerPassedThreshold',
+			answer: answerText
+		}));
 	},
 
 	generateAnswerPosition() {
