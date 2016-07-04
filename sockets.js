@@ -88,31 +88,25 @@ module.exports = function(server) {
 					tws.checkGameExists();
 					if (!m.answer) return tws.error('No answer text sent.');
 					let crew = tws.game.crews[tws.crewNumber];
+					let wasCorrectAnswer = false;
 
+					console.log(crew.recentAnswers);
 					// fuzzy answer checking
 					crew.recentAnswers.forEach(function(pastAnswer) {
 						if (pastAnswer.text == m.answer && new Date().getTime() - pastAnswer.time < maxFuzzyTime) {
-							tws.trysend(JSON.stringify({
-								event: 'answerSelected',
-								wasCorrectAnswer: true
-							}));
-							return tws.game.host.trysend(JSON.stringify({
-								event: 'answerSelected',
-								crewNumber: m.crewNumber,
-								wasCorrectAnswer: true
-							}));
+							wasCorrectAnswer = true;
 						}
 					});
 
 					// incorrect answers
 					tws.trysend(JSON.stringify({
 						event: 'answerSelected',
-						wasCorrectAnswer: false
+						wasCorrectAnswer
 					}));
 					tws.game.host.trysend(JSON.stringify({
 						event: 'answerSelected',
 						crewNumber: m.crewNumber,
-						wasCorrectAnswer: false
+						wasCorrectAnswer
 					}));
 
 					let correspondingQuestion;
@@ -141,7 +135,7 @@ module.exports = function(server) {
 							}));
 							ttws.questionsDone.push(correspondingQuestion);
 							return crew.recentAnswers.push({
-								text: m.answer,
+								text: newQuestion.answer,
 								time: new Date().getTime()
 							});
 						}
@@ -300,6 +294,10 @@ module.exports = function(server) {
 								event: 'correctAnswer', answer: question.answer
 							}));
 							ttws.questionsDone.push(tws.game.questions[questionID]);
+							return crew.recentAnswers.push({
+								text: question.answer,
+								time: new Date().getTime()
+							});
 						});
 					});
 				} else if (m.event == 'endGame') {
