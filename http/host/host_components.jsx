@@ -3,7 +3,6 @@ function getValuesOfObject(object) {
 	for (let key in object) {
 		values.push(object[key]);
 	}
-
 	return values;
 }
 
@@ -19,6 +18,8 @@ const GameHost = React.createClass({
 
 	answerSelected(wasCorrectAnswer, crewNumber) {
 		const crew = this.refs[crewNumber.toString()];
+		if (wasCorrectAnswer)
+			this.updateCrewPosition(crewNumber, 0.1);
 		crew.processAnswer(wasCorrectAnswer);
 	},
 
