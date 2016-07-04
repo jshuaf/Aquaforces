@@ -68,6 +68,7 @@ socket.onmessage = function(m) {
 		console.log(e);
 		return alert('Socket error.');
 	}
+	console.log(m);
 	switch (m.event) {
 	case 'error':
 		alert(m.body);

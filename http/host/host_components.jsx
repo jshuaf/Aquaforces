@@ -25,7 +25,7 @@ const GameHost = React.createClass({
 
 	updateCrewPosition(crewNumber, increment) {
 		// MARK: move the camera around
-
+		console.log("Move " + crewNumber + " by " + increment);
 		let oldCrews = this.state.crews;
 		oldCrews[crewNumber].position += increment;
 		this.setState({
@@ -109,13 +109,16 @@ const Crew = React.createClass({
 	},
 
 	render() {
-		const style = {
+		let style = {
 			width: '7rem',
-			transform: 'translate(' + (this.state.position * 200) + ' px, 0 px)',
-			backgroundColor: 'red',
+			marginLeft: (this.props.position * 200) + 'px',
+			backgroundColor: 'transparent',
+			border-radius: 5px,
+			border: 2px #26a65b solid,
 			height: '3rem'
 		};
 		const className = this.state.isRaft ? 'raft' : '';
+		console.log(this.props.position);
 		return <div className={className} style={style}></div>;
 	}
 });
@@ -146,7 +149,7 @@ const LeaderboardEntry = React.createClass({
 	render() {
 		let style = {
 			fontSize: (this.props.crewPosition + 1) * 15 + 'px',
-			padding: 5 + this.props.position + 'px',
+			padding: 5 + this.props.crewPosition + 'px',
 			color: 'white'
 		};
 		return (<div className="leaderboardEntry">
