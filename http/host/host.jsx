@@ -126,9 +126,6 @@ socket.onmessage = function(m) {
 		}
 		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 		break;
-	case 'updateCrewPosition':
-		gameHost.updateCrewPosition(m.crewNumber, m.increment);
-	}
 };
 
 socket.onclose = function() {

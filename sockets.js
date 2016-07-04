@@ -3,7 +3,6 @@ const ws = require('ws');
 let games = {};
 
 const maxFuzzyTime = 10000;
-const correctAnswerIncrement = 0.1;
 
 // event names to change from GAME:
 // addUser goes to addUser
