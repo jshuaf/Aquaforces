@@ -113,7 +113,7 @@ const Crew = React.createClass({
 			width: '7rem',
 			marginLeft: (this.props.position * 200) + 'px',
 			backgroundColor: 'transparent',
-			border-radius: 5px,
+			borderRadius: 5px,
 			border: 2px #26a65b solid,
 			height: '3rem'
 		};
