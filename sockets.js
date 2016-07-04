@@ -8,11 +8,13 @@ module.exports = (server) => {
 	let wss = new ws.Server({server});
 	wss.on('connection', (tws) => {
 		console.log('SOCKET CONNECT ' + tws.upgradeReq.url);
+
 		tws.trysend = (msg) => {
 			try {
 				tws.send(JSON.stringify(msg));
 			} catch (e) {}
 		};
+
 		tws.error = (body, state) =>
 			tws.trysend({event: 'error', body, state});
 
@@ -102,17 +104,6 @@ module.exports = (server) => {
 								}
 							});
 
-							// incorrect answers
-							tws.trysend({
-								event: 'answerSelected',
-								wasCorrectAnswer: false
-							});
-							tws.sendToGameHost({
-								event: 'answerSelected',
-								crewNumber: m.crewNumber,
-								wasCorrectAnswer: false
-							});
-
 							let correspondingQuestion;
 							tws.game.activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.answer == m.answer) {
@@ -144,9 +135,17 @@ module.exports = (server) => {
 									});
 								}
 							});
-
 							if (!correspondingQuestion) {
-								tws.error("Unknown answer clicked.");
+								// incorrect answers
+								tws.trysend({
+									event: 'answerSelected',
+									wasCorrectAnswer: false
+								});
+								tws.sendToGameHost({
+									event: 'answerSelected',
+									crewNumber: m.crewNumber,
+									wasCorrectAnswer: false
+								});
 							}
 							break;
 
@@ -201,6 +200,16 @@ module.exports = (server) => {
 							if (!correspondingQuestion) {
 								tws.error("Unknown question timed out.");
 							}
+							break;
+
+						case 'answerPassedThreshold':
+							const answerToResend = m.answer;
+							const crew = tws.game.crews[m.crewNumber];
+							const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+							ttws.trysend({
+								event: 'correctAnswer',
+								answer: answerToResend
+							});
 							break;
 
 						default:

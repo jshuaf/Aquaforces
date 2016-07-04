@@ -77,7 +77,8 @@ const Game = React.createClass({
 	answerPassedThreshold(answerText) {
 		this.props.socket.send(JSON.stringify({
 			event: 'answerPassedThreshold',
-			answer: answerText
+			answer: answerText,
+			crewNumber: this.props.crewNumber
 		}));
 	},
 
