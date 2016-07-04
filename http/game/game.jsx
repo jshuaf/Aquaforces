@@ -25,7 +25,7 @@ function setState(id) {
 function setupGameEnvironment() {
 	document.getElementById('content').hidden = true;
 	document.body.style =
-		`background: #e3d393 url('/assets/beach-background.png')
+		`background: #e3d393 url('/img/beach-background.png')
 		repeat-x center top; background-size: cover;`;
 }
 
@@ -103,5 +103,4 @@ document.getElementById('crew').addEventListener('submit', (e) => {
 	document.getElementById('crewnodisplay').textContent =
 		parseInt(document.getElementById('crewno').value, 10);
 	crewNumber = parseInt(document.getElementById('crewno').value, 10);
-	setState('wait');
 });

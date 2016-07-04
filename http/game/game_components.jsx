@@ -163,7 +163,7 @@ const Game = React.createClass({
 				</div>
 				<River
   position={this.state.canoePosition}
-  initialImage="../assets/canoe/canoe_full_health.png"
+  initialImage="../img/canoetop.svg"
   answersDisplayed={this.state.answers}
     />
       </div>
@@ -266,8 +266,9 @@ const Canoe = React.createClass({
 		};
 	},
 	render() {
-		return (null);
-		/* (<img id = "canoe" src = {this.state.image}></img>)*/
+		const style = {
+		};
+		return (<img id = "canoe" src = {this.state.image} style = {style}></img>);
 	}
 });
 
