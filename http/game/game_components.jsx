@@ -210,7 +210,7 @@ const Answer = React.createClass({
 		let positionY = this.state.position.y;
 		let velocityX = this.state.velocity.vx;
 		let velocityY = this.state.velocity.vy;
-		let offsetWidth = this.refs.answer.offsetWidth;
+		let offsetWidth = this.state.offsetWidth;
 
 		// ugly physics code beware
 		if ((positionX) + offsetWidth / 2 < innerWidth / 2) {
@@ -237,7 +237,8 @@ const Answer = React.createClass({
 		const currentTime = (new Date()).getTime();
 		this.setState({
 			startTime: currentTime,
-			lastAnimationTime: currentTime
+			lastAnimationTime: currentTime,
+			offsetWidth: this.refs.answer.offsetWidth
 		}, function() {
 			this.animate(new Date());
 		});
