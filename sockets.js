@@ -26,8 +26,19 @@ module.exports = (server) => {
 
 		tws.crew = () => tws.game.crews[tws.crewNumber];
 
+		tws.randomCrewMember = () => tws.crew().members[Math.floor(Math.random() * tws.crew().members.length)];
+
 		tws.addWhirlpool = () => {
 			tws.whirlpool = true;
+			const ttws = tws.randomCrewMember();
+			tws.crew().forEach(crewMember, () => {
+				crewMember.trysend({
+					event: 'whirlpool'
+				});
+			});
+			tws.trysend({
+
+			});
 		};
 
 		tws.addRock = () => {
