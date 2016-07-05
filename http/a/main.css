@@ -31,7 +31,6 @@ html, body, main, #progress, #cont { height: 100% }
 main { position: relative }
 #cont label {
 	font-size: 1.3em;
-	display: block;
 	margin: 0.5em 0.5em 0.5em 0;
 }
 form:not(.left-align) { margin: 0 auto }
