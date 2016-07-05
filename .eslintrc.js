@@ -4,6 +4,7 @@ module.exports = {
 		"node": true,
 		"es6": true
 	},
+	"parser": "babel-eslint",
 	"rules": {
 		"comma-dangle": ["error"],
 		"no-debugger": ["error"],

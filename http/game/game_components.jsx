@@ -399,18 +399,18 @@ const GameTimer = React.createClass({
 
 const Rock = React.createClass({
 	render() {
-		return <img src = {this.props.image}></img>
+		return <img src = {this.props.image}></img>;
 	}
 	// rock slowly approaches
 	// if 5 correct answers, rock explodes
 	// if 20 seconds pass
 	// trigger: 5% * number of correct answers
 	// testing purposes: 30%
-})
+});
 
 const Whirlpool = React.createClass({
 	render() {
-		return <img src={this.props.image}></img>
+		return <img src={this.props.image}></img>;
 	}
 
 	// popup - everything stops
@@ -422,4 +422,4 @@ const Whirlpool = React.createClass({
 	// for every 10 clicks, the timebar gets a 1 second boost
 	// if correct answer for Whirlpool
 	// increment by 5x correct questions
-})
+});
