@@ -113,8 +113,8 @@ const Crew = React.createClass({
 			width: '7rem',
 			marginLeft: (this.props.position * 200) + 'px',
 			backgroundColor: 'transparent',
-			borderRadius: 5px,
-			border: 2px #26a65b solid,
+			borderRadius: '5px',
+			border: '2px #26a65b solid',
 			height: '3rem'
 		};
 		const className = this.state.isRaft ? 'raft' : '';
