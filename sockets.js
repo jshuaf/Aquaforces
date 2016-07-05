@@ -96,6 +96,7 @@ module.exports = (server) => {
 							const crew = tws.game.crews[tws.crewNumber];
 
 							// fuzzy answer checking
+							/*
 							crew.recentAnswers.forEach((pastAnswer) => {
 								if (pastAnswer.text == m.answer && new Date().getTime() - pastAnswer.time < maxFuzzyTime) {
 									tws.trysend({
@@ -108,7 +109,7 @@ module.exports = (server) => {
 										wasCorrectAnswer: true
 									});
 								}
-							});
+							});*/
 
 							let correspondingQuestion;
 							tws.game.activeQuestions.forEach((activeQuestion) => {

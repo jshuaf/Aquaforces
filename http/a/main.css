@@ -73,10 +73,21 @@ span[.clickable]:hover {
 	position: absolute;
 	left: 0;
 	top: 0;
-	background-color: #34495e;
-	padding: 2rem;
-	border-radius: 1rem;
-	font-size: 20px;
+	background-color: #26a65b;
+	padding: 0.5rem 2rem 0.5rem 2rem;
+	border: 2px solid #ecf0f1;
+	border-radius: 4rem;
+	font-size: 20px
+}
+.answers > span:hover {
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: #16964b;
+	padding: 0.5rem 2rem 0.5rem 2rem;
+	border: 2px solid #ecf0f1;
+	border-radius: 4rem;
+	font-size: 20px
 }
 @media (min-width: 700px) {
 	.navbar > .columns > p, a {
