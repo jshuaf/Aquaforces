@@ -92,9 +92,11 @@ span[.clickable]:hover {
 	overflow-x: hidden;
 	overflow-y: hidden;
 }
-img {
-	max-width: 100%;
+#canoe {
+	max-width: 25%;
 	max-height: 100%;
+	position: absolute;
+	left: 50%;
 }
 .answers {
 	position: relative;

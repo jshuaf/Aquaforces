@@ -103,4 +103,5 @@ document.getElementById('crew').addEventListener('submit', (e) => {
 	document.getElementById('crewnodisplay').textContent =
 		parseInt(document.getElementById('crewno').value, 10);
 	crewNumber = parseInt(document.getElementById('crewno').value, 10);
+	setState('wait');
 });
