@@ -50,15 +50,15 @@ function removeUserFromCrew() {
 	this.parentNode.dataset.n--;
 	this.parentNode.removeChild(this);
 
-	crews.forEach(crewNumber, function() {
-		let crewmembers = crews.crewNumber.users;
-		crewmembers.forEach(crewmember, function() {
+	for (const crewNumber in crews) {
+		let crewmembers = crews[crewNumber].users;
+		for (const crewmember in crewmembers) {
 			if (crewmember == this.dataset.username) {
 				crewmembers.remove(crewmember);
 				return;
 			}
-		});
-	});
+		}
+	}
 }
 
 socket.onmessage = function(m) {
