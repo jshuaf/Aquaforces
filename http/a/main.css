@@ -6,9 +6,11 @@
 html {
 	font: 100% sans-serif;
 	text-align: center;
-	background-color: #39f;
+	background: #39f;
+	background-size: cover;
 	color: #eee;
 }
+html.pregamescreen { background-image: url('/img/background.svg') }
 body { margin: 0 }
 html, body, main, #progress, #cont { height: 100% }
 @keyframes flash-red {
