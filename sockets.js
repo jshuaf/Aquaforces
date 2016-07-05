@@ -27,7 +27,7 @@ module.exports = (server) => {
 			tws.game.host.trysend(data);
 
 		switch (tws.upgradeReq.url) {
-			case '/':
+			case '/': {
 				tws.on('message', function(m, raw) {
 					try {
 						m = JSON.parse(m);
@@ -36,7 +36,7 @@ module.exports = (server) => {
 					}
 					switch (m.event) {
 
-						case 'addUser':
+						case 'addUser': {
 							const tgame = games[m.code];
 							if (!tgame) return tws.error('Invalid game code.', 'join');
 							if (!m.name) {
@@ -59,8 +59,9 @@ module.exports = (server) => {
 							tws.trysend({event: 'addUser'});
 							tws.questionsDone = [];
 							break;
+						}
 
-						case 'addUserToCrew':
+						case 'addUserToCrew': {
 							tws.checkGameExists();
 							if (!m.crewNumber || typeof m.crewNumber != 'number') {
 								return tws.error('You must enter a crew number.', 'crew');
@@ -84,11 +85,12 @@ module.exports = (server) => {
 								crew: m.crewNumber
 							});
 							break;
+						}
 
-						case 'answerSelected':
+						case 'answerSelected': {
 							tws.checkGameExists();
 							if (!m.answer) return tws.error('No answer text sent.');
-							let crew = tws.game.crews[tws.crewNumber];
+							const crew = tws.game.crews[tws.crewNumber];
 
 							// fuzzy answer checking
 							crew.recentAnswers.forEach((pastAnswer) => {
@@ -105,7 +107,7 @@ module.exports = (server) => {
 								}
 							});
 
-							correspondingQuestion = null;
+							let correspondingQuestion;
 							tws.game.activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.answer == m.answer) {
 									correspondingQuestion = activeQuestion;
@@ -124,7 +126,7 @@ module.exports = (server) => {
 										event: 'newQuestion',
 										question: newQuestion.text
 									});
-									let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+									const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 									ttws.trysend({
 										event: 'correctAnswer',
 										answer: newQuestion.answer
@@ -149,14 +151,15 @@ module.exports = (server) => {
 								});
 							}
 							break;
+						}
 
-						case 'questionTimeout':
+						case 'questionTimeout': {
 							tws.checkGameExists();
 							if (!m.question) {
 								return tws.error('No question text sent.');
 							}
 
-							correspondingQuestion = null;
+							let correspondingQuestion;
 							tws.game.activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.text == m.question) {
 									correspondingQuestion = activeQuestion;
@@ -178,8 +181,8 @@ module.exports = (server) => {
 										event: 'newQuestion',
 										question: newQuestion.text
 									});
-									let crew = tws.game.crews[tws.crewNumber];
-									let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+									const crew = tws.game.crews[tws.crewNumber];
+									const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 									ttws.trysend({
 										event: 'correctAnswer',
 										answer: newQuestion.answer
@@ -190,8 +193,8 @@ module.exports = (server) => {
 									if (typeof m.text != 'string') {
 										return tws.error('No answer text sent.');
 									}
-									let crew = tws.game.crews[tws.crewNumber];
-									let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+									const crew = tws.game.crews[tws.crewNumber];
+									const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 									ttws.trysend({
 										event: 'correctAnswer',
 										answer: m.answer
@@ -202,8 +205,9 @@ module.exports = (server) => {
 								tws.error("Unknown question timed out.");
 							}
 							break;
+						}
 
-						case 'answerPassedThreshold':
+						case 'answerPassedThreshold': {
 							const answerToResend = m.answer;
 							crew = tws.game.crews[m.crewNumber];
 							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
@@ -212,9 +216,11 @@ module.exports = (server) => {
 								answer: answerToResend
 							});
 							break;
+						}
 
-						default:
+						default: {
 							tws.error('Unknown socket event ' + m.event + ' received.');
+						}
 					}
 				});
 				tws.on('close', () => {
@@ -226,8 +232,8 @@ module.exports = (server) => {
 					}
 				});
 				break;
-
-			case '/host/':
+			}
+			case '/host/': {
 				tws.on('message', (m, raw) => {
 					try {
 						m = JSON.parse(m);
@@ -236,7 +242,7 @@ module.exports = (server) => {
 					}
 
 					switch (m.event) {
-						case 'newGame':
+						case 'newGame': {
 							const id = Math.floor(Math.random() * 1e4);
 							games[id] = {
 								host: tws,
@@ -273,8 +279,9 @@ module.exports = (server) => {
 
 							tws.game.answers = answers;
 							break;
+						}
 
-						case 'removeUserFromCrew':
+						case 'removeUserFromCrew': {
 							tws.checkGameExists();
 							tws.game.crews.forEach((crew) => {
 								crew.members.forEach((ttws) => {
@@ -284,8 +291,9 @@ module.exports = (server) => {
 								});
 							});
 							break;
+						}
 
-						case 'removeUser':
+						case 'removeUser': {
 							if (!tws.game) {
 								return tws.error('Game not found.', 'join');
 							}
@@ -295,8 +303,9 @@ module.exports = (server) => {
 								}
 							});
 							break;
+						}
 
-						case 'startGame':
+						case 'startGame': {
 							tws.checkGameExists();
 							if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
 							tws.game.hasStarted = true;
@@ -324,8 +333,9 @@ module.exports = (server) => {
 								});
 							});
 							break;
+						}
 
-						case 'endGame':
+						case 'endGame': {
 							tws.checkGameExists();
 							tws.game.users.forEach((ttws) => {
 								ttws.trysend({
@@ -333,23 +343,28 @@ module.exports = (server) => {
 								});
 							});
 							break;
+						}
 
-						default:
+						default: {
 							tws.error('Unknown socket event ' + m.event + ' received.');
+						}
 					}
 				});
 				break;
+			}
 
-			case '/console/':
+			case '/console/': {
 				// MARK: console sockets
 				break;
+			}
 
-			default:
+			default: {
 				tws.trysend({
 					event: 'error',
 					body: 'Invalid upgrade URL.'
 				});
 				tws.close();
 			}
-		});
+		}
+	});
 };
