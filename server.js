@@ -11,7 +11,6 @@ const usedDBCs = [
 const http = require('http'),
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
-	babel = require('babel-core'),
 	zlib = require('zlib'),
 	fs = require('fs'),
 	path = require('path'),
@@ -63,7 +62,7 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname.includes('.')) {
 		let stats;
 		try {
-			stats = yield fs.stat('./http/' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+			stats = yield fs.stat('./http/' + req.url.pathname, yield);
 		} catch (e) {
 			return errorNotFound(req, res);
 		}
@@ -81,12 +80,12 @@ let serverHandler = o(function*(req, res) {
 			if (cache[req.url.pathname].updated < stats.mtime) {
 				let data;
 				try {
-					data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+					data = yield fs.readFile('http' + req.url.pathname, yield);
 				} catch (e) {
 					return;
 				}
 				switch (path.extname(req.url.pathname)) {
-					case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
+					case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
 					break;
 					case '.css': data = new CleanCSS().minify(data).styles;
 					break;
@@ -101,12 +100,12 @@ let serverHandler = o(function*(req, res) {
 		} else {
 			let data;
 			try {
-				data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+				data = yield fs.readFile('http' + req.url.pathname, yield);
 			} catch (e) {
 				return errorNotFound(req, res);
 			}
 			switch (path.extname(req.url.pathname)) {
-				case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
+				case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
 				break;
 				case '.css': data = new CleanCSS().minify(data).styles;
 				break;

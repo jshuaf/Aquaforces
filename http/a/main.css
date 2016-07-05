@@ -187,15 +187,13 @@ html, body, main, #progress, #cont { height: 100% }
 }
 [hidden] > * { display: none }
 main { position: relative }
-label {
+#cont label {
 	font-size: 1.3em;
 	display: block;
 	margin: 0.5em 0.5em 0.5em 0;
 }
-form {
-	margin: 0 auto;
-	padding: 2em;
-}
+form:not(.left-align) { margin: 0 auto }
+form { padding: 2em }
 .pregamescreen form { background: rgba(0, 0, 0, 0.5) }
 .centerbox {
 	text-align: left;
@@ -203,12 +201,14 @@ form {
 	margin: 0 auto;
 	max-width: 24em;
 }
-.centerbox span { min-width: 7ch }
-.centerbox label {
+.centerbox span { min-width: 6.5ch }
+label {
 	display: flex;
 	align-items: center;
 }
-.centerbox input {
+input {
+	font-size: 1.1em;
+	margin-left: 0.5ch;
 	flex-basis: 0;
 	flex-grow: 1;
 }
@@ -239,8 +239,7 @@ form[hidden] {
 form:not([hidden]) + form[hidden] {
 	display: table;
 }
-form > :not(label) { text-align: center }
-input { font-size: 1.1em }
+#cont form > :not(label) { text-align: center }
 nav, footer {
 	padding: 0.3em;
 	background: #ddd;
@@ -256,6 +255,7 @@ button {
 	transition: background-color 0.1s;
 	border: 1px solid #aaa;
 	color: #fff;
+	cursor: pointer;
 }
 button:hover { background: #09f }
 button:active { background: #05f }
@@ -277,10 +277,6 @@ a {
 }
 a:hover { color: #6ff }
 a:active { color: #faa }
-ul, ol {
-	text-align: left;
-	font-size: 1.5em;
-}
 #game, #tgame {
 	padding: 0;
 	background: transparent;
@@ -319,11 +315,8 @@ ul, ol {
 	cursor: pointer;
 	padding: 0.7em 1.2em;
 	background: url('/img/leaf1.svg') no-repeat center;
-	text-shadow: 1px 1px 5px #fff;
 }
-#answers > div.a-style2 { background: url('/img/leaf2.svg') no-repeat center }
-#answers > div.a-style3 { background: url('/img/log1.svg') no-repeat center }
-#answers > div.a-style4 { background: url('/img/log2.svg') no-repeat center }
+#answers > div.alt { background: url('/img/leaf2.svg') no-repeat center }
 @media (pointer: fine) {
 	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
 }
@@ -351,8 +344,14 @@ li:empty {
 li[data-n='1'] { color: #f22 }
 ul.studentselect > li { cursor: pointer }
 ul.studentselect > li:hover { text-decoration: line-through }
-ol > li { line-height: 2 }
-ol > li > span, #progress > div > span {
+.left-align { text-align: left }
+.left-align button { margin: 1em }
+.studentselect {
+	text-align: left;
+	font-size: 1.5em;
+}
+ol.studentselect > li { line-height: 2 }
+ol.studentselect > li > span, #progress > div > span {
 	display: inline-block;
 	background: #ff0;
 	color: #111;

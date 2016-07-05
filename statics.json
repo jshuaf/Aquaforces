@@ -6,6 +6,7 @@
 		"path": "./html/host.html"
 	},
 	"/console/": {
-		"path": "./html/console.html"
+		"path": "./html/console.html",
+		"inhead": "<link rel=\"stylesheet\" href=\"/host.css\" />"
 	}
 }

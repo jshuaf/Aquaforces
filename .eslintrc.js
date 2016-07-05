@@ -1,12 +1,8 @@
 module.exports = {
-	"parser": "babel-eslint",
 	"env": {
 		"browser": true,
 		"node": true,
 		"es6": true
-	},
-	"parserOptions": {
-		"sourceType": "module"
 	},
 	"rules": {
 		"comma-dangle": ["error"],
@@ -65,6 +61,7 @@ module.exports = {
 		"no-with": ["error"],
 		"wrap-iife": ["error"],
 		"yoda": ["error", "never"],
+		"strict": ["error", "global"],
 		"no-delete-var": ["error"],
 		"no-label-var": ["error"],
 		"no-shadow-restricted-names": ["error"],
@@ -110,6 +107,7 @@ module.exports = {
 		"space-in-parens": ["error"],
 		"space-infix-ops": ["error"],
 		"space-unary-ops": ["error", {"words": false}],
+		"spaced-comment": ["error", "never"],
 		"arrow-body-style": ["error"],
 		"arrow-spacing": ["error"],
 		"constructor-super": ["error"],
