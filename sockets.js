@@ -90,7 +90,7 @@ module.exports = (server) => {
 						case 'answerSelected': {
 							tws.checkGameExists();
 							if (!m.answer) return tws.error('No answer text sent.');
-							let crew = tws.game.crews[tws.crewNumber];
+							const crew = tws.game.crews[tws.crewNumber];
 
 							// fuzzy answer checking
 							crew.recentAnswers.forEach((pastAnswer) => {
@@ -107,7 +107,7 @@ module.exports = (server) => {
 								}
 							});
 
-							correspondingQuestion = null;
+							let correspondingQuestion;
 							tws.game.activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.answer == m.answer) {
 									correspondingQuestion = activeQuestion;
@@ -126,7 +126,7 @@ module.exports = (server) => {
 										event: 'newQuestion',
 										question: newQuestion.text
 									});
-									let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+									const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 									ttws.trysend({
 										event: 'correctAnswer',
 										answer: newQuestion.answer
@@ -159,7 +159,7 @@ module.exports = (server) => {
 								return tws.error('No question text sent.');
 							}
 
-							correspondingQuestion = null;
+							let correspondingQuestion;
 							tws.game.activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.text == m.question) {
 									correspondingQuestion = activeQuestion;
@@ -181,8 +181,8 @@ module.exports = (server) => {
 										event: 'newQuestion',
 										question: newQuestion.text
 									});
-									let crew = tws.game.crews[tws.crewNumber];
-									let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+									const crew = tws.game.crews[tws.crewNumber];
+									const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 									ttws.trysend({
 										event: 'correctAnswer',
 										answer: newQuestion.answer
@@ -193,8 +193,8 @@ module.exports = (server) => {
 									if (typeof m.text != 'string') {
 										return tws.error('No answer text sent.');
 									}
-									let crew = tws.game.crews[tws.crewNumber];
-									let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+									const crew = tws.game.crews[tws.crewNumber];
+									const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 									ttws.trysend({
 										event: 'correctAnswer',
 										answer: m.answer
