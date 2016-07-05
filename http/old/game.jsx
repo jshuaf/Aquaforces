@@ -1,4 +1,3 @@
-'use strict';
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error'),
@@ -34,16 +33,16 @@ socket.onmessage = function(m) {
 		errorEl.textContent = m.body;
 		errorEl.scrollIntoView();
 	}
-	if (m.event == 'start-game') {
+	if (m.event == 'startGame') {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
 		setInterval(addAnswer, 1000);
 	}
 	if (m.event == 'question') startQuestion(m.question);
-	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
-	if (m.event == 'answer-status') flash(m.correct ? 'green' : 'red');
-	if (m.event == 'end-game') gameHasEnded = true;
+	if (m.event == 'correctAnswer') correctAnswerQueue.push(m.answer);
+	if (m.event == 'answerStatus') flash(m.correct ? 'green' : 'red');
+	if (m.event == 'endGame') gameHasEnded = true;
 };
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
@@ -52,7 +51,7 @@ socket.onclose = function() {
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
-		event: 'new-user',
+		event: 'newUser',
 		code: parseInt(document.getElementById('game-code').value),
 		name: document.getElementById('crewmember-name').value
 	}));
@@ -61,7 +60,7 @@ document.getElementById('join').addEventListener('submit', function(e) {
 document.getElementById('crew').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
-		event: 'add-user-to-crew',
+		event: 'addUserToCrew',
 		crewnum: parseInt(document.getElementById('crewnum').value)
 	}));
 	document.getElementById('crewnumdisplay').textContent = parseInt(document.getElementById('crewnum').value);
@@ -90,13 +89,16 @@ function addAnswer() {
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
 	var answerInner = document.createElement('div');
 	answerInner.appendChild(document.createTextNode(answer));
-	if (Math.random() < 0.4) answerEl.classList.add('alt');
+	var rn = Math.random();
+	if (rn < 0.25) answerEl.classList.add('a-style2');
+	else if (rn < 0.5) answerEl.classList.add('a-style3');
+	else if (rn < 0.75) answerEl.classList.add('a-style4');
 	answerEl.appendChild(answerInner);
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
 	answerEl.dataset.y = 0;
-	answerEl.dataset.vx = (Math.random() - 0.5) / 100;
-	answerEl.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
+	answerEl.dataset.vx = (Math.random() - 0.5) / 150;
+	answerEl.dataset.vy = (Math.random() - 0.5) / 150 + innerHeight / 15000;
 	answerEl.addEventListener('click', answerClickListener);
 	if (correctAnswer) answerEl.classList.add('correct-answer');
 }
@@ -106,7 +108,7 @@ function startQuestion(question) {
 }
 function failQuestion() {
 	socket.send(JSON.stringify({
-		event: 'timeout-question',
+		event: 'timeoutQuestion',
 		text: document.getElementById('question').firstChild.firstChild.nodeValue
 	}));
 	flash('yellow');
@@ -126,14 +128,14 @@ function animationUpdate() {
 		}
 		e.dataset.vx /= 1.05;
 		e.dataset.vy = parseFloat(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
-		if (parseFloat(e.dataset.vy) < 0.05) e.dataset.vy = +e.dataset.vy + 0.1;
+		if (parseFloat(e.dataset.vy) < 0.03) e.dataset.vy = +e.dataset.vy + 0.03;
 		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
 		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
 		if (parseFloat(e.dataset.y) > innerHeight) {
 			if (e.classList.contains('correct-answer')) {
 				socket.send(JSON.stringify({
-					event: 'resend-answer',
+					event: 'resendAnswer',
 					text: e.firstChild.firstChild.nodeValue
 				}));
 			}

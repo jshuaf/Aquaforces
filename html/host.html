@@ -1,22 +1,20 @@
-<div id="cont" class="host">
 	<form id="dashboard">
-		<h1>Host dashboard</h1>
-		<button>New game</button>
+		<h1>Hello teacher!</h1>
+		<button class="button-primary">New game</button>
 	</form>
 	<form id="tgame" hidden="">
-		<h1 id="header">Game code: </h1>
-		<div class="half-divider">
-			<div class="half" id="lonelyfolks">
+		<h1>Game code: <span id="game-code-cont"></span></h1>
+		<div class="row">
+			<div class="six columns" id="lonelyfolks">
 				<h2>Available sailors</h2>
 				<ul class="studentselect" id="loneusers"></ul>
 			</div>
-			<div class="half">
-				<h2 id="crew-header">Crews</h2>
+			<div class="six columns">
+				<h2>Crews</h2>
 				<ol class="studentselect" id="crews"><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li></ol>
 			</div>
 		</div>
-		<button id="start-game-btn" disabled="">Start game</button>
+		<button id="start-game-btn" class="button-primary">Start game</button>
 	</form>
-</div>
-<section id="progress"></section>
-<script async="" src="/host.js"></script>
+	<script src="host.js"></script>
+	<script src="host_components.js"></script>

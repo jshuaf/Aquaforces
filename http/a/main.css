@@ -1,4 +1,162 @@
 * {
+	font-family: 'Source Sans Pro', sans-serif;
+	color: #2c3e50;
+}
+strong, b {
+	font-weight: bold
+}
+body {
+	background: #4ca9d6 url('/img/goshalex.svg') repeat-x center top;
+	background-size: cover;
+}
+.navbar {
+	background-color: white;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+	padding: 20px;
+	margin-bottom: 2rem;
+}
+.navbar > .container > .row > .columns > * {
+	margin-bottom: 0;
+	font-weight: normal;
+}
+.navbar > .container > .row > .columns > p, a {
+	line-height: 3.125rem;
+	vertical-align: center;
+}
+.navbar > .container > .row > .columns > .navbar-logo {
+	font-weight: bold;
+}
+h1 {
+	font-size: 5rem;
+	margin-top: 0;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+h2 {
+	font-size: 2.5rem;
+	font-weight: bold;
+}
+input {
+	font-size: 1.5rem;
+}
+span, span > * {
+	background-color: #16964b;
+	border-radius: 0.5rem;
+	padding: 0 1rem;
+	color: white;
+}
+span > span {
+	display: none;
+}
+span:hover > span {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	border-radius: 0;
+	line-height: 1;
+}
+span[.clickable]:hover {
+	background-color: #26a65b;
+}
+.panel {
+	background-color: white;
+	border-radius: 2rem;
+	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+	padding: 20px;
+	margin-bottom: 40px;
+}
+.answers > span {
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: #26a65b;
+	padding: 0.5rem 2rem;
+	border: 2px solid #ecf0f1;
+	border-radius: 4rem;
+	font-size: 20px
+}
+.answers > span:hover {
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: #16964b;
+	padding: 0.5rem 2rem;
+	border: 2px solid #ecf0f1;
+	border-radius: 4rem;
+	font-size: 20px
+}
+@media (min-width: 700px) {
+	.navbar > .columns > p, a {
+		text-align: right;
+	}
+}
+.studentselect > li {
+	font-size: 2rem;
+}
+.racetrack-boat {
+	background-color: #26a65b;
+}
+.racetrack-boat > p {
+	color: white;
+	background-color: #26a65b;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+.river {
+	background: #00aadb no-repeat center top;
+	width: 100%;
+	height: 75vh;
+	text-align: center;
+	border-radius: 0 0 2rem 2rem;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+#canoe {
+	max-width: 15rem;
+	max-height: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+.answers {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+.panel-group {
+	margin-top: 15px;
+}
+.panel-group > .panel-top {
+	background-color: white;
+	border-radius: 2rem 2rem 0 0;
+	padding: 15px;
+	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+}
+.panel-group > .panel-bottom {
+	background-color: white;
+}
+.panel-group > .panel-bottom > * {
+	background-color: #26a65b;
+	border-radius: 0;
+	padding: 5px;
+}
+#question {
+	margin-bottom: 0;
+}
+.button-primary {
+	margin-top: 10px;
+}
+/*
+The below is code from Brian
+* {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-overflow-scrolling: touch;
@@ -213,4 +371,10 @@ ol.studentselect > li > span::before {
 	vertical-align: top;
 	padding-bottom: 0.2em;
 }
-ol.studentselect > li > span:hover::before { width: 2ch }
+ol > li > span:hover::before { width: 2ch }
+.host ~ canvas {
+	left: 50%;
+	top: 75%;
+	transform: translate(-50%, -50%) rotate(90deg);
+}
+*/
