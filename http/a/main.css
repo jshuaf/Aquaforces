@@ -34,22 +34,21 @@ label {
 	display: block;
 	margin: 0.5em 0.5em 0.5em 0;
 }
-form {
-	margin: 0 auto;
-	padding: 2em;
-}
+form:not(.left-align) { margin: 0 auto }
+form {padding: 2em }
 .pregamescreen form { background: rgba(0, 0, 0, 0.5) }
 .centerbox {
 	text-align: left;
 	display: table;
 	margin: 0 auto;
 }
-.centerbox span { min-width: 7ch }
-.centerbox label {
+.centerbox span { min-width: 6.5ch }
+label {
 	display: flex;
 	align-items: center;
 }
-.centerbox input {
+input {
+	margin-left: 0.5ch;
 	flex-basis: 0;
 	flex-grow: 1;
 }
@@ -218,3 +217,5 @@ ol > li > span:hover::before { width: 2ch }
 	top: 75%;
 	transform: translate(-50%, -50%) rotate(90deg);
 }
+.left-align { text-align: left }
+.left-align button { margin: 1em }
