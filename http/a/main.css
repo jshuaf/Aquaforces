@@ -49,6 +49,7 @@ label {
 	align-items: center;
 }
 input {
+	font-size: 1.1em;
 	margin-left: 0.5ch;
 	flex-basis: 0;
 	flex-grow: 1;
@@ -81,7 +82,6 @@ form:not([hidden]) + form[hidden] {
 	display: table;
 }
 #cont form > :not(label) { text-align: center }
-input { font-size: 1.1em }
 nav, footer {
 	padding: 0.3em;
 	background: #ddd;
