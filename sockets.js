@@ -84,6 +84,9 @@ module.exports = (server) => {
 								user: tws.user,
 								crew: m.crewNumber
 							});
+							tws.trysend({
+								event: 'addUserToCrew'
+							});
 							break;
 						}
 
