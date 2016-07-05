@@ -1,4 +1,3 @@
-'use strict';
 const crypto = require('crypto'),
 	fs = require('fs'),
 	path = require('path');
