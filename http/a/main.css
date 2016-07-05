@@ -41,6 +41,7 @@ form {padding: 2em }
 	text-align: left;
 	display: table;
 	margin: 0 auto;
+	max-width: 24em;
 }
 .centerbox span { min-width: 6.5ch }
 label {
@@ -52,13 +53,12 @@ input {
 	flex-basis: 0;
 	flex-grow: 1;
 }
-@media (max-width: 599px) {
-	.pregamescreen form {
-		width: 100%;
-		padding: 0 0.5em;
-	}
+@media (max-width: 499px) {
+	.pregamescreen form { padding: 0 0.5em }
+	.pregamescreen form, .centerbox { width: 100% }
+	.centerbox input { width: 0 }
 }
-@media (min-width: 600px) {
+@media (min-width: 500px) {
 	.pregamescreen form { padding: 0 10% }
 }
 @media (min-height: 32em) and (pointer: fine) {
