@@ -97,7 +97,11 @@ module.exports = (server) => {
 							const crew = tws.crew();
 
 							// fuzzy answer checking
+<<<<<<< HEAD
 							console.log(crew.recentAnswers);
+=======
+							/*
+>>>>>>> origin/merge-functionality
 							crew.recentAnswers.forEach((pastAnswer) => {
 								if (pastAnswer.time < maxFuzzyTime) {
 									if (pastAnswer.text == m.answer) {
@@ -115,7 +119,7 @@ module.exports = (server) => {
 									const pastAnswerIndex = crew.recentAnswers.indexOf(pastAnswer);
 									crew.recentAnswers.splice(pastAnswerIndex, 1);
 								}
-							});
+							});*/
 
 							let correspondingQuestion;
 							tws.game.activeQuestions.forEach((activeQuestion) => {
