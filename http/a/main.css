@@ -74,7 +74,7 @@ span[.clickable]:hover {
 	left: 0;
 	top: 0;
 	background-color: #26a65b;
-	padding: 0.5rem 2rem 0.5rem 2rem;
+	padding: 0.5rem 2rem;
 	border: 2px solid #ecf0f1;
 	border-radius: 4rem;
 	font-size: 20px
@@ -84,7 +84,7 @@ span[.clickable]:hover {
 	left: 0;
 	top: 0;
 	background-color: #16964b;
-	padding: 0.5rem 2rem 0.5rem 2rem;
+	padding: 0.5rem 2rem;
 	border: 2px solid #ecf0f1;
 	border-radius: 4rem;
 	font-size: 20px
@@ -103,12 +103,10 @@ span[.clickable]:hover {
 .racetrack-boat > p {
 	color: white;
 	background-color: #26a65b;
-	color:  white;
-	text-align:center;
+	text-align: center;
 	text-transform: uppercase;
-	letter-spacing:1px;
+	letter-spacing: 1px;
 }
-
 .river {
 	background: #00aadb no-repeat center top;
 	width: 100%;
