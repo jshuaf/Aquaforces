@@ -396,3 +396,30 @@ const GameTimer = React.createClass({
 		return <p hidden={this.state.finished}>Time remaining: {this.state.time}</p>;
 	}
 });
+
+const Rock = React.createClass({
+	render() {
+		return <img src = {this.props.image}></img>
+	}
+	// rock slowly approaches
+	// if 5 correct answers, rock explodes
+	// if 20 seconds pass
+	// trigger: 5% * number of correct answers
+	// testing purposes: 30%
+})
+
+const Whirlpool = React.createClass({
+	render() {
+		return <img src={this.props.image}></img>
+	}
+
+	// popup - everything stops
+	// one person gets a challenge question - multiple choice
+	// timebar starts from 5 seconds
+	// incorrect answer = time up
+	// HP goes down by 25%
+	// 10 % decrement for incorrect answers normally
+	// for every 10 clicks, the timebar gets a 1 second boost
+	// if correct answer for Whirlpool
+	// increment by 5x correct questions
+})
