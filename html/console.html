@@ -1,22 +1,22 @@
-<p id="error"></p>
-<div id="cont">
-	<form id="dashboard">
-		<h1>Host dashboard</h1>
-		<button>New game</button>
-	</form>
-	<form id="tgame" hidden="">
-		<h1 id="game-code-cont">Game code: </h1>
-		<div class="half-divider">
-			<div class="half" id="lonelyfolks">
-				<h2>Available sailors</h2>
-				<ul class="studentselect" id="loneusers"></ul>
-			</div>
-			<div class="half">
-				<h2>Crews</h2>
-				<ol class="studentselect" id="crews"><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li><li data-n="0"></li></ol>
-			</div>
-		</div>
-		<button id="startgamebtn" disabled="">Start game</button>
-	</form>
-</div>
+<h1>Question Input</h1>
+<section class="left-align">
+	<button id="new-qset-btn">New question set</button>
+</section>
+<form class="left-align cover hide" id="new-qset">
+	<h1>New Question Set</h1>
+	<label>Title <input maxlength="144" class="fullwidth" id="qset-title" /></label>
+	<h2>Questions:</h2>
+	<ol>
+		<li>
+			<label>Question <input /></label>
+			<label>Answer <input /></label>
+			<p>Wrong answers:</p>
+			<ul>
+				<li><input /></li>
+				<li><small><a class="more-wrong">+ more</a></small></li>
+			</ul>
+		</li>
+		<li><small><a class="more-questions">+ more</a></small></li>
+	</ol>
+</form>
 <script async="" src="/console.js"></script>

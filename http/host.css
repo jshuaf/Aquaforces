@@ -27,3 +27,18 @@ html.hostgame h1 {
 	text-shadow: 1px 1px 3px #000;
 }
 #progress > div.raft { background: #950 }
+form.cover {
+	position: fixed;
+	display: block;
+	top: 0; right: 0; bottom: 0; left: 0;
+	background: #fff;
+	color: #000;
+	padding: 0 1em;
+}
+form.cover.hide {
+	opacity: 0;
+	pointer-events: none;
+}
+.cover small a { color: #444 }
+.cover small a:hover { color: #00f }
+.cover small a:active { color: #f00 }
