@@ -100,11 +100,9 @@ function addAnswer() {
 	answerEl.addEventListener('click', answerClickListener);
 	if (correctAnswer) answerEl.classList.add('correct-answer');
 }
-var includeTimeBar = true;
 function startQuestion(question) {
 	document.getElementById('question').firstChild.firstChild.nodeValue = question;
 	timeProportion = 1;
-	includeTimeBar = true;
 }
 function failQuestion() {
 	socket.send(JSON.stringify({
@@ -116,18 +114,10 @@ function failQuestion() {
 function animationUpdate() {
 	var thisTime = new Date().getTime(),
 		dt = thisTime - lastTime;
-	if (includeTimeBar) {
-		timeBar.style.width = 100 * timeProportion + '%';
-		timeBar.style.background = 'hsl(' + 110 * timeProportion + ', 100%, 50%)';
-		timeProportion -= dt / timeTotal / 1000;
-		if (timeProportion < 0) {
-			includeTimeBar = false;
-			failQuestion();
-		}
-	} else {
-		timeBar.style.width = '0';
-		timeBar.style.background = 'hsl(0, 100%, 50%)';
-	}
+	timeBar.style.width = 100 * timeProportion + '%';
+	timeBar.style.background = 'hsl(' + 110 * timeProportion + ', 100%, 50%)';
+	timeProportion -= dt / timeTotal / 1000;
+	if (timeProportion < 0) failQuestion();
 	answersEl.children.forEach(function(e) {
 		if (parseFloat(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
 			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth * 0.42) / 100)) || 0);
