@@ -56,6 +56,7 @@ const GameHost = React.createClass({
 					</div>
 						<div className="eight columns">
 							<div className="panel">
+								<h4><strong>Live stream</strong></h4>
 								{
 									Object.keys(this.state.crews).map(function(crewNumber, i) {
 										const crew = this.state.crews[crewNumber];
@@ -111,15 +112,14 @@ const Crew = React.createClass({
 	render() {
 		let style = {
 			width: '7rem',
-			marginLeft: (this.props.position * 200) + 'px',
-			backgroundColor: 'transparent',
+			marginLeft: (this.props.position * 100) + 'px',
 			borderRadius: '5px',
 			border: '2px #26a65b solid',
 			height: '3rem'
 		};
-		const className = this.state.isRaft ? 'raft' : '';
+		const className = this.state.isRaft ? 'raft' : 'racetrack-boat';
 		console.log(this.props.position);
-		return <div className={className} style={style}></div>;
+		return <div className={className} style={style}><p>Crew {this.props.crewNumber}</p></div>;
 	}
 });
 

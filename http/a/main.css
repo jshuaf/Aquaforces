@@ -44,7 +44,7 @@ input {
 	font-size: 1.5rem;
 }
 span, span > * {
-	background-color: #26a65b;
+	background-color: #16964b;
 	border-radius: 0.5rem;
 	padding: 0 1rem;
 	color: white;
@@ -60,7 +60,7 @@ span:hover > span {
 	line-height: 1;
 }
 span[.clickable]:hover {
-	background-color: #16964b;
+	background-color: #26a65b;
 }
 .panel {
 	background-color: white;
@@ -97,6 +97,18 @@ span[.clickable]:hover {
 .studentselect > li {
 	font-size: 2rem;
 }
+.racetrack-boat {
+	background-color: #26a65b;
+}
+.racetrack-boat > p {
+	color: white;
+	background-color: #26a65b;
+	color:  white;
+	text-align:center;
+	text-transform: uppercase;
+	letter-spacing:1px;
+}
+
 .river {
 	background: #00aadb no-repeat center top;
 	width: 100%;
