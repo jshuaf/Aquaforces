@@ -6,25 +6,28 @@ strong, b {
 	font-weight: bold
 }
 body {
-	background: #4ca9d6 url('/img/goshalex.svg') repeat-x center top;
+	background: #4ca9d6 url('/img/random-background.jpeg') repeat-x center top;
 	background-size: cover;
 }
 .navbar {
 	background-color: white;
-	border-radius: 2rem;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
-	padding: 20px 45px;
+	padding: 20px;
 	margin-bottom: 2rem;
 }
-.navbar > .columns > * {
+.navbar > .container > .row > .columns > * {
 	margin-bottom: 0;
 	font-weight: normal;
 }
-.navbar > .columns > p, a {
+.navbar > .container > .row > .columns > p, a {
 	line-height: 3.125rem;
 	vertical-align: center;
 }
-.navbar > .columns > .navbar-logo {
+.navbar > .container > .row > .columns > .navbar-logo {
 	font-weight: bold;
 }
 h1 {
@@ -63,7 +66,7 @@ span[.clickable]:hover {
 	background-color: white;
 	border-radius: 2rem;
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
-	padding: 45px;
+	padding: 20px;
 	margin-bottom: 40px;
 }
 .answers > span {
