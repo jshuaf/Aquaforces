@@ -26,6 +26,7 @@ module.exports = (server) => {
 		tws.sendToGameHost = (data) =>
 			tws.game.host.trysend(data);
 
+		tws.crew = () => tws.game.crews[tws.crewNumber];
 		switch (tws.upgradeReq.url) {
 			case '/': {
 				tws.on('message', function(m, raw) {
@@ -93,20 +94,26 @@ module.exports = (server) => {
 						case 'answerSelected': {
 							tws.checkGameExists();
 							if (!m.answer) return tws.error('No answer text sent.');
-							const crew = tws.game.crews[tws.crewNumber];
+							const crew = tws.crew();
 
 							// fuzzy answer checking
+							console.log(crew.recentAnswers);
 							crew.recentAnswers.forEach((pastAnswer) => {
-								if (pastAnswer.text == m.answer && new Date().getTime() - pastAnswer.time < maxFuzzyTime) {
-									tws.trysend({
-										event: 'answerSelected',
-										wasCorrectAnswer: true
-									});
-									return tws.sendToGameHost({
-										event: 'answerSelected',
-										crewNumber: m.crewNumber,
-										wasCorrectAnswer: true
-									});
+								if (pastAnswer.time < maxFuzzyTime) {
+									if (pastAnswer.text == m.answer) {
+										tws.trysend({
+											event: 'answerSelected',
+											wasCorrectAnswer: true
+										});
+										return tws.sendToGameHost({
+											event: 'answerSelected',
+											crewNumber: m.crewNumber,
+											wasCorrectAnswer: true
+										});
+									}
+								} else {
+									const pastAnswerIndex = crew.recentAnswers.indexOf(pastAnswer);
+									crew.recentAnswers.splice(pastAnswerIndex, 1);
 								}
 							});
 
@@ -124,6 +131,11 @@ module.exports = (server) => {
 										text: newQuestion.text,
 										answer: newQuestion.answer,
 										owner: correspondingQuestion.owner
+									});
+									tws.sendToGameHost({
+										event: 'answerSelected',
+										wasCorrectAnswer: true,
+										crewNumber: m.crewNumber
 									});
 									correspondingQuestion.owner.trysend({
 										event: 'newQuestion',
@@ -184,7 +196,7 @@ module.exports = (server) => {
 										event: 'newQuestion',
 										question: newQuestion.text
 									});
-									const crew = tws.game.crews[tws.crewNumber];
+									const crew = tws.crew();
 									const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 									ttws.trysend({
 										event: 'correctAnswer',
@@ -196,7 +208,7 @@ module.exports = (server) => {
 									if (typeof m.text != 'string') {
 										return tws.error('No answer text sent.');
 									}
-									const crew = tws.game.crews[tws.crewNumber];
+									const crew = tws.crew();
 									const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 									ttws.trysend({
 										event: 'correctAnswer',
@@ -332,7 +344,11 @@ module.exports = (server) => {
 									ttws.trysend({
 										event: 'correctAnswer', answer: question.answer
 									});
-									ttws.questionsDone.push(tws.game.questions[questionID]);
+									ttws.questionsDone.push(question);
+									return crew.recentAnswers.push({
+										text: question.answer,
+										time: new Date().getTime()
+									});
 								});
 							});
 							break;
