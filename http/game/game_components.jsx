@@ -18,7 +18,9 @@ const Game = React.createClass({
 			canoeBounds: {
 				left: 0.48,
 				right: 0.52
-			}
+			},
+			// Rock
+			rock: false
 		};
 	},
 
@@ -157,6 +159,12 @@ const Game = React.createClass({
 		}));
 	},
 
+	addRock() {
+		this.setState({
+			rock: true
+		});
+	},
+
 	render() {
 		// MARK: add flashing
 		return (
@@ -174,6 +182,7 @@ const Game = React.createClass({
   position={this.state.canoePosition}
   initialImage="../img/canoetop.svg"
   answersDisplayed={this.state.answers}
+	rock={this.state.rock}
     />
       </div>
     );
@@ -295,6 +304,7 @@ const River = React.createClass({
 				<div className="answers">
 					{this.props.answersDisplayed}
 				</div>
+				{this.props.rock ? <Rock /> : undefined}
 			</div>
 		);
 	}

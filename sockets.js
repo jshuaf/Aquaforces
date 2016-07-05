@@ -48,11 +48,12 @@ module.exports = (server) => {
 			if (tws.whirlpool) {
 				return;
 			}
-			tws.rock = true;
+			tws.rock = {
+				streak: 0,
+				startTime: new Date().getTime()
+			};
 			tws.crew().forEach(crewMember, () => {
-				if (crewMember != ttws) {
-					crewMember.trysend({event: 'rock'});
-				}
+				crewMember.trysend({event: 'addRock'});
 			});
 		};
 
@@ -180,7 +181,7 @@ module.exports = (server) => {
 								if (pastAnswer.time < maxFuzzyTime) {
 									if (pastAnswer.text == m.answer) {
 										tws.sendAnswerEvent(true, m.crewNumber);
-										tws.crew().streak += 1;
+										if (!tws.rock.length && !tws.whirlpool) tws.crew().streak += 1;
 									}
 								} else {
 									const pastAnswerIndex = crew.recentCorrectAnswers.indexOf(pastAnswer);
@@ -194,7 +195,20 @@ module.exports = (server) => {
 									correspondingQuestion = activeQuestion;
 									tws.crew().activeQuestions.splice(tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
 									tws.sendAnswerEvent(true, m.crewNumber);
-									tws.crew().streak += 1;
+
+									if (!tws.rock.length && !tws.whirlpool) tws.crew().streak += 1;
+									if (tws.rock) {
+										tws.rock.streak += 1;
+										if (tws.rock.streak >= 5) {
+											tws.rock = {};
+											tws.crew().members.forEach(crewMember, () => {
+												crewMember.trysend({
+													event: 'endRock'
+												});
+											});
+										}
+									}
+
 									const newQuestion = correspondingQuestion.owner.addNewQuestion();
 									tws.crew().recentCorrectAnswers.push(newQuestion.answer);
 								}
@@ -267,6 +281,7 @@ module.exports = (server) => {
 				});
 				break;
 			}
+
 			case '/host/': {
 				tws.on('message', (m, raw) => {
 					try {

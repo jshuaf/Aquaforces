@@ -72,6 +72,12 @@ socket.onmessage = function(m) {
 			game.incorrectAnswer();
 		}
 		break;
+	case 'addRock':
+		game.addRock();
+		break;
+	case 'endRock':
+		game.endRock();
+		break;
 	case 'correctAnswer':
 		game.addCorrectAnswer(m.answer);
 		break;
