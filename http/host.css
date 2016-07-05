@@ -3,10 +3,6 @@ html.hostgame {
 	background: #4af url('/img/beachscape.svg') repeat-x;
 	color: #000;
 }
-html.hostgame h1 {
-	float: right;
-	padding: 0 1em;
-}
 #progress {
 	position: absolute;
 	top: 0;
@@ -42,3 +38,10 @@ form.cover.hide {
 .cover small a { color: #444 }
 .cover small a:hover { color: #00f }
 .cover small a:active { color: #f00 }
+.hostgame #tgame {
+	float: left;
+	width: 25%;
+	padding: 1em;
+	background: rgba(255, 255, 255, 0.8);
+	height: 100%;
+}
