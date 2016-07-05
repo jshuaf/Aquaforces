@@ -48,8 +48,12 @@ module.exports = (server) => {
 			if (tws.whirlpool) {
 				return;
 			}
-
 			tws.rock = true;
+			tws.crew().forEach(crewMember, () => {
+				if (crewMember != ttws) {
+					crewMember.trysend({event: 'rock'});
+				}
+			});
 		};
 
 		tws.addNewQuestion = () => {
