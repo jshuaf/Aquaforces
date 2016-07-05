@@ -2,8 +2,7 @@
 const ws = require('ws');
 let games = {};
 
-const maxFuzzyTime = 10000;
-let correspondingQuestion;
+const maxFuzzyTime = 5000;
 
 module.exports = (server) => {
 	let wss = new ws.Server({server});
@@ -47,7 +46,7 @@ module.exports = (server) => {
 				newQuestionID = Math.floor(Math.random() * tws.game.questions.length);
 			}
 			const newQuestion = tws.game.questions[newQuestionID];
-			tws.game.activeQuestions.push({
+			tws.crew().activeQuestions.push({
 				text: newQuestion.text,
 				answer: newQuestion.answer,
 				owner: tws
@@ -62,10 +61,7 @@ module.exports = (server) => {
 				event: 'correctAnswer',
 				answer: newQuestion.answer
 			});
-			return crew.recentAnswers.push({
-				text: newQuestion.answer,
-				time: new Date().getTime()
-			});
+			return newQuestion;
 		};
 
 		tws.sendAnswerEvent = (wasCorrectAnswer, crewNumber) => {
@@ -126,10 +122,11 @@ module.exports = (server) => {
 							} else if (!tws.game.crews[m.crewNumber]) {
 								tws.game.crews[m.crewNumber] = {
 									members: [tws],
-									recentAnswers: [],
+									recentCorrectAnswers: [],
 									streak: 0,
 									rock: false,
-									whirlpool: false
+									whirlpool: false,
+									activeQuestions: []
 								};
 							} else if (tws.game.crews[m.crewNumber].members.length >= 6) {
 								return tws.error('Crew cannot have more than 6 sailors.', 'crew');
@@ -161,26 +158,27 @@ module.exports = (server) => {
 							const crew = tws.crew();
 
 							// fuzzy answer checking
-							crew.recentAnswers.forEach((pastAnswer) => {
+							crew.recentCorrectAnswers.forEach((pastAnswer) => {
 								if (pastAnswer.time < maxFuzzyTime) {
 									if (pastAnswer.text == m.answer) {
 										tws.sendAnswerEvent(true, m.crewNumber);
 										tws.crew().streak += 1;
 									}
 								} else {
-									const pastAnswerIndex = crew.recentAnswers.indexOf(pastAnswer);
-									crew.recentAnswers.splice(pastAnswerIndex, 1);
+									const pastAnswerIndex = crew.recentCorrectAnswers.indexOf(pastAnswer);
+									crew.recentCorrectAnswers.splice(pastAnswerIndex, 1);
 								}
 							});
 
 							let correspondingQuestion;
-							tws.game.activeQuestions.forEach((activeQuestion) => {
+							tws.crew().activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.answer == m.answer) {
 									correspondingQuestion = activeQuestion;
-									tws.game.activeQuestions.splice(tws.game.activeQuestions.indexOf(correspondingQuestion), 1);
+									tws.crew().activeQuestions.splice(tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
 									tws.sendAnswerEvent(true, m.crewNumber);
 									tws.crew().streak += 1;
-									correspondingQuestion.owner.addNewQuestion();
+									const newQuestion = correspondingQuestion.owner.addNewQuestion();
+									tws.crew().recentCorrectAnswers.push(newQuestion.answer);
 								}
 							});
 							if (!correspondingQuestion) {
@@ -198,11 +196,11 @@ module.exports = (server) => {
 							}
 
 							let correspondingQuestion;
-							tws.game.activeQuestions.forEach((activeQuestion) => {
+							tws.crew().activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.text == m.question) {
 									correspondingQuestion = activeQuestion;
-									tws.game.activeQuestions.splice(
-										tws.game.activeQuestions.indexOf(correspondingQuestion), 1);
+									tws.crew().activeQuestions.splice(
+										tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
 
 									correspondingQuestion.owner.addNewQuestion();
 									tws.crew().streak = 0;
@@ -268,7 +266,6 @@ module.exports = (server) => {
 								usernames: [],
 								users: [],
 								questions: [],
-								activeQuestions: [],
 								hasStarted: false
 							};
 
@@ -334,7 +331,7 @@ module.exports = (server) => {
 								crew.members.forEach((member) => {
 									const questionID = Math.floor(Math.random() * tws.game.questions.length);
 									const question = tws.game.questions[questionID];
-									tws.game.activeQuestions.push({
+									tws.crew().activeQuestions.push({
 										text: question.text,
 										answer: question.answer,
 										owner: member
@@ -348,10 +345,6 @@ module.exports = (server) => {
 										event: 'correctAnswer', answer: question.answer
 									});
 									ttws.questionsDone.push(question);
-									return crew.recentAnswers.push({
-										text: question.answer,
-										time: new Date().getTime()
-									});
 								});
 							});
 							break;
