@@ -32,12 +32,15 @@ module.exports = (server) => {
 			tws.whirlpool = true;
 			const ttws = tws.randomCrewMember();
 			tws.crew().forEach(crewMember, () => {
-				crewMember.trysend({
-					event: 'whirlpool'
-				});
+				if (crewMember != ttws) {
+					crewMember.trysend({event: 'whirlpool'});
+				}
 			});
-			tws.trysend({
 
+			// MARK: challenge questions?
+			ttws.trysend({
+				event: 'whirlpool',
+				question: tws.addNewQuestion()
 			});
 		};
 
@@ -157,7 +160,8 @@ module.exports = (server) => {
 						case 'answerSelected': {
 							tws.checkGameExists();
 
-							if (Math.random() < 0.05 * tws.streak) {
+							if (Math.random() < 0.05 * tws.crew().streak) {
+								tws.crew().streak = 0;
 								if (Math.random() < 0.5) {
 									tws.addWhirlpool();
 								} else {
