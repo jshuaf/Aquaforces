@@ -65,7 +65,7 @@ input {
 }
 @media (min-height: 32em) and (pointer: fine) {
 	html { overflow: hidden }
-	.pregamescreen { margin-top: 50vh }
+	.pregamescreen body { margin-top: 50vh }
 	.pregamescreen form { transform: translateY(-50%) }
 }
 form:not([hidden]) {
