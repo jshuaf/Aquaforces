@@ -37,7 +37,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addAnswer, 700);
+		setInterval(addAnswer, 1000);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correctAnswer') correctAnswerQueue.push(m.answer);
@@ -83,7 +83,7 @@ function addAnswer() {
 	var answerEl = document.createElement('div'),
 		answer,
 		correctAnswer = false;
-	if (correctAnswerQueue.length && Math.random() < 0.2) {
+	if (correctAnswerQueue.length && Math.random() < 0.4) {
 		answer = correctAnswerQueue.shift();
 		correctAnswer = true;
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
