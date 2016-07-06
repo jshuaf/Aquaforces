@@ -19,7 +19,9 @@ const Game = React.createClass({
 				left: 0.48,
 				right: 0.52
 			},
-			whirlpool: false
+			whirlpool: false,
+			whirlpoolType: 'Free',
+			whirlpoolQuestionText: ''
 		};
 	},
 
@@ -67,7 +69,8 @@ const Game = React.createClass({
 
 	initiateWhirlpoolTap() {
 		this.setState({
-			whirlpool: true
+			whirlpool: true,
+			whirlpoolType: 'Free'
 		});
 	},
 
@@ -167,8 +170,20 @@ const Game = React.createClass({
 
 	render() {
 		// MARK: add flashing
+		if (this.state.whirlpool) {
+			if (this.state.whirlpoolType = "Free") {
+				whirlpool = <WhirlpoolFree />;
+				}
+			else {
+				whirlpool = <WhirlpoolQuestion />;
+			}
+		}
+		else {
+			whirlpool = undefined;
+		}
 		return (
 			<div className="container" hidden={this.state.gameFinished}>
+				{whirlpool}
 				<div className="panel-group">
 					<div className="panel-top">
 						<GameTimer onFinish={this.gameTimerOver} totalTime={900000} />
@@ -179,10 +194,9 @@ const Game = React.createClass({
 					</div>
 				</div>
 				<River
-  position={this.state.canoePosition}
-  initialImage="../img/canoetop.svg"
-  answersDisplayed={this.state.answers}
-    />
+					position={this.state.canoePosition}
+					initialImage="../img/canoetop.svg"
+					answersDisplayed={this.state.answers} />
       </div>
     );
 	}
