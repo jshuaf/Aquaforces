@@ -49,3 +49,6 @@ global.addVersionNonces = o(function*(str, pn, cb) {
 	}
 	cb(null, str);
 });
+global.generateID = function() {
+	return crypto.randomBytes(21).toString('base64').replaceAll(['+', '/'], ['!', '_']);
+};

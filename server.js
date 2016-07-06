@@ -145,6 +145,17 @@ let serverHandler = o(function*(req, res) {
 			});
 			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
 		}
+	} else if (req.url.pathname == '/host/') {
+		yield respondPage('Host', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
+		var qsetstr = '';
+		dbcs.qsets.find({}, {title: true}).each(o(function*(err, qset) {
+			if (err) throw err;
+			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
+			else {
+				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
+				res.end(yield fs.readFile('./html/a/foot.html', yield));
+			}
+		}));
 	} else return errorNotFound(req, res);
 });
 console.log('Connecting to mongodb…'.cyan);

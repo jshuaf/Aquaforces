@@ -28,7 +28,11 @@ module.exports = function(req, res, post) {
 				incorrectAnswers: q.incorrectAnswers
 			});
 		}
-		dbcs.qsets.insert({questions});
+		dbcs.qsets.insert({
+			_id: generateID(),
+			title: post.name,
+			questions
+		});
 		res.writeHead(204);
 		res.end();
 	} else {
