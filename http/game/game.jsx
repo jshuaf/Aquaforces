@@ -55,6 +55,13 @@ socket.onmessage = function(m) {
 		crewNumber = parseInt(document.getElementById('crewno').value, 10);
 		setState('wait');
 		break;
+	case 'removeUserFromCrew':
+		setState('crew');
+		break;
+	case 'removeUserFromGame':
+		console.log("recieved");
+		setState('join');
+		break;
 	case 'startGame':
 		setState('mountNode');
 		setupGameEnvironment();
