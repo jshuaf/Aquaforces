@@ -120,9 +120,9 @@ span[.clickable]:hover {
 	max-width: 15rem;
 	max-height: 100%;
 	position: absolute;
-	bottom: 0;
+	top: 50%;
 	left: 50%;
-	transform: translateX(-50%);
+	transform: translate(-50%, -50%);
 }
 .answers {
 	position: relative;

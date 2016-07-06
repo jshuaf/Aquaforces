@@ -33,7 +33,7 @@ module.exports = (server) => {
 			const ttws = tws.randomCrewMember();
 			tws.crew().forEach(crewMember, () => {
 				if (crewMember != ttws) {
-					crewMember.trysend({event: 'whirlpool'});
+					crewMember.trysend({event: 'whirlpoolAhead'});
 				}
 			});
 

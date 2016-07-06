@@ -79,11 +79,18 @@ socket.onmessage = function(m) {
 			game.incorrectAnswer();
 		}
 		break;
+<<<<<<< HEAD
 	case 'addRock':
 		game.addRock();
 		break;
 	case 'endRock':
 		game.endRock();
+=======
+	case 'whirlpoolAhead':
+		game.initiateWhirlpoolTap();
+		break;
+	case 'whirlpoolQuestion':
+>>>>>>> whirlpools
 		break;
 	case 'correctAnswer':
 		game.addCorrectAnswer(m.answer);
