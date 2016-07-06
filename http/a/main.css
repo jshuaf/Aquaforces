@@ -53,7 +53,7 @@ input {
 	font-size: 1.1em;
 	margin-left: 0.5ch;
 }
-label input { width: 200% }
+label input:not([min]) { width: 200% }
 @media (max-width: 499px) {
 	.pregamescreen form { padding: 0 0.5em }
 	.pregamescreen form, .centerbox { width: 100% }
@@ -64,7 +64,7 @@ label input { width: 200% }
 }
 @media (min-height: 32em) and (pointer: fine) {
 	html { overflow: hidden }
-	.pregamescreen body { margin-top: 50vh }
+	.pregamescreen #cont { margin-top: 50vh }
 	.pregamescreen form { transform: translateY(-50%) }
 }
 form:not([hidden]) {

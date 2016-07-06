@@ -104,7 +104,7 @@ socket.onclose = function() {
 };
 document.getElementById('dashboard').addEventListener('submit', function(e) {
 	e.preventDefault();
-	socket.send(JSON.stringify({event: 'new-game'}));
+	socket.send(JSON.stringify({event: 'new-game', qsetID: document.getElementById('qsets').value}));
 	setState('tgame');
 });
 var progress = document.getElementById('progress'), lastTime;
