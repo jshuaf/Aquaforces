@@ -31,7 +31,7 @@ module.exports = (server) => {
 		tws.addWhirlpool = () => {
 			tws.whirlpool = true;
 			const ttws = tws.randomCrewMember();
-			tws.crew().forEach((crewMember) => {
+			tws.crew().members.forEach((crewMember) => {
 				if (crewMember != ttws) {
 					crewMember.trysend({event: 'whirlpoolAhead'});
 				}
@@ -52,7 +52,7 @@ module.exports = (server) => {
 				streak: 0,
 				startTime: new Date().getTime()
 			};
-			tws.crew().forEach((crewMember) => {
+			tws.crew().members.forEach((crewMember) => {
 				crewMember.trysend({event: 'addRock'});
 			});
 		};
