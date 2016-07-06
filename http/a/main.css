@@ -28,7 +28,8 @@ body {
 	vertical-align: center;
 }
 .navbar > .container > .row > .columns > .navbar-logo {
-	font-weight: bold;
+	height: 4rem;
+	width: auto;
 }
 h1 {
 	font-size: 5rem;

@@ -21,7 +21,7 @@ const Game = React.createClass({
 			},
 			whirlpool: false,
 			whirlpoolType: 'Free',
-			whirlpoolQuestionText: {}
+			whirlpoolQuestion: {}
 		};
 	},
 
@@ -178,20 +178,19 @@ const Game = React.createClass({
 
 	render() {
 		// MARK: add flashing
+		let whirlpoolValue;
 		if (this.state.whirlpool) {
-			if (this.state.whirlpoolType = "Free") {
-				whirlpool = <WhirlpoolFree />;
-				}
+			if (this.state.whirlpoolType == "Free") {
+				whirlpoolValue = <WhirlpoolFree />;
+			}
 			else {
-				whirlpool = <WhirlpoolQuestion question = {this.state.whirlpoolQuestion} />;
+				whirlpoolValue = <WhirlpoolQuestion question = {this.state.whirlpoolQuestion} />;
 			}
 		}
-		else {
-			whirlpool = undefined;
-		}
+		console.log(whirlpoolValue);
 		return (
 			<div className="container" hidden={this.state.gameFinished}>
-				{whirlpool}
+				<div>{whirlpoolValue}</div>
 				<div className="panel-group">
 					<div className="panel-top">
 						<GameTimer onFinish={this.gameTimerOver} totalTime={900000} />
@@ -488,7 +487,7 @@ const WhirlpoolQuestion = React.createClass({
 		return answers;
 	},
 	render() {
-		answers = preprocessAnswers;
+		let answers = preprocessAnswers;
 		return (
 			<div className="modal modal-active whirlpool">
 				<div className="container">
