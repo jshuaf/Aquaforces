@@ -21,7 +21,7 @@ const Game = React.createClass({
 			},
 			whirlpool: false,
 			whirlpoolType: 'Free',
-			whirlpoolQuestionText: ''
+			whirlpoolQuestionText: {}
 		};
 	},
 
@@ -67,10 +67,18 @@ const Game = React.createClass({
 		});
 	},
 
-	initiateWhirlpoolTap() {
+	addWhirlpoolTap() {
 		this.setState({
 			whirlpool: true,
 			whirlpoolType: 'Free'
+		});
+	},
+
+	addWhirlpoolQuestion(question) {
+		this.setState({
+			whirlpool: true,
+			whirlpoolType: 'Question',
+			whirlpoolQuestion: question
 		});
 	},
 
@@ -175,7 +183,7 @@ const Game = React.createClass({
 				whirlpool = <WhirlpoolFree />;
 				}
 			else {
-				whirlpool = <WhirlpoolQuestion />;
+				whirlpool = <WhirlpoolQuestion question = {this.state.whirlpoolQuestion} />;
 			}
 		}
 		else {
@@ -465,13 +473,20 @@ const WhirlpoolFree = React.createClass({
 });
 
 const WhirlpoolQuestion = React.createClass({
-	getDefaultProps() {
-		return {
-
-		};
-	},
 	render() {
-		return <img src={this.props.image}></img>;
+		return (
+			<div className="modal modal-active whirlpool">
+				<div className="container">
+					<div className="row">
+						<div className="twelve columns">
+							<h1><strong>Challenge</strong></h1>
+							<h4 className="whirlpool-question">{this.props.question}</h4>
+							<button className="tap-button" onClick = {this.processTap}>Send help</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
 	}
 
 	// popup - everything stops
