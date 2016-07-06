@@ -49,11 +49,13 @@ module.exports = (server) => {
 				return;
 			}
 			tws.crew().rock = {
-				streak: 0,
-				startTime: new Date().getTime()
+				streak: 0
 			};
 			tws.crew().members.forEach((crewMember) => {
-				crewMember.trysend({event: 'addRock'});
+				crewMember.trysend({
+					event: 'addRock',
+					startTime: (new Date().getTime()) + 3000
+				});
 			});
 		};
 
@@ -164,10 +166,10 @@ module.exports = (server) => {
 						case 'answerSelected': {
 							tws.checkGameExists();
 
-							if (Math.random() < 0.5 * tws.crew().streak) {
+							if (Math.random() < 0.8 * tws.crew().streak) {
 								tws.crew().streak = 0;
 								console.log("HI");
-								if (Math.random() < 0.1) {
+								if (Math.random() < 0.0000000000000000000001) {
 									tws.addWhirlpool();
 								} else {
 									tws.addRock();

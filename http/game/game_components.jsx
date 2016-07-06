@@ -21,7 +21,9 @@ const Game = React.createClass({
 			},
 			// Rock
 			rock: false,
-			rockPosition: 0,
+			rockYPosition: 0,
+			rockXPosition: 50,
+			rockStartTime: null,
 			// Whirlpool
 			whirlpool: false
 		};
@@ -51,7 +53,7 @@ const Game = React.createClass({
 			this.setState({
 				answers: currentAnswers
 			});
-		}, 2500);
+		}, 2000);
 	},
 
 	answerSelected(answerText) {
@@ -169,25 +171,47 @@ const Game = React.createClass({
 		}));
 	},
 
-	addRock() {
+	addRock(rockStartTime) {
 		const timeBeforeHit = 20000;
-		this.setState({rock: true});
+		const rockXVelocity = Math.random() * 0.05;
+		this.setState({
+			rockStartTime});
 
 		setTimeout(() => {
 			this.rockHit();
 		}, timeBeforeHit);
 
+		console.log(this.state.rockStartTime);
+
 		setInterval(() => {
-			rockPosition += innerHeight / 20;
-		}, 50);
+			const timeDifference = (new Date().getTime() - this.state.rockStartTime) / 1000;
+			if (timeDifference && timeDifference > 50) {
+				this.setState({rock: true});
+				const rockXPosition = `${50 + timeDifference}%`;
+				const rockYPosition = `${timeDifference}%`;
+				this.setState({
+					rockYPosition,
+					rockXPosition
+				});
+			}
+		}, 25);
 	},
 
 	rockHit() {
 		alert("rock hit!");
+		this.setState({
+			rock: false,
+			rockXPosition: 50,
+			rockYPosition: 0
+		});
 	},
 
 	endRock() {
-		this.setState({rock: false});
+		this.setState({
+			rock: false,
+			rockXPosition: 50,
+			rockYPosition: 0
+		});
 		alert("saved from rock");
 	},
 
@@ -207,12 +231,13 @@ const Game = React.createClass({
 					</div>
 				</div>
 				<River
-  position={this.state.canoePosition}
-  initialImage="../img/canoetop.svg"
-  answersDisplayed={this.state.answers}
-	rock={this.state.rock}
-	rockPosition = {this.state.rockPosition}
-    />
+					position={this.state.canoePosition}
+					initialImage="../img/canoetop.svg"
+					answersDisplayed={this.state.answers}
+					rock={this.state.rock}
+					rockYPosition = {this.state.rockYPosition}
+					rockXPosition = {this.state.rockXPosition}
+				/>
       </div>
     );
 	}
@@ -330,10 +355,10 @@ const River = React.createClass({
 			<Canoe position={this.props.position} initialImage={this.props.initialImage} />
 				<div className="answers">
 					{this.props.answersDisplayed}
+					{this.props.rock ? <Rock
+						x = {this.props.rockXPosition}
+						y = {this.props.rockYPosition}/> : undefined}
 				</div>
-				{this.props.rock ? <Rock
-					x = {innerWidth / 2}
-					y = {this.props.rockPosition}/> : undefined}
 			</div>
 		);
 	}
@@ -439,8 +464,9 @@ const GameTimer = React.createClass({
 const Rock = React.createClass({
 	render() {
 		const style = {
-			transform: `translate($(this.props.x) px, $(this.props.y) px)`,
-			width: '10em'
+			top: this.props.y,
+			left: this.props.x,
+			width: '5em'
 		};
 		return <img src = "img/rock.svg" style = {style}></img>;
 	}

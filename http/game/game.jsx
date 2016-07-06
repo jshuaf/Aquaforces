@@ -80,7 +80,7 @@ socket.onmessage = function(m) {
 		}
 		break;
 	case 'addRock':
-		game.addRock();
+		game.addRock(m.startTime);
 		break;
 	case 'endRock':
 		game.endRock();
