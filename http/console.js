@@ -27,3 +27,22 @@ document.getElementById('more-questions').addEventListener('click', function() {
 	newLi.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
 	newLi.getElementsByTagName('input')[0].focus();
 });
+document.getElementById('new-qset').addEventListener('submit', function(e) {
+	e.preventDefault();
+	this.classList.add('validating');
+	var inv = this.querySelector(':invalid');
+	if (inv) return inv.focus();
+	var questions = [];
+	document.getElementById('questions').children.forEach(function(e) {
+		var ins = e.getElementsByTagName('input');
+		if (ins.length == 0) return;
+		var question = {
+			text: ins[0].value,
+			answer: ins[1].value,
+			incorrectAnswers: []
+		};
+		for (var i = 2; i < ins.length; i++) question.incorrectAnswers.push(ins[i].value);
+		questions.push(question);
+	});
+	console.log(questions);
+});
