@@ -33,13 +33,13 @@ module.exports = (server) => {
 			const ttws = tws.randomCrewMember();
 			tws.crew().forEach(crewMember, () => {
 				if (crewMember != ttws) {
-					crewMember.trysend({event: 'whirlpool'});
+					crewMember.trysend({event: 'whirlpoolAhead'});
 				}
 			});
 
 			// MARK: challenge questions?
 			ttws.trysend({
-				event: 'whirlpool',
+				event: 'whirlpoolQuestion',
 				question: tws.addNewQuestion()
 			});
 		};
@@ -349,7 +349,7 @@ module.exports = (server) => {
 								crew.members.forEach((member) => {
 									const questionID = Math.floor(Math.random() * tws.game.questions.length);
 									const question = tws.game.questions[questionID];
-									tws.crew().activeQuestions.push({
+									member.crew().activeQuestions.push({
 										text: question.text,
 										answer: question.answer,
 										owner: member

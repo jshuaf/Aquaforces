@@ -18,7 +18,8 @@ const Game = React.createClass({
 			canoeBounds: {
 				left: 0.48,
 				right: 0.52
-			}
+			},
+			whirlpool: false
 		};
 	},
 
@@ -64,13 +65,20 @@ const Game = React.createClass({
 		});
 	},
 
+	initiateWhirlpoolTap() {
+		this.setState({
+			whirlpool: true
+		});
+	},
+
 	generateAnswerComponent(answer) {
 		return (<Answer
 			text={answer}
 			onClick={this.answerSelected.bind(this, answer)}
 			initialX={this.generateAnswerPosition()}
 			canoeBounds={this.state.canoeBounds}
-			passedThreshold={this.answerPassedThreshold}
+			passedThreshold={this.state.answerPassedThreshold}
+			keepRunning={!this.state.whirlpool}
 		/>);
 	},
 
@@ -167,7 +175,7 @@ const Game = React.createClass({
 						<Question text={this.state.questionText} />
 					</div>
 					<div className="panel-bottom">
-						<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={10000} ref="questionTimebar"></QuestionTimebar>
+						<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={10000} ref="questionTimebar" keepRunning={!this.state.whirlpool}></QuestionTimebar>
 					</div>
 				</div>
 				<River
@@ -252,8 +260,10 @@ const Answer = React.createClass({
 	},
 
 	animate(timestamp) {
-		this.setPosition();
-		window.requestAnimationFrame(this.animate);
+		if (this.props.keepRunning) {
+			this.setPosition();
+			window.requestAnimationFrame(this.animate);
+		}
 	},
 
 	render() {
@@ -318,7 +328,7 @@ const QuestionTimebar = React.createClass({
 
 	componentDidMount() {
 		setInterval(() => {
-			this.updateTime();
+			if (this.props.keepRunning) this.updateTime();
 		}, 50);
 	},
 
@@ -408,7 +418,44 @@ const Rock = React.createClass({
 	// testing purposes: 30%
 });
 
-const Whirlpool = React.createClass({
+const WhirlpoolFree = React.createClass({
+	getInitialState() {
+		return {
+			tapStreak: 0
+		};
+	},
+	processTap() {
+		this.setState({tapStreak: this.state.tapStreak + 1});
+		if (this.state.tapStreak == 5) {
+			socket.trysend(JSON.stringify({
+				event: 'fiveTapsDetected'
+			}));
+			this.setState({tapStreak: 0});
+		}
+	},
+	render() {
+		return (
+			<div className="modal modal-active whirlpool">
+				<div className="container">
+					<div className="row">
+						<div className="twelve columns">
+							<h1><strong>Tap!</strong></h1>
+							<p>For every tap, you help your friend out a bit.</p>
+							<button className="tap-button" onClick = {this.processTap}>Send help</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+});
+
+const WhirlpoolQuestion = React.createClass({
+	getDefaultProps() {
+		return {
+
+		};
+	},
 	render() {
 		return <img src={this.props.image}></img>;
 	}

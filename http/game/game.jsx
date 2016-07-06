@@ -72,6 +72,11 @@ socket.onmessage = function(m) {
 			game.incorrectAnswer();
 		}
 		break;
+	case 'whirlpoolAhead':
+		game.initiateWhirlpoolTap();
+		break;
+	case 'whirlpoolQuestion':
+		break;
 	case 'correctAnswer':
 		game.addCorrectAnswer(m.answer);
 		break;
