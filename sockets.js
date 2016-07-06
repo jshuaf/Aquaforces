@@ -31,7 +31,7 @@ module.exports = (server) => {
 		tws.addWhirlpool = () => {
 			tws.whirlpool = true;
 			const ttws = tws.randomCrewMember();
-			tws.crew().forEach(crewMember, () => {
+			tws.crew().forEach((crewMember) => {
 				if (crewMember != ttws) {
 					crewMember.trysend({event: 'whirlpoolAhead'});
 				}
@@ -52,7 +52,7 @@ module.exports = (server) => {
 				streak: 0,
 				startTime: new Date().getTime()
 			};
-			tws.crew().forEach(crewMember, () => {
+			tws.crew().forEach((crewMember) => {
 				crewMember.trysend({event: 'addRock'});
 			});
 		};
@@ -164,9 +164,10 @@ module.exports = (server) => {
 						case 'answerSelected': {
 							tws.checkGameExists();
 
-							if (Math.random() < 0.4 * tws.crew().streak) {
+							if (Math.random() < 0.5 * tws.crew().streak) {
 								tws.crew().streak = 0;
-								if (Math.random() < 0.5) {
+								console.log("HI");
+								if (Math.random() < 0.1) {
 									tws.addWhirlpool();
 								} else {
 									tws.addRock();
@@ -201,7 +202,7 @@ module.exports = (server) => {
 										tws.crew().rock.streak += 1;
 										if (tws.crew().rock.streak >= 5) {
 											tws.crew().rock = {};
-											tws.crew().members.forEach(crewMember, () => {
+											tws.crew().members.forEach((crewMember) => {
 												crewMember.trysend({
 													event: 'endRock'
 												});
@@ -365,12 +366,10 @@ module.exports = (server) => {
 							console.log('recieved start game');
 							if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
 							Object.keys(tws.game.crews).forEach((crewNumber) => {
-								console.log("HI");
 								const crew = tws.game.crews[crewNumber];
 								if (crew.members.length < 2) return tws.error('Need at least two people in every crew.');
 								else if (crew.members.length > 4) return tws.error('Maximum four people in every crew.');
 							});
-							console.log("maybe?");
 							tws.game.hasStarted = true;
 							tws.game.users.forEach((ttws) => {
 								ttws.trysend({event: 'startGame', answers: tws.game.answers});
