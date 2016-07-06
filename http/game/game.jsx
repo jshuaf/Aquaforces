@@ -78,7 +78,8 @@ socket.onmessage = function(m) {
 	case 'whirlpoolQuestion':
 		game.addWhirlpoolQuestion(m.question);
 		break;
-	case 'whirlpoolEnds':
+	case 'whirlpoolConclusion':
+		game.setState({whirlpool: false});
 		break;
 	case 'correctAnswer':
 		game.addCorrectAnswer(m.answer);

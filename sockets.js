@@ -29,7 +29,8 @@ module.exports = (server) => {
 		tws.randomCrewMember = () => tws.crew().members[Math.floor(Math.random() * tws.crew().members.length)];
 
 		tws.addWhirlpool = () => {
-			tws.whirlpool = true;
+			tws.whirlpool = {present: true, question: null};
+			tws.whirlpool.question = tws.generateNewQuestion();
 			const ttws = tws.randomCrewMember();
 			tws.crew().forEach(crewMember, () => {
 				if (crewMember != ttws) {
@@ -40,12 +41,12 @@ module.exports = (server) => {
 			// MARK: challenge questions?
 			ttws.trysend({
 				event: 'whirlpoolQuestion',
-				question: tws.addNewQuestion()
+				question: tws.whirlpool.question
 			});
 		};
 
 		tws.addRock = () => {
-			if (tws.whirlpool) {
+			if (tws.whirlpool.present) {
 				return;
 			}
 			tws.rock = true;
@@ -56,13 +57,17 @@ module.exports = (server) => {
 			});
 		};
 
-		tws.addNewQuestion = () => {
+		tws.generateNewQuestion = () => {
 			let newQuestionID = 0;
 			const crew = tws.crew();
 			while (!newQuestionID || tws.questionsDone.includes(tws.game.questions[newQuestionID])) {
 				newQuestionID = Math.floor(Math.random() * tws.game.questions.length);
 			}
-			const newQuestion = tws.game.questions[newQuestionID];
+			return tws.game.questions[newQuestionID];
+		};
+
+		tws.addNewQuestion = () => {
+			const newQuestion = tws.generateNewQuestion();
 			tws.crew().activeQuestions.push({
 				text: newQuestion.text,
 				answer: newQuestion.answer,
@@ -249,6 +254,14 @@ module.exports = (server) => {
 								event: 'correctAnswer',
 								answer: answerToResend
 							});
+							break;
+						}
+
+						case 'whirlpoolAnswerSelected': {
+							if (m.answer == tws.whirlpool.question.correctAnswer) {
+								tws.whirlpool = {present: false, question: null};
+								tws.trysend({event: 'whirlpoolConclusion'});
+							}
 							break;
 						}
 

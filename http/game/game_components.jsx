@@ -473,15 +473,32 @@ const WhirlpoolFree = React.createClass({
 });
 
 const WhirlpoolQuestion = React.createClass({
+	processAnswer(answer) {
+		socket.trysend({
+			event: 'whirlpoolAnswerSelected',
+			answer
+		});
+	},
+	preprocessAnswers() {
+		let answers = this.props.question.correctAnswers;
+		this.props.question.incorrectAnswers.forEach(function(thing) {
+			answers.push(thing);
+		});
+		answers = shuffle(answers);
+		return answers;
+	},
 	render() {
+		answers = preprocessAnswers;
 		return (
 			<div className="modal modal-active whirlpool">
 				<div className="container">
 					<div className="row">
 						<div className="twelve columns">
 							<h1><strong>Challenge</strong></h1>
-							<h4 className="whirlpool-question">{this.props.question}</h4>
-							<button className="tap-button" onClick = {this.processTap}>Send help</button>
+							<h4 className="whirlpool-question">{this.props.question.text}</h4>
+							answers.map(function(answer){
+								<button className="whirlpool-button" onClick={this.processAnswer.bind(this, answer)}>{answer}</button>
+							})
 						</div>
 					</div>
 				</div>
