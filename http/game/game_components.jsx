@@ -18,7 +18,10 @@ const Game = React.createClass({
 			canoeBounds: {
 				left: 0.48,
 				right: 0.52
-			}
+			},
+			// Rock
+			rock: false,
+			rockPosition: 0
 		};
 	},
 
@@ -157,8 +160,32 @@ const Game = React.createClass({
 		}));
 	},
 
+	addRock() {
+		const timeBeforeHit = 20000;
+		this.setState({rock: true});
+
+		setTimeout(() => {
+			this.rockHit();
+		}, timeBeforeHit);
+
+		setInterval(() => {
+			rockPosition += innerHeight / 20;
+		}, 50);
+	},
+
+	rockHit() {
+		alert("rock hit!");
+	},
+
+	endRock() {
+		this.setState({rock: false});
+		alert("saved from rock");
+	},
+
 	render() {
 		// MARK: add flashing
+		const timePerQuestion = this.state.rock ? 10000 : 15000;
+
 		return (
 			<div className="container" hidden={this.state.gameFinished}>
 				<div className="panel-group">
@@ -167,13 +194,15 @@ const Game = React.createClass({
 						<Question text={this.state.questionText} />
 					</div>
 					<div className="panel-bottom">
-						<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={10000} ref="questionTimebar"></QuestionTimebar>
+						<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={timePerQuestion} ref="questionTimebar"></QuestionTimebar>
 					</div>
 				</div>
 				<River
   position={this.state.canoePosition}
   initialImage="../img/canoetop.svg"
   answersDisplayed={this.state.answers}
+	rock={this.state.rock}
+	rockPosition = {this.state.rockPosition}
     />
       </div>
     );
@@ -276,6 +305,7 @@ const Canoe = React.createClass({
 		};
 	},
 	render() {
+		// shake 0.82s cubic-bezier(.36,.07,.19,.97) both
 		const style = {
 		};
 		return (<img id = "canoe" src = {this.state.image} style = {style}></img>);
@@ -283,11 +313,6 @@ const Canoe = React.createClass({
 });
 
 const River = React.createClass({
-	getInitialState() {
-		return {
-			image: <img></img>
-		};
-	},
 	render() {
 		return (
 			<div className="river">
@@ -295,6 +320,9 @@ const River = React.createClass({
 				<div className="answers">
 					{this.props.answersDisplayed}
 				</div>
+				{this.props.rock ? <Rock
+					x = {innerWidth / 2}
+					y = {this.props.rockPosition}/> : undefined}
 			</div>
 		);
 	}
@@ -399,13 +427,13 @@ const GameTimer = React.createClass({
 
 const Rock = React.createClass({
 	render() {
-		return <img src = {this.props.image}></img>;
+		const style = {
+			transform: `translate($(this.props.x) px, $(this.props.y) px)`,
+			width: '10em'
+		};
+		return <img src = "img/rock.svg" style = {style}></img>;
 	}
 	// rock slowly approaches
-	// if 5 correct answers, rock explodes
-	// if 20 seconds pass
-	// trigger: 5% * number of correct answers
-	// testing purposes: 30%
 });
 
 const Whirlpool = React.createClass({

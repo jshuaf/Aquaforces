@@ -55,6 +55,13 @@ socket.onmessage = function(m) {
 		crewNumber = parseInt(document.getElementById('crewno').value, 10);
 		setState('wait');
 		break;
+	case 'removeUserFromCrew':
+		setState('crew');
+		break;
+	case 'removeUserFromGame':
+		console.log("recieved");
+		setState('join');
+		break;
 	case 'startGame':
 		setState('mountNode');
 		setupGameEnvironment();
@@ -71,6 +78,12 @@ socket.onmessage = function(m) {
 		} else {
 			game.incorrectAnswer();
 		}
+		break;
+	case 'addRock':
+		game.addRock();
+		break;
+	case 'endRock':
+		game.endRock();
 		break;
 	case 'correctAnswer':
 		game.addCorrectAnswer(m.answer);

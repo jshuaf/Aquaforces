@@ -39,7 +39,7 @@ module.exports = (server) => {
 
 			// MARK: challenge questions?
 			ttws.trysend({
-				event: 'whirlpool',
+				event: 'whirlpoolQuestion',
 				question: tws.addNewQuestion()
 			});
 		};
@@ -48,11 +48,12 @@ module.exports = (server) => {
 			if (tws.whirlpool) {
 				return;
 			}
-			tws.rock = true;
+			tws.crew().rock = {
+				streak: 0,
+				startTime: new Date().getTime()
+			};
 			tws.crew().forEach(crewMember, () => {
-				if (crewMember != ttws) {
-					crewMember.trysend({event: 'rock'});
-				}
+				crewMember.trysend({event: 'addRock'});
 			});
 		};
 
@@ -72,7 +73,6 @@ module.exports = (server) => {
 				event: 'newQuestion',
 				question: newQuestion.text
 			});
-			tws.questionsDone.push(correspondingQuestion);
 			const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 			ttws.trysend({
 				event: 'correctAnswer',
@@ -88,7 +88,7 @@ module.exports = (server) => {
 			});
 			return tws.sendToGameHost({
 				event: 'answerSelected',
-				crewNumber: m.crewNumber,
+				crewNumber,
 				wasCorrectAnswer
 			});
 		};
@@ -164,7 +164,7 @@ module.exports = (server) => {
 						case 'answerSelected': {
 							tws.checkGameExists();
 
-							if (Math.random() < 0.05 * tws.crew().streak) {
+							if (Math.random() < 0.4 * tws.crew().streak) {
 								tws.crew().streak = 0;
 								if (Math.random() < 0.5) {
 									tws.addWhirlpool();
@@ -180,7 +180,7 @@ module.exports = (server) => {
 								if (pastAnswer.time < maxFuzzyTime) {
 									if (pastAnswer.text == m.answer) {
 										tws.sendAnswerEvent(true, m.crewNumber);
-										tws.crew().streak += 1;
+										if (!tws.crew().rock.length && !tws.whirlpool) tws.crew().streak += 1;
 									}
 								} else {
 									const pastAnswerIndex = crew.recentCorrectAnswers.indexOf(pastAnswer);
@@ -194,7 +194,21 @@ module.exports = (server) => {
 									correspondingQuestion = activeQuestion;
 									tws.crew().activeQuestions.splice(tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
 									tws.sendAnswerEvent(true, m.crewNumber);
-									tws.crew().streak += 1;
+									tws.questionsDone.push(correspondingQuestion);
+
+									if (!tws.crew().rock.length && !tws.whirlpool) tws.crew().streak += 1;
+									if (tws.crew().rock) {
+										tws.crew().rock.streak += 1;
+										if (tws.crew().rock.streak >= 5) {
+											tws.crew().rock = {};
+											tws.crew().members.forEach(crewMember, () => {
+												crewMember.trysend({
+													event: 'endRock'
+												});
+											});
+										}
+									}
+
 									const newQuestion = correspondingQuestion.owner.addNewQuestion();
 									tws.crew().recentCorrectAnswers.push(newQuestion.answer);
 								}
@@ -267,6 +281,7 @@ module.exports = (server) => {
 				});
 				break;
 			}
+
 			case '/host/': {
 				tws.on('message', (m, raw) => {
 					try {
@@ -320,6 +335,9 @@ module.exports = (server) => {
 								crew.members.forEach((ttws) => {
 									if (ttws.user == m.user) {
 										crew.members.splice(crew.members.indexOf(ttws), 1);
+										ttws.trysend({
+											event: 'removeUserFromCrew'
+										});
 									}
 								});
 							});
@@ -333,6 +351,10 @@ module.exports = (server) => {
 							tws.game.users.forEach((ttws, i) => {
 								if (ttws.user == m.user) {
 									tws.game.users.splice(i, 1);
+									tws.game.usernames.splice(i, 1);
+									ttws.trysend({
+										event: 'removeUserFromGame'
+									});
 								}
 							});
 							break;
@@ -340,16 +362,27 @@ module.exports = (server) => {
 
 						case 'startGame': {
 							tws.checkGameExists();
+							console.log('recieved start game');
 							if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
+							Object.keys(tws.game.crews).forEach((crewNumber) => {
+								console.log("HI");
+								const crew = tws.game.crews[crewNumber];
+								if (crew.members.length < 2) return tws.error('Need at least two people in every crew.');
+								else if (crew.members.length > 4) return tws.error('Maximum four people in every crew.');
+							});
+							console.log("maybe?");
 							tws.game.hasStarted = true;
 							tws.game.users.forEach((ttws) => {
 								ttws.trysend({event: 'startGame', answers: tws.game.answers});
+							});
+							tws.trysend({
+								event: 'startGame'
 							});
 							tws.game.crews.forEach((crew) => {
 								crew.members.forEach((member) => {
 									const questionID = Math.floor(Math.random() * tws.game.questions.length);
 									const question = tws.game.questions[questionID];
-									tws.crew().activeQuestions.push({
+									member.crew().activeQuestions.push({
 										text: question.text,
 										answer: question.answer,
 										owner: member
