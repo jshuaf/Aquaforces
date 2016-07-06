@@ -19,13 +19,11 @@ const Game = React.createClass({
 				left: 0.48,
 				right: 0.52
 			},
-<<<<<<< HEAD
 			// Rock
 			rock: false,
-			rockPosition: 0
-=======
+			rockPosition: 0,
+			// Whirlpool
 			whirlpool: false
->>>>>>> whirlpools
 		};
 	},
 
@@ -205,11 +203,7 @@ const Game = React.createClass({
 						<Question text={this.state.questionText} />
 					</div>
 					<div className="panel-bottom">
-<<<<<<< HEAD
-						<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={timePerQuestion} ref="questionTimebar"></QuestionTimebar>
-=======
 						<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={10000} ref="questionTimebar" keepRunning={!this.state.whirlpool}></QuestionTimebar>
->>>>>>> whirlpools
 					</div>
 				</div>
 				<River
