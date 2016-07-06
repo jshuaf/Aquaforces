@@ -44,5 +44,13 @@ document.getElementById('new-qset').addEventListener('submit', function(e) {
 		for (var i = 2; i < ins.length; i++) question.incorrectAnswers.push(ins[i].value);
 		questions.push(question);
 	});
-	console.log(questions);
+	request('/api/new-qset', function(res) {
+		if (res.indexOf('Error') == 0) {
+			alert(res);
+		} else if (res == 'Success') {
+			alert('Added question set.');
+		} else {
+			alert('Unknown error. Response was: ' + res);
+		}
+	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)));
 });
