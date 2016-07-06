@@ -88,7 +88,7 @@ module.exports = (server) => {
 			});
 			return tws.sendToGameHost({
 				event: 'answerSelected',
-				crewNumber: m.crewNumber,
+				crewNumber,
 				wasCorrectAnswer
 			});
 		};
