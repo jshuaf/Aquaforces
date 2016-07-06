@@ -48,11 +48,7 @@ module.exports = (server) => {
 			if (tws.whirlpool) {
 				return;
 			}
-<<<<<<< HEAD
-			tws.rock = {
-=======
 			tws.crew().rock = {
->>>>>>> master
 				streak: 0,
 				startTime: new Date().getTime()
 			};
@@ -184,11 +180,7 @@ module.exports = (server) => {
 								if (pastAnswer.time < maxFuzzyTime) {
 									if (pastAnswer.text == m.answer) {
 										tws.sendAnswerEvent(true, m.crewNumber);
-<<<<<<< HEAD
-										if (!tws.rock.length && !tws.whirlpool) tws.crew().streak += 1;
-=======
 										if (!tws.crew().rock.length && !tws.whirlpool) tws.crew().streak += 1;
->>>>>>> master
 									}
 								} else {
 									const pastAnswerIndex = crew.recentCorrectAnswers.indexOf(pastAnswer);
@@ -202,14 +194,6 @@ module.exports = (server) => {
 									correspondingQuestion = activeQuestion;
 									tws.crew().activeQuestions.splice(tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
 									tws.sendAnswerEvent(true, m.crewNumber);
-<<<<<<< HEAD
-
-									if (!tws.rock.length && !tws.whirlpool) tws.crew().streak += 1;
-									if (tws.rock) {
-										tws.rock.streak += 1;
-										if (tws.rock.streak >= 5) {
-											tws.rock = {};
-=======
 									tws.questionsDone.push(correspondingQuestion);
 
 									if (!tws.crew().rock.length && !tws.whirlpool) tws.crew().streak += 1;
@@ -217,7 +201,6 @@ module.exports = (server) => {
 										tws.crew().rock.streak += 1;
 										if (tws.crew().rock.streak >= 5) {
 											tws.crew().rock = {};
->>>>>>> master
 											tws.crew().members.forEach(crewMember, () => {
 												crewMember.trysend({
 													event: 'endRock'

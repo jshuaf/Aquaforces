@@ -20,12 +20,8 @@ const Game = React.createClass({
 				right: 0.52
 			},
 			// Rock
-<<<<<<< HEAD
-			rock: false
-=======
 			rock: false,
 			rockPosition: 0
->>>>>>> master
 		};
 	},
 
@@ -165,11 +161,6 @@ const Game = React.createClass({
 	},
 
 	addRock() {
-<<<<<<< HEAD
-		this.setState({
-			rock: true
-		});
-=======
 		const timeBeforeHit = 20000;
 		this.setState({rock: true});
 
@@ -189,7 +180,6 @@ const Game = React.createClass({
 	endRock() {
 		this.setState({rock: false});
 		alert("saved from rock");
->>>>>>> master
 	},
 
 	render() {
@@ -212,10 +202,7 @@ const Game = React.createClass({
   initialImage="../img/canoetop.svg"
   answersDisplayed={this.state.answers}
 	rock={this.state.rock}
-<<<<<<< HEAD
-=======
 	rockPosition = {this.state.rockPosition}
->>>>>>> master
     />
       </div>
     );
@@ -333,13 +320,9 @@ const River = React.createClass({
 				<div className="answers">
 					{this.props.answersDisplayed}
 				</div>
-<<<<<<< HEAD
-				{this.props.rock ? <Rock /> : undefined}
-=======
 				{this.props.rock ? <Rock
 					x = {innerWidth / 2}
 					y = {this.props.rockPosition}/> : undefined}
->>>>>>> master
 			</div>
 		);
 	}
