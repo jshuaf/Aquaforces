@@ -11,7 +11,7 @@ function Boat() {
 	this.dv = 10;
 	this.maxdv = 10;
 	this.hp = 1;
-	this.dhp = -0.1;
+	this.dhp = -0.05;
 	this.c = -0.3;
 	this.cf = 0.0005;
 	this.vf = 0.00001;
