@@ -12,8 +12,8 @@ function Boat() {
 	this.maxdv = 10;
 	this.hp = 1;
 	this.dhp = -0.1;
-	this.c = -0.1;
-	this.cf = 0.003;
+	this.c = -0.3;
+	this.cf = 0.0005;
 	this.vf = 0.00001;
 	this.raft = false;
 }
@@ -116,6 +116,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	document.getElementById('lonelyfolks').classList.add('hide');
 	document.getElementById('crew-header').hidden = document.getElementById('start-game-btn').hidden = true;
 	crewsEl.classList.remove('studentselect');
+	crewsEl.classList.add('leaderboard');
 	crewsEl.children.forEach(function(e, i) {
 		if (e.dataset.n != 0) {
 			progress.appendChild(document.createElement('div'));
@@ -126,7 +127,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	});
 	var n = progress.childElementCount - 1 || 1;
 	progress.childNodes.forEach(function(canoe, i) {
-		canoe.style.top = 'calc(' + (50 + 50 * (i + 1) / (n + 2)) + '% - ' + (1.6 * (2 * i / n - 0.5)) + 'em)';
+		canoe.style.top = 'calc(' + (50 + 50 * (i + 0.5) / (n + 1)) + '% - ' + (1.6 * (2 * (i + 0.5) / (n + 1) - 0.5)) + 'em)';
 	});
 	header.removeChild(header.lastChild);
 	lastTime = timeStart = new Date().getTime();
@@ -160,7 +161,7 @@ function animationUpdate() {
 	if (pRange > cameraS) cameraS = (1 - dt * cfCS) * cameraS + dt * cfCS * pRange;
 	for (var id in boats) {
 		var b = boats[id];
-		document.getElementById('boat' + id).style.transform = 'translateX(' + (b.p - cameraP + 0.5) * innerWidth * cameraS + 'px)';
+		document.getElementById('boat' + id).style.transform = 'translateX(' + ((b.p - cameraP + 0.5) * 0.75 + 0.25) * innerWidth * cameraS + 'px)';
 	}
 	lastTime = thisTime;
 	var ms = timeTotal - new Date().getTime() + timeStart + 1000, t = '';

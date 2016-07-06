@@ -3,6 +3,7 @@ var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') +
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error'),
 	gameHasEnded = false;
+document.documentElement.classList.add('pregamescreen');
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -11,7 +12,7 @@ function setState(id) {
 	document.getElementById(id).hidden = false;
 	var e = document.getElementById(id).getElementsByTagName('input');
 	if (e.length) e[e.length - 1].focus();
-	cont.classList.toggle('pregamescreen', id != 'game');
+	document.documentElement.classList.toggle('pregamescreen', id != 'game');
 }
 function flash(color) {
 	document.body.className = '';
@@ -38,7 +39,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addAnswer, 700);
+		setInterval(addAnswer, 1000);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -84,7 +85,7 @@ function addAnswer() {
 	var answerEl = document.createElement('div'),
 		answer,
 		correctAnswer = false;
-	if (correctAnswerQueue.length && Math.random() < 0.2) {
+	if (correctAnswerQueue.length && Math.random() < 0.4) {
 		answer = correctAnswerQueue.shift();
 		correctAnswer = true;
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
