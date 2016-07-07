@@ -194,7 +194,12 @@ const Game = React.createClass({
 			if (this.state.whirlpoolType == "Free") {
 				whirlpoolValue = (
 					<div className="modal-background">
-						<WhirlpoolFree socket = {this.props.socket} />
+						<div className="row">
+							<div className="three columns"><p></p></div>
+							<div className="six columns">
+								<WhirlpoolFree socket = {this.props.socket} />
+							</div>
+						</div>
 					</div>
 				);
 			}
