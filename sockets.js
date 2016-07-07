@@ -258,11 +258,14 @@ module.exports = (server) => {
 
 						case 'answerPassedThreshold': {
 							const answerToResend = m.answer;
-							crew = tws.game.crews[m.crewNumber];
-							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-							ttws.trysend({
-								event: 'correctAnswer',
-								answer: answerToResend
+							tws.crew().activeQuestions.forEach((activeQuestion) => {
+								if (activeQuestion.answer == answerToResend) {
+									ttws = tws.randomCrewMember();
+									return ttws.trysend({
+										event: 'correctAnswer',
+										answer: answerToResend
+									});
+								}
 							});
 							break;
 						}

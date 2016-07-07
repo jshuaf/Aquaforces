@@ -37,24 +37,21 @@ const Game = React.createClass({
 
 	componentWillMount() {
 		setInterval(() => {
-			// MARK: add checking for relooping
 			const currentAnswers = this.state.answers;
-			/* KEEP THIS COMMENTED OUT
-			for (let currentAnswer in currentAnswers) {
-				if (currentAnswer.state.position.y > innerHeight) {
-					currentAnswers.remove(currentAnswer);
-				}
-			}*/
 			const answersToAdd = this.state.answersToAdd;
 			if (answersToAdd.length > 0) {
 				currentAnswers.push(this.generateAnswerComponent(answersToAdd.shift()));
 				this.setState({answersToAdd});
 			} else {
-				const randomData = this.state.answerData[Math.floor(
+				let randomData = this.state.answerData[Math.floor(
 					Math.random() * this.state.answerData.length)];
-				if (!(randomData in currentAnswers)) {
-					currentAnswers.push(this.generateAnswerComponent(randomData));
+				let answerComponent = this.generateAnswerComponent(randomData);
+				while (answerComponent in currentAnswers) {
+					randomData = this.state.answerData[Math.floor(
+						Math.random() * this.state.answerData.length)];
+						answerComponent = this.generateAnswerComponent(randomData);
 				}
+				currentAnswers.push(answerComponent);
 			}
 			this.setState({
 				answers: currentAnswers
@@ -87,9 +84,9 @@ const Game = React.createClass({
 		return (<Answer
 			text={answer}
 			onClick={this.answerSelected.bind(this, answer)}
+			passedThreshold={this.answerPassedThreshold}
 			initialX={this.generateAnswerPosition()}
 			canoeBounds={this.state.canoeBounds}
-			passedThreshold={this.state.answerPassedThreshold}
 			keepRunning={!this.state.whirlpool}
 		/>);
 	},
@@ -100,6 +97,14 @@ const Game = React.createClass({
 			answer: answerText,
 			crewNumber: this.props.crewNumber
 		}));
+		let currentAnswers = this.state.answers;
+		for (let answerComponent in currentAnswers) {
+			if (answerComponent.props.text == answerText) {
+				currentAnswers.splice(answerComponent, 1);
+				break;
+			}
+		}
+		this.setState({answers: currentAnswers});
 	},
 
 	generateAnswerPosition() {
@@ -282,7 +287,7 @@ const Answer = React.createClass({
 				vy
 			},
 			disappeared: false,
-			hasCrossedThreshold: false
+			passedThreshold: false
 		};
 	},
 
@@ -313,6 +318,14 @@ const Answer = React.createClass({
 		positionX += (velocityX) * dt;
 		positionY += (velocityY) * dt;
 
+		if (positionY > window.innerHeight) {
+			this.setState({
+				passedThreshold: true
+			}, () => {
+				this.props.passedThreshold(this.props.text);
+			});
+		}
+
 		this.setState({
 			position: {x: positionX, y: positionY},
 			velocity: {vx: velocityX, vy: velocityY},
@@ -339,7 +352,7 @@ const Answer = React.createClass({
 	},
 
 	animate(timestamp) {
-		if (this.props.keepRunning) {
+		if (this.props.keepRunning && !(this.state.passedThreshold)) {
 			this.setPosition();
 			window.requestAnimationFrame(this.animate);
 		}
@@ -406,7 +419,16 @@ const River = React.createClass({
 		return (
 			<div className={"river" + this.props.flashClass} ref = "river">
 				<div className="answers">
-					{this.props.answersDisplayed}
+					{this.props.answersDisplayed.map((answer) =>
+						<Answer
+							text={answer}
+							onClick={this.props.answerSelected(answer)}
+							passedThreshold={this.props.answerPassedThreshold}
+							initialX={this.generateAnswerPosition()}
+							canoeBounds={this.props.canoeBounds}
+							keepRunning={!this.props.whirlpool}
+						/>
+					)}
 						<Rock
 							y = {this.props.rockYPosition}
 							ref = "rock"
