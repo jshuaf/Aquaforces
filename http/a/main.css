@@ -162,12 +162,13 @@ span[.clickable]:hover {
 	color: white;
 	font-weight: bold;
 	font-size: 100px;
-	background-color: #C1343F;
+	background-color: #e74c3c;
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+	text-align:center;
 }
-.tap-button:hover {
+.tap-button:hover, .tap-button:active {
 	color: white;
-	background-color: #B1444F;
+	background-color: #f75c4c;
 }
 /*
 The below is code from Brian
