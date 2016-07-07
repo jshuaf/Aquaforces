@@ -23,10 +23,13 @@ html.hostgame {
 	text-shadow: 1px 1px 3px #000;
 }
 #progress > div.raft { background: #950 }
-#new-qset {
-	display: block;
-	background: #026;
+.qset {
+	padding: 2em;
+	margin: 1em 0;
 }
+details p, details h3 { margin: 0.2em 0 }
+#new-qset, .qset { background: #026 }
+#new-qset { display: block }
 #new-qset.hide {
 	opacity: 0;
 	pointer-events: none;
@@ -43,3 +46,9 @@ html.hostgame {
 	height: 100%;
 }
 .validating :invalid { border: 2px solid #f00 }
+summary { font-size: 1.5em }
+summary h2 {
+	display: inline;
+	font-size: 1em;
+}
+[open] > summary { margin-bottom: 1em }
