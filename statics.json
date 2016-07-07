@@ -1,10 +1,5 @@
 {
 	"/": {
 		"path": "./html/index.html"
-	},
-	"/console/": {
-		"path": "./html/console.html",
-		"title": "Question Console",
-		"inhead": "<link rel=\"stylesheet\" href=\"/host.css\" />"
 	}
 }

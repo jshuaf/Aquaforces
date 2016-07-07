@@ -146,13 +146,33 @@ let serverHandler = o(function*(req, res) {
 			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
 		}
 	} else if (req.url.pathname == '/host/') {
-		yield respondPage('Host', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
+		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
 		dbcs.qsets.find({}, {title: true}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
 			else {
 				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
+				res.end(yield fs.readFile('./html/a/foot.html', yield));
+			}
+		}));
+	} else if (req.url.pathname == '/console/') {
+		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
+		var qsetstr = '';
+		dbcs.qsets.find().each(o(function*(err, qset) {
+			if (err) throw err;
+			if (qset) {
+				qsetstr += '<details class="qset"><summary><h2>' + html(qset.title) + '</h2></summary><ol>';
+				qset.questions.forEach(function(question) {
+					qsetstr += '<li><h3>Question: ' + question.text + '</h3><p>Answer: ' + question.answer + '</p><p>Wrong answers:</p><ul>';
+					question.incorrectAnswers.forEach(function(answer) {
+						qsetstr += '<li>' + answer + '</li>';
+					});
+					qsetstr += '</ul></li>';
+				});
+				qsetstr += '</ol></details>';
+			} else {
+				res.write((yield fs.readFile('./html/console.html', yield)).toString().replace('$qsets', qsetstr));
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));

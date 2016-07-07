@@ -63,7 +63,6 @@ label input:not([min]) { width: 200% }
 	.pregamescreen form { padding: 0 10% }
 }
 @media (min-height: 32em) and (pointer: fine) {
-	html { overflow: hidden }
 	.pregamescreen #cont { margin-top: 50vh }
 	.pregamescreen form { transform: translateY(-50%) }
 }
