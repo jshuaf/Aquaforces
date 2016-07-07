@@ -192,11 +192,17 @@ const Game = React.createClass({
 		let whirlpoolValue;
 		if (this.state.whirlpool) {
 			if (this.state.whirlpoolType == "Free") {
-				whirlpoolValue = <WhirlpoolFree socket = {this.props.socket} />;
+				whirlpoolValue = (
+					<div className="modal-background">
+						<WhirlpoolFree socket = {this.props.socket} />
+					</div>
+				);
 			}
 			else {
 				whirlpoolValue = (
-					<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.state.whirlpoolQuestionTimebar} socket = {this.props.socket} />
+					<div className="modal-background">
+						<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.state.whirlpoolQuestionTimebar} socket = {this.props.socket} />
+					</div>
 				);
 			}
 		}
@@ -508,7 +514,7 @@ const WhirlpoolQuestion = React.createClass({
 	render() {
 		let answers = this.state.answers;
 		return (
-			<div className="modal modal-active whirlpool panel-group">
+			<div className="modal-active whirlpool panel-group">
 				<div className="panel-top">
 					<h1><strong>Challenge</strong></h1>
 					<h4 className="whirlpool-question">{this.props.question.text}</h4>
