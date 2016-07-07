@@ -481,9 +481,9 @@ const WhirlpoolFree = React.createClass({
 			<div className="modal modal-active panel-group">
 				<div className="row">
 					<div className="twelve columns panel">
-						<h1><strong>Whirlpool! Tap!</strong></h1>
+						<h1><strong>Tap!</strong></h1>
 						<p className="marginless">For every tap, you give your friend a bit more time to answer the challenge question.</p>
-						<button className="tap-button" onClick = {this.processTap}>GO!</button>
+						<button className="tap-button" onClick = {this.processTap}>GO</button>
 					</div>
 				</div>
 			</div>
