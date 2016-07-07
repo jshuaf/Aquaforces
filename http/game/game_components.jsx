@@ -14,7 +14,7 @@ const Game = React.createClass({
 			answerData: this.props.initialAnswers,
 			answerPositions: {},
 			// Canoe
-			canoePosition: 0,
+			canoeHP: 100,
 			canoeTopPosition: null,
 			canoeHeight: null,
 			canoeBounds: {
@@ -142,6 +142,11 @@ const Game = React.createClass({
 
 	incorrectAnswer() {
 		// MARK: incorrect answer animation
+		this.setState((previousState, previousProps) => (
+			{
+				canoeHP: previousState.canoeHP - 5
+			}
+		));
 	},
 
 	newQuestion(question) {
@@ -209,9 +214,12 @@ const Game = React.createClass({
 	rockHit() {
 		this.flashRedTwice();
 		const y = -window.innerHeight * 0.2;
-		this.setState({
-			rockYPosition: y
-		});
+		this.setState((previousState, previousProps) => (
+			{
+				rockYPosition: y,
+				canoeHP: previousState.canoeHP - 30
+			}
+		));
 	},
 
 	clearFlash() {
@@ -254,13 +262,12 @@ const Game = React.createClass({
 					</div>
 				</div>
 				<River
-					position={this.state.canoePosition}
-					initialImage="../img/canoetop.svg"
 					answersDisplayed={this.state.answers}
 					rock={this.state.rock}
 					rockYPosition = {this.state.rockYPosition}
 					rockAnimationData = {this.rockAnimationData}
 					flashClass = {this.state.flashClass}
+					canoeHP = {this.state.canoeHP}
 				/>
       </div>
     );
@@ -360,8 +367,6 @@ const Answer = React.createClass({
 const Canoe = React.createClass({
 	getInitialState() {
 		return {
-			hp: 100,
-			image: this.props.initialImage,
 			height: null,
 			topPosition: null
 		};
@@ -378,11 +383,28 @@ const Canoe = React.createClass({
 
 	render() {
 		// shake 0.82s cubic-bezier(.36,.07,.19,.97) both
+		const hp = this.props.hp;
+		let image = "../img/boats-top";
+
+		if (hp > 50) {
+			image += "/canoe-100";
+		} else if (hp > 25) {
+			image += "/canoe-50";
+		} else if (hp > 10) {
+			image += "/canoe-25";
+		} else if (hp > 0) {
+			image += "/canoe-10";
+		} else if (hp <= 0) {
+			image += "/rafts";
+		}
+
+		image += "/4-members.svg";
+
 		const style = {
 			width: '25%',
 			transform: `translate(${0}px, ${window.innerHeight / 3.5}px)`
 		};
-		return (<img id = "canoe" src = {this.state.image} style = {style} ref = "canoe"></img>);
+		return (<img id = "canoe" src = {image} style = {style} ref = "canoe"></img>);
 	}
 });
 
@@ -411,7 +433,7 @@ const River = React.createClass({
 							y = {this.props.rockYPosition}
 							ref = "rock"
 						/>
-					<Canoe position={this.props.position} initialImage={this.props.initialImage} ref = "canoe"/>
+					<Canoe initialImage = {this.props.initialImage} ref = "canoe" hp = {this.props.canoeHP}/>
 				</div>
 			</div>
 		);
