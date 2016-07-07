@@ -51,9 +51,33 @@ newQSet.addEventListener('submit', function(e) {
 		questions.push(question);
 	});
 	request('/api/new-qset', function(res) {
+		newQSet.classList.remove('validating');
 		if (res.indexOf('Error') == 0) {
 			alert(res);
 		} else if (res == 'Success') {
+			var details = document.createElement('details');
+			details.className = 'qset';
+			details.appendChild(document.createElement('summary'));
+			details.lastChild.appendChild(document.createElement('h2'));
+			details.lastChild.lastChild.appendChild(document.createTextNode(document.getElementById('qset-title').value));
+			details.appendChild(document.createElement('ol'));
+			questions.forEach(function(question) {
+				var li = document.createElement('li');
+				li.appendChild(document.createElement('h3'));
+				li.lastChild.appendChild(document.createTextNode(question.text));
+				li.appendChild(document.createElement('p'));
+				li.lastChild.appendChild(document.createTextNode('Answer: ' + question.answer));
+				li.appendChild(document.createElement('p'));
+				li.lastChild.appendChild(document.createTextNode('Wrong answers:'));
+				var ul = document.createElement('ul');
+				question.incorrectAnswers.forEach(function(answer) {
+					ul.appendChild(document.createElement('li'));
+					ul.lastChild.appendChild(document.createTextNode(answer));
+				});
+				li.appendChild(ul);
+				details.lastChild.appendChild(li);
+			});
+			newQSet.parentNode.insertAfter(details, newQSet);
 			newQSet.removeChild(newQSet.firstElementChild);
 			newQSet.appendChild(protoDetails.cloneNode(true));
 			bindListeners();

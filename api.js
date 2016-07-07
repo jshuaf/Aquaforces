@@ -31,7 +31,8 @@ module.exports = function(req, res, post) {
 		dbcs.qsets.insert({
 			_id: generateID(),
 			title: post.name,
-			questions
+			questions,
+			timeAdded: new Date().getTime()
 		});
 		res.writeHead(204);
 		res.end();

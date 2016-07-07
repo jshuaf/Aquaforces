@@ -148,7 +148,7 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/host/') {
 		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		dbcs.qsets.find({}, {title: true}).each(o(function*(err, qset) {
+		dbcs.qsets.find({}, {title: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
 			else {
@@ -159,7 +159,7 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		dbcs.qsets.find().each(o(function*(err, qset) {
+		dbcs.qsets.find().sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
 				qsetstr += '<details class="qset"><summary><h2>' + html(qset.title) + '</h2></summary><ol>';
