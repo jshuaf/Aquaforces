@@ -29,30 +29,31 @@ const Game = React.createClass({
 
 	componentWillMount() {
 		setInterval(() => {
-			// MARK: add checking for relooping
-			const currentAnswers = this.state.answers;
-			/* KEEP THIS COMMENTED OUT
-			for (let currentAnswer in currentAnswers) {
-				if (currentAnswer.state.position.y > innerHeight) {
-					currentAnswers.remove(currentAnswer);
+			if (!this.state.whirlpool) {
+				// MARK: add checking for relooping
+				const currentAnswers = this.state.answers;
+				/* KEEP THIS COMMENTED OUT
+				for (let currentAnswer in currentAnswers) {
+					if (currentAnswer.state.position.y > innerHeight) {
+						currentAnswers.remove(currentAnswer);
+					}
+				}*/
+				const answersToAdd = this.state.answersToAdd;
+				if (answersToAdd.length > 0) {
+					currentAnswers.push(this.generateAnswerComponent(answersToAdd.shift()));
+					this.setState({answersToAdd});
+				} else {
+					const randomData = this.state.answerData[Math.floor(
+						Math.random() * this.state.answerData.length)];
+					if (!(randomData in currentAnswers)) {
+						currentAnswers.push(this.generateAnswerComponent(randomData));
+					}
 				}
-			}*/
-			const answersToAdd = this.state.answersToAdd;
-			if (answersToAdd.length > 0) {
-				currentAnswers.push(this.generateAnswerComponent(answersToAdd.shift()));
-				this.setState({answersToAdd});
-			} else {
-				const randomData = this.state.answerData[Math.floor(
-					Math.random() * this.state.answerData.length)];
-				if (!(randomData in currentAnswers)) {
-					currentAnswers.push(this.generateAnswerComponent(randomData));
-				}
-			}
-			this.setState({
-				answers: currentAnswers
-			});
-		}, 2500);
-	},
+				this.setState({
+					answers: currentAnswers
+				});
+			}}, 2500);
+		},
 
 	answerSelected(answerText) {
 		this.props.socket.send(JSON.stringify({
@@ -81,7 +82,7 @@ const Game = React.createClass({
 			whirlpool: true,
 			whirlpoolType: 'Question',
 			whirlpoolQuestion: question,
-			whirlpoolQuestionTimebar: <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} ref="whirlpoolTimebar" keepRunning={this.state.whirlpool}></QuestionTimebar>
+			whirlpoolQuestionTimebar: <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool}></QuestionTimebar>
 		});
 	},
 
@@ -191,11 +192,11 @@ const Game = React.createClass({
 		let whirlpoolValue;
 		if (this.state.whirlpool) {
 			if (this.state.whirlpoolType == "Free") {
-				whirlpoolValue = <WhirlpoolFree />;
+				whirlpoolValue = <WhirlpoolFree socket = {this.props.socket} />;
 			}
 			else {
 				whirlpoolValue = (
-					<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.whirlpoolQuestionTimebar} />
+					<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.state.whirlpoolQuestionTimebar} socket = {this.props.socket} />
 				);
 			}
 		}
@@ -388,7 +389,7 @@ const QuestionTimebar = React.createClass({
 			backgroundColor: '#26A65B',
 			height: '20px'
 		};
-		return <div style={style} id="questionTime"></div>;
+		return <div style={style} className="questionTime"></div>;
 	}
 });
 
@@ -460,7 +461,8 @@ const WhirlpoolFree = React.createClass({
 	processTap() {
 		this.setState({tapStreak: this.state.tapStreak + 1});
 		if (this.state.tapStreak == 5) {
-			socket.trysend(JSON.stringify({
+			console.log("YOU GO!");
+			this.props.socket.send(JSON.stringify({
 				event: 'whirlpoolFiveTapsDetected'
 			}));
 			this.setState({tapStreak: 0});
@@ -469,13 +471,11 @@ const WhirlpoolFree = React.createClass({
 	render() {
 		return (
 			<div className="modal modal-active whirlpool">
-				<div className="container">
-					<div className="row">
-						<div className="twelve columns">
-							<h1><strong>Tap!</strong></h1>
-							<p>For every tap, you help your friend out a bit.</p>
-							<button className="tap-button" onClick = {this.processTap}>Send help</button>
-						</div>
+				<div className="row">
+					<div className="twelve columns panel">
+						<h1><strong>Tap!</strong></h1>
+						<p>For every tap, you help your friend out a bit.</p>
+						<button className="tap-button" onClick = {this.processTap}>Send help</button>
 					</div>
 				</div>
 			</div>
@@ -484,22 +484,27 @@ const WhirlpoolFree = React.createClass({
 });
 
 const WhirlpoolQuestion = React.createClass({
+	getInitialState() {
+		return {
+			answers: []
+		};
+	},
 	processAnswer(answer) {
-		socket.trysend({
+		this.props.socket.send({
 			event: 'whirlpoolAnswerSelected',
 			answer
 		});
 	},
 	preprocessAnswers() {
-		let answers = this.props.question.correctAnswers;
+		let answers = [this.props.question.answer];
 		this.props.question.incorrectAnswers.forEach(function(thing) {
 			answers.push(thing);
 		});
 		answers = shuffle(answers);
-		return answers;
+		this.setState({answers});
 	},
 	render() {
-		let answers = preprocessAnswers;
+		let answers = this.state.answers;
 		return (
 			<div className="modal modal-active whirlpool panel-group">
 				<div className="panel-top">
@@ -507,10 +512,12 @@ const WhirlpoolQuestion = React.createClass({
 					<h4 className="whirlpool-question">{this.props.question.text}</h4>
 				</div>
 				{this.props.timebar}
-				<div>
-					answers.map(function(answer){
-						<button className="whirlpool-button" onClick={this.processAnswer.bind(this, answer)}>{answer}</button>
+				<div className="whirlpool-button-group">
+					{
+					answers.map(function(answer) {
+						return <button className="whirlpool-button">{answer}</button>;
 					})
+				}
 				</div>
 			</div>
 		);

@@ -33,7 +33,7 @@ module.exports = (server) => {
 			tws.crew().whirlpool.question = tws.generateNewQuestion();
 			const ttws = tws.randomCrewMember();
 			tws.crew().whirlpool.stressedPerson = ttws;
-			tws.crew().forEach(crewMember, () => {
+			tws.crew().members.forEach((crewMember) => {
 				if (crewMember != ttws) {
 					crewMember.trysend({event: 'whirlpoolAhead'});
 				}
@@ -51,7 +51,7 @@ module.exports = (server) => {
 				return;
 			}
 			tws.rock = true;
-			tws.crew().forEach(crewMember, () => {
+			tws.crew().members.forEach((crewMember) => {
 				if (crewMember != ttws) {
 					crewMember.trysend({event: 'rock'});
 				}
@@ -78,8 +78,7 @@ module.exports = (server) => {
 				event: 'newQuestion',
 				question: newQuestion.text
 			});
-			tws.questionsDone.push(correspondingQuestion);
-			const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+			const ttws = tws.crew().members[Math.floor(Math.random() * tws.crew().members.length)];
 			ttws.trysend({
 				event: 'correctAnswer',
 				answer: newQuestion.answer
@@ -170,9 +169,9 @@ module.exports = (server) => {
 						case 'answerSelected': {
 							tws.checkGameExists();
 
-							if (Math.random() < 0.0005 * tws.crew().streak) {
+							if (Math.random() < 0.9 * tws.crew().streak) {
 								tws.crew().streak = 0;
-								if (Math.random() < 0.5) {
+								if (Math.random() < 1) {
 									tws.addWhirlpool();
 								} else {
 									tws.addRock();
@@ -200,6 +199,7 @@ module.exports = (server) => {
 									correspondingQuestion = activeQuestion;
 									tws.crew().activeQuestions.splice(tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
 									tws.sendAnswerEvent(true, m.crewNumber);
+									tws.questionsDone.push(correspondingQuestion);
 									tws.crew().streak += 1;
 									const newQuestion = correspondingQuestion.owner.addNewQuestion();
 									tws.crew().recentCorrectAnswers.push(newQuestion.answer);
