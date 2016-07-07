@@ -87,7 +87,8 @@ span[.clickable]:hover {
 	padding: 0.5rem 2rem;
 	border: 2px solid #ecf0f1;
 	border-radius: 4rem;
-	font-size: 20px
+	font-size: 20px;
+	cursor: pointer;
 }
 @media (min-width: 700px) {
 	.navbar > .columns > p, a {
@@ -115,14 +116,6 @@ span[.clickable]:hover {
 	border-radius: 0 0 2rem 2rem;
 	overflow-x: hidden;
 	overflow-y: hidden;
-}
-#canoe {
-	max-width: 15rem;
-	max-height: 100%;
-	position: absolute;
-	top: 80%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 }
 .answers {
 	position: relative;
@@ -154,6 +147,12 @@ span[.clickable]:hover {
 .button-primary {
 	margin-top: 10px;
 }
+@keyframes flash-red-twice {
+	0% { background: #c0392b }
+	49% { background: transparent }
+	50% { background: #c0392b }
+}
+.flash-red-twice { animation: flash-red-twice 0.75s }
 @keyframes shake {
 	10%, 90% {
 		transform: translate3d(-1px, 0, 0);
@@ -183,18 +182,6 @@ html {
 }
 body { margin: 0 }
 html, body, main, #progress, #cont { height: 100% }
-@keyframes flash-red {
-	0% { background: #f00 }
-}
-@keyframes flash-yellow {
-	0% { background: #ff0 }
-}
-@keyframes flash-green {
-	0% { background: #0f0 }
-}
-.flash-red { animation: flash-red 0.3s }
-.flash-yellow { animation: flash-yellow 0.3s }
-.flash-green { animation: flash-green 0.3s }
 [hidden] {
 	display: none;
 	pointer-events: none;

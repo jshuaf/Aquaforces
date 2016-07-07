@@ -59,7 +59,6 @@ socket.onmessage = function(m) {
 		setState('crew');
 		break;
 	case 'removeUserFromGame':
-		console.log("recieved");
 		setState('join');
 		break;
 	case 'startGame':

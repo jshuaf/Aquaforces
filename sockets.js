@@ -54,7 +54,7 @@ module.exports = (server) => {
 			tws.crew().members.forEach((crewMember) => {
 				crewMember.trysend({
 					event: 'addRock',
-					startTime: (new Date().getTime()) + 3000
+					startTime: (new Date().getTime()) + 1500
 				});
 			});
 		};
@@ -165,11 +165,9 @@ module.exports = (server) => {
 
 						case 'answerSelected': {
 							tws.checkGameExists();
-
-							if (Math.random() < 0.8 * tws.crew().streak) {
+							if (Math.random() < 0.9 * tws.crew().streak) {
 								tws.crew().streak = 0;
-								console.log("HI");
-								if (Math.random() < 0.0000000000000000000001) {
+								if (Math.random() < 0.00001) {
 									tws.addWhirlpool();
 								} else {
 									tws.addRock();
@@ -365,7 +363,6 @@ module.exports = (server) => {
 
 						case 'startGame': {
 							tws.checkGameExists();
-							console.log('recieved start game');
 							if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
 							Object.keys(tws.game.crews).forEach((crewNumber) => {
 								const crew = tws.game.crews[crewNumber];

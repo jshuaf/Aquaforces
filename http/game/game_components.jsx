@@ -15,15 +15,21 @@ const Game = React.createClass({
 			answerPositions: {},
 			// Canoe
 			canoePosition: 0,
+			canoeTopPosition: null,
+			canoeHeight: null,
 			canoeBounds: {
 				left: 0.48,
 				right: 0.52
 			},
+			// River
+			riverTopPosition: null,
+			flashClass: "",
 			// Rock
 			rock: false,
-			rockYPosition: 0,
-			rockXPosition: 50,
+			rockYPosition: -window.innerHeight * 0.2,
+			rockHeight: null,
 			rockStartTime: null,
+			rockAnimation: null,
 			// Whirlpool
 			whirlpool: false
 		};
@@ -173,52 +179,69 @@ const Game = React.createClass({
 
 	addRock(rockStartTime) {
 		const timeBeforeHit = 20000;
-		const rockXVelocity = Math.random() * 0.05;
 		this.setState({
-			rockStartTime});
+			rockStartTime,
+			rock: true
+		});
 
-		setTimeout(() => {
-			this.rockHit();
-		}, timeBeforeHit);
+		const rockAnimation = setInterval(this.animateRock, 25);
+		this.setState({rockAnimation});
+	},
 
-		console.log(this.state.rockStartTime);
-
-		setInterval(() => {
-			const timeDifference = (new Date().getTime() - this.state.rockStartTime) / 1000;
-			if (timeDifference && timeDifference > 50) {
-				this.setState({rock: true});
-				const rockXPosition = `${50 + timeDifference}%`;
-				const rockYPosition = `${timeDifference}%`;
-				this.setState({
-					rockYPosition,
-					rockXPosition
-				});
+	animateRock() {
+		const timeDifference = (new Date().getTime() - this.state.rockStartTime) / 1000;
+		if (timeDifference && timeDifference > 0) {
+			const y = timeDifference * window.innerHeight / 10;
+			if (this.state.riverTopPosition) {
+				const positionLimit = this.state.canoeTopPosition - this.state.riverTopPosition - this.state.rockHeight - this.state.canoeHeight;
+				if (positionLimit < y) {
+					clearInterval(this.state.rockAnimation);
+					this.rockHit();
+					return;
+				}
 			}
-		}, 25);
+			this.setState({
+				rockYPosition: y
+			});
+		}
 	},
 
 	rockHit() {
-		alert("rock hit!");
+		this.flashRedTwice();
+		const y = -window.innerHeight * 0.2;
 		this.setState({
-			rock: false,
-			rockXPosition: 50,
-			rockYPosition: 0
+			rockYPosition: y
 		});
+	},
+
+	clearFlash() {
+		setTimeout(() => {
+			this.setState({
+				flashClass: ""
+			});
+		}, 1000);
+	},
+
+	flashRedTwice() {
+		this.setState({
+			flashClass: " flash-red-twice"
+		}, this.clearFlash);
 	},
 
 	endRock() {
 		this.setState({
 			rock: false,
-			rockXPosition: 50,
-			rockYPosition: 0
+			rockYPosition: -window.innerHeight * 0.2
 		});
 		alert("saved from rock");
 	},
 
-	render() {
-		// MARK: add flashing
-		const timePerQuestion = this.state.rock ? 10000 : 15000;
+	rockAnimationData(riverTopPosition, canoeTopPosition, canoeHeight, rockHeight) {
+		this.setState({riverTopPosition, canoeTopPosition, canoeHeight, rockHeight});
+	},
 
+	render() {
+		const timePerQuestion = this.state.rock ? 10000 : 15000;
 		return (
 			<div className="container" hidden={this.state.gameFinished}>
 				<div className="panel-group">
@@ -236,7 +259,8 @@ const Game = React.createClass({
 					answersDisplayed={this.state.answers}
 					rock={this.state.rock}
 					rockYPosition = {this.state.rockYPosition}
-					rockXPosition = {this.state.rockXPosition}
+					rockAnimationData = {this.rockAnimationData}
+					flashClass = {this.state.flashClass}
 				/>
       </div>
     );
@@ -337,27 +361,57 @@ const Canoe = React.createClass({
 	getInitialState() {
 		return {
 			hp: 100,
-			image: this.props.initialImage
+			image: this.props.initialImage,
+			height: null,
+			topPosition: null
 		};
 	},
+
+	componentDidMount() {
+		this.setState({
+			height: this.refs.canoe.offsetHeight,
+			width: this.refs.canoe.offsetWidth,
+			parentWidth: this.refs.canoe.parentElement.clientWidth,
+			topPosition: this.refs.canoe.getBoundingClientRect().top
+		});
+	},
+
 	render() {
 		// shake 0.82s cubic-bezier(.36,.07,.19,.97) both
 		const style = {
+			width: '25%',
+			transform: `translate(${0}px, ${window.innerHeight / 3.5}px)`
 		};
-		return (<img id = "canoe" src = {this.state.image} style = {style}></img>);
+		return (<img id = "canoe" src = {this.state.image} style = {style} ref = "canoe"></img>);
 	}
 });
 
 const River = React.createClass({
+	getInitialState() {
+		return {
+			// Canoe
+			canoeHeight: null
+		};
+	},
+
+	componentDidMount() {
+		const riverTopPosition = this.refs.river.getBoundingClientRect().top;
+		const canoeTopPosition = ReactDOM.findDOMNode(this.refs.canoe).getBoundingClientRect().top;
+		const canoeHeight = ReactDOM.findDOMNode(this.refs.canoe).offsetHeight;
+		const rockHeight = ReactDOM.findDOMNode(this.refs.rock).offsetHeight;
+		this.props.rockAnimationData(riverTopPosition, canoeTopPosition, canoeHeight, rockHeight);
+	},
+
 	render() {
 		return (
-			<div className="river">
-			<Canoe position={this.props.position} initialImage={this.props.initialImage} />
+			<div className={"river" + this.props.flashClass} ref = "river">
 				<div className="answers">
 					{this.props.answersDisplayed}
-					{this.props.rock ? <Rock
-						x = {this.props.rockXPosition}
-						y = {this.props.rockYPosition}/> : undefined}
+						<Rock
+							y = {this.props.rockYPosition}
+							ref = "rock"
+						/>
+					<Canoe position={this.props.position} initialImage={this.props.initialImage} ref = "canoe"/>
 				</div>
 			</div>
 		);
@@ -407,7 +461,7 @@ const QuestionTimebar = React.createClass({
 		const style = {
 			width: (this.state.timeLeft / this.props.timePerQuestion * 100).toString() + '%',
 			backgroundColor: '#26A65B',
-			height: '20px'
+			height: '5%'
 		};
 		return <div style={style} id="questionTime"></div>;
 	}
@@ -462,13 +516,35 @@ const GameTimer = React.createClass({
 });
 
 const Rock = React.createClass({
-	render() {
-		const style = {
-			top: this.props.y,
-			left: this.props.x,
-			width: '5em'
+	getInitialState() {
+		return {
+			x: null,
+			height: null
 		};
-		return <img src = "img/rock.svg" style = {style}></img>;
+	},
+
+	componentDidMount() {
+		this.setState({
+			width: this.refs.rock.offsetWidth,
+			parentWidth: this.refs.rock.parentElement.clientWidth,
+			height: this.refs.rock.offsetHeight
+		});
+	},
+
+	render() {
+		let x;
+		if (this.state.width) {
+			x = this.state.parentWidth / 2 - this.state.width / 2;
+		}
+		const style = {
+			transform: `translate(${x}px, ${this.props.y}px)`,
+			width: '10%'
+		};
+		return (
+			<div style = {style} ref = "rock">
+				<img src = "img/rock.svg" ></img>
+			</div>
+		);
 	}
 	// rock slowly approaches
 });
