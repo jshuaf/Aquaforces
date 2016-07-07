@@ -1,4 +1,3 @@
-'use strict';
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error'),

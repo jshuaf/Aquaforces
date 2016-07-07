@@ -1,5 +1,3 @@
-'use strict';
-
 const ws = require('ws');
 let games = {};
 
@@ -39,7 +37,7 @@ module.exports = (server) => {
 				}
 			});
 
-			//MARK: challenge questions?
+			// MARK: challenge questions?
 			ttws.trysend({
 				event: 'whirlpoolQuestion',
 				question: tws.addNewQuestion()
@@ -178,7 +176,7 @@ module.exports = (server) => {
 							if (!m.answer) return tws.error('No answer text sent.');
 							const crew = tws.crew();
 
-							//fuzzy answer checking
+							// fuzzy answer checking
 							crew.recentCorrectAnswers.forEach((pastAnswer) => {
 								if (pastAnswer.time < maxFuzzyTime) {
 									if (pastAnswer.text == m.answer) {
@@ -217,7 +215,7 @@ module.exports = (server) => {
 								}
 							});
 							if (!correspondingQuestion) {
-								//incorrect answers
+								// incorrect answers
 								tws.sendAnswerEvent(false, m.crewNumber);
 								tws.crew().streak = 0;
 							}
@@ -305,8 +303,8 @@ module.exports = (server) => {
 								hasStarted: false
 							};
 
-							//generate random math questions
-							//MARK: pull data from database
+							// generate random math questions
+							// MARK: pull data from database
 							for (let i = 0; i < 100; i++) {
 								games[id].questions.push({
 									text: 'What\'s ' + i + ' + ' + i + '?',
@@ -420,7 +418,7 @@ module.exports = (server) => {
 			}
 
 			case '/console/': {
-				//MARK: console sockets
+				// MARK: console sockets
 				break;
 			}
 
