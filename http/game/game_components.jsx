@@ -144,7 +144,7 @@ const Game = React.createClass({
 		// MARK: incorrect answer animation
 		this.setState((previousState, previousProps) => (
 			{
-				canoeHP: previousState.canoeHP - 5
+				canoeHP: previousState.canoeHP - 10
 			}
 		));
 	},
@@ -383,8 +383,23 @@ const Canoe = React.createClass({
 
 	render() {
 		// shake 0.82s cubic-bezier(.36,.07,.19,.97) both
+		const hp = this.props.hp;
+		let image = "../img/boats-top";
 
-		const image = "../img/canoetop.svg";
+		if (hp > 50) {
+			image += "/canoe-100";
+		} else if (hp > 25) {
+			image += "/canoe-50";
+		} else if (hp > 10) {
+			image += "/canoe-25";
+		} else if (hp > 0) {
+			image += "/canoe-10";
+		} else if (hp <= 0) {
+			image += "/rafts";
+		}
+
+		image += "/4-members.svg";
+
 		const style = {
 			width: '25%',
 			transform: `translate(${0}px, ${window.innerHeight / 3.5}px)`
