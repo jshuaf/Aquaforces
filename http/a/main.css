@@ -187,7 +187,7 @@ li[data-n='1'] { color: #f22 }
 ul.studentselect > li { cursor: pointer }
 ul.studentselect > li:hover { text-decoration: line-through }
 .left-align { text-align: left }
-.left-align button { margin: 1em }
+.left-align button { margin: 1em 0 0 }
 .studentselect, .leaderboard {
 	text-align: left;
 	font-size: 1.5em;

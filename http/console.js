@@ -1,7 +1,8 @@
 'use strict';
-document.getElementById('new-qset-btn').addEventListener('click', function() {
-	document.getElementById('new-qset').classList.remove('hide');
-	document.getElementById('qset-title').focus();
+document.getElementById('new-qset-summary').addEventListener('click', function() {
+	if (!this.parentNode.open) requestAnimationFrame(function() {
+		document.getElementById('qset-title').focus();
+	});
 });
 function inputRemove() {
 	if (!this.value) this.parentNode.parentNode.removeChild(this.parentNode);

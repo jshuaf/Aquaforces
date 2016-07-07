@@ -43,3 +43,9 @@ html.hostgame {
 	height: 100%;
 }
 .validating :invalid { border: 2px solid #f00 }
+#new-qset-summary { font-size: 1.5em }
+#new-qset-summary h2 {
+	display: inline;
+	font-size: 1em;
+}
+[open] > #new-qset-summary { margin-bottom: 1em }
