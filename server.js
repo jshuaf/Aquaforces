@@ -20,6 +20,7 @@ const http = require('http'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient;
 let statics = JSON.parse(fs.readFileSync('./statics.json'));
+const apiServer = require('./api.js');
 global.errorForbidden = function(req, res, msg) {
 	respondPage('403', req, res, o(function*() {
 		res.write('<h1>Error 403</h1>');
@@ -59,6 +60,25 @@ let serverHandler = o(function*(req, res) {
 		yield respondPage(i.title, req, res, yield, {inhead: i.inhead});
 		res.write((yield addVersionNonces((yield fs.readFile(i.path, yield)).toString(), req.url.pathname, yield)));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
+	} else if (req.url.pathname.substr(0, 5) == '/api/') {
+		req.url.pathname = req.url.pathname.substr(4);
+		if (req.method != 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
+		if (url.parse(req.headers.referer || '').host != req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
+		let post = '';
+		req.on('data', function(data) {
+			if (req.abort) return;
+			post += data;
+			if (post.length > 1e6) {
+				res.writeHead(413);
+				res.end('Error: Request entity too large.');
+				req.abort = true;
+			}
+		});
+		req.on('end', function() {
+			if (req.abort) return;
+			post = querystring.parse(post);
+			apiServer(req, res, post);
+		});
 	} else if (req.url.pathname.includes('.')) {
 		let stats;
 		try {
@@ -97,6 +117,17 @@ let serverHandler = o(function*(req, res) {
 					updated: stats.mtime
 				};
 			}
+		} else if (req.url.pathname == '/host/') {
+			yield respondPage('Host', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
+			var qsetstr = '';
+			dbcs.qsets.find({}, {title: true}).each(o(function*(err, qset) {
+				if (err) throw err;
+				if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
+				else {
+					res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
+					res.end(yield fs.readFile('./html/a/foot.html', yield));
+				}
+			}));
 		} else {
 			let data;
 			try {
