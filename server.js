@@ -162,7 +162,7 @@ let serverHandler = o(function*(req, res) {
 		dbcs.qsets.find().sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
-				qsetstr += '<details class="qset"><summary><h2>' + html(qset.title) + '</h2></summary><ol>';
+				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
 				qset.questions.forEach(function(question) {
 					qsetstr += '<li><h3>Question: ' + question.text + '</h3><p>Answer: ' + question.answer + '</p><p>Wrong answers:</p><ul>';
 					question.incorrectAnswers.forEach(function(answer) {

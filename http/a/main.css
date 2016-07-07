@@ -13,6 +13,10 @@ html {
 html.pregamescreen { background-image: url('/img/background.svg') }
 body { margin: 0 }
 html, body, main, #progress, #cont { height: 100% }
+@keyframes target {
+	0%, 30% { background: #f70 }
+}
+:target { animation: target 1s }
 @keyframes flash-red {
 	0% { background: #f00 }
 }

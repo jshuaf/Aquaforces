@@ -54,8 +54,9 @@ newQSet.addEventListener('submit', function(e) {
 		newQSet.classList.remove('validating');
 		if (res.indexOf('Error') == 0) {
 			alert(res);
-		} else if (res == 'Success') {
+		} else {
 			var details = document.createElement('details');
+			details.id = 'qset-' + res;
 			details.className = 'qset';
 			details.appendChild(document.createElement('summary'));
 			details.lastChild.appendChild(document.createElement('h2'));
@@ -81,8 +82,6 @@ newQSet.addEventListener('submit', function(e) {
 			newQSet.removeChild(newQSet.firstElementChild);
 			newQSet.appendChild(protoDetails.cloneNode(true));
 			bindListeners();
-		} else {
-			alert('Unknown error. Response was: ' + res);
 		}
 	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)));
 });
