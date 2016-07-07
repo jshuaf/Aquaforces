@@ -163,6 +163,7 @@ span[.clickable]:hover {
 	font-weight: bold;
 	font-size: 100px;
 	background-color: #e74c3c;
+	border:none;
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
 	text-align:center;
 }
@@ -170,6 +171,12 @@ span[.clickable]:hover {
 	color: white;
 	background-color: #f75c4c;
 }
+.whirlpool-button {
+	color: white;
+	background-color: #6AC46A;
+	width: 20%;
+}
+
 /*
 The below is code from Brian
 * {
