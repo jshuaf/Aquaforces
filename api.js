@@ -1,3 +1,4 @@
+'use strict';
 module.exports = function(req, res, post) {
 	if (req.url.pathname == '/new-qset') {
 		if (!post.name) return res.writeHead(400) || res.end('Set name is required.');
@@ -27,13 +28,14 @@ module.exports = function(req, res, post) {
 				incorrectAnswers: q.incorrectAnswers
 			});
 		}
+		const qsetID = generateID();
 		dbcs.qsets.insert({
-			_id: generateID(),
+			_id: qsetID,
 			title: post.name,
-			questions
+			questions,
+			timeAdded: new Date().getTime()
 		});
-		res.writeHead(204);
-		res.end();
+		res.end(qsetID);
 	} else {
 		res.writeHead(404);
 		res.end('The API feature requested has not been implemented.');

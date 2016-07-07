@@ -4,7 +4,6 @@ module.exports = {
 		"node": true,
 		"es6": true
 	},
-	"parser": "babel-eslint",
 	"rules": {
 		"comma-dangle": ["error"],
 		"no-debugger": ["error"],
@@ -108,7 +107,7 @@ module.exports = {
 		"space-in-parens": ["error"],
 		"space-infix-ops": ["error"],
 		"space-unary-ops": ["error", {"words": false}],
-		"spaced-comment": ["error", "always"],
+		"spaced-comment": ["error", "never"],
 		"arrow-body-style": ["error"],
 		"arrow-spacing": ["error"],
 		"constructor-super": ["error"],
