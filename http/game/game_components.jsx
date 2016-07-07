@@ -144,7 +144,7 @@ const Game = React.createClass({
 		// MARK: incorrect answer animation
 		this.setState((previousState, previousProps) => (
 			{
-				canoeHP: previousState.canoeHP - 10
+				canoeHP: previousState.canoeHP - 5
 			}
 		));
 	},
