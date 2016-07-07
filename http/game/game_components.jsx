@@ -200,7 +200,14 @@ const Game = React.createClass({
 				);
 			}
 		}
-		console.log(whirlpoolValue);
+		if (this.state.whirlpool) {
+			return (
+				<div className="container" hidden={this.state.gameFinished}>
+					<div>{whirlpoolValue}</div>
+				</div>
+			);
+		}
+		else {
 		return (
 			<div className="container" hidden={this.state.gameFinished}>
 				<div>{whirlpoolValue}</div>
@@ -219,6 +226,7 @@ const Game = React.createClass({
 					answersDisplayed={this.state.answers} />
       </div>
     );
+	}
 	}
 });
 
