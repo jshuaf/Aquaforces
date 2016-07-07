@@ -13,6 +13,10 @@ html {
 html.pregamescreen { background-image: url('/img/background.svg') }
 body { margin: 0 }
 html, body, main, #progress, #cont { height: 100% }
+@keyframes target {
+	0%, 30% { background: #f70 }
+}
+:target { animation: target 1s }
 @keyframes flash-red {
 	0% { background: #f00 }
 }
@@ -52,9 +56,8 @@ label {
 input {
 	font-size: 1.1em;
 	margin-left: 0.5ch;
-	flex-basis: 0;
-	flex-grow: 1;
 }
+label input:not([min]) { width: 200% }
 @media (max-width: 499px) {
 	.pregamescreen form { padding: 0 0.5em }
 	.pregamescreen form, .centerbox { width: 100% }
@@ -64,8 +67,7 @@ input {
 	.pregamescreen form { padding: 0 10% }
 }
 @media (min-height: 32em) and (pointer: fine) {
-	html { overflow: hidden }
-	.pregamescreen body { margin-top: 50vh }
+	.pregamescreen #cont { margin-top: 50vh }
 	.pregamescreen form { transform: translateY(-50%) }
 }
 form:not([hidden]) {
@@ -188,7 +190,7 @@ li[data-n='1'] { color: #f22 }
 ul.studentselect > li { cursor: pointer }
 ul.studentselect > li:hover { text-decoration: line-through }
 .left-align { text-align: left }
-.left-align button { margin: 1em }
+.left-align button { margin: 1em 0 0 }
 .studentselect, .leaderboard {
 	text-align: left;
 	font-size: 1.5em;
