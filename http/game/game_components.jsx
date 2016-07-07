@@ -59,7 +59,7 @@ const Game = React.createClass({
 			this.setState({
 				answers: currentAnswers
 			});
-		}, 2000);
+		}, 8000);
 	},
 
 	answerSelected(answerText) {
@@ -402,11 +402,16 @@ const River = React.createClass({
 		this.props.rockAnimationData(riverTopPosition, canoeTopPosition, canoeHeight, rockHeight);
 	},
 
+	// make answers avoid the canoe
+	// left boundary:
+	// 0 < x < canoe.left - river.left - span.width
+	// right boundary:
+	// canoe.right - river.left < x < river.right - river.left - span.width
 	render() {
 		return (
 			<div className={"river" + this.props.flashClass} ref = "river">
 				<div className="answers">
-					{this.props.answersDisplayed}
+					<span></span>
 						<Rock
 							y = {this.props.rockYPosition}
 							ref = "rock"
