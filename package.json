@@ -15,6 +15,10 @@
     "type": "git",
     "url": "https://github.com/bjb568/bonio-intern"
   },
+  "engines": {
+    "node": "6.2.2",
+    "npm": "3.10.3"
+  },
   "dependencies": {
     "colors": "^1.1.2",
     "yield-yield": "^1.0.1",
