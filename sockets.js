@@ -29,7 +29,7 @@ module.exports = (server) => {
 		tws.randomCrewMember = () => tws.crew().members[Math.floor(Math.random() * tws.crew().members.length)];
 
 		tws.addWhirlpool = () => {
-			tws.crew().whirlpool = {present: true, question: null};
+			tws.crew().whirlpool = {present: true, question: null, taps: 0};
 			tws.crew().whirlpool.question = tws.generateNewQuestion();
 			const ttws = tws.randomCrewMember();
 			tws.crew().whirlpool.stressedPerson = ttws;
@@ -260,9 +260,13 @@ module.exports = (server) => {
 
 						case 'whirlpoolFiveTapsDetected':
 							tws.crew().whirlpool.taps += 5;
+							console.log({
+								event: 'whirlpoolBonusReceived',
+								amount: tws.crew().whirlpool.taps * 1000 / 2 / 5
+							});
 							tws.crew().whirlpool.stressedPerson.trysend({
 								event: 'whirlpoolBonusReceived',
-								amount: tws.crew().whirlpool.taps * 1000 / 2
+								amount: tws.crew().whirlpool.taps * 1000 / 2 / 5
 							});
 							break;
 
