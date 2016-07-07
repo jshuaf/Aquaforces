@@ -21,7 +21,9 @@ const Game = React.createClass({
 			},
 			whirlpool: false,
 			whirlpoolType: 'Free',
-			whirlpoolQuestion: {}
+			whirlpoolQuestion: {},
+			whirlpoolQuestionBar: null,
+			whirlpoolBonus: 0
 		};
 	},
 
@@ -78,7 +80,8 @@ const Game = React.createClass({
 		this.setState({
 			whirlpool: true,
 			whirlpoolType: 'Question',
-			whirlpoolQuestion: question
+			whirlpoolQuestion: question,
+			whirlpoolQuestionTimebar: <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} ref="whirlpoolTimebar" keepRunning={this.state.whirlpool}></QuestionTimebar>
 		});
 	},
 
@@ -168,6 +171,13 @@ const Game = React.createClass({
 		});
 	},
 
+	whirlpoolQuestionTimeout() {
+		this.props.socket.send(JSON.stringify({
+			event: 'whirlpoolQuestionTimeout',
+			crewNumber: this.props.crewNumber
+		}));
+	},
+
 	questionTimeout() {
 		this.props.socket.send(JSON.stringify({
 			event: 'questionTimeout',
@@ -184,7 +194,9 @@ const Game = React.createClass({
 				whirlpoolValue = <WhirlpoolFree />;
 			}
 			else {
-				whirlpoolValue = <WhirlpoolQuestion question = {this.state.whirlpoolQuestion} />;
+				whirlpoolValue = (
+					<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.whirlpoolQuestionTimebar} />
+				);
 			}
 		}
 		console.log(whirlpoolValue);
@@ -449,7 +461,7 @@ const WhirlpoolFree = React.createClass({
 		this.setState({tapStreak: this.state.tapStreak + 1});
 		if (this.state.tapStreak == 5) {
 			socket.trysend(JSON.stringify({
-				event: 'fiveTapsDetected'
+				event: 'whirlpoolFiveTapsDetected'
 			}));
 			this.setState({tapStreak: 0});
 		}
@@ -489,17 +501,16 @@ const WhirlpoolQuestion = React.createClass({
 	render() {
 		let answers = preprocessAnswers;
 		return (
-			<div className="modal modal-active whirlpool">
-				<div className="container">
-					<div className="row">
-						<div className="twelve columns">
-							<h1><strong>Challenge</strong></h1>
-							<h4 className="whirlpool-question">{this.props.question.text}</h4>
-							answers.map(function(answer){
-								<button className="whirlpool-button" onClick={this.processAnswer.bind(this, answer)}>{answer}</button>
-							})
-						</div>
-					</div>
+			<div className="modal modal-active whirlpool panel-group">
+				<div className="panel-top">
+					<h1><strong>Challenge</strong></h1>
+					<h4 className="whirlpool-question">{this.props.question.text}</h4>
+				</div>
+				{this.props.timebar}
+				<div>
+					answers.map(function(answer){
+						<button className="whirlpool-button" onClick={this.processAnswer.bind(this, answer)}>{answer}</button>
+					})
 				</div>
 			</div>
 		);

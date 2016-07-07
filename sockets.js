@@ -29,9 +29,10 @@ module.exports = (server) => {
 		tws.randomCrewMember = () => tws.crew().members[Math.floor(Math.random() * tws.crew().members.length)];
 
 		tws.addWhirlpool = () => {
-			tws.whirlpool = {present: true, question: null};
-			tws.whirlpool.question = tws.generateNewQuestion();
+			tws.crew().whirlpool = {present: true, question: null};
+			tws.crew().whirlpool.question = tws.generateNewQuestion();
 			const ttws = tws.randomCrewMember();
+			tws.crew().whirlpool.stressedPerson = ttws;
 			tws.crew().forEach(crewMember, () => {
 				if (crewMember != ttws) {
 					crewMember.trysend({event: 'whirlpoolAhead'});
@@ -41,12 +42,12 @@ module.exports = (server) => {
 			// MARK: challenge questions?
 			ttws.trysend({
 				event: 'whirlpoolQuestion',
-				question: tws.whirlpool.question
+				question: tws.crew().whirlpool.question
 			});
 		};
 
 		tws.addRock = () => {
-			if (tws.whirlpool.present) {
+			if (tws.crew().whirlpool.present) {
 				return;
 			}
 			tws.rock = true;
@@ -257,9 +258,17 @@ module.exports = (server) => {
 							break;
 						}
 
+						case 'whirlpoolFiveTapsDetected':
+							tws.crew().whirlpool.taps += 5;
+							tws.crew().whirlpool.stressedPerson.trysend({
+								event: 'whirlpoolBonusReceived',
+								amount: tws.crew().whirlpool.taps * 1000 / 2
+							});
+							break;
+
 						case 'whirlpoolAnswerSelected': {
-							if (m.answer == tws.whirlpool.question.correctAnswer) {
-								tws.whirlpool = {present: false, question: null};
+							if (m.answer == tws.crew().whirlpool.question.correctAnswer) {
+								tws.crew().whirlpool = {present: false, question: null};
 								tws.trysend({event: 'whirlpoolConclusion'});
 							}
 							break;
