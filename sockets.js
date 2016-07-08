@@ -258,11 +258,14 @@ module.exports = (server) => {
 
 						case 'answerPassedThreshold': {
 							const answerToResend = m.answer;
-							crew = tws.game.crews[m.crewNumber];
-							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-							ttws.trysend({
-								event: 'correctAnswer',
-								answer: answerToResend
+							tws.crew().activeQuestions.forEach((activeQuestion) => {
+								if (activeQuestion.answer == answerToResend) {
+									ttws = tws.randomCrewMember();
+									return ttws.trysend({
+										event: 'correctAnswer',
+										answer: answerToResend
+									});
+								}
 							});
 							break;
 						}
@@ -278,6 +281,9 @@ module.exports = (server) => {
 							event: 'removeUser',
 							user: tws.user
 						});
+						const index = tws.game.users.indexOf(tws);
+						tws.game.users.splice(index, 1);
+						tws.game.usernames.splice(index, 1);
 					}
 				});
 				break;
