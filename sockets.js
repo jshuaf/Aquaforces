@@ -370,8 +370,15 @@ module.exports = (server) => {
 								else if (crew.members.length > 4) return tws.error('Maximum four people in every crew.');
 							});
 							tws.game.hasStarted = true;
-							tws.game.users.forEach((ttws) => {
-								ttws.trysend({event: 'startGame', answers: tws.game.answers});
+							tws.game.crews.forEach((crew) => {
+								const crewSize = crew.length;
+								crew.members.forEach((ttws) => {
+									ttws.trysend({
+										event: 'startGame',
+										answers: tws.game.answers,
+										crewSize
+									});
+								});
 							});
 							tws.trysend({
 								event: 'startGame'

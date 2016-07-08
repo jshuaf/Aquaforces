@@ -68,6 +68,7 @@ socket.onmessage = function(m) {
 		game = ReactDOM.render(<Game
   socket={socket} username={username}
   crewNumber={crewNumber} initialAnswers={m.answers}
+	crewSize={m.crewSize}
   />,
 			document.getElementById('mountNode'));
 		break;

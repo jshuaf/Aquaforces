@@ -268,6 +268,7 @@ const Game = React.createClass({
 					rockAnimationData = {this.rockAnimationData}
 					flashClass = {this.state.flashClass}
 					canoeHP = {this.state.canoeHP}
+					crewSize = {this.props.crewSize}
 				/>
       </div>
     );
@@ -398,7 +399,7 @@ const Canoe = React.createClass({
 			image += "/rafts";
 		}
 
-		image += "/4-members.svg";
+		image += `/${this.props.crewSize}-members.svg`;
 
 		const style = {
 			width: '25%',
@@ -433,7 +434,9 @@ const River = React.createClass({
 							y = {this.props.rockYPosition}
 							ref = "rock"
 						/>
-					<Canoe initialImage = {this.props.initialImage} ref = "canoe" hp = {this.props.canoeHP}/>
+					<Canoe initialImage = {this.props.initialImage}
+						ref = "canoe" hp = {this.props.canoeHP} crewSize = {this.props.crewSize}
+					/>
 				</div>
 			</div>
 		);
