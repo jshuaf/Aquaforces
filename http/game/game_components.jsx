@@ -8,19 +8,10 @@ const Game = React.createClass({
 			questionStartTime: null,
 			// Question
 			questionText: null,
-			// Answer
-			answers: [],
-			answersToAdd: [],
-			answerData: this.props.initialAnswers,
-			answerPositions: {},
 			// Canoe
 			canoeHP: 100,
 			canoeTopPosition: null,
 			canoeHeight: null,
-			canoeBounds: {
-				left: 0.48,
-				right: 0.52
-			},
 			// River
 			riverTopPosition: null,
 			flashClass: "",
@@ -33,30 +24,6 @@ const Game = React.createClass({
 			// Whirlpool
 			whirlpool: false
 		};
-	},
-
-	componentWillMount() {
-		setInterval(() => {
-			const currentAnswers = this.state.answers;
-			const answersToAdd = this.state.answersToAdd;
-			if (answersToAdd.length > 0) {
-				currentAnswers.push(this.generateAnswerComponent(answersToAdd.shift()));
-				this.setState({answersToAdd});
-			} else {
-				let randomData = this.state.answerData[Math.floor(
-					Math.random() * this.state.answerData.length)];
-				let answerComponent = this.generateAnswerComponent(randomData);
-				while (answerComponent in currentAnswers) {
-					randomData = this.state.answerData[Math.floor(
-						Math.random() * this.state.answerData.length)];
-						answerComponent = this.generateAnswerComponent(randomData);
-				}
-				currentAnswers.push(answerComponent);
-			}
-			this.setState({
-				answers: currentAnswers
-			});
-		}, 2000);
 	},
 
 	answerSelected(answerText) {
@@ -80,64 +47,19 @@ const Game = React.createClass({
 		});
 	},
 
-	generateAnswerComponent(answer) {
-		return (<Answer
-			text={answer}
-			onClick={this.answerSelected.bind(this, answer)}
-			passedThreshold={this.answerPassedThreshold}
-			initialX={this.generateAnswerPosition()}
-			canoeBounds={this.state.canoeBounds}
-			keepRunning={!this.state.whirlpool}
-		/>);
-	},
-
 	answerPassedThreshold(answerText) {
 		this.props.socket.send(JSON.stringify({
 			event: 'answerPassedThreshold',
 			answer: answerText,
 			crewNumber: this.props.crewNumber
 		}));
-		let currentAnswers = this.state.answers;
-		for (let answerComponent in currentAnswers) {
-			if (answerComponent.props.text == answerText) {
-				currentAnswers.splice(answerComponent, 1);
-				break;
-			}
-		}
-		this.setState({answers: currentAnswers});
 	},
 
-	generateAnswerPosition() {
-		const answerSpawnLeftBoundary = innerWidth * -0.1;
-		const answerSpawnRightBoundary = innerWidth * 0.65;
-		let newLeftBound = answerSpawnLeftBoundary;
-		let newRightBound = answerSpawnRightBoundary;
-		let currentXPositions = [];
-		let currentMaximumGap = 0;
-		for (let i = 0; i < 2; i++) {
-			const oneOfTopmostAnswers = this.state.answers.slice().reverse()[i];
-			if (oneOfTopmostAnswers) {
-				currentXPositions.push(oneOfTopmostAnswers.props.initialX);
-			}
-		}
-
-		function sortAscending(a, b) {
-			return a - b;
-		}
-
-		currentXPositions = [newLeftBound].concat(currentXPositions.sort(sortAscending))
-			.concat([newRightBound]).sort(sortAscending);
-		for (let i = 1; i < currentXPositions.length; i++) {
-			const currentGap = currentXPositions[i] - currentXPositions[i - 1];
-			if (currentGap > currentMaximumGap) {
-				currentMaximumGap = currentGap;
-				newLeftBound = currentXPositions[i - 1];
-				newRightBound = currentXPositions[i];
-			}
-		}
-		newLeftBound += currentMaximumGap * 0.25;
-		newRightBound -= currentMaximumGap * 0.25;
-		return newLeftBound + Math.random() * (newRightBound - newLeftBound);
+	newQuestion(question) {
+		this.setState({
+			questionText: question
+		});
+		this.refs.questionTimebar.reset();
 	},
 
 	correctAnswer() {
@@ -154,29 +76,9 @@ const Game = React.createClass({
 		));
 	},
 
-	newQuestion(question) {
-		this.setState({
-			questionText: question
-		});
-		this.refs.questionTimebar.reset();
-	},
-
 	addCorrectAnswer(answer) {
 		// add a random number of wrong answers before correct answer
-
-		const oldAnswersToAdd = this.state.answersToAdd;
-		const incorrectAnswers = [];
-		const incorrectAnswersToAdd = Math.floor(Math.random() * 2);
-		for (let i = 0; i < incorrectAnswersToAdd; i++) {
-			const randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
-			incorrectAnswers.push(randomData);
-		}
-		const currentAnswersToAdd = oldAnswersToAdd.concat(incorrectAnswers);
-		currentAnswersToAdd.push(answer);
-
-		this.setState({
-			answersToAdd: currentAnswersToAdd
-		});
+		this.refs.river.addCorrectAnswer(answer);
 	},
 
 	questionTimeout() {
@@ -263,11 +165,13 @@ const Game = React.createClass({
 						<Question text={this.state.questionText} />
 					</div>
 					<div className="panel-bottom">
-						<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={10000} ref="questionTimebar" keepRunning={!this.state.whirlpool}></QuestionTimebar>
+						<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={20000} ref="questionTimebar" keepRunning={!this.state.whirlpool}></QuestionTimebar>
 					</div>
 				</div>
-				<River
-					answersDisplayed={this.state.answers}
+				<River ref = "river"
+					initialAnswers = {this.props.initialAnswers}
+					answerSelected = {this.answerSelected}
+					answerPassedThreshold = {this.answerPassedThreshold}
 					rock={this.state.rock}
 					rockYPosition = {this.state.rockYPosition}
 					rockAnimationData = {this.rockAnimationData}
@@ -286,7 +190,7 @@ const Answer = React.createClass({
 		let vy = (Math.random() - 0.5) / 150 + innerHeight / 15000;
 		return {
 			position: {
-				x: this.props.initialX,
+				x: this.props.generateAnswerPosition(),
 				y: initialY
 			},
 			velocity: {
@@ -325,11 +229,12 @@ const Answer = React.createClass({
 		positionX += (velocityX) * dt;
 		positionY += (velocityY) * dt;
 
-		if (positionY > window.innerHeight) {
+		if (positionY > this.props.riverBottomBound && !(this.state.passedThreshold)) {
+			console.log(this.props.text);
 			this.setState({
 				passedThreshold: true
 			}, () => {
-				this.props.passedThreshold(this.props.text);
+				this.props.answerPassedThreshold(this.props.text);
 			});
 		}
 
@@ -355,7 +260,7 @@ const Answer = React.createClass({
 		this.setState({
 			disappeared: true
 		});
-		this.props.onClick();
+		this.props.onClick(this.props.text);
 	},
 
 	animate(timestamp) {
@@ -425,32 +330,133 @@ const River = React.createClass({
 	getInitialState() {
 		return {
 			// Canoe
-			canoeHeight: null
+			canoeHeight: null,
+			canoeBounds: {
+				left: 0.42,
+				right: 0.58
+			},
+			// Answers
+			answers: [],
+			answersToAdd: [],
+			answerData: this.props.initialAnswers,
+			initialAnswerXPositions: []
 		};
+	},
+
+	answerPassedThreshold(answerText) {
+			this.props.answerPassedThreshold(answerText);
+			let currentAnswers = this.state.answers;
+			for (let i = 0; i < currentAnswers.length; i++) {
+				const currentAnswer = currentAnswers[i];
+				if (currentAnswer == answerText) {
+					currentAnswers.splice(i, 1);
+					break;
+				}
+			}
+			this.setState({answers: currentAnswers});
+	},
+
+	addNewAnswer() {
+		const currentAnswers = this.state.answers;
+		const answersToAdd = this.state.answersToAdd;
+		if (answersToAdd.length > 0) {
+			currentAnswers.push(answersToAdd.shift());
+			this.setState({answersToAdd});
+		} else {
+			let randomData = this.state.answerData[Math.floor(
+				Math.random() * this.state.answerData.length)];
+			while (randomData in currentAnswers) {
+				randomData = this.state.answerData[Math.floor(
+					Math.random() * this.state.answerData.length)];
+			}
+			currentAnswers.push(randomData);
+		}
+		this.setState({
+			answers: currentAnswers
+		});
 	},
 
 	componentDidMount() {
 		const riverTopPosition = this.refs.river.getBoundingClientRect().top;
-		const canoeTopPosition = ReactDOM.findDOMNode(this.refs.canoe).getBoundingClientRect().top;
+		const riverBottomPosition = this.refs.river.getBoundingClientRect().bottom;
+		const canoe = ReactDOM.findDOMNode(this.refs.canoe);
+		const canoeTopPosition = canoe.getBoundingClientRect().top;
+		const canoeLeftPosition = canoe.getBoundingClientRect().left;
+		const canoeRightPosition = canoe.getBoundingClientRect().right;
 		const canoeHeight = ReactDOM.findDOMNode(this.refs.canoe).offsetHeight;
 		const rockHeight = ReactDOM.findDOMNode(this.refs.rock).offsetHeight;
 		this.props.rockAnimationData(riverTopPosition, canoeTopPosition, canoeHeight, rockHeight);
+		this.setState({
+			canoeBounds: {
+				left: canoeLeftPosition,
+				right: canoeRightPosition
+			},
+			bottomBound: riverBottomPosition
+		});
+		this.addNewAnswer();
+		setInterval(this.addNewAnswer, 2000);
+	},
+
+	generateAnswerPosition() {
+		const answerSpawnLeftBoundary = innerWidth * -0.1;
+		const answerSpawnRightBoundary = innerWidth * 0.65;
+		let newLeftBound = answerSpawnLeftBoundary;
+		let newRightBound = answerSpawnRightBoundary;
+		let topmostXPositions = this.state.initialAnswerXPositions.slice().reverse().slice(0, 2);
+		let initialXPositions = this.state.initialAnswerXPositions;
+		let currentMaximumGap = 0;
+
+		function sortAscending(a, b) {return a - b;}
+
+		let currentXPositions = [newLeftBound].concat(topmostXPositions.slice().sort(sortAscending))
+			.concat([newRightBound]).sort(sortAscending);
+		for (let i = 1; i < initialXPositions.length; i++) {
+			const currentGap = initialXPositions[i] - initialXPositions[i - 1];
+			if (currentGap > currentMaximumGap) {
+				currentMaximumGap = currentGap;
+				newLeftBound = currentXPositions[i - 1];
+				newRightBound = currentXPositions[i];
+			}
+		}
+		newLeftBound += currentMaximumGap * 0.25;
+		newRightBound -= currentMaximumGap * 0.25;
+		const newPosition = newLeftBound + Math.random() * (newRightBound - newLeftBound);
+		initialXPositions.push(newPosition);
+		this.setState({initialAnswerXPositions: initialXPositions});
+		return newPosition;
+	},
+
+	addCorrectAnswer(answer) {
+		const oldAnswersToAdd = this.state.answersToAdd;
+		const incorrectAnswers = [];
+		const incorrectAnswersToAdd = Math.floor(Math.random() * 2);
+		for (let i = 0; i < incorrectAnswersToAdd; i++) {
+			const randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
+			incorrectAnswers.push(randomData);
+		}
+		const currentAnswersToAdd = oldAnswersToAdd.concat(incorrectAnswers);
+		currentAnswersToAdd.push(answer);
+
+		this.setState({
+			answersToAdd: currentAnswersToAdd
+		});
 	},
 
 	render() {
 		return (
 			<div className={"river" + this.props.flashClass} ref = "river">
 				<div className="answers">
-					{this.props.answersDisplayed.map((answer) =>
+					{this.state.answers.map((answer) =>
 						<Answer
 							text={answer}
-							onClick={this.props.answerSelected(answer)}
-							passedThreshold={this.props.answerPassedThreshold}
-							initialX={this.generateAnswerPosition()}
-							canoeBounds={this.props.canoeBounds}
+							onClick={this.props.answerSelected}
+							answerPassedThreshold={this.props.answerPassedThreshold}
+							generateAnswerPosition={this.generateAnswerPosition}
+							riverBottomBound={this.state.bottomBound}
+							canoeBounds={this.state.canoeBounds}
 							keepRunning={!this.props.whirlpool}
 						/>
-					)}
+				)}
 						<Rock
 							y = {this.props.rockYPosition}
 							ref = "rock"
@@ -586,7 +592,7 @@ const Rock = React.createClass({
 		};
 		return (
 			<div style = {style} ref = "rock">
-				<img src = "img/rock.svg" ></img>
+				<img src = "img/obstacles/rock.svg" ></img>
 			</div>
 		);
 	}

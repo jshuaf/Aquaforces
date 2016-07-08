@@ -281,6 +281,9 @@ module.exports = (server) => {
 							event: 'removeUser',
 							user: tws.user
 						});
+						const index = tws.game.users.indexOf(tws);
+						tws.game.users.splice(index, 1);
+						tws.game.usernames.splice(index, 1);
 					}
 				});
 				break;
