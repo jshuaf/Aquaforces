@@ -69,11 +69,6 @@ const Game = React.createClass({
 
 	incorrectAnswer() {
 		// MARK: incorrect answer animation
-		this.setState((previousState, previousProps) => (
-			{
-				canoeHP: previousState.canoeHP - 5
-			}
-		));
 	},
 
 	addCorrectAnswer(answer) {
@@ -87,6 +82,10 @@ const Game = React.createClass({
 			crewNumber: this.props.crewNumber,
 			question: this.state.questionText
 		}));
+	},
+
+	updateHP(canoeHP) {
+		this.setState({canoeHP});
 	},
 
 	addRock(rockStartTime) {
@@ -403,7 +402,7 @@ const River = React.createClass({
 			bottomBound: riverBottomPosition
 		});
 		this.updateAnswers();
-		setInterval(this.updateAnswers, 5000);
+		setInterval(this.updateAnswers, 2500);
 	},
 
 	generateAnswerPosition() {

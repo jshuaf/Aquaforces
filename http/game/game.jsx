@@ -79,6 +79,9 @@ socket.onmessage = function(m) {
 			game.incorrectAnswer();
 		}
 		break;
+	case 'updateHP':
+		game.updateHP(m.hp);
+		break;
 	case 'addRock':
 		game.addRock(m.startTime);
 		break;

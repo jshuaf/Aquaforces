@@ -145,7 +145,8 @@ module.exports = (server) => {
 									streak: 0,
 									rock: false,
 									whirlpool: false,
-									activeQuestions: []
+									activeQuestions: [],
+									hp: 100
 								};
 							} else if (tws.game.crews[m.crewNumber].members.length >= 6) {
 								return tws.error('Crew cannot have more than 6 sailors.', 'crew');
@@ -216,8 +217,15 @@ module.exports = (server) => {
 							});
 							if (!correspondingQuestion) {
 								// incorrect answers
-								tws.sendAnswerEvent(false, m.crewNumber);
+								tws.crew().hp -= 5;
 								tws.crew().streak = 0;
+								tws.sendAnswerEvent(false, m.crewNumber);
+								tws.crew().members.forEach((member) => {
+									member.trysend({
+										event: 'updateHP',
+										hp: tws.crew().hp
+									});
+								});
 							}
 							break;
 						}
@@ -377,7 +385,7 @@ module.exports = (server) => {
 							});
 							tws.game.hasStarted = true;
 							tws.game.crews.forEach((crew) => {
-								const crewSize = crew.length;
+								const crewSize = crew.members.length;
 								crew.members.forEach((ttws) => {
 									ttws.trysend({
 										event: 'startGame',
