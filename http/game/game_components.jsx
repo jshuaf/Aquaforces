@@ -229,13 +229,9 @@ const Answer = React.createClass({
 		positionX += (velocityX) * dt;
 		positionY += (velocityY) * dt;
 
-		if (positionY > this.props.riverBottomBound && !(this.state.passedThreshold)) {
-			console.log(this.props.text);
-			this.setState({
-				passedThreshold: true
-			}, () => {
-				this.props.answerPassedThreshold(this.props.text);
-			});
+		if (positionY > this.props.riverBottomBound) {
+			this.props.answerPassedThreshold(this.props.text);
+			window.cancelAnimationFrame(this.state.positionAnimation);
 		}
 
 		this.setState({
@@ -251,8 +247,9 @@ const Answer = React.createClass({
 			startTime: currentTime,
 			lastAnimationTime: currentTime,
 			offsetWidth: this.refs.answer.offsetWidth
-		}, function() {
-			this.animate(new Date());
+		}, () => {
+			const positionAnimation = this.animate(new Date());
+			this.setState({positionAnimation});
 		});
 	},
 
@@ -266,7 +263,9 @@ const Answer = React.createClass({
 	animate(timestamp) {
 		if (this.props.keepRunning && !(this.state.passedThreshold)) {
 			this.setPosition();
-			window.requestAnimationFrame(this.animate);
+			this.setState({
+				positionAnimation: window.requestAnimationFrame(this.animate)
+			});
 		}
 	},
 
@@ -338,27 +337,36 @@ const River = React.createClass({
 			// Answers
 			answers: [],
 			answersToAdd: [],
+			answersToRemove: [],
 			answerData: this.props.initialAnswers,
 			initialAnswerXPositions: []
 		};
 	},
 
 	answerPassedThreshold(answerText) {
-			this.props.answerPassedThreshold(answerText);
-			let currentAnswers = this.state.answers;
-			for (let i = 0; i < currentAnswers.length; i++) {
-				const currentAnswer = currentAnswers[i];
-				if (currentAnswer == answerText) {
-					currentAnswers.splice(i, 1);
-					break;
-				}
-			}
-			this.setState({answers: currentAnswers});
+		this.props.answerPassedThreshold(answerText);
+		let answersToRemove = this.state.answersToRemove;
+		const removalIndex = answersToRemove.indexOf(answerText);
+		if (removalIndex <= -1) {
+			answersToRemove = answersToRemove.concat(answerText);
+		}
+		this.setState({answersToRemove});
 	},
 
-	addNewAnswer() {
+	updateAnswers() {
 		const currentAnswers = this.state.answers;
 		const answersToAdd = this.state.answersToAdd;
+		const answersToRemove = this.state.answersToRemove;
+		if (answersToRemove.length > 0) {
+			const removalIndex = currentAnswers.indexOf(answersToRemove.shift());
+			currentAnswers.splice(removalIndex, 1);
+			this.setState((previousState, previousProps) => (
+			{
+				answersToRemove: previousState.answersToRemove.splice(0, 1)
+			}
+		));
+		}
+
 		if (answersToAdd.length > 0) {
 			currentAnswers.push(answersToAdd.shift());
 			this.setState({answersToAdd});
@@ -393,8 +401,8 @@ const River = React.createClass({
 			},
 			bottomBound: riverBottomPosition
 		});
-		this.addNewAnswer();
-		setInterval(this.addNewAnswer, 2000);
+		this.updateAnswers();
+		setInterval(this.updateAnswers, 5000);
 	},
 
 	generateAnswerPosition() {
@@ -450,7 +458,7 @@ const River = React.createClass({
 						<Answer
 							text={answer}
 							onClick={this.props.answerSelected}
-							answerPassedThreshold={this.props.answerPassedThreshold}
+							answerPassedThreshold={this.answerPassedThreshold}
 							generateAnswerPosition={this.generateAnswerPosition}
 							riverBottomBound={this.state.bottomBound}
 							canoeBounds={this.state.canoeBounds}
