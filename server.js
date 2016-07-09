@@ -158,8 +158,6 @@ let serverHandler = o(function*(req, res) {
 	} else return errorNotFound(req, res);
 });
 console.log('Connecting to mongodb…'.cyan);
-let uri;
-
 mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
 	if (err) throw err;
 	let i = usedDBCs.length;
