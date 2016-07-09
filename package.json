@@ -28,9 +28,9 @@
     "uglify-js": "^2.6.4",
     "clean-css": "^3.4.18",
     "mongodb": "^2.1.18",
-		"babel-core": "^6.10.4"
+    "babel-core": "^6.10.4"
   },
   "devDependencies": {
-    "babel-eslint": "^6.1.0"
+    "babel-eslint": "^6.1.1"
   }
 }
