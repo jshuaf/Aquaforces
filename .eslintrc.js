@@ -70,7 +70,6 @@ module.exports = {
 		"no-mixed-requires": ["error"],
 		"no-new-require": ["error"],
 		"no-path-concat": ["error"],
-		"no-process-env": ["error"],
 		"array-bracket-spacing": ["error"],
 		"block-spacing": ["error", "never"],
 		"camelcase": ["error"],

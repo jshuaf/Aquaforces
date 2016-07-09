@@ -159,12 +159,8 @@ let serverHandler = o(function*(req, res) {
 });
 console.log('Connecting to mongodb…'.cyan);
 let uri;
-if(!process.env.MONGOLAB_URI)
-	uri = "mongodb://localhost:27017/DevDoodle";
-else {
-	uri = process.env.MONGOLAB_URI;
-}
-mongo.connect(uri, function(err, db) {
+
+mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
 	if (err) throw err;
 	let i = usedDBCs.length;
 	function handleCollection(err, collection) {
