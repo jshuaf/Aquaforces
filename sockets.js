@@ -145,7 +145,8 @@ module.exports = (server) => {
 									streak: 0,
 									rock: false,
 									whirlpool: false,
-									activeQuestions: []
+									activeQuestions: [],
+									hp: 100
 								};
 							} else if (tws.game.crews[m.crewNumber].members.length >= 6) {
 								return tws.error('Crew cannot have more than 6 sailors.', 'crew');
@@ -216,8 +217,15 @@ module.exports = (server) => {
 							});
 							if (!correspondingQuestion) {
 								// incorrect answers
-								tws.sendAnswerEvent(false, m.crewNumber);
+								tws.crew().hp -= 5;
 								tws.crew().streak = 0;
+								tws.sendAnswerEvent(false, m.crewNumber);
+								tws.crew().members.forEach((member) => {
+									member.trysend({
+										event: 'updateHP',
+										hp: tws.crew().hp
+									});
+								});
 							}
 							break;
 						}
@@ -258,11 +266,14 @@ module.exports = (server) => {
 
 						case 'answerPassedThreshold': {
 							const answerToResend = m.answer;
-							crew = tws.game.crews[m.crewNumber];
-							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-							ttws.trysend({
-								event: 'correctAnswer',
-								answer: answerToResend
+							tws.crew().activeQuestions.forEach((activeQuestion) => {
+								if (activeQuestion.answer == answerToResend) {
+									ttws = tws.randomCrewMember();
+									return ttws.trysend({
+										event: 'correctAnswer',
+										answer: answerToResend
+									});
+								}
 							});
 							break;
 						}
@@ -278,6 +289,9 @@ module.exports = (server) => {
 							event: 'removeUser',
 							user: tws.user
 						});
+						const index = tws.game.users.indexOf(tws);
+						tws.game.users.splice(index, 1);
+						tws.game.usernames.splice(index, 1);
 					}
 				});
 				break;
@@ -370,8 +384,15 @@ module.exports = (server) => {
 								else if (crew.members.length > 4) return tws.error('Maximum four people in every crew.');
 							});
 							tws.game.hasStarted = true;
-							tws.game.users.forEach((ttws) => {
-								ttws.trysend({event: 'startGame', answers: tws.game.answers});
+							tws.game.crews.forEach((crew) => {
+								const crewSize = crew.members.length;
+								crew.members.forEach((ttws) => {
+									ttws.trysend({
+										event: 'startGame',
+										answers: tws.game.answers,
+										crewSize
+									});
+								});
 							});
 							tws.trysend({
 								event: 'startGame'
