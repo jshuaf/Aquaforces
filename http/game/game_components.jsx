@@ -69,11 +69,6 @@ const Game = React.createClass({
 
 	incorrectAnswer() {
 		// MARK: incorrect answer animation
-		this.setState((previousState, previousProps) => (
-			{
-				canoeHP: previousState.canoeHP - 5
-			}
-		));
 	},
 
 	addCorrectAnswer(answer) {
@@ -87,6 +82,10 @@ const Game = React.createClass({
 			crewNumber: this.props.crewNumber,
 			question: this.state.questionText
 		}));
+	},
+
+	updateHP(canoeHP) {
+		this.setState({canoeHP});
 	},
 
 	addRock(rockStartTime) {
@@ -177,6 +176,7 @@ const Game = React.createClass({
 					rockAnimationData = {this.rockAnimationData}
 					flashClass = {this.state.flashClass}
 					canoeHP = {this.state.canoeHP}
+					crewSize = {this.props.crewSize}
 				/>
       </div>
     );
@@ -315,7 +315,7 @@ const Canoe = React.createClass({
 			image += "/rafts";
 		}
 
-		image += "/4-members.svg";
+		image += `/${this.props.crewSize}-members.svg`;
 
 		const style = {
 			width: '25%',
@@ -402,7 +402,7 @@ const River = React.createClass({
 			bottomBound: riverBottomPosition
 		});
 		this.updateAnswers();
-		setInterval(this.updateAnswers, 5000);
+		setInterval(this.updateAnswers, 2500);
 	},
 
 	generateAnswerPosition() {
@@ -469,7 +469,9 @@ const River = React.createClass({
 							y = {this.props.rockYPosition}
 							ref = "rock"
 						/>
-					<Canoe initialImage = {this.props.initialImage} ref = "canoe" hp = {this.props.canoeHP}/>
+					<Canoe initialImage = {this.props.initialImage}
+						ref = "canoe" hp = {this.props.canoeHP} crewSize = {this.props.crewSize}
+					/>
 				</div>
 			</div>
 		);

@@ -68,6 +68,7 @@ socket.onmessage = function(m) {
 		game = ReactDOM.render(<Game
   socket={socket} username={username}
   crewNumber={crewNumber} initialAnswers={m.answers}
+	crewSize={m.crewSize}
   />,
 			document.getElementById('mountNode'));
 		break;
@@ -77,6 +78,9 @@ socket.onmessage = function(m) {
 		} else {
 			game.incorrectAnswer();
 		}
+		break;
+	case 'updateHP':
+		game.updateHP(m.hp);
 		break;
 	case 'addRock':
 		game.addRock(m.startTime);
