@@ -173,8 +173,10 @@ span[.clickable]:hover {
 }
 .whirlpool-button {
 	color: white;
-	background-color: #6AC46A;
-	width: 20%;
+	text-align: center;
+	background-color: #26a65b;
+	border-radius:0;
+	letter-spacing: normal;
 }
 .modal-active {
 	text-align: center;
@@ -187,7 +189,8 @@ span[.clickable]:hover {
 	height: 100%;
 	top: 0;
 	left: 0;
-	background-color: rgba(0,0,0,0.5)
+	background-color: rgba(0,0,0,0.5);
+	z-index: 1000;
 }
 .modal-background > * {
 	position: relative;

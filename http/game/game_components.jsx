@@ -82,7 +82,7 @@ const Game = React.createClass({
 			whirlpool: true,
 			whirlpoolType: 'Question',
 			whirlpoolQuestion: question,
-			whirlpoolQuestionTimebar: <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool}></QuestionTimebar>
+			whirlpoolQuestionTimebar: <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={true}></QuestionTimebar>
 		});
 	},
 
@@ -206,7 +206,12 @@ const Game = React.createClass({
 			else {
 				whirlpoolValue = (
 					<div className="modal-background">
-						<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.state.whirlpoolQuestionTimebar} socket = {this.props.socket} />
+						<div className="row">
+							<div className="three columns"><p></p></div>
+							<div className="six columns">
+								<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.state.whirlpoolQuestionTimebar} socket = {this.props.socket} />
+							</div>
+						</div>
 					</div>
 				);
 			}
@@ -525,13 +530,11 @@ const WhirlpoolQuestion = React.createClass({
 					<h4 className="whirlpool-question">{this.props.question.text}</h4>
 				</div>
 				{this.props.timebar}
-				<div className="whirlpool-button-group">
-					{
+				{
 					answers.map(function(answer) {
-						return <button className="whirlpool-button">{answer}</button>;
+						return <button className="whirlpool-button u-full-width">{answer}</button>;
 					})
 				}
-				</div>
 			</div>
 		);
 	}
