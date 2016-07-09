@@ -2,7 +2,7 @@ let config = {
 	port: 3000
 };
 if (process.env.PORT) {
-	let config = {
+	config = {
 		port: process.env.PORT
 	};
 }
@@ -189,6 +189,7 @@ mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
 			testRes.on('end', function() {
 				console.log('HTTP test passed, starting socket test.'.green);
 				let WS = require('ws');
+				console.log(config.port);
 				let wsc = new WS('ws://localhost:' + config.port + '/test');
 				wsc.on('open', function() {
 					console.log('Connected to socket.');
