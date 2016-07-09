@@ -301,7 +301,13 @@ const Answer = React.createClass({
 
 		// ugly physics code beware
 		if ((positionX) + offsetWidth / 2 < innerWidth / 2) {
-			velocityX += (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-(positionX)) / 100) - Math.min(0.001, Math.exp((positionX) + offsetWidth - innerWidth * leftBoundary) / 100)) || 0);
+			// on the left side
+			velocityX += (dt *
+				(
+					(Math.random() - 0.5) / 10000 +
+					Math.min(0.001, Math.exp(-(positionX)) / 100)
+					- Math.min(0.001, Math.exp((positionX) + offsetWidth - innerWidth * leftBoundary) / 100)
+				) || 0);
 		} else {
 			velocityX += (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-(positionX) + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp((positionX) + offsetWidth - innerWidth) / 100)) || 0);
 		}
