@@ -1,6 +1,11 @@
-const config = {
+let config = {
 	port: 3000
 };
+if (process.env.PORT) {
+	config = {
+		port: process.env.PORT
+	};
+}
 require('./essentials.js');
 require('colors');
 global.dbcs = {};
@@ -158,7 +163,9 @@ let serverHandler = o(function*(req, res) {
 	} else return errorNotFound(req, res);
 });
 console.log('Connecting to mongodb…'.cyan);
-mongo.connect('mongodb://localhost:27017', function(err, db) {
+if (!process.env.MONGOLAB_URI)
+	process.env.MONGOLAB_URI = 'mongodb://localhost:27017';
+mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
 	if (err) throw err;
 	let i = usedDBCs.length;
 	function handleCollection(err, collection) {
@@ -183,6 +190,7 @@ mongo.connect('mongodb://localhost:27017', function(err, db) {
 			testRes.on('end', function() {
 				console.log('HTTP test passed, starting socket test.'.green);
 				let WS = require('ws');
+				console.log(config.port);
 				let wsc = new WS('ws://localhost:' + config.port + '/test');
 				wsc.on('open', function() {
 					console.log('Connected to socket.');
