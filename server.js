@@ -1,6 +1,11 @@
-const config = {
+let config = {
 	port: 3000
 };
+if (process.env.PORT) {
+	let config = {
+		port: process.env.port
+	};
+}
 require('./essentials.js');
 require('colors');
 global.dbcs = {};
