@@ -3,7 +3,7 @@ let config = {
 };
 if (process.env.PORT) {
 	let config = {
-		port: process.env.port
+		port: process.env.PORT
 	};
 }
 require('./essentials.js');
