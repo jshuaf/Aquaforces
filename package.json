@@ -2,23 +2,10 @@
   "name": "Aquaforces",
   "version": "0.0.0",
   "description": "A collaborative learning game.",
-  "homepage": "https://google.com",
-  "bugs": "https://github.com/bjb568/bonio-intern/issues",
+  "homepage": "https://aquaforces.com",
+  "bugs": "https://github.com/bjb568/aquaforces/issues",
   "license": "UNLICENSED",
   "main": "server.js",
-	"icons": [
-		{
-			"src": "\/android-chrome-192x192.png",
-			"sizes": "192x192",
-			"type": "image\/png"
-		},
-		{
-			"src": "\/android-chrome-512x512.png",
-			"sizes": "512x512",
-			"type": "image\/png"
-		}
-	],
-	"theme_color": "#ffffff",
 	"display": "standalone",
   "scripts": {
     "start": "sudo node server",
@@ -27,7 +14,7 @@
   "author": "BoniO Interns",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bjb568/bonio-intern"
+    "url": "https://github.com/bjb568/aquaforces"
   },
   "dependencies": {
     "colors": "^1.1.2",
@@ -38,7 +25,9 @@
     "uglify-js": "^2.6.4",
     "clean-css": "^3.4.18",
     "mongodb": "^2.1.18",
-		"babel-core": "^6.10.4"
+		"babel-core": "^6.10.4",
+		"babel-preset-react": "^6.11.1",
+		"babel-preset-es2015": "^6.9.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.0"
