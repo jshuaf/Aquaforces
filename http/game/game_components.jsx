@@ -82,7 +82,7 @@ const Game = React.createClass({
 			whirlpool: true,
 			whirlpoolType: 'Question',
 			whirlpoolQuestion: question,
-			whirlpoolQuestionTimebar: <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={true}></QuestionTimebar>
+			whirlpoolQuestionTimebar: <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool} ref="whirlpoolTimebar"></QuestionTimebar>
 		});
 	},
 

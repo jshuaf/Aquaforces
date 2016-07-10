@@ -31,6 +31,11 @@ module.exports = (server) => {
 		tws.addWhirlpool = () => {
 			tws.crew().whirlpool = {present: true, question: null, taps: 0};
 			tws.crew().whirlpool.question = tws.generateNewQuestion();
+			tws.sendToGameHost({
+				event: 'whirlpoolStatusChanged',
+				status: 'new',
+				creNumber: tws.crewNumber
+			});
 			const ttws = tws.randomCrewMember();
 			tws.crew().whirlpool.stressedPerson = ttws;
 			tws.crew().members.forEach((crewMember) => {
@@ -247,6 +252,12 @@ module.exports = (server) => {
 							break;
 						}
 
+						case 'whirlpoolQuestionTimeout':
+							tws.crew().whirlpool = {present: false, question: null};
+							tws.trysend({event: 'whirlpoolConclusion', wasCorrect: false});
+							tws.sendToGameHost({event: 'whirlpoolStatusChanged', status: 'timeout', crewNumber: tws.crewNumber});
+							break;
+
 						case 'answerPassedThreshold': {
 							const answerToResend = m.answer;
 							crew = tws.game.crews[m.crewNumber];
@@ -273,7 +284,13 @@ module.exports = (server) => {
 						case 'whirlpoolAnswerSelected': {
 							if (m.answer == tws.crew().whirlpool.question.correctAnswer) {
 								tws.crew().whirlpool = {present: false, question: null};
-								tws.trysend({event: 'whirlpoolConclusion'});
+								tws.trysend({event: 'whirlpoolConclusion', wasCorrect: true});
+								tws.sendToGameHost({event: 'whirlpoolStatusChanged', status: 'correctAnswer', crewNumber: tws.crewNumber});
+							}
+							else {
+								tws.crew().whirlpool = {present: false, question: null};
+								tws.trysend({event: 'whirlpoolConclusion', wasCorrect: false});
+								tws.sendToGameHost({event: 'whirlpoolStatusChanged', status: 'wrongAnswer', crewNumber: tws.crewNumber});
 							}
 							break;
 						}

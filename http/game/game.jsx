@@ -36,7 +36,7 @@ socket.onmessage = function(m) {
 		console.log(e);
 		return alert('Socket error.');
 	}
-
+	console.log(m);
 	switch (m.event) {
 	case 'notice':
 		errorEl.textContent = m.body;
@@ -79,10 +79,12 @@ socket.onmessage = function(m) {
 		game.addWhirlpoolQuestion(m.question);
 		break;
 	case 'whirlpoolBonusReceived':
+		console.log('Bonus received');
 		game.setState({whirlpoolBonus: m.amount});
 		break;
 	case 'whirlpoolConclusion':
 		game.setState({whirlpool: false});
+		game.refs.whirlpoolTimebar.reset();
 		break;
 	case 'correctAnswer':
 		game.addCorrectAnswer(m.answer);

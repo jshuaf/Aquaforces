@@ -45,6 +45,11 @@ const GameHost = React.createClass({
 		this.setState(oldCrews);
 	},
 
+	whirlpoolStatusChanged(status, crewNumber) {
+		const crew = this.refs[crewNumber.toString()];
+		crew.processWhirlpool(status);
+	},
+
 	render() {
 		return (
 			<div className="container">
@@ -80,7 +85,8 @@ const Crew = React.createClass({
 			maximumDeltaVelocity: 10,
 			hp: 1,
 			current: -0.1,
-			isRaft: false
+			isRaft: false,
+			isWhirlpool: false
 		};
 	},
 
@@ -90,6 +96,25 @@ const Crew = React.createClass({
 			velocityConstant: 0.00001,
 			deltaHPConstant: -0.1
 		};
+	},
+
+	processWhirlpool(status) {
+		switch (status) {
+			case 'new':
+				this.setState({isWhirlpool: true});
+				break;
+			case 'timeout':
+				this.setState({hp: this.state.hp - 0.25, isWhirlpool: false});
+				break;
+			case 'wrongAnswer':
+				this.setState({hp: this.state.hp - 0.25, isWhirlpool: false});
+				break;
+			case 'correctAnswer':
+				this.setState({position: this.state.position + 0.3, isWhirlpool: false});
+				break;
+			default:
+				break;
+			}
 	},
 
 	processAnswer(wasCorrectAnswer) {
