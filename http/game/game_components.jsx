@@ -22,7 +22,7 @@ const Game = React.createClass({
 			whirlpool: false,
 			whirlpoolType: 'Free',
 			whirlpoolQuestion: {},
-			whirlpoolQuestionBar: null,
+			whirlpoolTimebar: null,
 			whirlpoolBonus: 0
 		};
 	},
@@ -81,8 +81,7 @@ const Game = React.createClass({
 		this.setState({
 			whirlpool: true,
 			whirlpoolType: 'Question',
-			whirlpoolQuestion: question,
-			whirlpoolQuestionTimebar: <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool} ref="whirlpoolTimebar"></QuestionTimebar>
+			whirlpoolQuestion: question
 		});
 	},
 
@@ -190,6 +189,7 @@ const Game = React.createClass({
 	render() {
 		// MARK: add flashing
 		let whirlpoolValue;
+		this.state.whirlpoolTimebar = <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool} />;
 		if (this.state.whirlpool) {
 			if (this.state.whirlpoolType == "Free") {
 				whirlpoolValue = (
@@ -209,7 +209,7 @@ const Game = React.createClass({
 						<div className="row">
 							<div className="three columns"><p></p></div>
 							<div className="six columns">
-								<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.state.whirlpoolQuestionTimebar} socket = {this.props.socket} />
+								<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.state.whirlpoolTimebar} socket = {this.props.socket} />
 							</div>
 						</div>
 					</div>
@@ -382,12 +382,14 @@ const QuestionTimebar = React.createClass({
 	},
 
 	updateTime() {
-		const currentTime = (new Date()).getTime();
-		const timeLeft = this.props.timePerQuestion - currentTime + this.state.timeStart;
-		if (timeLeft < 0) {
-			this.props.onTimeout();
-		} else {
+		if (this.props.keepRunning) {
+			const currentTime = (new Date()).getTime();
+			const timeLeft = this.props.timePerQuestion - currentTime + this.state.timeStart;
+			if (timeLeft < 0) {
+				this.props.onTimeout();
+			} else {
 			this.setState({timeLeft});
+			}
 		}
 	},
 
@@ -532,7 +534,7 @@ const WhirlpoolQuestion = React.createClass({
 				{this.props.timebar}
 				{
 					answers.map(function(answer) {
-						return <button className="whirlpool-button u-full-width">{answer}</button>;
+						return <button className="whirlpool-button u-full-width" onClick={this.processAnswer.bind(this, answer)}>{answer}</button>;
 					})
 				}
 			</div>

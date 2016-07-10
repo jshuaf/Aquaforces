@@ -254,8 +254,11 @@ module.exports = (server) => {
 
 						case 'whirlpoolQuestionTimeout':
 							tws.crew().whirlpool = {present: false, question: null};
-							tws.trysend({event: 'whirlpoolConclusion', wasCorrect: false});
+							tws.crew().members.forEach(function(member) {
+								member.trysend({event: 'whirlpoolConclusion', wasCorrect: false});
+							});
 							tws.sendToGameHost({event: 'whirlpoolStatusChanged', status: 'timeout', crewNumber: tws.crewNumber});
+							console.log(tws.crewNumber);
 							break;
 
 						case 'answerPassedThreshold': {
