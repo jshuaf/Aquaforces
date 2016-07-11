@@ -98,12 +98,9 @@ span[.clickable]:hover {
 .studentselect > li {
 	font-size: 2rem;
 }
-.racetrack-boat {
-	background-color: #26a65b;
-}
 .racetrack-boat > p {
 	color: white;
-	background-color: #26a65b;
+	background-color: transparent;
 	text-align: center;
 	text-transform: uppercase;
 	letter-spacing: 1px;
