@@ -13,6 +13,7 @@ body {
 }
 input {
 	color: #2c3e50;
+	font-size: 1.5rem;
 }
 .navbar {
 	background-color: transparent;
@@ -33,11 +34,9 @@ input {
 	font-size: 1.5rem;
 	font-weight: normal;
 }
-
 .button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover {
 	background-color: #5e9e43;
 }
-
 .navbar > .container > .row > .columns > * {
 	margin-bottom: 0;
 	font-weight: normal;
@@ -60,14 +59,11 @@ h2 {
 	font-size: 2.5rem;
 	font-weight: normal;
 }
-input {
-	font-size: 1.5rem;
-}
 span, span > * {
 	background-color: white;
 	border-radius: 0.5rem;
 	padding: 0 1rem;
-	color: #5BAEB9;
+	color: #5baeb9;
 }
 span > span {
 	display: none;
