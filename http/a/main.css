@@ -144,6 +144,10 @@ span[.clickable]:hover {
 #question {
 	margin-bottom: 0;
 }
+.gameInProgress {
+	background: #e3d393 url('/img/backgrounds/beach-with-trees.png') repeat-x center top;
+	background-size: cover;
+}
 .button-primary {
 	margin-top: 10px;
 }
