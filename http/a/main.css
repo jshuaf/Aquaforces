@@ -8,6 +8,7 @@ strong, b {
 body {
 	background: url('/img/background.svg') no-repeat center fixed;
 	background-size: cover;
+	overflow-x: hidden;
 }
 input {
 	color: #2c3e50;
