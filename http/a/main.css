@@ -1,21 +1,20 @@
 * {
 	font-family: 'Source Sans Pro', sans-serif;
-	color: #2c3e50;
+	color: white;
 }
 strong, b {
-	font-weight: bold
+	font-weight: bold;
 }
 body {
-	background: #4ca9d6 url('/img/goshalex.svg') repeat-x center top;
+	background: #4ca9d6 url('/img/background.svg') repeat-x center top;
 	background-size: cover;
 }
 .navbar {
-	background-color: white;
+	background-color: transparent;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
-	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
 	padding: 20px;
 	margin-bottom: 2rem;
 }
@@ -38,7 +37,7 @@ h1 {
 }
 h2 {
 	font-size: 2.5rem;
-	font-weight: bold;
+	font-weight: normal;
 }
 input {
 	font-size: 1.5rem;
@@ -63,9 +62,9 @@ span[.clickable]:hover {
 	background-color: #26a65b;
 }
 .panel {
-	background-color: white;
+	background-color: transparent;
 	border-radius: 2rem;
-	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+	color: white;
 	padding: 20px;
 	margin-bottom: 40px;
 }
