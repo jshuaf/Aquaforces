@@ -5,6 +5,9 @@
 	"/host/": {
 		"path": "./html/host.html"
 	},
+	"/overview/": {
+		"path": "./html/overview.html"
+	}
 	"/console/": {
 		"path": "./html/console.html",
 		"title": "Question Console",
