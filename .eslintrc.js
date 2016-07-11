@@ -62,7 +62,6 @@ module.exports = {
 		"no-with": ["error"],
 		"wrap-iife": ["error"],
 		"yoda": ["error", "never"],
-		"strict": ["error", "global"],
 		"no-delete-var": ["error"],
 		"no-label-var": ["error"],
 		"no-shadow-restricted-names": ["error"],
