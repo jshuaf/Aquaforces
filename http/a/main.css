@@ -10,9 +10,13 @@ html {
 	background-size: cover;
 	color: #eee;
 }
-html.pregamescreen { background-image: url('/img/background.svg') }
+html.pregamescreen {
+	background-color: #267;
+	background-image: url('/img/background.svg');
+}
 body { margin: 0 }
-html, body, main, #progress, #cont { height: 100% }
+html, #progress { height: 100% }
+#cont { height: 50% }
 @keyframes target {
 	0%, 30% { background: #f70 }
 }
@@ -34,7 +38,6 @@ html, body, main, #progress, #cont { height: 100% }
 	pointer-events: none;
 }
 [hidden] > * { display: none }
-main { position: relative }
 #cont label {
 	font-size: 1.3em;
 	margin: 0.5em 0.5em 0.5em 0;
@@ -66,7 +69,7 @@ label input:not([min]) { width: 200% }
 @media (min-width: 500px) {
 	.pregamescreen form { padding: 0 10% }
 }
-@media (min-height: 32em) and (pointer: fine) {
+@media (min-height: 24em) and (pointer: fine) {
 	.pregamescreen #cont { margin-top: 50vh }
 	.pregamescreen form { transform: translateY(-50%) }
 }
