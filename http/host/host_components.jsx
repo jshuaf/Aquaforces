@@ -150,7 +150,7 @@ const LeaderboardEntry = React.createClass({
 		let style = {
 			fontSize: (this.props.crewPosition + 1) * 15 + 'px',
 			padding: 5 + this.props.crewPosition + 'px',
-			color: 'white'
+			color: '#2c3e50'
 		};
 		return (<div className="leaderboardEntry">
 		<h5>Crew {this.props.crewNumber}: <span style={style}>{Math.round(this.props.crewPosition * 10) / 10}</span></h5>
