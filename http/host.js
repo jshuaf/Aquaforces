@@ -2,7 +2,6 @@
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/');
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
-document.documentElement.classList.add('prehostgamescreen');
 var boats = {},
 	cameraP = 0,
 	cameraS = 1;
@@ -113,7 +112,6 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'start-game'}));
 	playing = true;
-	document.documentElement.classList.remove('prehostgamescreen');
 	document.documentElement.classList.add('hostgame');
 	document.getElementById('lonelyfolks').classList.add('hide');
 	document.getElementById('crew-header').hidden = document.getElementById('start-game-btn').hidden = true;

@@ -3,7 +3,6 @@ var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') +
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error'),
 	gameHasEnded = false;
-document.documentElement.classList.add('pregamescreen');
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
@@ -12,7 +11,7 @@ function setState(id) {
 	document.getElementById(id).hidden = false;
 	var e = document.getElementById(id).getElementsByTagName('input');
 	if (e.length) e[e.length - 1].focus();
-	document.documentElement.classList.toggle('pregamescreen', id != 'game');
+	document.documentElement.classList.toggle('no-bg', id == 'game');
 }
 function flash(color) {
 	document.body.className = '';

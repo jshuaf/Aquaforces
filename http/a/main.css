@@ -5,12 +5,11 @@
 }
 html {
 	font: 100% sans-serif;
-	text-align: center;
 	background: #39f;
 	background-size: cover;
 	color: #eee;
 }
-html.pregamescreen, html.prehostgamescreen {
+html:not(.hostgame):not(.no-bg) {
 	background-color: #267;
 	background-image: url('/img/background.svg');
 }
@@ -45,14 +44,12 @@ h1, h2, h3, h4, h5, h6 { color: #fff }
 }
 form:not(.left-align) { margin: 0 auto }
 form { padding: 2em }
-.pregamescreen form { background: rgba(0, 0, 0, 0.5) }
 .centerbox {
-	text-align: left;
 	display: table;
 	margin: 0 auto;
 	max-width: 24em;
 }
-.centerbox span { min-width: 6.5ch }
+.centerbox span { min-width: 4.8ch }
 label {
 	display: flex;
 	align-items: center;
@@ -62,17 +59,8 @@ input {
 	margin-left: 0.5ch;
 }
 label input:not([min]) { width: 200% }
-@media (max-width: 499px) {
-	.pregamescreen form { padding: 0 0.5em }
-	.pregamescreen form, .centerbox { width: 100% }
-	.centerbox input { width: 0 }
-}
 @media (min-width: 500px) {
 	.pregamescreen form { padding: 0 10% }
-}
-@media (min-height: 24em) and (pointer: fine) {
-	.pregamescreen #cont { margin-top: 50vh }
-	.pregamescreen form { transform: translateY(-50%) }
 }
 form:not([hidden]) {
 	transition: opacity 0.5s;
@@ -88,7 +76,6 @@ form[hidden] {
 form:not([hidden]) + form[hidden] {
 	display: table;
 }
-#cont form > :not(label) { text-align: center }
 nav, footer {
 	padding: 0.3em;
 	background: #ddd;
@@ -97,7 +84,7 @@ footer { margin-top: 2em }
 header { margin-bottom: 2em }
 button {
 	display: block;
-	margin: 1em auto;
+	margin: 0.2em 0;
 	padding: 0.2em 1em;
 	background: #29f;
 	font-size: 1.6em;
@@ -194,7 +181,7 @@ li:empty {
 li[data-n='1'] { color: #f22 }
 ul.studentselect > li { cursor: pointer }
 ul.studentselect > li:hover { text-decoration: line-through }
-.left-align { text-align: left }
+.center { text-align: center }
 .left-align button { margin: 1em 0 0 }
 .studentselect, .leaderboard {
 	text-align: left;
