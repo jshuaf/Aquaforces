@@ -1,5 +1,5 @@
 'use strict';
-const config = {
+let config = {
 	port: 3000
 };
 if (process.env.PORT) {
