@@ -16,6 +16,7 @@ html:not(.hostgame):not(.no-bg) {
 body { margin: 0 }
 html, #progress { height: 100% }
 #cont { height: 50% }
+h1 { margin: 0.4em 0 }
 h1, h2, h3, h4, h5, h6 { color: #fff }
 @keyframes target {
 	0%, 30% { background: #f70 }
@@ -210,3 +211,4 @@ ol.studentselect > li > span::before {
 	padding-bottom: 0.2em;
 }
 ol.studentselect > li > span:hover::before { width: 2ch }
+#qsets { font-size: 1.2em }
