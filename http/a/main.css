@@ -192,3 +192,6 @@ span[.clickable]:hover {
 .margins {
 	margin-top: 30px;
 }
+.marginless {
+	margin-bottom: 0;
+}
