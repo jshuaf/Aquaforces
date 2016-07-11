@@ -10,13 +10,14 @@ html {
 	background-size: cover;
 	color: #eee;
 }
-html.pregamescreen {
+html.pregamescreen, html.prehostgamescreen {
 	background-color: #267;
 	background-image: url('/img/background.svg');
 }
 body { margin: 0 }
 html, #progress { height: 100% }
 #cont { height: 50% }
+h1, h2, h3, h4, h5, h6 { color: #fff }
 @keyframes target {
 	0%, 30% { background: #f70 }
 }
@@ -98,15 +99,16 @@ button {
 	display: block;
 	margin: 1em auto;
 	padding: 0.2em 1em;
-	background: #07f;
+	background: #29f;
 	font-size: 1.6em;
 	transition: background-color 0.1s;
 	border: 1px solid #aaa;
+	border-radius: 1em;
 	color: #fff;
 	cursor: pointer;
 }
-button:hover { background: #09f }
-button:active { background: #05f }
+button:hover { background: #4af }
+button:active { background: #07f }
 button[disabled] { background: #aaa }
 #error {
 	color: #f00;
@@ -201,8 +203,8 @@ ul.studentselect > li:hover { text-decoration: line-through }
 ol.studentselect > li, .leaderboard > li { line-height: 2 }
 ol.studentselect > li > span, .leaderboard > li > span {
 	display: inline-block;
-	background: #ff0;
-	color: #111;
+	background: rgba(0, 0, 0, 0.3);
+	color: #fff;
 	padding: 0.1em 0.5em;
 	margin: 0 0.3em;
 	border-radius: 0.3em;
