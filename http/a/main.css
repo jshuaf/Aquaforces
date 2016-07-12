@@ -7,14 +7,23 @@
 strong, b {
 	font-weight: bold;
 }
-body {
-	background: #bee6f1 url(/img/back.svg) no-repeat center fixed;
-	background-size: cover;
+@media (min-width: 800px) {
+	body {
+		background: #bee6f1 url("/img/back.svg") no-repeat center fixed;
+		background-size: cover;
+	}
+}
+@media (max-width: 800px) {
+	body {
+		background: #bee6f1 no-repeat center fixed;
+		background-size: cover;
+	}
 }
 input[type=tel], input[type=url], input[type=password], input[type=email], input[type=number], input[type=search], input[type=text], select, textarea, input {
 	color: #2c3e50;
 	font-size: 1.5rem;
 	border-radius: 30px;
+	text-align: center;
 }
 label {
 	font-weight: normal;
@@ -38,7 +47,7 @@ label {
 	font-size: 1.5rem;
 	font-weight: bold;
 }
-.button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover {
+.button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active {
 	background-color: #5e9e43;
 }
 .navbar-logo {
