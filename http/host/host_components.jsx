@@ -97,7 +97,7 @@ const Crew = React.createClass({
 				velocity: this.state.velocity + this.state.deltaVelocity
 			});
 		} else if (this.state.isRaft) {
-			this.setState({deltaVelocity: this.state.deltaVelocity * 0.95});
+			this.setState({deltaVelocity: this.state.deltaVelocity * 0.25});
 		} else {
 			this.setState({
 				hp: this.state.hp + this.props.deltaHPConstant
@@ -148,8 +148,7 @@ const LeaderboardEntry = React.createClass({
 	render() {
 		let style = {
 			fontSize: (this.props.crewPosition + 1) * 15 + 'px',
-			padding: 5 + this.props.crewPosition + 'px',
-			color: '#2c3e50'
+			padding: 5 + this.props.crewPosition + 'px'
 		};
 		return (<div className="leaderboardEntry">
 		<h5>Crew {this.props.crewNumber}: <span style={style}>{Math.round(this.props.crewPosition * 10) / 10}</span></h5>
