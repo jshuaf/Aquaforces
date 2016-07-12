@@ -6,8 +6,9 @@
 		"path": "./html/host.html"
 	},
 	"/overview/": {
-		"path": "./html/overview.html"
-	}
+		"path": "./html/overview.html",
+		"landing": "landing"
+	},
 	"/console/": {
 		"path": "./html/console.html",
 		"title": "Question Console",
