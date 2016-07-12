@@ -9,7 +9,7 @@ strong, b {
 }
 @media (min-width: 800px) {
 	body {
-		background: #bee6f1 url("/img/back.svg") no-repeat center fixed;
+		background: #bee6f1 url('/img/back.svg') no-repeat center fixed;
 		background-size: cover;
 	}
 }
