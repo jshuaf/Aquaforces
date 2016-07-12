@@ -7,7 +7,7 @@
 	},
 	"/overview/": {
 		"path": "./html/overview.html",
-		"landing": "landing"
+		"landing": "landing-body"
 	},
 	"/console/": {
 		"path": "./html/console.html",
