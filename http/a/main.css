@@ -1,23 +1,41 @@
 * {
 	font-family: 'Source Sans Pro', sans-serif;
-	color: #2c3e50;
+	-webkit-font-smoothing: antialiased;
+	color: white;
 }
 strong, b {
-	font-weight: bold
+	font-weight: bold;
 }
 body {
-	background: #4ca9d6 url('/img/backgrounds/beach.svg') repeat-x center top;
+	background: url('/img/background.svg') no-repeat center fixed;
 	background-size: cover;
+	overflow-x: hidden;
+}
+input {
+	color: #2c3e50;
+	font-size: 1.5rem;
 }
 .navbar {
-	background-color: white;
+	background-color: transparent;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
-	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
 	padding: 20px;
 	margin-bottom: 2rem;
+}
+.button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
+	border-radius: 30px;
+	margin-top: 10px;
+	background-color: #7eb530;
+	border: none;
+	letter-spacing: normal;
+	text-transform: none;
+	font-size: 1.5rem;
+	font-weight: normal;
+}
+.button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover {
+	background-color: #5e9e43;
 }
 .navbar > .container > .row > .columns > * {
 	margin-bottom: 0;
@@ -28,7 +46,8 @@ body {
 	vertical-align: center;
 }
 .navbar > .container > .row > .columns > .navbar-logo {
-	font-weight: bold;
+	height: 4rem;
+	width: auto;
 }
 h1 {
 	font-size: 5rem;
@@ -38,16 +57,13 @@ h1 {
 }
 h2 {
 	font-size: 2.5rem;
-	font-weight: bold;
-}
-input {
-	font-size: 1.5rem;
+	font-weight: normal;
 }
 span, span > * {
-	background-color: #16964b;
+	background-color: white;
 	border-radius: 0.5rem;
 	padding: 0 1rem;
-	color: white;
+	color: #5baeb9;
 }
 span > span {
 	display: none;
@@ -60,12 +76,12 @@ span:hover > span {
 	line-height: 1;
 }
 span[.clickable]:hover {
-	background-color: #26a65b;
+	background-color: #ecf0f1;
 }
 .panel {
-	background-color: white;
+	background-color: transparent;
 	border-radius: 2rem;
-	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+	color: white;
 	padding: 20px;
 	margin-bottom: 40px;
 }
@@ -77,7 +93,11 @@ span[.clickable]:hover {
 	padding: 0.5rem 2rem;
 	border: 2px solid #ecf0f1;
 	border-radius: 4rem;
-	font-size: 20px
+	font-size: 20px;
+	color: white;
+}
+.answers > span > * {
+	color: white;
 }
 .answers > span:hover {
 	position: absolute;
@@ -98,12 +118,9 @@ span[.clickable]:hover {
 .studentselect > li {
 	font-size: 2rem;
 }
-.racetrack-boat {
-	background-color: #26a65b;
-}
 .racetrack-boat > p {
 	color: white;
-	background-color: #26a65b;
+	background-color: transparent;
 	text-align: center;
 	text-transform: uppercase;
 	letter-spacing: 1px;
@@ -133,6 +150,9 @@ span[.clickable]:hover {
 	padding: 15px;
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
 }
+.panel-top > h2, .panel-top > p {
+	color: #2c3e50;
+}
 .panel-group > .panel-bottom {
 	background-color: white;
 }
@@ -143,9 +163,6 @@ span[.clickable]:hover {
 }
 #question {
 	margin-bottom: 0;
-}
-.button-primary {
-	margin-top: 10px;
 }
 @keyframes flash-red-twice {
 	0% { background: #c0392b }
@@ -166,4 +183,10 @@ span[.clickable]:hover {
 	40%, 60% {
 		transform: translate3d(4px, 0, 0);
 	}
+}
+.margins {
+	margin-top: 30px;
+}
+.marginless {
+	margin-bottom: 0;
 }

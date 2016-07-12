@@ -50,9 +50,9 @@ function removeUserFromCrew() {
 	this.parentNode.dataset.n--;
 	this.parentNode.removeChild(this);
 
-	for (const crewNumber in crews) {
+	for (let crewNumber in crews) {
 		let crewmembers = crews[crewNumber].users;
-		for (const crewmember in crewmembers) {
+		for (let crewmember of crewmembers) {
 			if (crewmember == this.dataset.username) {
 				crewmembers.splice(crewmembers.indexOf(crewmember), 1);
 				return;
