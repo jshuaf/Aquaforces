@@ -8,7 +8,7 @@ strong, b {
 	font-weight: bold;
 }
 body {
-	background: #1e414e url(/img/back.svg) no-repeat center fixed;
+	background: #bee6f1 url(/img/back.svg) no-repeat center fixed;
 	background-size: cover;
 }
 input[type=tel], input[type=url], input[type=password], input[type=email], input[type=number], input[type=search], input[type=text], select, textarea, input {
