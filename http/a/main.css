@@ -1,19 +1,23 @@
 * {
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
-	color: white;
+	color: #2c3e50;
+	overflow-x: hidden;
 }
 strong, b {
 	font-weight: bold;
 }
 body {
-	background: url('/img/background.svg') no-repeat center fixed;
+	background: #1e414e url(/img/back.svg) no-repeat center fixed;
 	background-size: cover;
-	overflow-x: hidden;
 }
-input {
+input[type=tel], input[type=url], input[type=password], input[type=email], input[type=number], input[type=search], input[type=text], select, textarea, input {
 	color: #2c3e50;
 	font-size: 1.5rem;
+	border-radius: 30px;
+}
+label {
+	font-weight: normal;
 }
 .navbar {
 	background-color: transparent;
@@ -32,22 +36,17 @@ input {
 	letter-spacing: normal;
 	text-transform: none;
 	font-size: 1.5rem;
-	font-weight: normal;
+	font-weight: bold;
 }
 .button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover {
 	background-color: #5e9e43;
 }
-.navbar > .container > .row > .columns > * {
-	margin-bottom: 0;
-	font-weight: normal;
-}
-.navbar > .container > .row > .columns > p, a {
-	line-height: 3.125rem;
-	vertical-align: center;
-}
-.navbar > .container > .row > .columns > .navbar-logo {
+.navbar-logo {
 	height: 4rem;
 	width: auto;
+}
+.text-center {
+	text-align: center;
 }
 h1 {
 	font-size: 5rem;
@@ -60,10 +59,10 @@ h2 {
 	font-weight: normal;
 }
 span, span > * {
-	background-color: white;
+	background-color: #1e414e;
 	border-radius: 0.5rem;
 	padding: 0 1rem;
-	color: #5baeb9;
+	color: white;
 }
 span > span {
 	display: none;
