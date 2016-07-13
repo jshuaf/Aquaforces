@@ -7,8 +7,17 @@
 strong, b {
 	font-weight: bold;
 }
-#landing-top {
+.landing-section {
 	height: 100vh;
+}
+.landing-pos {
+	background-color: transparent;
+}
+.landing-neg {
+	background-color: #2c3e50;
+}
+.landing-neg > .container > .row > div > * {
+	color: white;
 }
 .landing-body {
 	background: #bee6f1;

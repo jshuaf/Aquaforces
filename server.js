@@ -54,7 +54,13 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	if (typeof header['X-Frame-Options'] != 'string') header['X-Frame-Options'] = 'DENY';
 	if (typeof header['Vary'] != 'string') header['Vary'] = 'Cookie';
 	res.writeHead(status || 200, header);
-	let data = (yield fs.readFile('./html/a/head.html', yield)).toString();
+	let data;
+	if (req.url.pathname == '/overview/') {
+		data = (yield fs.readFile('.html/a/head_nav.html', yield)).toString();
+	}
+	else {
+		data = (yield fs.readFile('./html/a/head.html', yield)).toString();
+	}
 	res.write(yield addVersionNonces(data.replace('$title', (title ? title + ' · ' : '') + 'Aquaforces').replace('$inhead', inhead), req.url.pathname, yield));
 	callback();
 });
