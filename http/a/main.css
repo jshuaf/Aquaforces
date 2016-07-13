@@ -1,11 +1,56 @@
 * {
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
-	color: #2c3e50;
+	color: #212f3c;
 	overflow-x: hidden;
 }
 strong, b {
 	font-weight: bold;
+}
+section {
+	overflow-y: hidden;
+}
+.landing-neg > .container > .row > div > *, .landing-neg > .container > .row > div > * > * {
+	color: white;
+}
+.landing-top-section {
+	height: 100vh;
+}
+.landing-pos {
+	background-color: #efefef;
+}
+.landing-neg {
+	background-color: #212f3c;
+}
+@media(min-width: 800px) {
+	.landing-river {
+		background: url('/img/back-bottom.svg') no-repeat center top;
+		background-size: cover;
+	}
+}
+@media(max-width: 800px) {
+	.landing-river {
+		background-color: #bee6f1;
+	}
+}
+.landing-body {
+	background: #bee6f1;
+}
+.landing-top-group {
+	margin-top: 50vh;
+	transform: translateY(-50%);
+}
+.landing-group {
+	padding: 8vh;
+}
+.text-landing {
+	font-size: 6rem;
+}
+.button-landing {
+	padding: 0 5rem;
+}
+.feature-img {
+	width: 50%;
 }
 @media (min-width: 800px) {
 	body {
@@ -20,7 +65,7 @@ strong, b {
 	}
 }
 input[type=tel], input[type=url], input[type=password], input[type=email], input[type=number], input[type=search], input[type=text], select, textarea, input {
-	color: #2c3e50;
+	color: #212f3c;
 	font-size: 1.5rem;
 	border-radius: 30px;
 	text-align: center;
@@ -29,13 +74,17 @@ label {
 	font-weight: normal;
 }
 .navbar {
-	background-color: transparent;
+	background: #bee6f1;
+	z-index: 1000;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	padding: 20px;
 	margin-bottom: 2rem;
+}
+#landing-img {
+	max-width: 50%;
 }
 .button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
 	border-radius: 30px;
@@ -62,6 +111,7 @@ h1 {
 	margin-top: 0;
 	margin-bottom: 10px;
 	font-weight: bold;
+	overflow-y: hidden;
 }
 h2 {
 	font-size: 2.5rem;
@@ -159,7 +209,7 @@ span[.clickable]:hover {
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
 }
 .panel-top > h2, .panel-top > p {
-	color: #2c3e50;
+	color: #212f3c;
 }
 .panel-group > .panel-bottom {
 	background-color: white;
