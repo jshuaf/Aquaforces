@@ -35,6 +35,9 @@ section {
 .landing-group {
 	padding: 8vh;
 }
+.feature-img {
+	width: 50%;
+}
 @media (min-width: 800px) {
 	body {
 		background: #bee6f1 url('/img/back.svg') no-repeat center fixed;
