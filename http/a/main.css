@@ -10,6 +10,9 @@ strong, b {
 section {
 	overflow-y: hidden;
 }
+.landing-neg > .container > .row > div > *, .landing-neg > .container > .row > div > * > * {
+	color: white;
+}
 .landing-top-section {
 	height: 100vh;
 }
@@ -19,12 +22,16 @@ section {
 .landing-neg {
 	background-color: #212f3c;
 }
-.landing-river {
-	background: url('/img/back-bottom.svg') no-repeat center top;
-	background-size: cover;
+@media(min-width: 800px){
+	.landing-river {
+		background: url('/img/back-bottom.svg') no-repeat center top;
+		background-size: cover;
+	}
 }
-.landing-neg > .container > .row > div > *, .landing-neg > .container > .row > div > * > * {
-	color: white;
+@media(max-width: 800px){
+	.landing-river {
+		background-color: #bee6f1;
+	}
 }
 .landing-body {
 	background: #bee6f1;
@@ -38,6 +45,9 @@ section {
 }
 .text-landing {
 	font-size: 6rem;
+}
+.button-landing {
+	padding: 0 5rem;
 }
 .feature-img {
 	width: 50%;
