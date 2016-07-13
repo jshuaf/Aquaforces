@@ -36,6 +36,9 @@ section {
 .landing-group {
 	padding: 8vh;
 }
+.text-landing {
+	font-size: 6rem;
+}
 .feature-img {
 	width: 50%;
 }
