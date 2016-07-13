@@ -22,13 +22,13 @@ section {
 .landing-neg {
 	background-color: #212f3c;
 }
-@media(min-width: 800px){
+@media(min-width: 800px) {
 	.landing-river {
 		background: url('/img/back-bottom.svg') no-repeat center top;
 		background-size: cover;
 	}
 }
-@media(max-width: 800px){
+@media(max-width: 800px) {
 	.landing-river {
 		background-color: #bee6f1;
 	}
@@ -74,7 +74,8 @@ label {
 	font-weight: normal;
 }
 .navbar {
-	background-color: transparent;
+	background: #bee6f1;
+	z-index: 1000;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -246,8 +247,4 @@ span[.clickable]:hover {
 }
 .marginless {
 	margin-bottom: 0;
-}
-.navbar {
-	background: #bee6f1;
-	z-index: 1000;
 }
