@@ -20,7 +20,8 @@ section {
 	background-color: #212f3c;
 }
 .landing-river {
-	background-color: transparent; /* to be replaced */
+	background: url('/img/back-bottom.svg') no-repeat center top;
+	background-size: cover;
 }
 .landing-neg > .container > .row > div > *, .landing-neg > .container > .row > div > * > * {
 	color: white;
