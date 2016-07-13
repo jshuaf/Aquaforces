@@ -8,7 +8,7 @@ strong, b {
 	font-weight: bold;
 }
 section {
-	overflow-y: hidden;
+	overflow-x: hidden;
 }
 .landing-neg > .container > .row > div > *, .landing-neg > .container > .row > div > * > * {
 	color: white;
@@ -83,8 +83,27 @@ label {
 	padding: 20px;
 	margin-bottom: 2rem;
 }
+@media (max-width:800px) {
+	.mobileless {
+		display: none;
+	}
+}
 #landing-img {
 	max-width: 50%;
+}
+.button.button-navbar, button.button-navbar, input[type=submit].button-navbar, input[type=reset].button-navbar, input[type=button].button-navbar {
+	border-radius: 30px;
+	margin-top: 10px;
+	background-color: white;
+	border: none;
+	letter-spacing: normal;
+	text-transform: none;
+	color: #212f3c;
+	font-size: 1.5rem;
+	font-weight: normal;
+}
+.button.button-navbar:hover, button.button-navbar:hover, input[type=submit].button-navbar:hover, input[type=reset].button-navbar:hover, input[type=button].button-navbar:hover, .button.button-navbar:active, button.button-navbar:active, input[type=submit].button-navbar:active, input[type=reset].button-navbar:active, input[type=button].button-navbar:active {
+	background-color: #ecf0f1;
 }
 .button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
 	border-radius: 30px;
@@ -94,7 +113,6 @@ label {
 	letter-spacing: normal;
 	text-transform: none;
 	font-size: 1.5rem;
-	font-weight: bold;
 }
 .button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active {
 	background-color: #5e9e43;
@@ -102,9 +120,13 @@ label {
 .navbar-logo {
 	height: 4rem;
 	width: auto;
+	margin-top: 10px;
 }
 .text-center {
 	text-align: center;
+}
+.text-right {
+	text-align: right;
 }
 h1 {
 	font-size: 5rem;
