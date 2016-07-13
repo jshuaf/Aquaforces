@@ -49,7 +49,8 @@ module.exports = function(server) {
 						tws.crew = tws.game.crews[m.crewnum] = {
 							members: [tws],
 							activeQuestions: [],
-							recentAnswers: []
+							recentAnswers: [],
+							streak: 0
 						};
 					} else if (tws.game.crews[m.crewnum].members.length >= 6) return tws.error('Crew cannot have more than 6 sailors.', 'crew');
 					else (tws.crew = tws.game.crews[m.crewnum]).members.push(tws);
@@ -76,8 +77,8 @@ module.exports = function(server) {
 					if (tquestion) {
 						tws.crew.activeQuestions.splice(tws.crew.activeQuestions.indexOf(tquestion), 1);
 						let questionID = -1;
-						if (tws.questionIDsDone.length == tws.game.questions.length) tws.questionIDsDone = [];
-						while (questionID == -1 || tws.questionIDsDone.includes(questionID)) questionID = Math.floor(Math.random() * tws.game.questions.length);
+						if (tquestion.owner.questionIDsDone.length == tws.game.questions.length) tquestion.owner.questionIDsDone = [];
+						while (questionID == -1 || tquestion.owner.questionIDsDone.includes(questionID)) questionID = Math.floor(Math.random() * tws.game.questions.length);
 						let question = tws.game.questions[questionID];
 						tws.crew.activeQuestions.push({
 							text: question.text,
@@ -85,13 +86,45 @@ module.exports = function(server) {
 							owner: tquestion.owner
 						});
 						tquestion.owner.trysend(JSON.stringify({event: 'question', question: question.text}));
-						let ttws = tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)];
-						ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
-						if (!ttws.questionIDsDone.includes(questionID)) ttws.questionIDsDone.push(questionID);
+						if (!tquestion.owner.questionIDsDone.includes(questionID)) tquestion.owner.questionIDsDone.push(questionID);
+						for (var i = 0; i < 2; i++) {
+							let ttws = tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)];
+							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+						}
 						tws.crew.recentAnswers.push({
 							text: m.text,
 							time: new Date().getTime()
 						});
+						tws.crew.streak++;
+					} else tws.crew.streak = 0;
+					if (tws.crew.rockActive) {
+						tws.crew.members.forEach(function(ttws) {
+							ttws.trysend(JSON.stringify({event: 'rock-answer-status', correct: !!tquestion, streak: tws.crew.streak}));
+						});
+						if (tws.crew.streak >= 6) {
+							clearTimeout(tws.crew.rockActive);
+							tws.crew.rock = tws.crew.rockActive = false;
+							tws.crew.members.forEach(function(ttws) {
+								ttws.trysend(JSON.stringify({event: 'end-rock'}));
+							});
+							tws.game.host.trysend(JSON.stringify({event: 'end-rock', crewnum: tws.crewnum}));
+						}
+					}
+					if (Math.random() < tws.crew.streak / 2 && !tws.crew.rock) {
+						tws.crew.rock = true;
+						tws.crew.streak = 0;
+						setTimeout(function() {
+							tws.crew.members.forEach(function(ttws) {
+								ttws.trysend(JSON.stringify({event: 'rock'}));
+							});
+							tws.game.host.trysend(JSON.stringify({event: 'rock', crewnum: tws.crewnum}));
+							tws.crew.rockActive = setTimeout(function() {
+								tws.crew.members.forEach(function(ttws) {
+									ttws.trysend(JSON.stringify({event: 'collide-rock'}));
+								});
+								tws.game.host.trysend(JSON.stringify({event: 'collide-rock', crewnum: tws.crewnum}));
+							}, 30000);
+						}, Math.random() * 8000);
 					}
 				} else if (m.event == 'timeout-question') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
@@ -166,7 +199,7 @@ module.exports = function(server) {
 						crew.members.forEach(function(ttws) {
 							if (ttws.user == m.user) {
 								ttws.trysend(JSON.stringify({event: 'set-state', state: 'crew'}));
-								crew.splice(crew.indexOf(ttws), 1);
+								crew.members.splice(crew.members.indexOf(ttws), 1);
 							}
 						});
 					});
@@ -207,8 +240,6 @@ module.exports = function(server) {
 					});
 				} else tws.error('Unknown socket event ' + m.event + ' received.');
 			});
-		} else if (tws.upgradeReq.url == '/console/') {
-
 		} else {
 			tws.trysend(JSON.stringify({
 				event: 'error',

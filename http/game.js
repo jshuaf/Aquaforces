@@ -2,6 +2,7 @@
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error'),
+	rockEl = document.getElementById('rock'),
 	gameHasEnded = false;
 function setState(id) {
 	errorEl.textContent = '';
@@ -14,12 +15,16 @@ function setState(id) {
 	document.documentElement.classList.toggle('no-bg', id == 'game');
 }
 function flash(color) {
-	document.body.className = '';
+	var colors = ['red', 'yellow', 'green', 'red-double', 'green-double'];
+	colors.forEach(function(cName) {
+		document.documentElement.classList.remove('flash-' + cName);
+	});
 	requestAnimationFrame(function() {
-		document.body.classList.add('flash-' + color);
+		document.documentElement.classList.add('flash-' + color);
 	});
 }
-var answers = [],
+var rock = {},
+	answers = [],
 	correctAnswerQueue = [];
 socket.onmessage = function(m) {
 	console.log(m.data);
@@ -38,13 +43,33 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addAnswer, 1000);
+		setInterval(addAnswer, 1500);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
 	if (m.event == 'answer-status') flash(m.correct ? 'green' : 'red');
+	if (m.event == 'rock') initRock();
+	if (m.event == 'rock-answer-status') moveRock(m.streak);
+	if (m.event == 'collide-rock') collideRock();
+	if (m.event == 'end-rock') moveRock(7);
 	if (m.event == 'end-game') gameHasEnded = true;
 };
+function collideRock() {
+	rock.shown = false;
+	flash('red-double');
+}
+function initRock() {
+	rock.shown = true;
+	rock.x = innerWidth / 2;
+	rock.y = 0;
+	rock.vx = 0;
+	rock.vy = innerHeight / 100000;
+	rock.direction = Math.random() < 0.5 ? -1 : 1;
+	rock.position = 0;
+}
+function moveRock(newPosition) {
+	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 10000;
+}
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
 	errorEl.scrollIntoView();
@@ -110,6 +135,7 @@ function failQuestion() {
 		text: document.getElementById('question').firstChild.firstChild.nodeValue
 	}));
 	flash('yellow');
+	timeProportion = 1;
 }
 function animationUpdate() {
 	var thisTime = new Date().getTime(),
@@ -119,18 +145,18 @@ function animationUpdate() {
 	timeProportion -= dt / timeTotal / 1000;
 	if (timeProportion < 0) failQuestion();
 	answersEl.children.forEach(function(e) {
-		if (parseFloat(e.dataset.x) + e.offsetWidth / 2 < innerWidth / 2) {
-			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x)) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth * 0.42) / 100)) || 0);
+		if (+e.dataset.x + e.offsetWidth / 2 < innerWidth / 2) {
+			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x) / 100) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth * 0.42) / 100)) || 0);
 		} else {
-			e.dataset.vx = parseFloat(e.dataset.vx) + (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-parseFloat(e.dataset.x) + innerWidth * 0.58) / 100) - Math.min(0.001, Math.exp(parseFloat(e.dataset.x) + e.offsetWidth - innerWidth) / 100)) || 0);
+			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x + innerWidth * 0.58) / 100) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth) / 100)) || 0);
 		}
 		e.dataset.vx /= 1.05;
-		e.dataset.vy = parseFloat(e.dataset.vy) + dt * ((Math.random() - 0.5) / 10000);
-		if (parseFloat(e.dataset.vy) < 0.05) e.dataset.vy = +e.dataset.vy + 0.1;
-		e.dataset.x = parseFloat(e.dataset.x) + parseFloat(e.dataset.vx) * dt;
-		e.dataset.y = parseFloat(e.dataset.y) + parseFloat(e.dataset.vy) * dt;
+		e.dataset.vy = +e.dataset.vy + dt * ((Math.random() - 0.5) / 10000);
+		if (+e.dataset.vy < 0.01) e.dataset.vy = +e.dataset.vy + 0.005;
+		e.dataset.x = +e.dataset.x + +e.dataset.vx * dt;
+		e.dataset.y = +e.dataset.y + +e.dataset.vy * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
-		if (parseFloat(e.dataset.y) > innerHeight) {
+		if (+e.dataset.y > innerHeight) {
 			if (e.classList.contains('correct-answer')) {
 				socket.send(JSON.stringify({
 					event: 'resend-answer',
@@ -140,6 +166,15 @@ function animationUpdate() {
 			answersEl.removeChild(e);
 		}
 	});
+	if (rock.shown) {
+		rock.x += dt * rock.vx;
+		rock.y += dt * rock.vy;
+		rock.vx /= 1 + dt * 0.001;
+		rockEl.removeAttribute('hidden');
+		rockEl.style.transform = 'translate(' + rock.x + 'px, ' + rock.y + 'px)';
+		document.getElementById('subheading').hidden = false;
+	} else rockEl.setAttribute('hidden');
+	document.getElementById('subheading').hidden = true;
 	lastTime = thisTime;
 	if (!gameHasEnded) requestAnimationFrame(animationUpdate);
 }

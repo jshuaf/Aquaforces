@@ -12,7 +12,8 @@ function Boat() {
 	this.maxdv = 10;
 	this.hp = 1;
 	this.dhp = -0.05;
-	this.c = -0.3;
+	this.bdhp = -0.2;
+	this.c = -0.1;
 	this.cf = 0.0005;
 	this.vf = 0.00001;
 	this.raft = false;
@@ -61,7 +62,7 @@ socket.onmessage = function(m) {
 		if (m.state) setState(m.state);
 		errorEl.textContent = m.body;
 	} else if (m.event == 'new-game') {
-		header.appendChild(document.createTextNode(m.id));
+		header.insertBefore(document.createTextNode(m.id), header.lastChild);
 	} else if (m.event == 'add-loneuser') {
 		var li = document.createElement('li');
 		li.dataset.username = m.user;
@@ -97,6 +98,10 @@ socket.onmessage = function(m) {
 				document.getElementById('boat' + m.crewnum).classList.add('raft');
 			}
 		}
+	} else if (m.event = 'collide-rock') {
+		var b = boats[m.crewnum];
+		if (m.raft) b.dv *= 0.8;
+		else b.hp += b.bdhp;
 	}
 };
 socket.onclose = function() {
@@ -130,6 +135,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 		canoe.style.top = 'calc(' + (50 + 50 * (i + 0.5) / (n + 1)) + '% - ' + (1.6 * (2 * (i + 0.5) / (n + 1) - 0.5)) + 'em)';
 	});
 	header.removeChild(header.lastChild);
+	header.removeChild(header.firstChild);
 	lastTime = timeStart = new Date().getTime();
 	animationUpdate();
 });

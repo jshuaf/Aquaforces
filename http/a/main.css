@@ -6,18 +6,17 @@
 html {
 	font: 100% sans-serif;
 	background: #39f;
-	background-size: cover;
-	color: #eee;
 }
 html:not(.hostgame):not(.no-bg) {
-	background-color: #267;
+	background-color: #bef;
 	background-image: url('/img/background.svg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: bottom left;
 }
-body { margin: 0 }
 html, #progress { height: 100% }
 #cont { height: 50% }
-h1 { margin: 0.4em 0 }
-h1, h2, h3, h4, h5, h6 { color: #fff }
+h1 { margin: 0 0 0.4em }
 @keyframes target {
 	0%, 30% { background: #f70 }
 }
@@ -25,15 +24,33 @@ h1, h2, h3, h4, h5, h6 { color: #fff }
 @keyframes flash-red {
 	0% { background: #f00 }
 }
+@keyframes flash-red-double {
+	0% { background: #f00 }
+	24% { background: rgba(255, 0, 0, 0.5) }
+	25% { background: #f00 }
+}
 @keyframes flash-yellow {
 	0% { background: #ff0 }
 }
 @keyframes flash-green {
 	0% { background: #0f0 }
 }
-.flash-red { animation: flash-red 0.3s }
-.flash-yellow { animation: flash-yellow 0.3s }
-.flash-green { animation: flash-green 0.3s }
+@keyframes flash-green-double {
+	0% { background: #0f0 }
+	24% { background: rgba(0, 255, 0, 0.5) }
+	25% { background: #0f0 }
+}
+.flash-red::after { animation: flash-red 0.3s }
+.flash-yellow::after { animation: flash-yellow 0.3s }
+.flash-green::after { animation: flash-green 0.3s }
+.flash-red-double::after { animation: flash-red-double 0.5s }
+.flash-green-double::after { animation: flash-green-double 0.5s }
+.flash-red::after, .flash-yellow::after, .flash-green::after, .flash-red-double::after, .flash-green-double::after {
+	content: '';
+	position: absolute;
+	z-index: 2;
+	top: 0; right: 0; bottom: 0; left: 0;
+}
 [hidden] {
 	display: none;
 	pointer-events: none;
@@ -44,7 +61,6 @@ h1, h2, h3, h4, h5, h6 { color: #fff }
 	margin: 0.5em 0.5em 0.5em 0;
 }
 form:not(.left-align) { margin: 0 auto }
-form { padding: 2em }
 .centerbox {
 	display: table;
 	margin: 0 auto;
@@ -83,12 +99,14 @@ nav, footer {
 }
 footer { margin-top: 2em }
 header { margin-bottom: 2em }
+h1 button { float: right }
+h1 + * { clear: both }
 button {
 	display: block;
 	margin: 0.2em 0;
 	padding: 0.2em 1em;
 	background: #29f;
-	font-size: 1.6em;
+	font-size: 1.6rem;
 	transition: background-color 0.1s;
 	border: 1px solid #aaa;
 	border-radius: 1em;
@@ -98,23 +116,24 @@ button {
 button:hover { background: #4af }
 button:active { background: #07f }
 button[disabled] { background: #aaa }
+#joinbtn { margin: 0.2em auto }
 #error {
 	color: #f00;
-	transition: padding-top 0.3s, padding-bottom 0.3s, height 0.3s;
+	transition: padding-top 0.3s, padding-bottom 0.3s, height 0.3s, margin-bottom 0.3s;
 	background: #fff;
 	padding: 1em;
-	margin: 0;
+	margin: 0 0 1em;
 }
 #error:empty {
 	padding: 0;
 	height: 0;
 }
 a {
-	color: #fff;
+	color: #00f;
 	transition: color 0.1s;
 }
-a:hover { color: #6ff }
-a:active { color: #faa }
+a:hover { color: #06f }
+a:active { color: #f44 }
 #game, #tgame {
 	padding: 0;
 	background: transparent;
@@ -127,8 +146,9 @@ a:active { color: #faa }
 	position: absolute;
 	z-index: 1;
 	right: 0; left: 0;
-	margin-top: 0;
+	margin-top: -1rem;
 	padding-top: 0.3em;
+	text-align: center;
 }
 #timebar {
 	height: 0.5em;
@@ -143,8 +163,8 @@ a:active { color: #faa }
 	width: 24.52vmin;
 	height: 39.18vmin;
 	background: url('/img/canoetop.svg');
-	background-size: cover;
-	margin: calc(5em + 20vh) auto 0
+	background-size: contain;
+	margin: 34.91vh auto 0
 }
 #game input[type='text'] { width: 100% }
 #answers > div {
@@ -163,6 +183,11 @@ a:active { color: #faa }
 	color: #000;
 	max-width: 10em;
 }
+#rock {
+	position: absolute;
+	top: 0;
+	width: calc(3em + 6vmax);
+}
 .half-divider { display: flex }
 .half {
 	width: 0;
@@ -179,7 +204,7 @@ li:empty {
 	opacity: 0;
 	height: 0;
 }
-li[data-n='1'] { color: #f22 }
+li[data-n='1'] { color: #f44 }
 ul.studentselect > li { cursor: pointer }
 ul.studentselect > li:hover { text-decoration: line-through }
 .center { text-align: center }
