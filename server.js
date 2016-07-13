@@ -56,7 +56,7 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	res.writeHead(status || 200, header);
 	let data;
 	if (req.url.pathname == '/overview/') {
-		data = (yield fs.readFile('.html/a/head_nav.html', yield)).toString();
+		data = (yield fs.readFile('./html/a/head_nav.html', yield)).toString();
 	}
 	else {
 		data = (yield fs.readFile('./html/a/head.html', yield)).toString();
