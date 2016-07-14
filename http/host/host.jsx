@@ -28,7 +28,7 @@ function removeUserFromGame() {
 	for (let i = 0; i < usersWithoutCrews.length; i++) {
 		const username = usersWithoutCrews[i];
 		if (userToRemove == username) {
-			usersWithoutCrews.remove(username);
+			usersWithoutCrews.splice(usersWithoutCrews.indexOf(username), 1);
 			break;
 		}
 	}
@@ -50,11 +50,11 @@ function removeUserFromCrew() {
 	this.parentNode.dataset.n--;
 	this.parentNode.removeChild(this);
 
-	for (const crewNumber in crews) {
+	for (let crewNumber in crews) {
 		let crewmembers = crews[crewNumber].users;
-		for (const crewmember in crewmembers) {
+		for (let crewmember of crewmembers) {
 			if (crewmember == this.dataset.username) {
-				crewmembers.remove(crewmember);
+				crewmembers.splice(crewmembers.indexOf(crewmember), 1);
 				return;
 			}
 		}
@@ -72,7 +72,6 @@ socket.onmessage = function(m) {
 	switch (m.event) {
 	case 'error':
 		alert(m.body);
-		setState(m.state);
 		errorEl.textContent = m.body;
 		break;
 	case 'newGame':
@@ -99,7 +98,6 @@ socket.onmessage = function(m) {
 		span.appendChild(document.createTextNode(m.user));
 		document.getElementById('crews').children[m.crew - 1].appendChild(span);
 		document.getElementById('crews').children[m.crew - 1].dataset.n++;
-		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 		if (m.crew in crews) {
 			crews[m.crew].users.push(m.user);
 		} else {
@@ -111,6 +109,12 @@ socket.onmessage = function(m) {
 				boat: 'canoe'
 			};
 		}
+		break;
+	case 'startGame':
+		document.getElementById('cont').hidden = true;
+		setState('mountNode');
+		gameHasStarted = true;
+		gameHost = ReactDOM.render(<GameHost initialCrews={crews} />, document.getElementById('mountNode'));
 		break;
 	case 'answerSelected':
 		gameHost.answerSelected(m.wasCorrectAnswer, m.crewNumber);
@@ -124,12 +128,11 @@ socket.onmessage = function(m) {
 			e.parentNode.removeChild(e);
 			// if (e.parentNode.dataset.n) e.parentNode.dataset.n--;
 		}
-		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 		break;
 	}
 };
 
-socket.onclose = function() {
+socket.onclose = () => {
 	errorEl.textContent = 'Socket closed.';
 };
 document.getElementById('dashboard').addEventListener('submit', function(e) {
@@ -144,10 +147,6 @@ document.getElementById('start-game-btn').addEventListener('click', function(e) 
 		event: 'startGame'
 	}));
 	// MARK: figure out our html
-	document.getElementById('cont').hidden = true;
-	setState('mountNode');
-	gameHasStarted = true;
-	gameHost = ReactDOM.render(<GameHost initialCrews={crews} />, document.getElementById('mountNode'));
 });
 function endGame() {
     socket.send(JSON.stringify({

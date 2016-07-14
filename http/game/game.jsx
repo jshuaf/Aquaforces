@@ -24,7 +24,7 @@ function setState(id) {
 
 function setupGameEnvironment() {
 	document.getElementById('content').hidden = true;
-	document.body.style =
+	document.body.style.cssText =
 		`background: #e3d393 url('/img/beach-background.png')
 		repeat-x center top; background-size: cover;`;
 }
@@ -55,6 +55,12 @@ socket.onmessage = function(m) {
 		crewNumber = parseInt(document.getElementById('crewno').value, 10);
 		setState('wait');
 		break;
+	case 'removeUserFromCrew':
+		setState('crew');
+		break;
+	case 'removeUserFromGame':
+		setState('join');
+		break;
 	case 'startGame':
 		setState('mountNode');
 		setupGameEnvironment();
@@ -62,6 +68,7 @@ socket.onmessage = function(m) {
 		game = ReactDOM.render(<Game
   socket={socket} username={username}
   crewNumber={crewNumber} initialAnswers={m.answers}
+	crewSize={m.crewSize}
   />,
 			document.getElementById('mountNode'));
 		break;
@@ -71,6 +78,15 @@ socket.onmessage = function(m) {
 		} else {
 			game.incorrectAnswer();
 		}
+		break;
+	case 'updateHP':
+		game.updateHP(m.hp);
+		break;
+	case 'addRock':
+		game.addRock(m.startTime);
+		break;
+	case 'endRock':
+		game.endRock();
 		break;
 	case 'whirlpoolAhead':
 		game.addWhirlpoolTap();

@@ -10,9 +10,11 @@ install:
   - npm install -g eslint
   - npm install -g stylelint
   - npm install -g babel-eslint
+
 script:
   - npm test
   - snyk test
   - nsp check
   - eslint ./
-  - stylelint ./*/*.css ./*/*/*.css verbose
+
+  - stylelint ./*/*.css ./*/*/*.css -f verbose

@@ -54,18 +54,18 @@ const GameHost = React.createClass({
 		return (
 			<div className="container">
 				<div className="row">
-					<div className="four columns">
+					<div className="three columns">
 						<div className="panel">
 							<Leaderboard crews={this.state.crews} />
 						</div>
 					</div>
-						<div className="eight columns">
+						<div className="nine columns">
 							<div className="panel">
 								<h4><strong>Live stream</strong></h4>
 								{
 									Object.keys(this.state.crews).map(function(crewNumber, i) {
 										const crew = this.state.crews[crewNumber];
-										return <Crew position={crew.position} status={crew.status} boat={crew.boat} crewNumber={crewNumber} key={i} ref={crewNumber.toString()}/>;
+										return <Crew position={crew.position} status={crew.status} boat={crew.boat} size={crew.users.length} crewNumber={crewNumber} key={i} ref={crewNumber.toString()}/>;
 									}.bind(this))
 								}
 							</div>
@@ -79,7 +79,6 @@ const GameHost = React.createClass({
 const Crew = React.createClass({
 	getInitialState() {
 		return {
-			position: 0,
 			velocity: 0,
 			deltaVelocity: 10,
 			maximumDeltaVelocity: 10,
@@ -123,7 +122,7 @@ const Crew = React.createClass({
 				velocity: this.state.velocity + this.state.deltaVelocity
 			});
 		} else if (this.state.isRaft) {
-			this.setState({deltaVelocity: this.state.deltaVelocity * 0.95});
+			this.setState({deltaVelocity: this.state.deltaVelocity * 0.25});
 		} else {
 			this.setState({
 				hp: this.state.hp + this.props.deltaHPConstant
@@ -136,11 +135,11 @@ const Crew = React.createClass({
 
 	render() {
 		let style = {
-			width: '7rem',
+			width: '10rem',
 			marginLeft: (this.props.position * 100) + 'px',
 			borderRadius: '5px',
-			border: '2px #26a65b solid',
-			height: '3rem'
+			border: 'none',
+			background: 'url(/img/boats-side/' + (this.state.isRaft ? 'rafts' : 'canoes') + '/' + this.props.size + '-members.svg) no-repeat center top'
 		};
 		const className = this.state.isRaft ? 'raft' : 'racetrack-boat';
 		console.log(this.props.position);
@@ -174,8 +173,7 @@ const LeaderboardEntry = React.createClass({
 	render() {
 		let style = {
 			fontSize: (this.props.crewPosition + 1) * 15 + 'px',
-			padding: 5 + this.props.crewPosition + 'px',
-			color: 'white'
+			padding: 5 + this.props.crewPosition + 'px'
 		};
 		return (<div className="leaderboardEntry">
 		<h5>Crew {this.props.crewNumber}: <span style={style}>{Math.round(this.props.crewPosition * 10) / 10}</span></h5>

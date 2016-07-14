@@ -1,51 +1,124 @@
 * {
 	font-family: 'Source Sans Pro', sans-serif;
-	color: #2c3e50;
+	-webkit-font-smoothing: antialiased;
+	color: #212f3c;
+	overflow-x: hidden;
 }
 strong, b {
-	font-weight: bold
+	font-weight: bold;
 }
-body {
-	background: #4ca9d6 url('/img/goshalex.svg') repeat-x center top;
-	background-size: cover;
+section {
+	overflow-y: hidden;
+}
+.landing-neg > .container > .row > div > *, .landing-neg > .container > .row > div > * > * {
+	color: white;
+}
+.landing-top-section {
+	height: 100vh;
+}
+.landing-pos {
+	background-color: #efefef;
+}
+.landing-neg {
+	background-color: #212f3c;
+}
+@media(min-width: 800px) {
+	.landing-river {
+		background: url('/img/back-bottom.svg') no-repeat center top;
+		background-size: cover;
+	}
+}
+@media(max-width: 800px) {
+	.landing-river {
+		background-color: #bee6f1;
+	}
+}
+.landing-body {
+	background: #bee6f1;
+}
+.landing-top-group {
+	margin-top: 50vh;
+	transform: translateY(-50%);
+}
+.landing-group {
+	padding: 8vh;
+}
+.text-landing {
+	font-size: 6rem;
+}
+.button-landing {
+	padding: 0 5rem;
+}
+.feature-img {
+	width: 50%;
+}
+@media (min-width: 800px) {
+	body {
+		background: #bee6f1 url('/img/back.svg') no-repeat center fixed;
+		background-size: cover;
+	}
+}
+@media (max-width: 800px) {
+	body {
+		background: #bee6f1 no-repeat center fixed;
+		background-size: cover;
+	}
+}
+input[type=tel], input[type=url], input[type=password], input[type=email], input[type=number], input[type=search], input[type=text], select, textarea, input {
+	color: #212f3c;
+	font-size: 1.5rem;
+	border-radius: 30px;
+	text-align: center;
+}
+label {
+	font-weight: normal;
 }
 .navbar {
-	background-color: white;
+	background: #bee6f1;
+	z-index: 1000;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
-	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
 	padding: 20px;
 	margin-bottom: 2rem;
 }
-.navbar > .container > .row > .columns > * {
-	margin-bottom: 0;
-	font-weight: normal;
+#landing-img {
+	max-width: 50%;
 }
-.navbar > .container > .row > .columns > p, a {
-	line-height: 3.125rem;
-	vertical-align: center;
+.button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
+	border-radius: 30px;
+	margin-top: 10px;
+	background-color: #7eb530;
+	border: none;
+	letter-spacing: normal;
+	text-transform: none;
+	font-size: 1.5rem;
+	font-weight: bold;
 }
-.navbar > .container > .row > .columns > .navbar-logo {
+.button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active {
+	background-color: #5e9e43;
+}
+.navbar-logo {
 	height: 4rem;
 	width: auto;
+}
+.text-center {
+	text-align: center;
 }
 h1 {
 	font-size: 5rem;
 	margin-top: 0;
 	margin-bottom: 10px;
 	font-weight: bold;
+	overflow-y: hidden;
 }
 h2 {
 	font-size: 2.5rem;
-	font-weight: bold;
-}
-input {
-	font-size: 1.5rem;
+	font-weight: normal;
 }
 span, span > * {
-	background-color: #16964b;
+	background-color: #1e414e;
 	border-radius: 0.5rem;
 	padding: 0 1rem;
 	color: white;
@@ -61,12 +134,12 @@ span:hover > span {
 	line-height: 1;
 }
 span[.clickable]:hover {
-	background-color: #26a65b;
+	background-color: #ecf0f1;
 }
 .panel {
-	background-color: white;
+	background-color: transparent;
 	border-radius: 2rem;
-	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+	color: white;
 	padding: 20px;
 	margin-bottom: 40px;
 }
@@ -78,7 +151,11 @@ span[.clickable]:hover {
 	padding: 0.5rem 2rem;
 	border: 2px solid #ecf0f1;
 	border-radius: 4rem;
-	font-size: 20px
+	font-size: 20px;
+	color: white;
+}
+.answers > span > * {
+	color: white;
 }
 .answers > span:hover {
 	position: absolute;
@@ -88,7 +165,8 @@ span[.clickable]:hover {
 	padding: 0.5rem 2rem;
 	border: 2px solid #ecf0f1;
 	border-radius: 4rem;
-	font-size: 20px
+	font-size: 20px;
+	cursor: pointer;
 }
 @media (min-width: 700px) {
 	.navbar > .columns > p, a {
@@ -98,12 +176,9 @@ span[.clickable]:hover {
 .studentselect > li {
 	font-size: 2rem;
 }
-.racetrack-boat {
-	background-color: #26a65b;
-}
 .racetrack-boat > p {
 	color: white;
-	background-color: #26a65b;
+	background-color: transparent;
 	text-align: center;
 	text-transform: uppercase;
 	letter-spacing: 1px;
@@ -116,14 +191,6 @@ span[.clickable]:hover {
 	border-radius: 0 0 2rem 2rem;
 	overflow-x: hidden;
 	overflow-y: hidden;
-}
-#canoe {
-	max-width: 15rem;
-	max-height: 100%;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 }
 .answers {
 	position: relative;
@@ -140,6 +207,9 @@ span[.clickable]:hover {
 	border-radius: 2rem 2rem 0 0;
 	padding: 15px;
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+}
+.panel-top > h2, .panel-top > p {
+	color: #212f3c;
 }
 .panel-group > .panel-bottom {
 	background-color: white;
@@ -163,9 +233,9 @@ span[.clickable]:hover {
 	font-weight: bold;
 	font-size: 100px;
 	background-color: #e74c3c;
-	border:none;
+	border: none;
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
-	text-align:center;
+	text-align: center;
 }
 .tap-button:hover, .tap-button:active {
 	color: white;
@@ -175,7 +245,7 @@ span[.clickable]:hover {
 	color: white;
 	text-align: center;
 	background-color: #26a65b;
-	border-radius:0;
+	border-radius: 0;
 	letter-spacing: normal;
 }
 .modal-active {
@@ -189,233 +259,35 @@ span[.clickable]:hover {
 	height: 100%;
 	top: 0;
 	left: 0;
-	background-color: rgba(0,0,0,0.5);
+	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1000;
 }
 .modal-background > * {
 	position: relative;
 }
-/*
-The below is code from Brian
-* {
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-overflow-scrolling: touch;
+@keyframes flash-red-twice {
+	0% { background: #c0392b }
+	49% { background: transparent }
+	50% { background: #c0392b }
 }
-html {
-	font: 100% sans-serif;
-	text-align: center;
-	background-color: #39f;
-	color: #eee;
+.flash-red-twice { animation: flash-red-twice 0.75s }
+@keyframes shake {
+	10%, 90% {
+		transform: translate3d(-1px, 0, 0);
+	}
+	20%, 80% {
+		transform: translate3d(2px, 0, 0);
+	}
+	30%, 50%, 70% {
+		transform: translate3d(-4px, 0, 0);
+	}
+	40%, 60% {
+		transform: translate3d(4px, 0, 0);
+	}
 }
-body { margin: 0 }
-html, body, main, #progress, #cont { height: 100% }
-@keyframes flash-red {
-	0% { background: #f00 }
+.margins {
+	margin-top: 30px;
 }
-@keyframes flash-yellow {
-	0% { background: #ff0 }
+.marginless {
+	margin-bottom: 0;
 }
-@keyframes flash-green {
-	0% { background: #0f0 }
-}
-.flash-red { animation: flash-red 0.3s }
-.flash-yellow { animation: flash-yellow 0.3s }
-.flash-green { animation: flash-green 0.3s }
-[hidden] {
-	display: none;
-	pointer-events: none;
-}
-[hidden] > * { display: none }
-main { position: relative }
-#cont label {
-	font-size: 1.3em;
-	margin: 0.5em 0.5em 0.5em 0;
-}
-form:not(.left-align) { margin: 0 auto }
-form { padding: 2em }
-.pregamescreen form { background: rgba(0, 0, 0, 0.5) }
-.centerbox {
-	text-align: left;
-	display: table;
-	margin: 0 auto;
-	max-width: 24em;
-}
-.centerbox span { min-width: 6.5ch }
-label {
-	display: flex;
-	align-items: center;
-}
-input {
-	font-size: 1.1em;
-	margin-left: 0.5ch;
-	flex-basis: 0;
-	flex-grow: 1;
-}
-@media (max-width: 499px) {
-	.pregamescreen form { padding: 0 0.5em }
-	.pregamescreen form, .centerbox { width: 100% }
-	.centerbox input { width: 0 }
-}
-@media (min-width: 500px) {
-	.pregamescreen form { padding: 0 10% }
-}
-@media (min-height: 32em) and (pointer: fine) {
-	html { overflow: hidden }
-	.pregamescreen { margin-top: 50vh }
-	.pregamescreen form { transform: translateY(-50%) }
-}
-form:not([hidden]) {
-	transition: opacity 0.5s;
-	display: table;
-}
-form[hidden] {
-	opacity: 0;
-	height: 0;
-	display: block;
-	padding: 1px;
-	margin-bottom: -2px;
-}
-form:not([hidden]) + form[hidden] {
-	display: table;
-}
-#cont form > :not(label) { text-align: center }
-nav, footer {
-	padding: 0.3em;
-	background: #ddd;
-}
-footer { margin-top: 2em }
-header { margin-bottom: 2em }
-button {
-	display: block;
-	margin: 1em auto;
-	padding: 0.2em 1em;
-	background: #07f;
-	font-size: 1.6em;
-	transition: background-color 0.1s;
-	border: 1px solid #aaa;
-	color: #fff;
-	cursor: pointer;
-}
-button:hover { background: #09f }
-button:active { background: #05f }
-button[disabled] { background: #aaa }
-#error {
-	color: #f00;
-	transition: padding-top 0.3s, padding-bottom 0.3s, height 0.3s;
-	background: #fff;
-	padding: 1em;
-	margin: 0;
-}
-#error:empty {
-	padding: 0;
-	height: 0;
-}
-a {
-	color: #fff;
-	transition: color 0.1s;
-}
-a:hover { color: #6ff }
-a:active { color: #faa }
-#game, #tgame {
-	padding: 0;
-	background: transparent;
-	width: 100%;
-	display: block;
-}
-#game h1 {
-	background: #fff;
-	color: #000;
-	position: absolute;
-	z-index: 1;
-	right: 0; left: 0;
-	margin-top: 0;
-	padding-top: 0.3em;
-}
-#timebar {
-	height: 0.5em;
-	margin-top: 0.3em;
-}
-#game h1 ~ * { font-size: 1.3em }
-#prequestion {
-	position: absolute;
-	top: 0; right: 0; bottom: 0; left: 0;
-}
-#canoe {
-	width: 24.52vmin;
-	height: 39.18vmin;
-	background: url('/img/canoetop.svg');
-	background-size: cover;
-	margin: calc(5em + 20vh) auto 0
-}
-#game input[type='text'] { width: 100% }
-#answers > div {
-	position: absolute;
-	top: 0; left: 0;
-	cursor: pointer;
-	padding: 0.7em 1.2em;
-	background: url('/img/leaf1.svg') no-repeat center;
-}
-#answers > div.alt { background: url('/img/leaf2.svg') no-repeat center }
-@media (pointer: fine) {
-	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
-}
-#answers > div > div {
-	padding: 0.2em 0.5em;
-	color: #000;
-	max-width: 10em;
-}
-.half-divider { display: flex }
-.half {
-	width: 0;
-	flex-grow: 1;
-}
-.half:first-of-type { margin-right: 0.5em }
-#lonelyfolks { transition: flex-grow 0.3s }
-#lonelyfolks.hide {
-	flex-grow: 0;
-	overflow: hidden;
-}
-li { width: intrinsic }
-li:empty {
-	opacity: 0;
-	height: 0;
-}
-li[data-n='1'] { color: #f22 }
-ul.studentselect > li { cursor: pointer }
-ul.studentselect > li:hover { text-decoration: line-through }
-.left-align { text-align: left }
-.left-align button { margin: 1em }
-.studentselect, .leaderboard {
-	text-align: left;
-	font-size: 1.5em;
-}
-ol.studentselect > li, .leaderboard > li { line-height: 2 }
-ol.studentselect > li > span, .leaderboard > li > span {
-	display: inline-block;
-	background: #ff0;
-	color: #111;
-	padding: 0.1em 0.5em;
-	margin: 0 0.3em;
-	border-radius: 0.3em;
-	vertical-align: middle;
-	line-height: 1.3;
-}
-ol.studentselect > li > span { cursor: pointer }
-ol.studentselect > li > span::before {
-	content: '<';
-	display: inline-block;
-	color: #666;
-	width: 0;
-	overflow: hidden;
-	transition: width 0.1s;
-	vertical-align: top;
-	padding-bottom: 0.2em;
-}
-ol > li > span:hover::before { width: 2ch }
-.host ~ canvas {
-	left: 50%;
-	top: 75%;
-	transform: translate(-50%, -50%) rotate(90deg);
-}
-*/

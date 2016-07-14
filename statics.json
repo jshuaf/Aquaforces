@@ -5,8 +5,13 @@
 	"/host/": {
 		"path": "./html/host.html"
 	},
+	"/overview/": {
+		"path": "./html/overview.html",
+		"landing": "landing-body"
+	},
 	"/console/": {
 		"path": "./html/console.html",
+		"title": "Question Console",
 		"inhead": "<link rel=\"stylesheet\" href=\"/host.css\" />"
 	}
 }

@@ -55,11 +55,14 @@ module.exports = (server) => {
 			if (tws.crew().whirlpool.present) {
 				return;
 			}
-			tws.rock = true;
+			tws.crew().rock = {
+				streak: 0
+			};
 			tws.crew().members.forEach((crewMember) => {
-				if (crewMember != ttws) {
-					crewMember.trysend({event: 'rock'});
-				}
+				crewMember.trysend({
+					event: 'addRock',
+					startTime: (new Date().getTime()) + 1500
+				});
 			});
 		};
 
@@ -153,7 +156,8 @@ module.exports = (server) => {
 									streak: 0,
 									rock: false,
 									whirlpool: false,
-									activeQuestions: []
+									activeQuestions: [],
+									hp: 100
 								};
 							} else if (tws.game.crews[m.crewNumber].members.length >= 6) {
 								return tws.error('Crew cannot have more than 6 sailors.', 'crew');
@@ -190,7 +194,7 @@ module.exports = (server) => {
 								if (pastAnswer.time < maxFuzzyTime) {
 									if (pastAnswer.text == m.answer) {
 										tws.sendAnswerEvent(true, m.crewNumber);
-										tws.crew().streak += 1;
+										if (!tws.crew().rock.length && !tws.whirlpool) tws.crew().streak += 1;
 									}
 								} else {
 									const pastAnswerIndex = crew.recentCorrectAnswers.indexOf(pastAnswer);
@@ -205,15 +209,34 @@ module.exports = (server) => {
 									tws.crew().activeQuestions.splice(tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
 									tws.sendAnswerEvent(true, m.crewNumber);
 									tws.questionsDone.push(correspondingQuestion);
-									tws.crew().streak += 1;
+									if (!tws.crew().rock.length && !tws.whirlpool) tws.crew().streak += 1;
+									if (tws.crew().rock) {
+										tws.crew().rock.streak += 1;
+										if (tws.crew().rock.streak >= 5) {
+											tws.crew().rock = {};
+											tws.crew().members.forEach((crewMember) => {
+												crewMember.trysend({
+													event: 'endRock'
+												});
+											});
+										}
+									}
+
 									const newQuestion = correspondingQuestion.owner.addNewQuestion();
 									tws.crew().recentCorrectAnswers.push(newQuestion.answer);
 								}
 							});
 							if (!correspondingQuestion) {
 								// incorrect answers
-								tws.sendAnswerEvent(false, m.crewNumber);
+								tws.crew().hp -= 5;
 								tws.crew().streak = 0;
+								tws.sendAnswerEvent(false, m.crewNumber);
+								tws.crew().members.forEach((member) => {
+									member.trysend({
+										event: 'updateHP',
+										hp: tws.crew().hp
+									});
+								});
 							}
 							break;
 						}
@@ -263,11 +286,14 @@ module.exports = (server) => {
 
 						case 'answerPassedThreshold': {
 							const answerToResend = m.answer;
-							crew = tws.game.crews[m.crewNumber];
-							ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-							ttws.trysend({
-								event: 'correctAnswer',
-								answer: answerToResend
+							tws.crew().activeQuestions.forEach((activeQuestion) => {
+								if (activeQuestion.answer == answerToResend) {
+									ttws = tws.randomCrewMember();
+									return ttws.trysend({
+										event: 'correctAnswer',
+										answer: answerToResend
+									});
+								}
 							});
 							break;
 						}
@@ -309,10 +335,14 @@ module.exports = (server) => {
 							event: 'removeUser',
 							user: tws.user
 						});
+						const index = tws.game.users.indexOf(tws);
+						tws.game.users.splice(index, 1);
+						tws.game.usernames.splice(index, 1);
 					}
 				});
 				break;
 			}
+
 			case '/host/': {
 				tws.on('message', (m, raw) => {
 					try {
@@ -366,6 +396,9 @@ module.exports = (server) => {
 								crew.members.forEach((ttws) => {
 									if (ttws.user == m.user) {
 										crew.members.splice(crew.members.indexOf(ttws), 1);
+										ttws.trysend({
+											event: 'removeUserFromCrew'
+										});
 									}
 								});
 							});
@@ -379,6 +412,10 @@ module.exports = (server) => {
 							tws.game.users.forEach((ttws, i) => {
 								if (ttws.user == m.user) {
 									tws.game.users.splice(i, 1);
+									tws.game.usernames.splice(i, 1);
+									ttws.trysend({
+										event: 'removeUserFromGame'
+									});
 								}
 							});
 							break;
@@ -387,9 +424,24 @@ module.exports = (server) => {
 						case 'startGame': {
 							tws.checkGameExists();
 							if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
+							Object.keys(tws.game.crews).forEach((crewNumber) => {
+								const crew = tws.game.crews[crewNumber];
+								if (crew.members.length < 2) return tws.error('Need at least two people in every crew.');
+								else if (crew.members.length > 4) return tws.error('Maximum four people in every crew.');
+							});
 							tws.game.hasStarted = true;
-							tws.game.users.forEach((ttws) => {
-								ttws.trysend({event: 'startGame', answers: tws.game.answers});
+							tws.game.crews.forEach((crew) => {
+								const crewSize = crew.members.length;
+								crew.members.forEach((ttws) => {
+									ttws.trysend({
+										event: 'startGame',
+										answers: tws.game.answers,
+										crewSize
+									});
+								});
+							});
+							tws.trysend({
+								event: 'startGame'
 							});
 							tws.game.crews.forEach((crew) => {
 								crew.members.forEach((member) => {
