@@ -105,7 +105,6 @@ module.exports = (server) => {
 				wasCorrectAnswer
 			});
 		};
-
 		switch (tws.upgradeReq.url) {
 			case '/': {
 				tws.on('message', function(m, raw) {
