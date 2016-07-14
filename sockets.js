@@ -94,9 +94,8 @@ module.exports = (server) => {
 				wasCorrectAnswer
 			});
 		};
-
 		switch (tws.upgradeReq.url) {
-			case '/play/': {
+			case '/': {
 				tws.on('message', function(m, raw) {
 					try {
 						m = JSON.parse(m);

@@ -7,7 +7,7 @@
 		"path": "./html/host.html"
 	},
 	"/play/": {
-		"path": "./html/index.html"
+		"path": "./html/play.html"
 	},
 	"/console/": {
 		"path": "./html/console.html",
