@@ -53,6 +53,10 @@ h1 { margin: 0 0 0.4em }
 	z-index: 2;
 	top: 0; right: 0; bottom: 0; left: 0;
 }
+.white { color: #eee }
+.white a { color: #fff }
+.white a:hover { color: #6ff }
+.white a:active { color: #faa }
 [hidden] {
 	display: none;
 	pointer-events: none;
