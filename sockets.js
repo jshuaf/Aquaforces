@@ -378,11 +378,11 @@ module.exports = (server) => {
 						case 'startGame': {
 							tws.checkGameExists();
 							if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
-							Object.keys(tws.game.crews).forEach((crewNumber) => {
+							for (crewNumber in tws.game.crews) {
 								const crew = tws.game.crews[crewNumber];
 								if (crew.members.length < 2) return tws.error('Need at least two people in every crew.');
 								else if (crew.members.length > 4) return tws.error('Maximum four people in every crew.');
-							});
+							}
 							tws.game.hasStarted = true;
 							tws.game.crews.forEach((crew) => {
 								const crewSize = crew.members.length;
