@@ -96,7 +96,7 @@ module.exports = (server) => {
 		};
 
 		switch (tws.upgradeReq.url) {
-			case '/': {
+			case '/play/': {
 				tws.on('message', function(m, raw) {
 					try {
 						m = JSON.parse(m);
