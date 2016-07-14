@@ -72,6 +72,7 @@ input[type=tel], input[type=url], input[type=password], input[type=email], input
 }
 label {
 	font-weight: normal;
+	margin-top: 3%;
 }
 .navbar {
 	background: #bee6f1;
@@ -88,7 +89,7 @@ label {
 }
 .button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
 	border-radius: 30px;
-	margin-top: 10px;
+	margin-top: 12%;
 	background-color: #7eb530;
 	border: none;
 	letter-spacing: normal;
