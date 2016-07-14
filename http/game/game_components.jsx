@@ -206,28 +206,11 @@ const Answer = React.createClass({
 		const timeAtAnimation = (new Date()).getTime();
 		const dt = timeAtAnimation - this.state.lastAnimationTime;
 
-		const leftBoundary = this.props.canoeBounds.left;
-		const rightBoundary = this.props.canoeBounds.right;
-
 		let positionX = this.state.position.x;
 		let positionY = this.state.position.y;
 		let velocityX = this.state.velocity.vx;
 		let velocityY = this.state.velocity.vy;
 		let offsetWidth = this.state.offsetWidth;
-		// ugly physics code beware
-		/*
-		if ((positionX) + offsetWidth / 2 < innerWidth / 2) {
-			// on the left side
-			velocityX += (dt *
-				(
-					(Math.random() - 0.5) / 10000 +
-					Math.min(0.001, Math.exp(-(positionX)) / 100)
-					- Math.min(0.001, Math.exp((positionX) + offsetWidth - innerWidth * leftBoundary) / 100)
-				) || 0);
-		} else {
-			velocityX += (dt * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-(positionX) + innerWidth * rightBoundary) / 100) - Math.min(0.001, Math.exp((positionX) + offsetWidth - innerWidth) / 100)) || 0);
-		}
-		velocityX /= 1.05;*/
 
 		velocityY += dt * ((Math.random() - 0.5) / 10000);
 		if ((velocityY) < 0.03) velocityY = +velocityY + 0.03;
@@ -342,9 +325,6 @@ const Canoe = React.createClass({
 const River = React.createClass({
 	getInitialState() {
 		return {
-			// Canoe
-			canoeBounds: null,
-			canoeDimensions: null,
 			// Answers
 			answers: [],
 			answersToAdd: [],
@@ -352,14 +332,7 @@ const River = React.createClass({
 			answerData: this.props.initialAnswers,
 			initialAnswerXPositions: [],
 			// River Reflections
-			riverReflectionGroups: [],
-			// River
-			bounds: {
-				left: null,
-				right: null,
-				bottom: null,
-				top: null
-			}
+			riverReflectionGroups: []
 		};
 	},
 
@@ -416,24 +389,6 @@ const River = React.createClass({
 		// Rocks
 		this.props.rockAnimationData(riverRect.top, canoeRect.top, canoe.offsetHeight, rockHeight);
 
-		// Measurements
-		this.setState({
-			canoeBounds: {
-				left: canoeRect.left,
-				right: canoeRect.right
-			},
-			canoeDimensions: {
-				height: canoe.offsetHeight,
-				width: canoe.offsetWidth
-			},
-			bounds: {
-				left: riverRect.left,
-				right: riverRect.right,
-				bottom: riverRect.bottom,
-				top: riverRect.top
-			}
-		});
-
 		// River Reflections
 		this.startRiverReflections();
 		this.updateRiverReflections();
@@ -473,14 +428,16 @@ const River = React.createClass({
 	},
 
 	generateAnswerPosition(answerWidth) {
-		const canoeBounds = this.state.canoeBounds;
-		const riverBounds = this.state.bounds;
+		const riverBounds = this.riverBounds();
+		const canoeBounds = this.canoeBounds();
 
 		// answers should spawn between screenleft and canoeleft or screenright and canoeright
 		const screenLeft = 0;
 		const canoeLeft = canoeBounds.left - riverBounds.left - answerWidth;
 		const canoeRight = canoeBounds.right - riverBounds.left;
 		const screenRight = riverBounds.right - riverBounds.left - answerWidth;
+
+		console.log(screenLeft, canoeLeft, canoeRight, screenRight);
 
 		function ascending(a, b) {return a - b;}
 
@@ -543,8 +500,19 @@ const River = React.createClass({
 		});
 	},
 
+	canoeBounds() {
+		const canoe = ReactDOM.findDOMNode(this.refs.canoe);
+		return canoe.getBoundingClientRect();
+	},
+
+	riverBounds() {
+		const river = this.refs.river;
+		return river.getBoundingClientRect();
+	},
+
 	render() {
 		let answers = [];
+
 		for (let i = 0; i < this.state.answers.length; i++) {
 			answers.push(<Answer
 				text={this.state.answers[i]}
@@ -552,8 +520,8 @@ const River = React.createClass({
 				onClick={this.props.answerSelected}
 				answerPassedThreshold={this.answerPassedThreshold}
 				generateAnswerPosition={this.generateAnswerPosition}
-				riverBounds={this.state.bounds}
-				canoeBounds={this.state.canoeBounds}
+				riverBounds={this.riverBounds()}
+				canoeBounds={this.canoeBounds()}
 				keepRunning={!this.props.whirlpool}
 			/>);
 		}
