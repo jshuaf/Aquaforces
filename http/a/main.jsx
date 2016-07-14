@@ -29,3 +29,9 @@ function request(uri, callback, params) {
 	};
 	return i;
 }
+
+let currentWindowWidth;
+
+window.addEventListener('resize', (event) => {
+  let currentWindowWidth = window.innerWidth;
+});
