@@ -315,7 +315,7 @@ const Canoe = React.createClass({
 		image += `/${this.props.crewSize}-members.svg`;
 
 		const style = {
-			width: '25%',
+			height: '50%',
 			transform: `translate(${0}px, ${window.innerHeight / 3.5}px)`
 		};
 		return (<img id = "canoe" src = {image} style = {style} ref = "canoe"></img>);
@@ -436,8 +436,6 @@ const River = React.createClass({
 		const canoeLeft = canoeBounds.left - riverBounds.left - answerWidth;
 		const canoeRight = canoeBounds.right - riverBounds.left;
 		const screenRight = riverBounds.right - riverBounds.left - answerWidth;
-
-		console.log(screenLeft, canoeLeft, canoeRight, screenRight);
 
 		function ascending(a, b) {return a - b;}
 
