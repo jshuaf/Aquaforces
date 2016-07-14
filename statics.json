@@ -1,13 +1,13 @@
 {
 	"/": {
-		"path": "./html/index.html"
+		"path": "./html/overview.html",
+		"landing": "landing-body"
 	},
 	"/host/": {
 		"path": "./html/host.html"
 	},
-	"/overview/": {
-		"path": "./html/overview.html",
-		"landing": "landing-body"
+	"/play/": {
+		"path": "./html/play.html"
 	},
 	"/console/": {
 		"path": "./html/console.html",

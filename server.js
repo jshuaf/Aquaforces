@@ -55,7 +55,7 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	if (typeof header['Vary'] != 'string') header['Vary'] = 'Cookie';
 	res.writeHead(status || 200, header);
 	let data;
-	if (req.url.pathname == '/overview/') {
+	if (req.url.pathname == '/') {
 		data = (yield fs.readFile('./html/a/head_nav.html', yield)).toString();
 	}
 	else {
