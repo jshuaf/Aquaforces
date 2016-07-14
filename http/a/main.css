@@ -7,12 +7,14 @@ html {
 	font: 100% sans-serif;
 	background: #39f;
 }
-html:not(.hostgame):not(.no-bg) {
-	background-color: #bef;
-	background-image: url('/img/background.svg');
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: bottom left;
+html:not(.hostgame):not(.no-bg) { background-color: #bef }
+@media (min-height: 32em) {
+	html:not(.hostgame):not(.no-bg) {
+		background-image: url('/img/background.svg');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: bottom left;
+	}
 }
 html, #progress { height: 100% }
 #cont { height: 50% }
