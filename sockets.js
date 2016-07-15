@@ -337,6 +337,7 @@ module.exports = (server) => {
 						const index = tws.game.users.indexOf(tws);
 						tws.game.users.splice(index, 1);
 						tws.game.usernames.splice(index, 1);
+						tws.crew().members.splice(tws.crew().members.indexOf(tws), 1);
 					}
 				});
 				break;
