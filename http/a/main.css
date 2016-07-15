@@ -120,6 +120,7 @@ h2 {
 	background-color: #1e414e;
 	border-radius: 0.5rem;
 	color: white;
+	padding: 0 1rem;
 }
 .pill > .pill {
 	display: none;
