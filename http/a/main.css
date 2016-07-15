@@ -21,13 +21,13 @@ section {
 .landing-neg {
 	background-color: #212f3c;
 }
-@media(min-width: 800px) {
+@media (min-width: 800px) {
 	.landing-river {
 		background: url('/img/back-bottom.svg') no-repeat center top;
 		background-size: cover;
 	}
 }
-@media(max-width: 800px) {
+@media (max-width: 800px) {
 	.landing-river {
 		background-color: #bee6f1;
 	}
@@ -264,11 +264,19 @@ h2 {
 	position: relative;
 }
 @keyframes flash-red-twice {
-	0% { background: #c0392b }
-	49% { background: transparent }
-	50% { background: #c0392b }
+	0% {
+		background: #c0392b;
+	}
+	49% {
+		background: transparent;
+	}
+	50% {
+		background: #c0392b;
+	}
 }
-.flash-red-twice { animation: flash-red-twice 0.75s }
+.flash-red-twice {
+	animation: flash-red-twice 0.75s;
+}
 @keyframes shake {
 	10%, 90% {
 		transform: translate3d(-1px, 0, 0);
