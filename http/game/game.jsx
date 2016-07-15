@@ -1,6 +1,5 @@
 let socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
 const cont = document.getElementById('cont');
-const errorEl = document.getElementById('error');
 let gameHasEnded = false;
 let answers = [];
 
@@ -9,7 +8,6 @@ let username;
 let crewNumber;
 
 function setState(id) {
-	errorEl.textContent = '';
 	cont.children.forEach((e) => {
 		if (e.id !== id) {
 			e.hidden = true;
@@ -38,13 +36,8 @@ socket.onmessage = function(m) {
 	}
 	console.log(m);
 	switch (m.event) {
-	case 'notice':
-		errorEl.textContent = m.body;
-		errorEl.scrollIntoView();
-		break;
 	case 'error':
-		errorEl.textContent = m.body;
-		errorEl.scrollIntoView();
+		sweetAlert(m.title, m.text, "error");
 		break;
 	case 'addUser':
 		setState('crew');
@@ -117,8 +110,8 @@ socket.onmessage = function(m) {
 	}
 };
 
-socket.onclose = function() {
-	errorEl.textContent = 'Socket closed.';
+socket.onclose = () => {
+	sweetAlert("Server connection died.", "We're sorry about that.", "error");
 };
 document.getElementById('join').addEventListener('submit', (e) => {
 	e.preventDefault();

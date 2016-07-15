@@ -1,6 +1,5 @@
 const socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/');
-const cont = document.getElementById('cont'),
-	errorEl = document.getElementById('error');
+const cont = document.getElementById('cont');
 
 const crews = {};
 const usersWithoutCrews = [];
@@ -10,7 +9,6 @@ let gameHasStarted = false;
 
 function setState(id) {
 	// hide and show different elements
-	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
 		if (e.id != id) e.hidden = true;
 	});
@@ -71,8 +69,7 @@ socket.onmessage = function(m) {
 	console.log(m);
 	switch (m.event) {
 	case 'error':
-		alert(m.body);
-		errorEl.textContent = m.body;
+		sweetAlert(m.title, m.text, "error");
 		break;
 	case 'newGame':
 		document.getElementById('game-code-cont').appendChild(document.createTextNode(m.id));
@@ -89,11 +86,9 @@ socket.onmessage = function(m) {
 		document.getElementById('loneusers').childNodes.forEach(function(e) {
 			if (e.firstChild.nodeValue == m.user) e.parentNode.removeChild(e);
 		});
-		let sign = document.createElement('span');
-		sign.appendChild(document.createTextNode('<'));
 		let span = document.createElement('span');
 		span.dataset.username = m.user;
-		span.className = 'clickable';
+		span.className = 'clickable pill';
 		span.onclick = removeUserFromCrew;
 		span.appendChild(document.createTextNode(m.user));
 		document.getElementById('crews').children[m.crew - 1].appendChild(span);
@@ -133,7 +128,7 @@ socket.onmessage = function(m) {
 };
 
 socket.onclose = () => {
-	errorEl.textContent = 'Socket closed.';
+	sweetAlert("Server connection died.", "We're sorry about that.", "error");
 };
 document.getElementById('dashboard').addEventListener('submit', function(e) {
 	e.preventDefault();

@@ -2,7 +2,6 @@
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	color: #212f3c;
-	overflow-x: hidden;
 }
 strong, b {
 	font-weight: bold;
@@ -117,23 +116,22 @@ h2 {
 	font-size: 2.5rem;
 	font-weight: normal;
 }
-span, span > * {
+.pill, .pill > * {
 	background-color: #1e414e;
 	border-radius: 0.5rem;
-	padding: 0 1rem;
 	color: white;
 }
-span > span {
+.pill > .pill {
 	display: none;
 }
-span:hover > span {
+.pill:hover > .pill {
 	display: inline-block;
 	margin: 0;
 	padding: 0;
 	border-radius: 0;
 	line-height: 1;
 }
-span[.clickable]:hover {
+.pill[.clickable]:hover {
 	background-color: #ecf0f1;
 }
 .panel {
@@ -143,7 +141,7 @@ span[.clickable]:hover {
 	padding: 20px;
 	margin-bottom: 40px;
 }
-.answers > span {
+.answers > .pill {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -154,10 +152,10 @@ span[.clickable]:hover {
 	font-size: 20px;
 	color: white;
 }
-.answers > span > * {
+.answers > .pill > * {
 	color: white;
 }
-.answers > span:hover {
+.answers > .pill:hover {
 	position: absolute;
 	left: 0;
 	top: 0;

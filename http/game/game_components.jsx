@@ -371,7 +371,7 @@ const Answer = React.createClass({
 			transform: 'translate(' + this.state.position.x + 'px, ' + this.state.position.y + 'px)'
 		};
 		if (!this.state.disappeared)
-			return <span style={style} onClick={this.handleClick} ref = "answer">{this.props.text}</span>;
+			return <span style={style} onClick={this.handleClick} ref = "answer" className = "pill">{this.props.text}</span>;
 		else {
 			return null;
 		}
