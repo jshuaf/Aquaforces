@@ -10,6 +10,9 @@ strong, b {
 section {
 	overflow-x: hidden;
 }
+.container {
+	max-width: 2000px;
+}
 .landing-neg > .container > .row > div > *, .landing-neg > .container > .row > div > * > * {
 	color: white;
 }
