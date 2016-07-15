@@ -335,9 +335,13 @@ module.exports = (server) => {
 							user: tws.user
 						});
 						const index = tws.game.users.indexOf(tws);
+						const crewMembers = tws.crew().members;
 						tws.game.users.splice(index, 1);
 						tws.game.usernames.splice(index, 1);
-						tws.crew().members.splice(tws.crew().members.indexOf(tws), 1);
+						crewMembers.splice(crewMembers.indexOf(tws), 1);
+						if (crewMembers.length == 0) {
+							tws.game.crews.splice(tws.game.crews.indexOf(tws.game.crew()), 1);
+						}
 					}
 				});
 				break;
