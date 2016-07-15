@@ -29,15 +29,8 @@ function request(uri, callback, params) {
 	};
 	return i;
 }
-<<<<<<< HEAD
 
-let currentWindowWidth;
-
-window.addEventListener('resize', (event) => {
-  let currentWindowWidth = window.innerWidth;
-});
-=======
-function shuffle(array) { // from stack overflow
+function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
   while (currentIndex !== 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);
@@ -48,4 +41,3 @@ function shuffle(array) { // from stack overflow
   }
   return array;
 }
->>>>>>> sexy-errors
