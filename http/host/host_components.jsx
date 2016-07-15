@@ -45,6 +45,11 @@ const GameHost = React.createClass({
 		this.setState(oldCrews);
 	},
 
+	whirlpoolStatusChanged(status, crewNumber) {
+		const crew = this.refs[crewNumber.toString()];
+		crew.processWhirlpool(status);
+	},
+
 	render() {
 		return (
 			<div className="container">
@@ -79,7 +84,8 @@ const Crew = React.createClass({
 			maximumDeltaVelocity: 10,
 			hp: 1,
 			current: -0.1,
-			isRaft: false
+			isRaft: false,
+			isWhirlpool: false
 		};
 	},
 
@@ -91,13 +97,32 @@ const Crew = React.createClass({
 		};
 	},
 
+	processWhirlpool(status) {
+		switch (status) {
+			case 'new':
+				this.setState({isWhirlpool: true});
+				break;
+			case 'timeout':
+				this.setState({hp: this.state.hp - 0.25, isWhirlpool: false});
+				break;
+			case 'wrongAnswer':
+				this.setState({hp: this.state.hp - 0.25, isWhirlpool: false});
+				break;
+			case 'correctAnswer':
+				this.setState({position: this.state.position + 0.3, isWhirlpool: false});
+				break;
+			default:
+				break;
+			}
+	},
+
 	processAnswer(wasCorrectAnswer) {
 		if (wasCorrectAnswer) {
 			this.setState({
 				velocity: this.state.velocity + this.state.deltaVelocity
 			});
 		} else if (this.state.isRaft) {
-			this.setState({deltaVelocity: this.state.deltaVelocity * 0.95});
+			this.setState({deltaVelocity: this.state.deltaVelocity * 0.25});
 		} else {
 			this.setState({
 				hp: this.state.hp + this.props.deltaHPConstant
@@ -148,69 +173,10 @@ const LeaderboardEntry = React.createClass({
 	render() {
 		let style = {
 			fontSize: (this.props.crewPosition + 1) * 15 + 'px',
-			padding: 5 + this.props.crewPosition + 'px',
-			color: 'white'
+			padding: 5 + this.props.crewPosition + 'px'
 		};
 		return (<div className="leaderboardEntry">
-		<h5>Crew {this.props.crewNumber}: <span style={style}>{Math.round(this.props.crewPosition * 10) / 10}</span></h5>
+		<h5>Crew {this.props.crewNumber}: <span style={style} className = "pill">{Math.round(this.props.crewPosition * 10) / 10}</span></h5>
 		</div>);
 	}
-});
-
-const River = React.createClass({
-	getInitialState() {
-		return {
-			riverReflectionGroups: []
-		};
-	},
-
-	addRiverReflectionGroup() {
-		const currentGroups = this.state.riverReflectionGroups;
-		const newReflectionGroup = {};
-		if (currentGroups.length) {
-			const currentYPositions = [];
-			for (const currentGroup in currentGroups) {
-				currentYPositions.push(currentGroup.yPosition);
-			}
-			for (let i = 1; i < currentXPositions.length; i++) {
-				const currentGap = currentXPositions[i] - currentXPositions[i - 1];
-				if (currentGap > currentMaximumGap) {
-					currentMaximumGap = currentGap;
-					newLeftBound = currentXPositions[i - 1];
-					newRightBound = currentXPositions[i];
-				}
-			}
-		} else {
-			newReflectionGroup.leftBoundary = 10 + Math.random() * 5;
-			newReflectionGroup.yPosition = 15 + Math.random() * 70;
-		}
-
-		newReflectionGroup.rightBoundary = newReflectionGroup.leftBoundary + Math.random() * 15;
-	},
-
-	render() {
-		return (
-			<div>
-			{
-				this.state.riverReflectionGroups.map((riverReflectionGroup, i) =>
-					<RiverReflectionGroup
-						leftBoundary = {riverReflectionGroup.leftBoundary}
-						rightBoundary = {riverReflectionGroup.rightBoundary}
-						yPosition = {riverReflectionGroup.yPosition}
-						backgroundColor = {backgroundColor}
-						/>
-				)
-			}
-			</div>
-		);
-	}
-});
-
-const RiverShore = React.createClass({
-	render() {
-		return null;
-	}
-
-	// 2 groups in each screen
-	// 1 - 2 in each group
 });
