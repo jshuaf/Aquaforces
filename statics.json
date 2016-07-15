@@ -1,17 +1,9 @@
 {
 	"/": {
-		"path": "./html/overview.html",
-		"landing": "landing-body"
-	},
-	"/host/": {
-		"path": "./html/host.html"
+		"path": "./html/landing.html",
+		"inhead": "<link rel=\"stylesheet\" href=\"/landing.css\" />"
 	},
 	"/play/": {
 		"path": "./html/play.html"
-	},
-	"/console/": {
-		"path": "./html/console.html",
-		"title": "Question Console",
-		"inhead": "<link rel=\"stylesheet\" href=\"/host.css\" />"
 	}
 }

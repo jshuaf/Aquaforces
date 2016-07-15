@@ -1,3 +1,4 @@
+'use strict';
 function inputRemove() {
 	if (!this.value) this.parentNode.parentNode.removeChild(this.parentNode);
 }
