@@ -7,7 +7,8 @@ html {
 	font: 100% sans-serif;
 	background: #39f;
 }
-html:not(.hostgame):not(.no-bg) { background-color: #bef }
+body { margin: 1em 1.3em }
+html:not(.hostgame):not(.no-bg) { background-color: #bee6f1 }
 @media (min-height: 32em) {
 	html:not(.hostgame):not(.no-bg) {
 		background-image: url('/img/background.svg');
@@ -122,9 +123,15 @@ button, .button {
 }
 .button { display: inline-table }
 button:hover, .button:hover { background: #fa4 }
-button:active, .button:active { background: #f70 }
-.button:hover, .button:active { color: #fff }
-button[disabled] { background: #aaa }
+.button:hover { color: #224 }
+button:active, .button:active {
+	background: #f70;
+	color: #fff;
+}
+button[disabled] {
+	background: #aaa;
+	color: #444;
+}
 #joinbtn { margin: 0.2em auto }
 #error {
 	color: #f00;

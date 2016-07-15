@@ -4,13 +4,16 @@ html:not(.hostgame):not(.no-bg) {
 	background-position: 50% 70%;
 	background-image: url('/img/landing-background.svg');
 }
-body { margin: 0 }
-section { padding: calc(2em + 2vh) 3em }
+body {
+	margin: 0;
+	line-height: 1.35;
+}
+section { padding: calc(2em + 2vh) 5% }
 section:first-of-type {
 	position: absolute;
 	top: 0; left: 0; right: 0;
-	margin-top: 20vh;
-	transform: translateY(-20%);
+	margin-top: 22vh;
+	transform: translateY(-22%);
 	text-align: center;
 }
 section:first-of-type p { display: none }
@@ -32,7 +35,7 @@ section div {
 	section div:nth-child(3), section div:nth-child(4) { margin-top: 2em }
 }
 section div h2 { text-align: center }
-section div h2, section div p { margin: 0.2em 0 }
+section div h2, section div p { margin: 0.3em 0 }
 section div svg {
 	display: block;
 	margin: 0 auto;
@@ -40,8 +43,8 @@ section div svg {
 }
 @media (min-height: 32em) {
 	section:first-of-type {
-		margin-top: 30vh;
-		transform: translateY(-30%);
+		margin-top: 32vh;
+		transform: translateY(-32%);
 	}
 	section:first-of-type p {
 		display: block;
@@ -50,8 +53,11 @@ section div svg {
 	}
 }
 #logo {
-	width: calc(16em + 12%);
+	width: calc(14em + 10%);
+	position: absolute;
 	max-width: 100%;
+	top: 1em;
+	left: 2.5em;
 }
 h1 {
 	font-size: calc(2rem + 1vw);
@@ -71,7 +77,8 @@ section > h2 {
 section > p {
 	display: table;
 	margin: 0 auto;
-	font-size: 1.2em;
+	font-size: 1.4em;
+	line-height: 1.4;
 }
 #summary {
 	background: #223;
