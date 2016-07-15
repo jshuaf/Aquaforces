@@ -111,18 +111,18 @@ button, .button {
 	display: block;
 	margin: 0.2em 0;
 	padding: 0.2em 1em;
-	background: #29f;
+	background: #f92;
 	font-size: 1.6rem;
 	transition: background-color 0.1s;
 	border: 1px solid #aaa;
 	border-radius: 1em;
-	color: #fff;
+	color: #224;
 	cursor: pointer;
 	text-decoration: none;
 }
 .button { display: inline-table }
-button:hover, .button:hover { background: #4af }
-button:active, .button:active { background: #07f }
+button:hover, .button:hover { background: #fa4 }
+button:active, .button:active { background: #f70 }
 .button:hover, .button:active { color: #fff }
 button[disabled] { background: #aaa }
 #joinbtn { margin: 0.2em auto }
