@@ -40,7 +40,6 @@ section {
 	margin-top: 50vh;
 	transform: translateY(-50%);
 }
-<<<<<<< HEAD
 .centerbox span { min-width: 4.8ch }
 label {
 	display: flex;
@@ -105,10 +104,8 @@ button[disabled] { background: #aaa }
 #error:empty {
 	padding: 0;
 	height: 0;
-=======
 .landing-group {
 	padding: 8vh;
->>>>>>> parent of ea8490d... Merge pull request #101 from bjb568/tweak-landing-page
 }
 .text-landing {
 	font-size: 6rem;
