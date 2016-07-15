@@ -396,6 +396,9 @@ module.exports = (server) => {
 								crew.members.forEach((ttws) => {
 									if (ttws.user == m.user) {
 										crew.members.splice(crew.members.indexOf(ttws), 1);
+										if (crew.members.length == 0) {
+											tws.game.crews.splice(tws.game.crews.indexOf(crew), 1);
+										}
 										ttws.trysend({
 											event: 'removeUserFromCrew'
 										});
