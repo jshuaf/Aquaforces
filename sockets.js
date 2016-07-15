@@ -179,7 +179,7 @@ module.exports = (server) => {
 
 							if (Math.random() < 0.9 * tws.crew().streak) {
 								tws.crew().streak = 0;
-								if (Math.random() < 1) {
+								if (Math.random() < 0) {
 									tws.addWhirlpool();
 								} else {
 									tws.addRock();
