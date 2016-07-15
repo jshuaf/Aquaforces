@@ -1,0 +1,61 @@
+html { background-color: #148 }
+html.hostgame {
+	background: #4af url('/img/beachscape.svg') repeat-x;
+	color: #000;
+}
+#tgame h1 { font-size: calc(1em + 4vmin) }
+#tgame h1 span { font-weight: normal }
+#tgame h2 { text-align: center }
+#progress {
+	position: absolute;
+	top: 0; bottom: 0;
+}
+#progress.hide {
+	opacity: 0;
+	transition: opacity 0.5s;
+}
+#progress > div {
+	position: absolute;
+	left: 0;
+	width: 3.2em;
+	padding: 0.25em 0.5em;
+	color: #fff;
+	font-size: 2em;
+	background: url('/img/canoeside.svg') no-repeat;
+	background-size: contain;
+	text-shadow: 1px 1px 3px #000;
+}
+#progress > div.raft { background: #950 }
+.qset {
+	padding: 2em;
+	margin: 1em 0;
+}
+details p, details h3 { margin: 0.2em 0 }
+#new-qset {
+	display: block;
+	padding: 2em;
+}
+#new-qset, .qset { background: #026 }
+#new-qset.hide {
+	opacity: 0;
+	pointer-events: none;
+}
+#new-qset small a:not(:hover):not(:focus) { color: #fcc }
+#new-qset p { margin: 0.5em 0 0.3em }
+#new-qset li { width: 100% }
+#new-qset ul li input { width: calc(100% - 0.5ch) }
+.hostgame #tgame {
+	position: absolute;
+	top: 0; bottom: 0; left: 0;
+	width: 30%;
+	padding: 1em;
+	background: rgba(255, 255, 255, 0.8);
+	height: 100%;
+}
+.validating :invalid { border: 2px solid #f00 }
+summary { font-size: 1.5em }
+summary h2 {
+	display: inline;
+	font-size: 1em;
+}
+[open] > summary { margin-bottom: 1em }

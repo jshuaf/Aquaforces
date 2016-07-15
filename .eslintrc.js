@@ -4,7 +4,6 @@ module.exports = {
 		"node": true,
 		"es6": true
 	},
-	"parser": "babel-eslint",
 	"rules": {
 		"comma-dangle": ["error"],
 		"no-debugger": ["error"],
@@ -62,6 +61,7 @@ module.exports = {
 		"no-with": ["error"],
 		"wrap-iife": ["error"],
 		"yoda": ["error", "never"],
+		"strict": ["error", "global"],
 		"no-delete-var": ["error"],
 		"no-label-var": ["error"],
 		"no-shadow-restricted-names": ["error"],
@@ -69,6 +69,7 @@ module.exports = {
 		"no-mixed-requires": ["error"],
 		"no-new-require": ["error"],
 		"no-path-concat": ["error"],
+		"no-process-env": ["error"],
 		"array-bracket-spacing": ["error"],
 		"block-spacing": ["error", "never"],
 		"camelcase": ["error"],
@@ -106,7 +107,7 @@ module.exports = {
 		"space-in-parens": ["error"],
 		"space-infix-ops": ["error"],
 		"space-unary-ops": ["error", {"words": false}],
-		"spaced-comment": ["error", "always"],
+		"spaced-comment": ["error", "never"],
 		"arrow-body-style": ["error"],
 		"arrow-spacing": ["error"],
 		"constructor-super": ["error"],

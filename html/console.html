@@ -1,24 +1,26 @@
-<h1>Question Input</h1>
-<section class="left-align">
-	<button id="new-qset-btn">New question set</button>
-	<form class="hide" id="new-qset">
-		<h1>New Question Set</h1>
-		<label>Title <input maxlength="144" class="fullwidth" id="qset-title" placeholder="My question set" required="" /></label>
-		<h2>Questions:</h2>
-		<p><i>Avoid synonyms among answers.</i></p>
-		<ol id="questions">
-			<li>
-				<label>Question <input placeholder="What's one plus one?" required="" maxlength="144" /></label>
-				<label>Answer <input placeholder="Two" required="" maxlength="64" /></label>
-				<p>Wrong answers:</p>
-				<ul>
-					<li><input placeholder="Not two" required="" maxlength="64" /></li>
-					<li><small><a class="more-wrong">+ more</a></small></li>
-				</ul>
-			</li>
-			<li><small><a id="more-questions">+ more</a></small></li>
-		</ol>
-		<button>Add set</button>
+<h1 class="center white">Question Input</h1>
+<section class="left-align white">
+	<form id="new-qset">
+		<details>
+			<summary id="new-qset-summary"><h2>New Question Set</h2></summary>
+			<label>Title <input maxlength="144" class="fullwidth" id="qset-title" placeholder="My question set" required="" /></label>
+			<h3>Questions:</h3>
+			<p><i>Avoid synonyms among answers.</i></p>
+			<ol id="questions">
+				<li>
+					<label>Question <input placeholder="What's one plus one?" required="" maxlength="144" /></label>
+					<label>Answer <input placeholder="Two" required="" maxlength="64" /></label>
+					<p>Wrong answers:</p>
+					<ul>
+						<li><input placeholder="Not two" required="" maxlength="64" /></li>
+						<li><small><a class="more-wrong">+ more</a></small></li>
+					</ul>
+				</li>
+				<li><small><a id="more-questions">+ more</a></small></li>
+			</ol>
+			<button>Add set</button>
+		</details>
 	</form>
+	$qsets
 </section>
 <script async="" src="/console.js"></script>

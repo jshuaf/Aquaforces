@@ -1,22 +1,16 @@
 'use strict';
-let config = {
+const config = {
 	port: 3000
 };
-if (process.env.PORT) {
-	config = {
-		port: process.env.PORT
-	};
-}
 require('./essentials.js');
 require('colors');
 global.dbcs = {};
 const usedDBCs = [
-	'questions'
+	'qsets'
 ];
 const http = require('http'),
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
-	babel = require('babel-core'),
 	zlib = require('zlib'),
 	fs = require('fs'),
 	path = require('path'),
@@ -46,27 +40,24 @@ global.errorNotFound = function(req, res) {
 global.respondPage = o(function*(title, req, res, callback, header, status) {
 	if (title) title = html(title);
 	if (!header) header = {};
-	let inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : '');
+	let inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : ''),
+		noBG = header.noBG;
 	delete header.inhead;
 	delete header.description;
+	delete header.noBG;
 	if (typeof header['Content-Type'] != 'string') header['Content-Type'] = 'application/xhtml+xml; charset=utf-8';
 	if (typeof header['Cache-Control'] != 'string') header['Cache-Control'] = 'no-cache';
 	if (typeof header['X-Frame-Options'] != 'string') header['X-Frame-Options'] = 'DENY';
 	if (typeof header['Vary'] != 'string') header['Vary'] = 'Cookie';
 	res.writeHead(status || 200, header);
-	let data;
-	if (req.url.pathname == '/') {
-		data = (yield fs.readFile('./html/a/head_nav.html', yield)).toString();
-	}
-	else {
-		data = (yield fs.readFile('./html/a/head.html', yield)).toString();
-	}
-	res.write(yield addVersionNonces(data.replace('$title', (title ? title + ' · ' : '') + 'Aquaforces').replace('$inhead', inhead), req.url.pathname, yield));
+	let data = (yield fs.readFile('./html/a/head.html', yield)).toString();
+	res.write(yield addVersionNonces(data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"').replace('$title', (title ? title + ' · ' : '') + 'Aquaforces').replace('$inhead', inhead), req.url.pathname, yield));
 	callback();
 });
 let cache = {};
 let serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
+	console.log(req.method, req.url.pathname);
 	let i;
 	if (i = statics[req.url.pathname]) {
 		yield respondPage(i.title, req, res, yield, {inhead: i.inhead});
@@ -94,7 +85,7 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname.includes('.')) {
 		let stats;
 		try {
-			stats = yield fs.stat('./http/' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+			stats = yield fs.stat('./http/' + req.url.pathname, yield);
 		} catch (e) {
 			return errorNotFound(req, res);
 		}
@@ -112,12 +103,12 @@ let serverHandler = o(function*(req, res) {
 			if (cache[req.url.pathname].updated < stats.mtime) {
 				let data;
 				try {
-					data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+					data = yield fs.readFile('http' + req.url.pathname, yield);
 				} catch (e) {
 					return;
 				}
 				switch (path.extname(req.url.pathname)) {
-					case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
+					case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
 					break;
 					case '.css': data = new CleanCSS().minify(data).styles;
 					break;
@@ -129,26 +120,15 @@ let serverHandler = o(function*(req, res) {
 					updated: stats.mtime
 				};
 			}
-		} else if (req.url.pathname == '/host/') {
-			yield respondPage('Host', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
-			var qsetstr = '';
-			dbcs.qsets.find({}, {title: true}).each(o(function*(err, qset) {
-				if (err) throw err;
-				if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
-				else {
-					res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
-					res.end(yield fs.readFile('./html/a/foot.html', yield));
-				}
-			}));
 		} else {
 			let data;
 			try {
-				data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+				data = yield fs.readFile('http' + req.url.pathname, yield);
 			} catch (e) {
 				return errorNotFound(req, res);
 			}
 			switch (path.extname(req.url.pathname)) {
-				case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
+				case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
 				break;
 				case '.css': data = new CleanCSS().minify(data).styles;
 				break;
@@ -167,12 +147,41 @@ let serverHandler = o(function*(req, res) {
 			});
 			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
 		}
+	} else if (req.url.pathname == '/host/') {
+		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
+		var qsetstr = '';
+		dbcs.qsets.find({}, {title: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
+			if (err) throw err;
+			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
+			else {
+				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
+				res.end(yield fs.readFile('./html/a/foot.html', yield));
+			}
+		}));
+	} else if (req.url.pathname == '/console/') {
+		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
+		var qsetstr = '';
+		dbcs.qsets.find().sort({timeAdded: -1}).each(o(function*(err, qset) {
+			if (err) throw err;
+			if (qset) {
+				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
+				qset.questions.forEach(function(question) {
+					qsetstr += '<li><h3>Question: ' + question.text + '</h3><p>Answer: ' + question.answer + '</p><p>Wrong answers:</p><ul>';
+					question.incorrectAnswers.forEach(function(answer) {
+						qsetstr += '<li>' + answer + '</li>';
+					});
+					qsetstr += '</ul></li>';
+				});
+				qsetstr += '</ol></details>';
+			} else {
+				res.write((yield fs.readFile('./html/console.html', yield)).toString().replace('$qsets', qsetstr));
+				res.end(yield fs.readFile('./html/a/foot.html', yield));
+			}
+		}));
 	} else return errorNotFound(req, res);
 });
 console.log('Connecting to mongodb…'.cyan);
-if (!process.env.MONGOLAB_URI)
-	process.env.MONGOLAB_URI = 'mongodb://localhost:27017';
-mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+mongo.connect('mongodb://localhost:27017/Aquaforces', function(err, db) {
 	if (err) throw err;
 	let i = usedDBCs.length;
 	function handleCollection(err, collection) {
@@ -197,7 +206,6 @@ mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
 			testRes.on('end', function() {
 				console.log('HTTP test passed, starting socket test.'.green);
 				let WS = require('ws');
-				console.log(config.port);
 				let wsc = new WS('ws://localhost:' + config.port + '/test');
 				wsc.on('open', function() {
 					console.log('Connected to socket.');
