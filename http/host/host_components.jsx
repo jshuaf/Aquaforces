@@ -176,7 +176,7 @@ const LeaderboardEntry = React.createClass({
 			padding: 5 + this.props.crewPosition + 'px'
 		};
 		return (<div className="leaderboardEntry">
-		<h5>Crew {this.props.crewNumber}: <span style={style}>{Math.round(this.props.crewPosition * 10) / 10} className = "pill"</span></h5>
+		<h5>Crew {this.props.crewNumber}: <span style={style} className = "pill">{Math.round(this.props.crewPosition * 10) / 10}</span></h5>
 		</div>);
 	}
 });
