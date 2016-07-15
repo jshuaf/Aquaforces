@@ -39,70 +39,6 @@ section {
 	margin-top: 50vh;
 	transform: translateY(-50%);
 }
-.centerbox span { min-width: 4.8ch }
-label {
-	display: flex;
-	align-items: center;
-}
-input {
-	font-size: 1.1em;
-	margin-left: 0.5ch;
-}
-label input:not([min]) { width: 200% }
-@media (min-width: 500px) {
-	.pregamescreen form { padding: 0 10% }
-}
-form:not([hidden]) {
-	transition: opacity 0.5s;
-	display: table;
-}
-form[hidden] {
-	opacity: 0;
-	height: 0;
-	display: block;
-	padding: 1px;
-	margin-bottom: -2px;
-}
-form:not([hidden]) + form[hidden] {
-	display: table;
-}
-nav, footer {
-	padding: 0.3em;
-	background: #ddd;
-}
-footer { margin-top: 2em }
-header { margin-bottom: 2em }
-h1 button { float: right }
-h1 + * { clear: both }
-button, .button {
-	display: block;
-	margin: 0.2em 0;
-	padding: 0.2em 1em;
-	background: #f92;
-	font-size: 1.6rem;
-	transition: background-color 0.1s;
-	border: 1px solid #aaa;
-	border-radius: 1em;
-	color: #224;
-	cursor: pointer;
-	text-decoration: none;
-}
-.button { display: inline-table }
-button:hover, .button:hover { background: #fa4 }
-button:active, .button:active { background: #f70 }
-.button:hover, .button:active { color: #fff }
-button[disabled] { background: #aaa }
-#joinbtn { margin: 0.2em auto }
-#error {
-	color: #f00;
-	transition: padding-top 0.3s, padding-bottom 0.3s, height 0.3s, margin-bottom 0.3s;
-	background: #fff;
-	padding: 1em;
-	margin: 0 0 1em;
-}
-#error:empty {
-	padding: 0;
-	height: 0;
 .landing-group {
 	padding: 8vh;
 }
@@ -135,7 +71,6 @@ input[type=tel], input[type=url], input[type=password], input[type=email], input
 }
 label {
 	font-weight: normal;
-	margin-top: 3%;
 }
 .navbar {
 	background: #bee6f1;
@@ -152,7 +87,7 @@ label {
 }
 .button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
 	border-radius: 30px;
-	margin-top: 12%;
+	margin-top: 10px;
 	background-color: #7eb530;
 	border: none;
 	letter-spacing: normal;
