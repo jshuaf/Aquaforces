@@ -1,16 +1,13 @@
-import React from 'react';
-import reactDOM from 'react-dom';
-
 function getValuesOfObject(object) {
 	let values = [];
 	for (let key in object) {
 		values.push(object[key]);
 	}
-
 	return values;
 }
 
 const GameHost = React.createClass({
+	// MARK: ADD END GAME
 	getInitialState() {
 		return {
 			gameStatus: 'hasNotStarted',
@@ -20,13 +17,15 @@ const GameHost = React.createClass({
 	},
 
 	answerSelected(wasCorrectAnswer, crewNumber) {
-		const crewToPassFunctionTo = this.refs[crewNumber.toString()];
-		crewToPassFunctionTo.answerSelected(wasCorrectAnswer, crewNumber);
+		const crew = this.refs[crewNumber.toString()];
+		if (wasCorrectAnswer)
+			this.updateCrewPosition(crewNumber, 0.1);
+		crew.processAnswer(wasCorrectAnswer);
 	},
 
 	updateCrewPosition(crewNumber, increment) {
 		// MARK: move the camera around
-
+		console.log("Move " + crewNumber + " by " + increment);
 		let oldCrews = this.state.crews;
 		oldCrews[crewNumber].position += increment;
 		this.setState({
@@ -50,17 +49,18 @@ const GameHost = React.createClass({
 		return (
 			<div className="container">
 				<div className="row">
-					<div className="four columns">
+					<div className="three columns">
 						<div className="panel">
 							<Leaderboard crews={this.state.crews} />
 						</div>
 					</div>
-						<div className="eight columns">
+						<div className="nine columns">
 							<div className="panel">
+								<h4><strong>Live stream</strong></h4>
 								{
 									Object.keys(this.state.crews).map(function(crewNumber, i) {
 										const crew = this.state.crews[crewNumber];
-										return <Crew position={crew.position} status={crew.status} boat={crew.boat} crewNumber={crewNumber} key={i} ref={crewNumber.toString()}/>;
+										return <Crew position={crew.position} status={crew.status} boat={crew.boat} size={crew.users.length} crewNumber={crewNumber} key={i} ref={crewNumber.toString()}/>;
 									}.bind(this))
 								}
 							</div>
@@ -74,7 +74,6 @@ const GameHost = React.createClass({
 const Crew = React.createClass({
 	getInitialState() {
 		return {
-			position: 0,
 			velocity: 0,
 			deltaVelocity: 10,
 			maximumDeltaVelocity: 10,
@@ -92,34 +91,34 @@ const Crew = React.createClass({
 		};
 	},
 
-	processAnswer(correctAnswerBoolean) {
-		if (correctAnswerBoolean) this.setState({velocity: this.state.velocity + this.state.deltaVelocity});
-		//MESSAGE RAFT => ISRAFT
-		else if (this.state.isRaft) this.setState({deltaVelocity: this.state.deltaVelocity * 0.95});
-		else {
-				this.setState({hp: this.state.hp + this.props.deltaHPConstant});
-				if (!this.state.isRaft && this.state.hp <= 0) {
-						this.setState({isRaft: true});
-				}
+	processAnswer(wasCorrectAnswer) {
+		if (wasCorrectAnswer) {
+			this.setState({
+				velocity: this.state.velocity + this.state.deltaVelocity
+			});
+		} else if (this.state.isRaft) {
+			this.setState({deltaVelocity: this.state.deltaVelocity * 0.95});
+		} else {
+			this.setState({
+				hp: this.state.hp + this.props.deltaHPConstant
+			});
+			if (!this.state.isRaft && this.state.hp <= 0) {
+					this.setState({isRaft: true});
+			}
 		}
 	},
 
 	render() {
-		const style = {
-			width: '7rem',
-			transform: 'translate(' + (this.state.position * 200) + ' px, 0 px)',
-			backgroundColor: 'red',
-			height: '3rem'
-
+		let style = {
+			width: '10rem',
+			marginLeft: (this.props.position * 100) + 'px',
+			borderRadius: '5px',
+			border: 'none',
+			background: 'url(/img/boats-side/' + (this.state.isRaft ? 'rafts' : 'canoes') + '/' + this.props.size + '-members.svg) no-repeat center top'
 		};
-		if (this.state.isRaft) {
-			const classNames = 'raft';
-		}
-		else {
-			const classNames = '';
-		}
-		console.log(style);
-		return <div className={classNames} style={style}></div>;
+		const className = this.state.isRaft ? 'raft' : 'racetrack-boat';
+		console.log(this.props.position);
+		return <div className={className} style={style}><p>Crew {this.props.crewNumber}</p></div>;
 	}
 });
 
@@ -149,7 +148,7 @@ const LeaderboardEntry = React.createClass({
 	render() {
 		let style = {
 			fontSize: (this.props.crewPosition + 1) * 15 + 'px',
-			padding: 5 + this.props.position + 'px',
+			padding: 5 + this.props.crewPosition + 'px',
 			color: 'white'
 		};
 		return (<div className="leaderboardEntry">
@@ -158,4 +157,60 @@ const LeaderboardEntry = React.createClass({
 	}
 });
 
-export default GameHost;
+const River = React.createClass({
+	getInitialState() {
+		return {
+			riverReflectionGroups: []
+		};
+	},
+
+	addRiverReflectionGroup() {
+		const currentGroups = this.state.riverReflectionGroups;
+		const newReflectionGroup = {};
+		if (currentGroups.length) {
+			const currentYPositions = [];
+			for (const currentGroup in currentGroups) {
+				currentYPositions.push(currentGroup.yPosition);
+			}
+			for (let i = 1; i < currentXPositions.length; i++) {
+				const currentGap = currentXPositions[i] - currentXPositions[i - 1];
+				if (currentGap > currentMaximumGap) {
+					currentMaximumGap = currentGap;
+					newLeftBound = currentXPositions[i - 1];
+					newRightBound = currentXPositions[i];
+				}
+			}
+		} else {
+			newReflectionGroup.leftBoundary = 10 + Math.random() * 5;
+			newReflectionGroup.yPosition = 15 + Math.random() * 70;
+		}
+
+		newReflectionGroup.rightBoundary = newReflectionGroup.leftBoundary + Math.random() * 15;
+	},
+
+	render() {
+		return (
+			<div>
+			{
+				this.state.riverReflectionGroups.map((riverReflectionGroup, i) =>
+					<RiverReflectionGroup
+						leftBoundary = {riverReflectionGroup.leftBoundary}
+						rightBoundary = {riverReflectionGroup.rightBoundary}
+						yPosition = {riverReflectionGroup.yPosition}
+						backgroundColor = {backgroundColor}
+						/>
+				)
+			}
+			</div>
+		);
+	}
+});
+
+const RiverShore = React.createClass({
+	render() {
+		return null;
+	}
+
+	// 2 groups in each screen
+	// 1 - 2 in each group
+});

@@ -1,15 +1,12 @@
-import React from 'react';
-import reactDOM from 'react-dom';
-import GameHost from './host_components.jsx';
-
-var socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/');
-var cont = document.getElementById('cont'),
+const socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/');
+const cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
 
-var crews = {};
-var usersWithoutCrews = [];
+const crews = {};
+const usersWithoutCrews = [];
 
 let gameHost;
+let gameHasStarted = false;
 
 function setState(id) {
 	// hide and show different elements
@@ -23,26 +20,29 @@ function setState(id) {
 function removeUserFromGame() {
 	const userToRemove = this.dataset.username;
 	socket.send(JSON.stringify({
-		event: 'remove-user',
+		event: 'removeUser',
 		user: userToRemove
 	}));
 	this.parentNode.removeChild(this);
 
-	for (var i = 0; i < usersWithoutCrews.length; i++) {
+	for (let i = 0; i < usersWithoutCrews.length; i++) {
 		const username = usersWithoutCrews[i];
 		if (userToRemove == username) {
-			usersWithoutCrews.remove(username);
+			usersWithoutCrews.splice(usersWithoutCrews.indexOf(username), 1);
 			break;
 		}
 	}
 }
 
 function removeUserFromCrew() {
+	if (gameHasStarted) {
+		return;
+	}
 	socket.send(JSON.stringify({
-		event: 'remove-user-from-crew',
+		event: 'removeUserFromCrew',
 		user: this.dataset.username
 	}));
-	var li = document.createElement('li');
+	let li = document.createElement('li');
 	li.dataset.username = this.dataset.username;
 	li.appendChild(document.createTextNode(this.dataset.username));
 	li.onclick = removeUserFromGame;
@@ -50,90 +50,86 @@ function removeUserFromCrew() {
 	this.parentNode.dataset.n--;
 	this.parentNode.removeChild(this);
 
-	crews.forEach(crewNumber, function() {
-		let crewmembers = crews.crewNumber.users;
-		crewmembers.forEach(crewmember, function() {
+	for (let crewNumber in crews) {
+		let crewmembers = crews[crewNumber].users;
+		for (let crewmember of crewmembers) {
 			if (crewmember == this.dataset.username) {
-				crewmembers.remove(crewmember);
+				crewmembers.splice(crewmembers.indexOf(crewmember), 1);
 				return;
 			}
-		});
-	});
+		}
+	}
 }
 
-socket.onmessage = function(message) {
-	console.log(message.data);
+socket.onmessage = function(m) {
 	try {
-		message = JSON.parse(message.data);
+		m = JSON.parse(m.data);
 	} catch (e) {
 		console.log(e);
 		return alert('Socket error.');
 	}
-	switch (message.event) {
-	case 'notice':
-		alert(message.body);
-		break;
+	console.log(m);
+	switch (m.event) {
 	case 'error':
-		alert(message.body);
-		setState(message.state);
-		errorEl.textContent = message.body;
+		alert(m.body);
+		errorEl.textContent = m.body;
 		break;
 	case 'newGame':
-		document.getElementById('game-code-cont').appendChild(document.createTextNode(message.id));
+		document.getElementById('game-code-cont').appendChild(document.createTextNode(m.id));
 		break;
 	case 'addNewUser':
-		var li = document.createElement('li');
-		li.dataset.username = message.user;
-		li.appendChild(document.createTextNode(message.user));
+		let li = document.createElement('li');
+		li.dataset.username = m.user;
+		li.appendChild(document.createTextNode(m.user));
 		li.onclick = removeUserFromGame;
 		document.getElementById('loneusers').appendChild(li);
-		usersWithoutCrews.push(message.user);
+		usersWithoutCrews.push(m.user);
 		break;
 	case 'addUserToCrew':
 		document.getElementById('loneusers').childNodes.forEach(function(e) {
-			if (e.firstChild.nodeValue == message.user) e.parentNode.removeChild(e);
+			if (e.firstChild.nodeValue == m.user) e.parentNode.removeChild(e);
 		});
 		let sign = document.createElement('span');
 		sign.appendChild(document.createTextNode('<'));
-		var span = document.createElement('span');
-		span.dataset.username = message.user;
+		let span = document.createElement('span');
+		span.dataset.username = m.user;
 		span.className = 'clickable';
-		span.appendChild(sign);
-		span.appendChild(document.createTextNode(message.user));
 		span.onclick = removeUserFromCrew;
-		document.getElementById('crews').children[message.crew - 1].appendChild(span);
-		document.getElementById('crews').children[message.crew - 1].dataset.n++;
-		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
-		console.log(crews);
-		if (message.crew in crews) {
-			crews[message.crew].users.push(message.user);
+		span.appendChild(document.createTextNode(m.user));
+		document.getElementById('crews').children[m.crew - 1].appendChild(span);
+		document.getElementById('crews').children[m.crew - 1].dataset.n++;
+		if (m.crew in crews) {
+			crews[m.crew].users.push(m.user);
 		} else {
-			crews[message.crew] = {
-				name: 'Crew ' + (message.crew).toString(),
-				users: [message.user],
+			crews[m.crew] = {
+				name: 'Crew ' + (m.crew).toString(),
+				users: [m.user],
 				position: 0,
 				status: 'rowing',
 				boat: 'canoe'
 			};
 		}
 		break;
+	case 'startGame':
+		document.getElementById('cont').hidden = true;
+		setState('mountNode');
+		gameHasStarted = true;
+		gameHost = ReactDOM.render(<GameHost initialCrews={crews} />, document.getElementById('mountNode'));
+		break;
 	case 'answerSelected':
-		gameHost.answerSelected(message.wasCorrectAnswer, message.crewNumber);
+		gameHost.answerSelected(m.wasCorrectAnswer, m.crewNumber);
 		break;
 	case 'removeUser':
-		var e = document.querySelector('[data-username=' + JSON.stringify(message.user) + ']');
+		let e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
 		if (e) {
 			e.parentNode.removeChild(e);
 			// if (e.parentNode.dataset.n) e.parentNode.dataset.n--;
 		}
-		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 		break;
-	case 'updateCrewPosition':
-		gameHost.updateCrewPosition(message.crewNumber, message.increment);
 	}
 };
 
-socket.onclose = function() {
+socket.onclose = () => {
 	errorEl.textContent = 'Socket closed.';
 };
 document.getElementById('dashboard').addEventListener('submit', function(e) {
@@ -144,18 +140,13 @@ document.getElementById('dashboard').addEventListener('submit', function(e) {
 
 document.getElementById('start-game-btn').addEventListener('click', function(e) {
 	e.preventDefault();
-	socket.send(JSON.stringify({event: 'startGame'}));
-	document.getElementById('cont').hidden = true;
-	setState('mountNode');
-	console.log(crews);
-	gameHost = reactDOM.render(<GameHost initialCrews={crews} />, document.getElementById('mountNode'));
+	socket.send(JSON.stringify({
+		event: 'startGame'
+	}));
+	// MARK: figure out our html
 });
 function endGame() {
-    crewsEl.children.forEach(function(e, i) {
-        if (boats[i + 1]) e.appendChild(document.createTextNode(boats[i + 1].p.toFixed(1) + '\u2006km'));
-    });
-    progress.classList.add('hide');
     socket.send(JSON.stringify({
-        event: 'end-game'
+        event: 'endGame'
     }));
 }
