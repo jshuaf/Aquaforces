@@ -565,7 +565,7 @@ const River = React.createClass({
 	addCorrectAnswer(answer) {
 		const oldAnswersToAdd = this.state.answersToAdd;
 		const incorrectAnswers = [];
-		const incorrectAnswersToAdd = Math.floor(Math.random() * 2);
+		const incorrectAnswersToAdd = Math.floor(Math.random() * 1.5);
 		for (let i = 0; i < incorrectAnswersToAdd; i++) {
 			let randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
 			while (this.state.answers.indexOf(randomData) >= 0) {
