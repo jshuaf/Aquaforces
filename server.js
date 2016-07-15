@@ -127,11 +127,15 @@ let serverHandler = o(function*(req, res) {
 			} catch (e) {
 				return errorNotFound(req, res);
 			}
-			switch (path.extname(req.url.pathname)) {
-				case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
-				break;
-				case '.css': data = new CleanCSS().minify(data).styles;
-				break;
+			try {
+				switch (path.extname(req.url.pathname)) {
+					case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
+					break;
+					case '.css': data = new CleanCSS().minify(data).styles;
+					break;
+				}
+			} catch (e) {
+				console.error(e);
 			}
 			cache[req.url.pathname] = {
 				raw: data,
