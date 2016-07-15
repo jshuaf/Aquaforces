@@ -9,12 +9,11 @@ const Game = React.createClass({
 			// Question
 			questionText: null,
 			// Canoe
-			canoeHP: 100,
-			canoeTopPosition: null,
-			canoeHeight: null,
-			// River
-			riverTopPosition: null,
-			flashClass: "",
+			canoePosition: 0,
+			canoeBounds: {
+				left: 0.48,
+				right: 0.52
+			},
 			// Rock
 			rock: false,
 			rockYPosition: -window.innerHeight * 0.2,
@@ -22,9 +21,47 @@ const Game = React.createClass({
 			rockStartTime: null,
 			rockAnimation: null,
 			// Whirlpool
-			whirlpool: false
+			whirlpool: false,
+			whirlpoolType: 'Free',
+			whirlpoolQuestion: {},
+			whirlpoolTimebar: null,
+			whirlpoolBonus: 0,
+			canoeHP: 100,
+			canoeTopPosition: null,
+			canoeHeight: null,
+			// River
+			riverTopPosition: null,
+			flashClass: ""
 		};
 	},
+
+	componentWillMount() {
+		setInterval(() => {
+			if (!this.state.whirlpool) {
+				// MARK: add checking for relooping
+				const currentAnswers = this.state.answers;
+				/* KEEP THIS COMMENTED OUT
+				for (let currentAnswer in currentAnswers) {
+					if (currentAnswer.state.position.y > innerHeight) {
+						currentAnswers.remove(currentAnswer);
+					}
+				}*/
+				const answersToAdd = this.state.answersToAdd;
+				if (answersToAdd.length > 0) {
+					currentAnswers.push(this.generateAnswerComponent(answersToAdd.shift()));
+					this.setState({answersToAdd});
+				} else {
+					const randomData = this.state.answerData[Math.floor(
+						Math.random() * this.state.answerData.length)];
+					if (!(randomData in currentAnswers)) {
+						currentAnswers.push(this.generateAnswerComponent(randomData));
+					}
+				}
+				this.setState({
+					answers: currentAnswers
+				});
+			}}, 2500);
+		},
 
 	answerSelected(answerText) {
 		this.props.socket.send(JSON.stringify({
@@ -41,9 +78,18 @@ const Game = React.createClass({
 		});
 	},
 
-	initiateWhirlpoolTap() {
+	addWhirlpoolTap() {
 		this.setState({
-			whirlpool: true
+			whirlpool: true,
+			whirlpoolType: 'Free'
+		});
+	},
+
+	addWhirlpoolQuestion(question) {
+		this.setState({
+			whirlpool: true,
+			whirlpoolType: 'Question',
+			whirlpoolQuestion: question
 		});
 	},
 
@@ -74,6 +120,13 @@ const Game = React.createClass({
 	addCorrectAnswer(answer) {
 		// add a random number of wrong answers before correct answer
 		this.refs.river.addCorrectAnswer(answer);
+	},
+
+	whirlpoolQuestionTimeout() {
+		this.props.socket.send(JSON.stringify({
+			event: 'whirlpoolQuestionTimeout',
+			crewNumber: this.props.crewNumber
+		}));
 	},
 
 	questionTimeout() {
@@ -155,9 +208,39 @@ const Game = React.createClass({
 	},
 
 	render() {
+		// MARK: add flashing
+		let whirlpoolValue;
+		this.state.whirlpoolTimebar = <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool} />;
+		if (this.state.whirlpool) {
+			if (this.state.whirlpoolType == "Free") {
+				whirlpoolValue = (
+					<div className="modal-background">
+						<div className="row">
+							<div className="three columns"><p></p></div>
+							<div className="six columns">
+								<WhirlpoolFree socket = {this.props.socket} />
+							</div>
+						</div>
+					</div>
+				);
+			}
+			else {
+				whirlpoolValue = (
+					<div className="modal-background">
+						<div className="row">
+							<div className="three columns"><p></p></div>
+							<div className="six columns">
+								<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.state.whirlpoolTimebar} socket = {this.props.socket} />
+							</div>
+						</div>
+					</div>
+				);
+			}
+		}
 		const timePerQuestion = this.state.rock ? 10000 : 15000;
 		return (
 			<div className="container" hidden={this.state.gameFinished}>
+				<div>{whirlpoolValue}</div>
 				<div className="panel-group">
 					<div className="panel-top">
 						<GameTimer onFinish={this.gameTimerOver} totalTime={900000} />
@@ -271,7 +354,7 @@ const Answer = React.createClass({
 			transform: 'translate(' + this.state.position.x + 'px, ' + this.state.position.y + 'px)'
 		};
 		if (!this.state.disappeared)
-			return <span style={style} onClick={this.handleClick} ref = "answer">{this.props.text}</span>;
+			return <span style={style} onClick={this.handleClick} ref = "answer" className = "pill">{this.props.text}</span>;
 		else {
 			return null;
 		}
@@ -569,12 +652,14 @@ const QuestionTimebar = React.createClass({
 	},
 
 	updateTime() {
-		const currentTime = (new Date()).getTime();
-		const timeLeft = this.props.timePerQuestion - currentTime + this.state.timeStart;
-		if (timeLeft < 0) {
-			this.props.onTimeout();
-		} else {
+		if (this.props.keepRunning) {
+			const currentTime = (new Date()).getTime();
+			const timeLeft = this.props.timePerQuestion - currentTime + this.state.timeStart;
+			if (timeLeft < 0) {
+				this.props.onTimeout();
+			} else {
 			this.setState({timeLeft});
+			}
 		}
 	},
 
@@ -591,7 +676,7 @@ const QuestionTimebar = React.createClass({
 			backgroundColor: '#26A65B',
 			height: '5%'
 		};
-		return <div style={style} id="questionTime"></div>;
+		return <div style={style} className="questionTime"></div>;
 	}
 });
 
@@ -686,22 +771,21 @@ const WhirlpoolFree = React.createClass({
 	processTap() {
 		this.setState({tapStreak: this.state.tapStreak + 1});
 		if (this.state.tapStreak == 5) {
-			socket.trysend(JSON.stringify({
-				event: 'fiveTapsDetected'
+			console.log("YOU GO!");
+			this.props.socket.send(JSON.stringify({
+				event: 'whirlpoolFiveTapsDetected'
 			}));
 			this.setState({tapStreak: 0});
 		}
 	},
 	render() {
 		return (
-			<div className="modal modal-active whirlpool">
-				<div className="container">
-					<div className="row">
-						<div className="twelve columns">
-							<h1><strong>Tap!</strong></h1>
-							<p>For every tap, you help your friend out a bit.</p>
-							<button className="tap-button" onClick = {this.processTap}>Send help</button>
-						</div>
+			<div className="modal modal-active panel-group">
+				<div className="row">
+					<div className="twelve columns panel">
+						<h1><strong>Tap!</strong></h1>
+						<p>For every tap, you give your friend a bit more time to answer the challenge question.</p>
+						<button className="tap-button" onClick = {this.processTap}>GO</button>
 					</div>
 				</div>
 			</div>
@@ -710,13 +794,44 @@ const WhirlpoolFree = React.createClass({
 });
 
 const WhirlpoolQuestion = React.createClass({
-	getDefaultProps() {
+	getInitialState() {
 		return {
-
+			answers: null
 		};
 	},
+	componentWillMount() {
+		this.preprocessAnswers();
+	},
+	processAnswer(answer) {
+		this.props.socket.send({
+			event: 'whirlpoolAnswerSelected',
+			answer
+		});
+	},
+	preprocessAnswers() {
+		let answers = [this.props.question.answer];
+		this.props.question.incorrectAnswers.forEach(function(thing) {
+			answers.push(thing);
+		});
+		answers = shuffle(answers);
+		this.setState({answers});
+	},
 	render() {
-		return <img src={this.props.image}></img>;
+		let answers = this.state.answers;
+		return (
+			<div className="modal-active whirlpool panel-group">
+				<div className="panel-top">
+					<h1><strong>Challenge</strong></h1>
+					<h4 className="whirlpool-question">{this.props.question.text}</h4>
+				</div>
+				{this.props.timebar}
+				{
+					answers.map(function(answer) {
+						return <button className="whirlpool-button u-full-width" onClick={this.processAnswer.bind(this, answer)}>{answer}</button>;
+					})
+				}
+			</div>
+		);
 	}
 
 	// popup - everything stops

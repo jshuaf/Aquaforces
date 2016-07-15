@@ -2,7 +2,6 @@
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
 	color: #212f3c;
-	overflow-x: hidden;
 }
 strong, b {
 	font-weight: bold;
@@ -22,13 +21,13 @@ section {
 .landing-neg {
 	background-color: #212f3c;
 }
-@media(min-width: 800px) {
+@media (min-width: 800px) {
 	.landing-river {
 		background: url('/img/back-bottom.svg') no-repeat center top;
 		background-size: cover;
 	}
 }
-@media(max-width: 800px) {
+@media (max-width: 800px) {
 	.landing-river {
 		background-color: #bee6f1;
 	}
@@ -182,23 +181,22 @@ h2 {
 	font-size: 2.5rem;
 	font-weight: normal;
 }
-span, span > * {
+.pill, .pill > * {
 	background-color: #1e414e;
 	border-radius: 0.5rem;
-	padding: 0 1rem;
 	color: white;
 }
-span > span {
+.pill > .pill {
 	display: none;
 }
-span:hover > span {
+.pill:hover > .pill {
 	display: inline-block;
 	margin: 0;
 	padding: 0;
 	border-radius: 0;
 	line-height: 1;
 }
-span[.clickable]:hover {
+.pill[.clickable]:hover {
 	background-color: #ecf0f1;
 }
 .panel {
@@ -208,7 +206,7 @@ span[.clickable]:hover {
 	padding: 20px;
 	margin-bottom: 40px;
 }
-.answers > span {
+.answers > .pill {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -219,10 +217,10 @@ span[.clickable]:hover {
 	font-size: 20px;
 	color: white;
 }
-.answers > span > * {
+.answers > .pill > * {
 	color: white;
 }
-.answers > span:hover {
+.answers > .pill:hover {
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -287,12 +285,63 @@ span[.clickable]:hover {
 #question {
 	margin-bottom: 0;
 }
-@keyframes flash-red-twice {
-	0% { background: #c0392b }
-	49% { background: transparent }
-	50% { background: #c0392b }
+.button-primary {
+	margin-top: 10px;
 }
-.flash-red-twice { animation: flash-red-twice 0.75s }
+.tap-button {
+	height: 200px;
+	width: 200px;
+	border-radius: 100px;
+	color: white;
+	font-weight: bold;
+	font-size: 100px;
+	background-color: #e74c3c;
+	border: none;
+	box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+	text-align: center;
+}
+.tap-button:hover, .tap-button:active {
+	color: white;
+	background-color: #f75c4c;
+}
+.whirlpool-button {
+	color: white;
+	text-align: center;
+	background-color: #26a65b;
+	border-radius: 0;
+	letter-spacing: normal;
+}
+.modal-active {
+	text-align: center;
+	z-index: -1;
+}
+.modal-background {
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1000;
+}
+.modal-background > * {
+	position: relative;
+}
+@keyframes flash-red-twice {
+	0% {
+		background: #c0392b;
+	}
+	49% {
+		background: transparent;
+	}
+	50% {
+		background: #c0392b;
+	}
+}
+.flash-red-twice {
+	animation: flash-red-twice 0.75s;
+}
 @keyframes shake {
 	10%, 90% {
 		transform: translate3d(-1px, 0, 0);
