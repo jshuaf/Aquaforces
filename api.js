@@ -32,7 +32,7 @@ module.exports = function(req, res, post) {
 			_id: qsetID,
 			title: post.name,
 			questions,
-			timeAdded: new Date().getTime()
+			timeAdded: Date.now()
 		});
 		res.end(qsetID);
 	} else {
