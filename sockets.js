@@ -287,7 +287,7 @@ module.exports = (server) => {
 							const answerToResend = m.answer;
 							tws.crew().activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.answer == answerToResend) {
-									ttws = tws.randomCrewMember();
+									const ttws = tws.randomCrewMember();
 									return ttws.trysend({
 										event: 'correctAnswer',
 										answer: answerToResend
