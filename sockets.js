@@ -61,7 +61,7 @@ module.exports = (server) => {
 			tws.crew().members.forEach((crewMember) => {
 				crewMember.trysend({
 					event: 'addRock',
-					startTime: (new Date().getTime()) + 1500
+					startTime: (Date.now()) + 1500
 				});
 			});
 		};

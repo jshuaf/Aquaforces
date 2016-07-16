@@ -125,7 +125,7 @@ const Game = React.createClass({
 	},
 
 	animateRock() {
-		const timeDifference = (new Date().getTime() - this.state.rockStartTime) / 1000;
+		const timeDifference = (Date.now() - this.state.rockStartTime) / 1000;
 		if (timeDifference && timeDifference > 0) {
 			const y = timeDifference * window.innerHeight / 10;
 			if (this.state.riverTopPosition) {
@@ -258,7 +258,7 @@ const Answer = React.createClass({
 	},
 
 	setPosition() {
-		const timeAtAnimation = (new Date()).getTime();
+		const timeAtAnimation = Date.now();
 		const dt = timeAtAnimation - this.state.lastAnimationTime;
 
 		let positionX = this.state.position.x;
@@ -292,7 +292,7 @@ const Answer = React.createClass({
 	},
 
 	componentDidMount() {
-		const currentTime = (new Date()).getTime();
+		const currentTime = Date.now();
 		const initialX = this.props.generateAnswerPosition(this.refs.answer.offsetWidth);
 		this.setState((previousState, previousProps) => (
 			{
@@ -389,6 +389,7 @@ const River = React.createClass({
 			initialAnswerXPositions: [],
 			// River Reflections
 			riverReflectionGroups: [],
+			lastAnimationTime: null,
 			// River
 			riverWidth: null
 		};
@@ -450,7 +451,6 @@ const River = React.createClass({
 		// River Reflections
 		this.setState({riverWidth: this.refs.river.offsetWidth});
 		this.startRiverReflections();
-
 		// Answers
 		this.updateAnswers();
 		setInterval(this.updateAnswers, 2500);
@@ -494,12 +494,19 @@ const River = React.createClass({
 				x: newXPosition, y: newYPosition, key: newXPosition});
 		}
 
-		this.setState({riverReflectionGroups});
+		this.setState({riverReflectionGroups, lastAnimationTime}, () => {
+			requestAnimationFrame(this.updateRiverReflections);
+		});
 	},
 
-	updateRiverReflections() {
+	updateRiverReflections(timestamp) {
 		this.setState((previousState, previousProps) => {
 			const currentGroups = previousState.riverReflectionGroups;
+			for (let currentGroup of currentGroups) {
+
+			}
+		}, () => {
+			requestAnimationFrame(this.updateRiverReflections);
 		});
 	},
 
@@ -636,7 +643,7 @@ const QuestionTimebar = React.createClass({
 	getInitialState() {
 		return {
 			timeLeft: this.props.timePerQuestion,
-			timeStart: (new Date()).getTime()
+			timeStart: Date.now()
 		};
 	},
 
@@ -648,7 +655,7 @@ const QuestionTimebar = React.createClass({
 
 	updateTime() {
 		if (this.props.keepRunning) {
-			const currentTime = (new Date()).getTime();
+			const currentTime = Date.now();
 			const timeLeft = this.props.timePerQuestion - currentTime + this.state.timeStart;
 			if (timeLeft < 0) {
 				this.props.onTimeout();
@@ -661,7 +668,7 @@ const QuestionTimebar = React.createClass({
 	reset() {
 		this.setState({
 			timeLeft: this.props.timePerQuestion,
-			timeStart: (new Date()).getTime()
+			timeStart: Date.now()
 		});
 	},
 
@@ -683,7 +690,7 @@ const GameTimer = React.createClass({
 		return {
 			time: '',
 			finished: false,
-			timeStart: (new Date()).getTime()
+			timeStart: Date.now()
 		};
 	},
 	zeroPad(t) {
@@ -692,7 +699,7 @@ const GameTimer = React.createClass({
 	},
 
 	updateTimer() {
-		const currentTime = (new Date()).getTime();
+		const currentTime = Date.now();
 		const ms = this.props.totalTime - currentTime + this.state.timeStart + 1000;
 		let t = '';
 		if (ms < 0) {
