@@ -729,7 +729,7 @@ const QuestionTimebar = React.createClass({
 		const style = {
 			width: (this.state.timeLeft / this.props.timePerQuestion * 100).toString() + '%',
 			backgroundColor: '#26A65B',
-			height: '5%'
+			height: '100%'
 		};
 		return <div style={style} className="questionTime"></div>;
 	}

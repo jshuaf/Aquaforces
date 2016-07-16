@@ -225,7 +225,9 @@ h2 {
 .panel-group > .panel-bottom > * {
 	background-color: #26a65b;
 	border-radius: 0;
-	padding: 5px;
+}
+.panel-bottom {
+	height: 10px;
 }
 #question {
 	margin-bottom: 0;
