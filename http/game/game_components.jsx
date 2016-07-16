@@ -279,8 +279,9 @@ const Answer = React.createClass({
 
 		// check if it's passing the threshold for the first time
 		if (positionY > this.props.riverBounds.bottom) {
-			this.props.answerPassedThreshold(this.props.text);
-			window.cancelAnimationFrame(this.state.positionAnimation);
+			this.setState({
+				passedThreshold: true
+			});
 		}
 
 		this.setState({
@@ -315,9 +316,9 @@ const Answer = React.createClass({
 	animate(timestamp) {
 		if (this.props.keepRunning && !(this.state.passedThreshold)) {
 			this.setPosition();
-			this.setState({
-				positionAnimation: window.requestAnimationFrame(this.animate)
-			});
+			requestAnimationFrame(this.animate);
+		} else {
+			this.props.answerPassedThreshold(this.props.text);
 		}
 	},
 
@@ -602,6 +603,13 @@ const River = React.createClass({
 			<div className={"river" + this.props.flashClass} ref = "river">
 				<div className="answers">
 					{answers}
+					{this.state.riverReflectionGroups.map((riverReflectionGroup) =>
+						<RiverReflectionGroup
+							x = {riverReflectionGroup.x}
+							y = {riverReflectionGroup.y}
+							riverWidth = {this.state.riverWidth}
+						/>
+					)}
 					<Rock
 						y = {this.props.rockYPosition}
 						ref = "rock"
