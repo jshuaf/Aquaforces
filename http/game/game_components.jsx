@@ -392,7 +392,9 @@ const River = React.createClass({
 			lastAnimationTime: null,
 			// River
 			riverWidth: null,
-			riverHeight: null
+			riverHeight: null,
+			// Canoe
+			canoeBounds: null
 		};
 	},
 
@@ -450,7 +452,7 @@ const River = React.createClass({
 		this.props.rockAnimationData(riverRect.top, canoeRect.top, canoe.offsetHeight, rockHeight);
 
 		// River Reflections
-		this.setState({riverWidth: river.offsetWidth});
+		this.setState({riverWidth: river.offsetWidth, canoeBounds: this.canoeBounds()});
 		this.startRiverReflections();
 		// Answers
 		this.updateAnswers();
@@ -655,7 +657,7 @@ const River = React.createClass({
 				answerPassedThreshold={this.answerPassedThreshold}
 				generateAnswerPosition={this.generateAnswerPosition}
 				riverBounds={this.riverBounds()}
-				canoeBounds={this.canoeBounds()}
+				canoeBounds={this.state.canoeBounds}
 				keepRunning={!this.props.whirlpool}
 			/>);
 		}
