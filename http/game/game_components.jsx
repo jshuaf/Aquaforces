@@ -480,7 +480,7 @@ const River = React.createClass({
 		const riverHeight = riverBounds.bottom - riverBounds.top;
 		const initialXPositions = [0, riverBounds.right - riverBounds.left - this.refs.river.offsetWidth * 0.15];
 		const initialYPositions = [-riverHeight, riverHeight * 2];
-		const initialReflectionCount = Math.floor(5 + Math.random() * 2);
+		const initialReflectionCount = Math.floor(4 + Math.random() * 2);
 		const riverReflectionGroups = [];
 		function ascending(a, b) {return a - b;}
 
@@ -512,6 +512,8 @@ const River = React.createClass({
 				currentGroups[i].y -= (timeSinceLastAnimation / 1000) * (riverHeight / 20);
 				if (currentGroups[i].y > riverHeight) {
 					hasBottomReflectionGroup = true;
+				} else if (currentGroups[i].y < -riverHeight) {
+					this.removeReflectionGroup(currentGroups[i].x);
 				}
 			}
 			if (!hasBottomReflectionGroup) {
@@ -523,6 +525,18 @@ const River = React.createClass({
 			};
 		}, () => {
 			requestAnimationFrame(this.updateRiverReflections);
+		});
+	},
+
+	removeReflectionGroup(xPosition) {
+		this.setState((previousState, previousProps) => {
+			const currentGroups = previousState.riverReflectionGroups.slice();
+			for (let currentGroup of currentGroups) {
+				if (currentGroup.x == xPosition) {
+					currentGroups.splice(currentGroups.indexOf(currentGroup), 1);
+				}
+			}
+			return {riverReflectionGroups: currentGroups};
 		});
 	},
 
@@ -541,7 +555,7 @@ const River = React.createClass({
 		currentXPositions.push(riverBounds.right - riverBounds.left - this.refs.river.offsetWidth * 0.15);
 
 		const newXPosition = this.findMaximumGap(currentXPositions);
-		const newYPosition = currentGroups[0].y + riverHeight / (2 + Math.random());
+		const newYPosition = currentGroups[0].y + riverHeight / (1.5 + Math.random());
 		this.setState((previousState, previousProps) => {
 			const riverReflectionGroups = previousState.riverReflectionGroups;
 			riverReflectionGroups.push({x: newXPosition, y: newYPosition, key: newXPosition});
@@ -914,6 +928,7 @@ const RiverReflectionGroup = React.createClass({
 			transform: `translate(${this.props.x}px, ${this.props.y}px)`,
 			height: `${this.state.height}%`,
 			width: `${this.state.numberOfReflections * 4}%`,
+			maxWidth: `${this.state.numberOfReflections * 20}px`,
 			zIndex: '-10',
 			position: 'absolute'
 		};
