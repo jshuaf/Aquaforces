@@ -61,7 +61,7 @@ module.exports = (server) => {
 			tws.crew().members.forEach((crewMember) => {
 				crewMember.trysend({
 					event: 'addRock',
-					startTime: (new Date().getTime()) + 1500
+					startTime: (Date.now()) + 1500
 				});
 			});
 		};
@@ -177,7 +177,7 @@ module.exports = (server) => {
 						case 'answerSelected': {
 							tws.checkGameExists();
 
-							if (Math.random() < 0.9 * tws.crew().streak) {
+							if (Math.random() < 0.05 * tws.crew().streak) {
 								tws.crew().streak = 0;
 								if (Math.random() < 0) {
 									tws.addWhirlpool();
@@ -287,7 +287,7 @@ module.exports = (server) => {
 							const answerToResend = m.answer;
 							tws.crew().activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.answer == answerToResend) {
-									ttws = tws.randomCrewMember();
+									const ttws = tws.randomCrewMember();
 									return ttws.trysend({
 										event: 'correctAnswer',
 										answer: answerToResend
