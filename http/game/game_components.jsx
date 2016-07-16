@@ -483,7 +483,6 @@ const River = React.createClass({
 		const riverReflectionGroups = [];
 		function ascending(a, b) {return a - b;}
 
-		console.log(initialXPositions, initialYPositions, initialReflectionCount);
 		for (let i of Array(initialReflectionCount).keys()) {
 			const newXPosition = this.findMaximumGap(initialXPositions);
 			const newYPosition = this.findMaximumGap(initialYPositions);
@@ -491,7 +490,8 @@ const River = React.createClass({
 			initialXPositions.sort(ascending);
 			initialYPositions.push(newYPosition);
 			initialYPositions.sort(ascending);
-			riverReflectionGroups.push({x: newXPosition, y: newYPosition});
+			riverReflectionGroups.push({
+				x: newXPosition, y: newYPosition, key: newXPosition});
 		}
 
 		this.setState({riverReflectionGroups});
@@ -608,6 +608,7 @@ const River = React.createClass({
 							x = {riverReflectionGroup.x}
 							y = {riverReflectionGroup.y}
 							riverWidth = {this.state.riverWidth}
+							key = {riverReflectionGroup.key}
 						/>
 					)}
 					<Rock
@@ -845,18 +846,27 @@ const RiverReflectionGroup = React.createClass({
 		const darkerColor = '0068A0';
 		return {
 			numberOfReflections: Math.floor(2 + 2 * Math.random()),
-			backgroundColor: Math.random() < 0.7 ? lighterColor : darkerColor
+			backgroundColor: Math.random() < 0.7 ? lighterColor : darkerColor,
+			height: 25 + Math.random() * 10
 		};
 	},
 
 	render() {
 		const riverReflections = [];
 		for (let i = 0; i < this.state.numberOfReflections; i++) {
-			riverReflections.push(<RiverReflection backgroundColor = {this.state.backgroundColor} riverWidth = {this.props.riverWidth}/>);
+			riverReflections.push(<RiverReflection
+				backgroundColor = {this.state.backgroundColor}
+				riverWidth = {this.props.riverWidth}
+				height = {this.state.height}
+				width = {100 / this.state.numberOfReflections}
+				key = {i}
+			/>);
 		}
 
 		const style = {
-			transform: `translate(${this.props.x}px, ${this.props.y}px)`
+			transform: `translate(${this.props.x}px, ${this.props.y}px)`,
+			height: `${this.state.height}%`,
+			width: `${this.state.numberOfReflections * 8}%`
 		};
 		return (
 			<div style = {style}>
@@ -869,8 +879,8 @@ const RiverReflectionGroup = React.createClass({
 const RiverReflection = React.createClass({
 	getInitialState() {
 		return {
-			height: 10 + Math.random() * 15,
-			offset: (2 + Math.random() * 3) * this.props.riverWidth
+			height: 80 + Math.random() * 20,
+			offset: (2 + Math.random() * 3) * this.props.riverWidth / 100
 		};
 	},
 
@@ -879,11 +889,12 @@ const RiverReflection = React.createClass({
 			backgroundColor: this.props.backgroundColor,
 			display: 'block',
 			float: 'left',
-			borderRadius: '5%',
+			borderRadius: `${this.props.width / 2}%`,
 			height: `${this.state.height}%`,
 			transform: `translate(0px, ${this.state.offset}px)`,
-			width: '5%'
+			width: `${this.props.width}%`
 		};
+		console.log(style);
 		return <div style={style}></div>;
 	}
 
