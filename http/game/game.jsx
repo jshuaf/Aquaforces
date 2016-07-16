@@ -17,7 +17,7 @@ function setState(id) {
 	// if filling out form, automatically focus
 	// to the next input field
 	var e = document.getElementById(id).getElementsByTagName('input');
-	if (e.length) e[e.length - 1].focus();
+	if (e.length) e[0].focus();
 }
 
 function setupGameEnvironment() {
