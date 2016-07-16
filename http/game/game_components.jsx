@@ -844,17 +844,23 @@ const RiverReflectionGroup = React.createClass({
 		const lighterColor = 'C1E4EB';
 		const darkerColor = '0068A0';
 		return {
-			numberOfReflections: Math.floor(2 + Math.random()),
-			backgroundColor: lighterColor ? Math.random() < 0.7 : darkerColor
+			numberOfReflections: Math.floor(2 + 2 * Math.random()),
+			backgroundColor: Math.random() < 0.7 ? lighterColor : darkerColor
 		};
 	},
 
 	render() {
+		const riverReflections = [];
+		for (let i = 0; i < this.state.numberOfReflections; i++) {
+			riverReflections.push(<RiverReflection backgroundColor = {this.state.backgroundColor} riverWidth = {this.props.riverWidth}/>);
+		}
+
+		const style = {
+			transform: `translate(${this.props.x}px, ${this.props.y}px)`
+		};
 		return (
-			<div transform = {`translate(${this.props.x} px, ${this.props.y} px)`}>
-				{Array(this.state.numberOfReflections).map(() =>
-					<RiverReflection backgroundColor = {this.state.backgroundColor} riverWidth = {this.props.riverWidth}/>
-				)}
+			<div style = {style}>
+				{riverReflections}
 			</div>
 		);
 	}
@@ -869,8 +875,8 @@ const RiverReflection = React.createClass({
 			display: 'block',
 			float: 'left',
 			borderRadius: '5%',
-			height: `${height} %`,
-			transform: `translate(0 px, ${offset} px)`,
+			height: `${height}%`,
+			transform: `translate(0px, ${offset}px)`,
 			width: '5%'
 		};
 		return <div style={style}></div>;
