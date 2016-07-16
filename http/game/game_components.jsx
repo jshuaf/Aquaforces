@@ -867,16 +867,21 @@ const RiverReflectionGroup = React.createClass({
 });
 
 const RiverReflection = React.createClass({
+	getInitialState() {
+		return {
+			height: 10 + Math.random() * 15,
+			offset: (2 + Math.random() * 3) * this.props.riverWidth
+		};
+	},
+
 	render() {
-		const height = 10 + Math.random() * 15;
-		const offset = (2 + Math.random() * 3) * this.props.riverWidth;
 		const style = {
 			backgroundColor: this.props.backgroundColor,
 			display: 'block',
 			float: 'left',
 			borderRadius: '5%',
-			height: `${height}%`,
-			transform: `translate(0px, ${offset}px)`,
+			height: `${this.state.height}%`,
+			transform: `translate(0px, ${this.state.offset}px)`,
 			width: '5%'
 		};
 		return <div style={style}></div>;
