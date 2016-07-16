@@ -197,6 +197,7 @@ h2 {
 	width: 100%;
 	overflow-x: hidden;
 	overflow-y: hidden;
+	z-index: 0;
 }
 .panel-group {
 	margin-top: 15px;
