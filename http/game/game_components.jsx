@@ -450,7 +450,7 @@ const River = React.createClass({
 		this.props.rockAnimationData(riverRect.top, canoeRect.top, canoe.offsetHeight, rockHeight);
 
 		// River Reflections
-		this.setState({riverWidth: river.offsetWidth, riverHeight: river.offsetHeight});
+		this.setState({riverWidth: river.offsetWidth});
 		this.startRiverReflections();
 		// Answers
 		this.updateAnswers();
@@ -501,12 +501,21 @@ const River = React.createClass({
 	},
 
 	updateRiverReflections(timestamp) {
+		const riverBounds = this.riverBounds();
+		const riverHeight = riverBounds.bottom - riverBounds.top;
 		this.setState((previousState, previousProps) => {
 			const currentGroups = previousState.riverReflectionGroups;
 			const currentTime = Date.now();
 			const timeSinceLastAnimation = currentTime - previousState.lastAnimationTime;
-			for (let currentGroup of currentGroups) {
-				currentGroup.y -= (timeSinceLastAnimation / 1000) * (previousState.riverHeight / 50);
+			let hasBottomReflectionGroup = false;
+			for (let i = 0; i < currentGroups.length; i++) {
+				currentGroups[i].y -= (timeSinceLastAnimation / 1000) * (riverHeight / 20);
+				if (currentGroups[i].y > riverHeight) {
+					hasBottomReflectionGroup = true;
+				}
+			}
+			if (!hasBottomReflectionGroup) {
+				this.addBottomReflectionGroup();
 			}
 			return {
 				riverReflectionGroups: currentGroups,
@@ -514,6 +523,29 @@ const River = React.createClass({
 			};
 		}, () => {
 			requestAnimationFrame(this.updateRiverReflections);
+		});
+	},
+
+	addBottomReflectionGroup() {
+		function descendingY(a, b) {return b.y - a.y;}
+		function ascending(a, b) {return a - b;}
+
+		const currentGroups = this.state.riverReflectionGroups.slice();
+		currentGroups.sort(descendingY);
+
+		const riverBounds = this.riverBounds();
+		const riverHeight = riverBounds.bottom - riverBounds.top;
+		let currentXPositions = [0];
+
+		currentXPositions = currentXPositions.concat(currentGroups.slice(0, 3).map(({x}) => x).sort(ascending));
+		currentXPositions.push(riverBounds.right - riverBounds.left - this.refs.river.offsetWidth * 0.15);
+
+		const newXPosition = this.findMaximumGap(currentXPositions);
+		const newYPosition = currentGroups[0].y + riverHeight / (2.5 + Math.random());
+		this.setState((previousState, previousProps) => {
+			const riverReflectionGroups = previousState.riverReflectionGroups;
+			riverReflectionGroups.push({x: newXPosition, y: newYPosition, key: newXPosition});
+			return {riverReflectionGroups};
 		});
 	},
 
