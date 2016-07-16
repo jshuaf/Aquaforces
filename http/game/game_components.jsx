@@ -842,8 +842,8 @@ const WhirlpoolQuestion = React.createClass({
 
 const RiverReflectionGroup = React.createClass({
 	getInitialState() {
-		const lighterColor = 'C1E4EB';
-		const darkerColor = '0068A0';
+		const lighterColor = '#C1E4EB';
+		const darkerColor = '#0068A0';
 		return {
 			numberOfReflections: Math.floor(2 + 2 * Math.random()),
 			backgroundColor: Math.random() < 0.7 ? lighterColor : darkerColor,
