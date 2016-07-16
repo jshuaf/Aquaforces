@@ -391,7 +391,8 @@ const River = React.createClass({
 			riverReflectionGroups: [],
 			lastAnimationTime: null,
 			// River
-			riverWidth: null
+			riverWidth: null,
+			riverHeight: null
 		};
 	},
 
@@ -449,7 +450,7 @@ const River = React.createClass({
 		this.props.rockAnimationData(riverRect.top, canoeRect.top, canoe.offsetHeight, rockHeight);
 
 		// River Reflections
-		this.setState({riverWidth: this.refs.river.offsetWidth});
+		this.setState({riverWidth: river.offsetWidth, riverHeight: river.offsetHeight});
 		this.startRiverReflections();
 		// Answers
 		this.updateAnswers();
@@ -494,7 +495,7 @@ const River = React.createClass({
 				x: newXPosition, y: newYPosition, key: newXPosition});
 		}
 
-		this.setState({riverReflectionGroups, lastAnimationTime}, () => {
+		this.setState({riverReflectionGroups, lastAnimationTime: Date.now()}, () => {
 			requestAnimationFrame(this.updateRiverReflections);
 		});
 	},
@@ -502,9 +503,15 @@ const River = React.createClass({
 	updateRiverReflections(timestamp) {
 		this.setState((previousState, previousProps) => {
 			const currentGroups = previousState.riverReflectionGroups;
+			const currentTime = Date.now();
+			const timeSinceLastAnimation = currentTime - previousState.lastAnimationTime;
 			for (let currentGroup of currentGroups) {
-
+				currentGroup.y -= (timeSinceLastAnimation / 1000) * (previousState.riverHeight / 50);
 			}
+			return {
+				riverReflectionGroups: currentGroups,
+				lastAnimationTime: currentTime
+			};
 		}, () => {
 			requestAnimationFrame(this.updateRiverReflections);
 		});
