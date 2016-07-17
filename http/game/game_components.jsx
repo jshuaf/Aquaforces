@@ -31,7 +31,9 @@ const Game = React.createClass({
 			canoeHeight: null,
 			// River
 			riverTopPosition: null,
-			flashClass: ""
+			flashClass: "",
+			// River Reflections
+			reflectionGroupUpdate: null
 		};
 	},
 
@@ -82,7 +84,7 @@ const Game = React.createClass({
 
 	correctAnswer() {
 		// MARK: correct answer animation
-
+		this.setState({reflectionGroupUpdate: Date.now()});
 	},
 
 	incorrectAnswer() {
@@ -232,6 +234,7 @@ const Game = React.createClass({
 					flashClass = {this.state.flashClass}
 					canoeHP = {this.state.canoeHP}
 					crewSize = {this.props.crewSize}
+					reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
 				/>
       </div>
     );
@@ -503,13 +506,19 @@ const River = React.createClass({
 	updateRiverReflections(timestamp) {
 		const riverBounds = this.riverBounds();
 		const riverHeight = riverBounds.bottom - riverBounds.top;
+		const updateTimeDifference = Date.now() - this.props.reflectionGroupUpdate;
+		console.log(updateTimeDifference);
 		this.setState((previousState, previousProps) => {
 			const currentGroups = previousState.riverReflectionGroups;
 			const currentTime = Date.now();
 			const timeSinceLastAnimation = currentTime - previousState.lastAnimationTime;
 			let hasBottomReflectionGroup = false;
 			for (let i = 0; i < currentGroups.length; i++) {
-				currentGroups[i].y -= (timeSinceLastAnimation / 1000) * (riverHeight / 20);
+				if (updateTimeDifference > 0 && updateTimeDifference < 3000) {
+					currentGroups[i].y += (timeSinceLastAnimation / 1000) * (riverHeight / 5);
+				} else {
+					currentGroups[i].y -= (timeSinceLastAnimation / 1000) * (riverHeight / 40);
+				}
 				if (currentGroups[i].y > riverHeight) {
 					hasBottomReflectionGroup = true;
 				} else if (currentGroups[i].y < -riverHeight) {
