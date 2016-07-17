@@ -115,6 +115,10 @@ module.exports = (server) => {
 					}
 					switch (m.event) {
 
+						case 'messageRecieved': {
+							break;
+						}
+
 						case 'addUser': {
 							const tgame = games[m.code];
 							if (!tgame) return tws.error('Invalid game code.', 'Make sure you type it correctly!');

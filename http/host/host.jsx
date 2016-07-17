@@ -59,14 +59,20 @@ function removeUserFromCrew() {
 	}
 }
 
+function confirmMessageRecieved() {
+	socket.send(JSON.stringify({event: 'messageRecieved'}));
+}
+
 socket.onmessage = function(m) {
 	try {
 		m = JSON.parse(m.data);
 	} catch (e) {
 		console.log(e);
-		return alert('Socket error.');
+		return sweetAlert('Socket error.', 'error');
 	}
-	console.log(m);
+
+	confirmMessageRecieved();
+
 	switch (m.event) {
 	case 'error':
 		sweetAlert(m.title, m.text, "error");
@@ -113,6 +119,7 @@ socket.onmessage = function(m) {
 		break;
 	case 'answerSelected':
 		gameHost.answerSelected(m.wasCorrectAnswer, m.crewNumber);
+
 		break;
 	case 'whirlpoolStatusChanged':
 		gameHost.whirlpoolStatusChanged(m.status, m.crewNumber);

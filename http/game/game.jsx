@@ -27,14 +27,20 @@ function setupGameEnvironment() {
 		repeat-x center top; background-size: cover;`;
 }
 
+function confirmMessageRecieved() {
+	socket.send(JSON.stringify({event: 'messageRecieved'}));
+}
+
 socket.onmessage = function(m) {
 	try {
 		m = JSON.parse(m.data);
 	} catch (e) {
 		console.log(e);
-		return alert('Socket error.');
+		return sweetAlert('Socket error.');
 	}
-	console.log(m);
+
+	confirmMessageRecieved();
+
 	switch (m.event) {
 	case 'error':
 		sweetAlert(m.title, m.text, "error");
