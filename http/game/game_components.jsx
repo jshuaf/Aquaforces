@@ -510,7 +510,6 @@ const River = React.createClass({
 		const riverBounds = this.riverBounds();
 		const riverHeight = riverBounds.bottom - riverBounds.top;
 		const updateTimeDifference = Date.now() - this.props.reflectionGroupUpdate;
-		console.log(updateTimeDifference);
 		this.setState((previousState, previousProps) => {
 			const currentGroups = previousState.riverReflectionGroups;
 			const currentTime = Date.now();

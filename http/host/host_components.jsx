@@ -25,7 +25,6 @@ const GameHost = React.createClass({
 
 	updateCrewPosition(crewNumber, increment) {
 		// MARK: move the camera around
-		console.log("Move " + crewNumber + " by " + increment);
 		let oldCrews = this.state.crews;
 		oldCrews[crewNumber].position += increment;
 		this.setState({
@@ -142,7 +141,6 @@ const Crew = React.createClass({
 			background: 'url(/img/boats-side/' + (this.state.isRaft ? 'rafts' : 'canoes') + '/' + this.props.size + '-members.svg) no-repeat center top'
 		};
 		const className = this.state.isRaft ? 'raft' : 'racetrack-boat';
-		console.log(this.props.position);
 		return <div className={className} style={style}><p>Crew {this.props.crewNumber}</p></div>;
 	}
 });
