@@ -235,6 +235,7 @@ const Game = React.createClass({
 					canoeHP = {this.state.canoeHP}
 					crewSize = {this.props.crewSize}
 					reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
+					hp = {this.state.hp}
 				/>
       </div>
     );
@@ -516,8 +517,13 @@ const River = React.createClass({
 			let hasTopReflectionGroup = false;
 			for (let i = 0; i < currentGroups.length; i++) {
 				if (updateTimeDifference > 0 && updateTimeDifference < 1000) {
-					currentGroups[i].y += (timeSinceLastAnimation / 1000) *
-						(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 1.8));
+					if (this.props.HP > 0) {
+						currentGroups[i].y += (timeSinceLastAnimation / 1000) *
+							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 1.8));
+					} else {
+						currentGroups[i].y += (timeSinceLastAnimation / 1000) *
+							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 3));
+					}
 				} else {
 					currentGroups[i].y -= (timeSinceLastAnimation / 1000) * (riverHeight / 40);
 				}
