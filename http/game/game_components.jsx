@@ -31,7 +31,9 @@ const Game = React.createClass({
 			canoeHeight: null,
 			// River
 			riverTopPosition: null,
-			flashClass: ""
+			flashClass: "",
+			// River Reflections
+			reflectionGroupUpdate: null
 		};
 	},
 
@@ -82,7 +84,7 @@ const Game = React.createClass({
 
 	correctAnswer() {
 		// MARK: correct answer animation
-
+		this.setState({reflectionGroupUpdate: Date.now()});
 	},
 
 	incorrectAnswer() {
@@ -232,6 +234,8 @@ const Game = React.createClass({
 					flashClass = {this.state.flashClass}
 					canoeHP = {this.state.canoeHP}
 					crewSize = {this.props.crewSize}
+					reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
+					hp = {this.state.hp}
 				/>
       </div>
     );
@@ -505,21 +509,41 @@ const River = React.createClass({
 	updateRiverReflections(timestamp) {
 		const riverBounds = this.riverBounds();
 		const riverHeight = riverBounds.bottom - riverBounds.top;
+		const updateTimeDifference = Date.now() - this.props.reflectionGroupUpdate;
+		console.log(updateTimeDifference);
 		this.setState((previousState, previousProps) => {
 			const currentGroups = previousState.riverReflectionGroups;
 			const currentTime = Date.now();
 			const timeSinceLastAnimation = currentTime - previousState.lastAnimationTime;
 			let hasBottomReflectionGroup = false;
+			let hasTopReflectionGroup = false;
 			for (let i = 0; i < currentGroups.length; i++) {
-				currentGroups[i].y -= (timeSinceLastAnimation / 1000) * (riverHeight / 20);
+				if (updateTimeDifference > 0 && updateTimeDifference < 1000) {
+					if (this.props.HP > 0) {
+						currentGroups[i].y += (timeSinceLastAnimation / 1000) *
+							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 1.8));
+					} else {
+						currentGroups[i].y += (timeSinceLastAnimation / 1000) *
+							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 3));
+					}
+				} else {
+					currentGroups[i].y -= (timeSinceLastAnimation / 1000) * (riverHeight / 40);
+				}
 				if (currentGroups[i].y > riverHeight) {
 					hasBottomReflectionGroup = true;
 				} else if (currentGroups[i].y < -riverHeight) {
+					hasTopReflectionGroup = true;
+				} else if (currentGroups[i].y < -2 * riverHeight) {
+					this.removeReflectionGroup(currentGroups[i].x);
+				} else if (currentGroups[i].y > riverHeight * 3) {
 					this.removeReflectionGroup(currentGroups[i].x);
 				}
 			}
 			if (!hasBottomReflectionGroup) {
-				this.addBottomReflectionGroup();
+				this.addReflectionGroup('bottom');
+			}
+			if (!hasTopReflectionGroup) {
+				this.addReflectionGroup('top');
 			}
 			return {
 				riverReflectionGroups: currentGroups,
@@ -542,12 +566,12 @@ const River = React.createClass({
 		});
 	},
 
-	addBottomReflectionGroup() {
-		function descendingY(a, b) {return b.y - a.y;}
+	addReflectionGroup(side) {
 		function ascending(a, b) {return a - b;}
 
 		const currentGroups = this.state.riverReflectionGroups.slice();
-		currentGroups.sort(descendingY);
+		if (side == 'bottom') currentGroups.sort((a, b) => b.y - a.y);
+		else if (side == 'top') currentGroups.sort((a, b) => a.y - b.y);
 
 		const riverBounds = this.riverBounds();
 		const riverHeight = riverBounds.bottom - riverBounds.top;
@@ -557,7 +581,10 @@ const River = React.createClass({
 		currentXPositions.push(riverBounds.right - riverBounds.left - this.refs.river.offsetWidth * 0.15);
 
 		const newXPosition = this.findMaximumGap(currentXPositions);
-		const newYPosition = currentGroups[0].y + riverHeight / (1.5 + Math.random());
+		let newYPosition;
+		if (side == 'bottom') newYPosition = currentGroups[0].y + riverHeight / (1.5 + Math.random());
+		else if (side == 'top') newYPosition = currentGroups[0].y - 2 * riverHeight / (2.5 + Math.random());
+
 		this.setState((previousState, previousProps) => {
 			const riverReflectionGroups = previousState.riverReflectionGroups;
 			riverReflectionGroups.push({x: newXPosition, y: newYPosition, key: newXPosition});
