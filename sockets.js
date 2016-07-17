@@ -105,6 +105,11 @@ module.exports = (server) => {
 				wasCorrectAnswer
 			});
 		};
+
+		setTimeout(() => {
+			tws.trysend({event: 'ping'});
+		}, 20000);
+
 		switch (tws.upgradeReq.url) {
 			case '/play/': {
 				tws.on('message', function(m, raw) {
@@ -116,10 +121,6 @@ module.exports = (server) => {
 					switch (m.event) {
 
 						case 'messageRecieved': {
-							break;
-						}
-
-						case 'ping': {
 							break;
 						}
 
@@ -365,10 +366,6 @@ module.exports = (server) => {
 
 					switch (m.event) {
 						case 'messageRecieved': {
-							break;
-						}
-
-						case 'ping': {
 							break;
 						}
 
