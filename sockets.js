@@ -360,6 +360,10 @@ module.exports = (server) => {
 					}
 
 					switch (m.event) {
+						case 'messageRecieved': {
+							break;
+						}
+
 						case 'newGame': {
 							const id = Math.floor(Math.random() * 1e4);
 							games[id] = {
