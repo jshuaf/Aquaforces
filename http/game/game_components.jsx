@@ -510,7 +510,6 @@ const River = React.createClass({
 		const riverBounds = this.riverBounds();
 		const riverHeight = riverBounds.bottom - riverBounds.top;
 		const updateTimeDifference = Date.now() - this.props.reflectionGroupUpdate;
-		console.log(updateTimeDifference);
 		this.setState((previousState, previousProps) => {
 			const currentGroups = previousState.riverReflectionGroups;
 			const currentTime = Date.now();
@@ -646,11 +645,12 @@ const River = React.createClass({
 
 	addCorrectAnswer(answer) {
 		const oldAnswersToAdd = this.state.answersToAdd;
+		const currentAnswers = this.state.answers;
 		const incorrectAnswers = [];
 		const incorrectAnswersToAdd = Math.floor(Math.random() * 1.5);
 		for (let i = 0; i < incorrectAnswersToAdd; i++) {
 			let randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
-			while (this.state.answers.indexOf(randomData) >= 0) {
+			while (currentAnswers.indexOf(randomData) >= 0 || incorrectAnswers.indexOf(randomData) >= 0) {
 				randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
 			}
 			incorrectAnswers.push(randomData);
