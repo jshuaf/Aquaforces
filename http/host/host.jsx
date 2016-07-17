@@ -70,6 +70,8 @@ socket.onmessage = function(m) {
 	}
 	console.log(m);
 	switch (m.event) {
+	case 'ping':
+		break;
 	case 'error':
 		alert(m.body);
 		errorEl.textContent = m.body;

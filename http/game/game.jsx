@@ -38,6 +38,8 @@ socket.onmessage = function(m) {
 	}
 
 	switch (m.event) {
+	case 'ping':
+		break;
 	case 'notice':
 		errorEl.textContent = m.body;
 		errorEl.scrollIntoView();

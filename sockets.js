@@ -94,6 +94,11 @@ module.exports = (server) => {
 				wasCorrectAnswer
 			});
 		};
+
+		setInterval(() => {
+			tws.trysend({event: 'ping'});
+		}, 20000);
+
 		switch (tws.upgradeReq.url) {
 			case '/': {
 				tws.on('message', function(m, raw) {
