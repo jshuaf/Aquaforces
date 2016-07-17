@@ -118,10 +118,6 @@ const Game = React.createClass({
 		alert("saved from rock");
 	},
 
-	rockAnimationData(riverTopPosition, canoeTopPosition, canoeHeight, rockHeight) {
-		this.setState({riverTopPosition, canoeTopPosition, canoeHeight, rockHeight});
-	},
-
 	render() {
 		// MARK: add flashing
 		let whirlpoolValue;
@@ -313,11 +309,20 @@ const Canoe = React.createClass({
 
 		image += `/${this.props.crewSize}-members.svg`;
 
-		const style = {
-			height: '50%',
-			transform: `translate(${0}px, ${window.innerHeight / 3.5}px)`
+		const canoeStyle = {
+			transform: `translate(${0}px, ${window.innerHeight / 3.5}px)`,
+			height: '100%'
 		};
-		return (<img id = "canoe" src = {image} style = {style} ref = "canoe"></img>);
+		const containerStyle = {
+			textAlign: "center",
+			height: '50%'
+		};
+
+		return (
+			<div style={containerStyle}>
+				<img id = "canoe" src = {image} style = {canoeStyle} ref = "canoe"></img>
+			</div>
+		);
 	}
 });
 
@@ -336,7 +341,7 @@ const River = React.createClass({
 			// River
 			riverWidth: null,
 			riverHeight: null,
-			flashClass: null,
+			flashClass: "",
 			// Canoe
 			canoeBounds: null,
 			// Rock
@@ -353,10 +358,6 @@ const River = React.createClass({
 		const canoe = ReactDOM.findDOMNode(this.refs.canoe);
 		const canoeRect = canoe.getBoundingClientRect();
 		const rockHeight = ReactDOM.findDOMNode(this.refs.rock).offsetHeight;
-
-		// Rocks
-		this.props.rockAnimationData(riverRect.top, canoeRect.top, canoe.offsetHeight, rockHeight);
-
 		// River Reflections
 		this.setState({riverWidth: river.offsetWidth, canoeBounds: this.canoeBounds()});
 		this.startRiverReflections();
@@ -688,7 +689,7 @@ const River = React.createClass({
 							key = {riverReflectionGroup.key}
 						/>
 					)}
-					<Rock y = {this.props.rockYPosition} ref = "rock"/>
+					<Rock y = {this.state.rockYPosition} ref = "rock"/>
 					<Canoe initialImage = {this.props.initialImage}
 						ref = "canoe" hp = {this.props.canoeHP} crewSize = {this.props.crewSize}
 					/>
@@ -798,33 +799,18 @@ const GameTimer = React.createClass({
 });
 
 const Rock = React.createClass({
-	getInitialState() {
-		return {
-			x: null,
-			height: null
-		};
-	},
-
-	componentDidMount() {
-		this.setState({
-			width: this.refs.rock.offsetWidth,
-			parentWidth: this.refs.rock.parentElement.clientWidth,
-			height: this.refs.rock.offsetHeight
-		});
-	},
-
 	render() {
-		let x;
-		if (this.state.width) {
-			x = this.state.parentWidth / 2 - this.state.width / 2;
-		}
-		const style = {
-			transform: `translate(${x}px, ${this.props.y}px)`,
-			height: '10%'
+		const rockStyle = {
+			transform: `translate(0px, ${this.props.y}px)`,
+			width: "100%"
+		};
+		const containerStyle = {
+			textAlign: "center",
+			width: "8%"
 		};
 		return (
-			<div style = {style} ref = "rock">
-				<img src = "../img/obstacles/rock.svg" ></img>
+			<div style={containerStyle}>
+				<img src = "../img/obstacles/rock.svg" style = {rockStyle}></img>
 			</div>
 		);
 	}
