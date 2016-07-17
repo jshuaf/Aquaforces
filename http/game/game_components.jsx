@@ -14,12 +14,6 @@ const Game = React.createClass({
 				left: 0.48,
 				right: 0.52
 			},
-			// Rock
-			rock: false,
-			rockYPosition: -window.innerHeight * 0.2,
-			rockHeight: null,
-			rockStartTime: null,
-			rockAnimation: null,
 			// Whirlpool
 			whirlpool: false,
 			whirlpoolType: 'Free',
@@ -29,9 +23,6 @@ const Game = React.createClass({
 			canoeHP: 100,
 			canoeTopPosition: null,
 			canoeHeight: null,
-			// River
-			riverTopPosition: null,
-			flashClass: "",
 			// River Reflections
 			reflectionGroupUpdate: null
 		};
@@ -116,57 +107,7 @@ const Game = React.createClass({
 	},
 
 	addRock(rockStartTime) {
-		const timeBeforeHit = 20000;
-		this.setState({
-			rockStartTime,
-			rock: true
-		});
-
-		const rockAnimation = setInterval(this.animateRock, 25);
-		this.setState({rockAnimation});
-	},
-
-	animateRock() {
-		const timeDifference = (Date.now() - this.state.rockStartTime) / 1000;
-		if (timeDifference && timeDifference > 0) {
-			const y = timeDifference * window.innerHeight / 10;
-			if (this.state.riverTopPosition) {
-				const positionLimit = this.state.canoeTopPosition - this.state.riverTopPosition - this.state.rockHeight - this.state.canoeHeight;
-				if (positionLimit < y) {
-					clearInterval(this.state.rockAnimation);
-					this.rockHit();
-					return;
-				}
-			}
-			this.setState({
-				rockYPosition: y
-			});
-		}
-	},
-
-	rockHit() {
-		this.flashRedTwice();
-		const y = -window.innerHeight * 0.2;
-		this.setState((previousState, previousProps) => (
-			{
-				rockYPosition: y,
-				canoeHP: previousState.canoeHP - 30
-			}
-		));
-	},
-
-	clearFlash() {
-		setTimeout(() => {
-			this.setState({
-				flashClass: ""
-			});
-		}, 1000);
-	},
-
-	flashRedTwice() {
-		this.setState({
-			flashClass: " flash-red-twice"
-		}, this.clearFlash);
+		this.refs.river.addRock(rockStartTime);
 	},
 
 	endRock() {
@@ -228,14 +169,12 @@ const Game = React.createClass({
 					initialAnswers = {this.props.initialAnswers}
 					answerSelected = {this.answerSelected}
 					answerPassedThreshold = {this.answerPassedThreshold}
-					rock={this.state.rock}
-					rockYPosition = {this.state.rockYPosition}
-					rockAnimationData = {this.rockAnimationData}
 					flashClass = {this.state.flashClass}
 					canoeHP = {this.state.canoeHP}
 					crewSize = {this.props.crewSize}
 					reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
 					hp = {this.state.hp}
+					updateHP = {this.updateHP}
 				/>
       </div>
     );
@@ -397,9 +336,33 @@ const River = React.createClass({
 			// River
 			riverWidth: null,
 			riverHeight: null,
+			flashClass: null,
 			// Canoe
-			canoeBounds: null
+			canoeBounds: null,
+			// Rock
+			rockStartTime: false,
+			rockAnimation: null,
+			rockYPosition: -window.innerHeight * 0.2
 		};
+	},
+
+	componentDidMount() {
+		// Constants
+		const river = this.refs.river;
+		const riverRect = river.getBoundingClientRect();
+		const canoe = ReactDOM.findDOMNode(this.refs.canoe);
+		const canoeRect = canoe.getBoundingClientRect();
+		const rockHeight = ReactDOM.findDOMNode(this.refs.rock).offsetHeight;
+
+		// Rocks
+		this.props.rockAnimationData(riverRect.top, canoeRect.top, canoe.offsetHeight, rockHeight);
+
+		// River Reflections
+		this.setState({riverWidth: river.offsetWidth, canoeBounds: this.canoeBounds()});
+		this.startRiverReflections();
+		// Answers
+		this.updateAnswers();
+		setInterval(this.updateAnswers, 2500);
 	},
 
 	answerPassedThreshold(answerText) {
@@ -444,23 +407,48 @@ const River = React.createClass({
 		});
 	},
 
-	componentDidMount() {
-		// Constants
-		const river = this.refs.river;
-		const riverRect = river.getBoundingClientRect();
-		const canoe = ReactDOM.findDOMNode(this.refs.canoe);
-		const canoeRect = canoe.getBoundingClientRect();
-		const rockHeight = ReactDOM.findDOMNode(this.refs.rock).offsetHeight;
+	addRock(rockStartTime) {
+		const rockAnimation = requestAnimationFrame(this.animateRock);
+		this.setState({rockStartTime, rockAnimation});
+	},
 
-		// Rocks
-		this.props.rockAnimationData(riverRect.top, canoeRect.top, canoe.offsetHeight, rockHeight);
+	animateRock(timestamp) {
+		if (!this.state.rockStartTime) return;
+		const timeDifference = (Date.now() - this.state.rockStartTime) / 1000;
+		if (timeDifference > 0) {
+			const rock = ReactDOM.findDOMNode(this.refs.rock);
+			const impactDistance = this.canoeBounds().top - this.riverBounds().top - rock.offsetHeight;
+			const distanceToGo = impactDistance - this.state.rockYPosition;
+			const impactVelocity = distanceToGo / (20000 - timeDifference);
+			const rockYPosition = timeDifference * impactVelocity;
+			if (rockYPosition > impactDistance) {
+				cancelAnimationFrame(this.state.rockAnimation);
+				this.rockHit();
+			} else {
+				this.setState({rockYPosition});
+			}
+		}
+		requestAnimationFrame(this.animateRock);
+	},
 
-		// River Reflections
-		this.setState({riverWidth: river.offsetWidth, canoeBounds: this.canoeBounds()});
-		this.startRiverReflections();
-		// Answers
-		this.updateAnswers();
-		setInterval(this.updateAnswers, 2500);
+	rockHit() {
+		this.flashRedTwice();
+		this.setState({rockYPosition: -window.innerHeight * 0.2});
+		this.props.updateHP(this.props.HP - 30);
+	},
+
+	clearFlash() {
+		setTimeout(() => {
+			this.setState({
+				flashClass: ""
+			});
+		}, 1000);
+	},
+
+	flashRedTwice() {
+		this.setState({
+			flashClass: " flash-red-twice"
+		}, this.clearFlash);
 	},
 
 	findMaximumGap(positions) {
@@ -689,7 +677,7 @@ const River = React.createClass({
 			/>);
 		}
 		return (
-			<div className={"river" + this.props.flashClass} ref = "river">
+			<div className={"river" + this.state.flashClass} ref = "river">
 				<div className="answers">
 					{answers}
 					{this.state.riverReflectionGroups.map((riverReflectionGroup) =>
@@ -700,10 +688,7 @@ const River = React.createClass({
 							key = {riverReflectionGroup.key}
 						/>
 					)}
-					<Rock
-						y = {this.props.rockYPosition}
-						ref = "rock"
-					/>
+					<Rock y = {this.props.rockYPosition} ref = "rock"/>
 					<Canoe initialImage = {this.props.initialImage}
 						ref = "canoe" hp = {this.props.canoeHP} crewSize = {this.props.crewSize}
 					/>
@@ -835,7 +820,7 @@ const Rock = React.createClass({
 		}
 		const style = {
 			transform: `translate(${x}px, ${this.props.y}px)`,
-			width: '10%'
+			height: '10%'
 		};
 		return (
 			<div style = {style} ref = "rock">

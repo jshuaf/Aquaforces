@@ -186,7 +186,7 @@ module.exports = (server) => {
 						case 'answerSelected': {
 							tws.checkGameExists();
 
-							if (Math.random() < 0.05 * tws.crew().streak) {
+							if (Math.random() < 0.9 * tws.crew().streak) {
 								tws.crew().streak = 0;
 								if (Math.random() < 0) {
 									tws.addWhirlpool();
