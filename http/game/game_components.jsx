@@ -514,8 +514,9 @@ const River = React.createClass({
 			const timeSinceLastAnimation = currentTime - previousState.lastAnimationTime;
 			let hasBottomReflectionGroup = false;
 			for (let i = 0; i < currentGroups.length; i++) {
-				if (updateTimeDifference > 0 && updateTimeDifference < 3000) {
-					currentGroups[i].y += (timeSinceLastAnimation / 1000) * (riverHeight / 5);
+				if (updateTimeDifference > 0 && updateTimeDifference < 1000) {
+					currentGroups[i].y += (timeSinceLastAnimation / 1000) *
+						(riverHeight / Math.abs((500 - updateTimeDifference) / 500) + 2);
 				} else {
 					currentGroups[i].y -= (timeSinceLastAnimation / 1000) * (riverHeight / 40);
 				}
