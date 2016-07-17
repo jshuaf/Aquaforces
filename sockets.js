@@ -105,6 +105,11 @@ module.exports = (server) => {
 				wasCorrectAnswer
 			});
 		};
+
+		setInterval(() => {
+			tws.trysend({event: 'ping'});
+		}, 20000);
+
 		switch (tws.upgradeReq.url) {
 			case '/play/': {
 				tws.on('message', function(m, raw) {
@@ -114,6 +119,10 @@ module.exports = (server) => {
 						return tws.error('JSON error.');
 					}
 					switch (m.event) {
+
+						case 'messageRecieved': {
+							break;
+						}
 
 						case 'addUser': {
 							const tgame = games[m.code];
@@ -335,8 +344,13 @@ module.exports = (server) => {
 							user: tws.user
 						});
 						const index = tws.game.users.indexOf(tws);
+						const crewMembers = tws.crew().members;
 						tws.game.users.splice(index, 1);
 						tws.game.usernames.splice(index, 1);
+						crewMembers.splice(crewMembers.indexOf(tws), 1);
+						if (crewMembers.length == 0) {
+							tws.game.crews.splice(tws.game.crews.indexOf(tws.crew()), 1);
+						}
 					}
 				});
 				break;
@@ -351,6 +365,10 @@ module.exports = (server) => {
 					}
 
 					switch (m.event) {
+						case 'messageRecieved': {
+							break;
+						}
+
 						case 'newGame': {
 							const id = Math.floor(Math.random() * 1e4);
 							games[id] = {
@@ -395,6 +413,9 @@ module.exports = (server) => {
 								crew.members.forEach((ttws) => {
 									if (ttws.user == m.user) {
 										crew.members.splice(crew.members.indexOf(ttws), 1);
+										if (crew.members.length == 0) {
+											tws.game.crews.splice(tws.game.crews.indexOf(crew), 1);
+										}
 										ttws.trysend({
 											event: 'removeUserFromCrew'
 										});

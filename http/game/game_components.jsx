@@ -392,7 +392,9 @@ const River = React.createClass({
 			lastAnimationTime: null,
 			// River
 			riverWidth: null,
-			riverHeight: null
+			riverHeight: null,
+			// Canoe
+			canoeBounds: null
 		};
 	},
 
@@ -450,7 +452,7 @@ const River = React.createClass({
 		this.props.rockAnimationData(riverRect.top, canoeRect.top, canoe.offsetHeight, rockHeight);
 
 		// River Reflections
-		this.setState({riverWidth: river.offsetWidth});
+		this.setState({riverWidth: river.offsetWidth, canoeBounds: this.canoeBounds()});
 		this.startRiverReflections();
 		// Answers
 		this.updateAnswers();
@@ -618,7 +620,7 @@ const River = React.createClass({
 	addCorrectAnswer(answer) {
 		const oldAnswersToAdd = this.state.answersToAdd;
 		const incorrectAnswers = [];
-		const incorrectAnswersToAdd = Math.floor(Math.random() * 2);
+		const incorrectAnswersToAdd = Math.floor(Math.random() * 1.5);
 		for (let i = 0; i < incorrectAnswersToAdd; i++) {
 			let randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
 			while (this.state.answers.indexOf(randomData) >= 0) {
@@ -655,7 +657,7 @@ const River = React.createClass({
 				answerPassedThreshold={this.answerPassedThreshold}
 				generateAnswerPosition={this.generateAnswerPosition}
 				riverBounds={this.riverBounds()}
-				canoeBounds={this.canoeBounds()}
+				canoeBounds={this.state.canoeBounds}
 				keepRunning={!this.props.whirlpool}
 			/>);
 		}
@@ -729,7 +731,7 @@ const QuestionTimebar = React.createClass({
 		const style = {
 			width: (this.state.timeLeft / this.props.timePerQuestion * 100).toString() + '%',
 			backgroundColor: '#26A65B',
-			height: '5%'
+			height: '100%'
 		};
 		return <div style={style} className="questionTime"></div>;
 	}
