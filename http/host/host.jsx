@@ -7,6 +7,10 @@ const usersWithoutCrews = [];
 let gameHost;
 let gameHasStarted = false;
 
+setTimeout(() => {
+	socket.send(JSON.stringify({event: 'ping'}));
+}, 20000);
+
 function setState(id) {
 	// hide and show different elements
 	cont.children.forEach(function(e) {

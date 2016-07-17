@@ -119,6 +119,10 @@ module.exports = (server) => {
 							break;
 						}
 
+						case 'ping': {
+							break;
+						}
+
 						case 'addUser': {
 							const tgame = games[m.code];
 							if (!tgame) return tws.error('Invalid game code.', 'Make sure you type it correctly!');
@@ -361,6 +365,10 @@ module.exports = (server) => {
 
 					switch (m.event) {
 						case 'messageRecieved': {
+							break;
+						}
+
+						case 'ping': {
 							break;
 						}
 

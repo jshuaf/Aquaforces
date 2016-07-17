@@ -7,6 +7,10 @@ let game;
 let username;
 let crewNumber;
 
+setTimeout(() => {
+	socket.send(JSON.stringify({event: 'ping'}));
+}, 20000);
+
 function setState(id) {
 	cont.children.forEach((e) => {
 		if (e.id !== id) {
