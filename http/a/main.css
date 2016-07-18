@@ -5,7 +5,7 @@
 }
 html {
 	font: 100% 'Helvetica', sans-serif;
-	background: #39f;
+	background: #6cf;
 }
 body { margin: 1em 1.3em }
 html:not(.hostgame):not(.no-bg) { background-color: #bee6f1 }
