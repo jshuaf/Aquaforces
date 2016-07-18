@@ -380,11 +380,11 @@ const River = React.createClass({
 		const answersToAdd = this.state.answersToAdd;
 		const answersToRemove = this.state.answersToRemove;
 
-		let newAnswer;
-		if (answersToAdd.length > 0) {
-			newAnswer = answersToAdd.shift();
+		let newAnswer = answersToAdd.shift();
+		if (answersToAdd.length > 0 && currentAnswers.indexOf(newAnswer) < 0) {
 			this.setState({answersToAdd});
 		} else {
+			answerToAdd.unshift(newAnswer);
 			let randomData = this.state.answerData[Math.floor(
 				Math.random() * this.state.answerData.length)];
 			while (currentAnswers.indexOf(randomData) >= 0) {
@@ -671,7 +671,7 @@ const River = React.createClass({
 		const incorrectAnswersToAdd = Math.floor(Math.random() * 1.5);
 		for (let i = 0; i < incorrectAnswersToAdd; i++) {
 			let randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
-			while (currentAnswers.indexOf(randomData) >= 0 || incorrectAnswers.indexOf(randomData) >= 0) {
+			while (currentAnswers.indexOf(randomData) >= 0 || incorrectAnswers.indexOf(randomData) >= 0 || oldAnswersToAdd.indexOf(randomData) >= 0) {
 				randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
 			}
 			incorrectAnswers.push(randomData);
