@@ -16,6 +16,7 @@ const Game = React.createClass({
 			whirlpoolQuestion: {},
 			whirlpoolTimebar: null,
 			whirlpoolBonus: 0,
+			rock: false,
 			canoeHP: 100,
 			canoeTopPosition: null,
 			canoeHeight: null,
@@ -103,11 +104,13 @@ const Game = React.createClass({
 	},
 
 	addRock(rockStartTime) {
+		this.state.rock = true;
 		this.refs.river.addRock(rockStartTime);
 	},
 
 	endRock() {
 		this.refs.river.endRock();
+		this.state.rock = false;
 	},
 
 	rockHit() {
@@ -704,6 +707,7 @@ const River = React.createClass({
 				keepRunning={!this.props.whirlpool}
 			/>);
 		}
+		console.log(this.props.rockPresent);
 		return (
 			<div className={"river" + this.state.flashClass} ref = "river">
 				<div className="answers">
