@@ -110,7 +110,7 @@ module.exports = function(server) {
 							tws.game.host.trysend(JSON.stringify({event: 'end-rock', crewnum: tws.crewnum}));
 						}
 					}
-					if (Math.random() < tws.crew.streak / 2 && !tws.crew.rock) {
+					if (Math.random() < tws.crew.streak / 20 && !tws.crew.rock) {
 						tws.crew.rock = true;
 						tws.crew.streak = 0;
 						setTimeout(function() {
