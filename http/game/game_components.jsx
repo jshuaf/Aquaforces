@@ -110,6 +110,10 @@ const Game = React.createClass({
 		this.refs.river.endRock();
 	},
 
+	rockHit() {
+		this.props.socket.send(JSON.stringify({event: 'rockHit'}));
+	},
+
 	render() {
 		// MARK: add flashing
 		let whirlpoolValue;
@@ -157,11 +161,11 @@ const Game = React.createClass({
 					initialAnswers = {this.props.initialAnswers}
 					answerSelected = {this.answerSelected}
 					answerPassedThreshold = {this.answerPassedThreshold}
-					flashClass = {this.state.flashClass}
 					canoeHP = {this.state.canoeHP}
 					crewSize = {this.props.crewSize}
 					reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
 					updateHP = {this.updateHP}
+					rockHit = {this.rockHit}
 				/>
       </div>
     );
@@ -432,8 +436,12 @@ const River = React.createClass({
 	},
 
 	rockHit() {
+		this.setState({
+			rockStartTime: null,
+			rockAnimation: null,
+			rockYPosition: -innerHeight * 0.1
+		});
 		this.flashRedTwice();
-		this.setState({rockYPosition: -innerHeight * 0.1});
 		this.props.updateHP(this.props.canoeHP - 30);
 	},
 

@@ -332,6 +332,11 @@ module.exports = (server) => {
 							break;
 						}
 
+						case 'rockHit': {
+							tws.crew().rock = false;
+							break;
+						}
+
 						default: {
 							tws.error('Unknown socket event ' + m.event + ' received.');
 						}
