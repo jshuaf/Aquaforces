@@ -77,7 +77,7 @@ function initRock() {
 	rock.position = 0;
 }
 function moveRock(newPosition) {
-	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 60000;
+	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 10000;
 	rock.position = newPosition;
 }
 socket.onclose = function() {
