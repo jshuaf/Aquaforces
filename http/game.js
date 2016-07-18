@@ -68,7 +68,7 @@ function initRock() {
 	rock.position = 0;
 }
 function moveRock(newPosition) {
-	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 10000;
+	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 20000;
 }
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
