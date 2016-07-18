@@ -1,4 +1,3 @@
-html { background-color: #148 }
 html.hostgame {
 	background: #4af url('/img/beachscape.svg') repeat-x;
 	color: #000;
@@ -43,15 +42,32 @@ details p, details h3 { margin: 0.2em 0 }
 	display: block;
 	padding: 2em;
 }
-#new-qset, .qset { background: #026 }
+#new-qset, .qset { background: #fff }
 #new-qset.hide {
 	opacity: 0;
 	pointer-events: none;
 }
-#new-qset small a:not(:hover):not(:focus) { color: #fcc }
 #new-qset p { margin: 0.5em 0 0.3em }
 #new-qset li { width: 100% }
 #new-qset ul li input { width: calc(100% - 0.5ch) }
+.left-align { margin: 0 -1.3em }
+summary + ol {
+	list-style-type: none;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+}
+summary + ol > li {
+	display: flex;
+	flex-grow: 1;
+	border: 0.5px solid #aaa;
+	padding: 1em;
+}
+summary + ol > li > div {
+	flex-grow: 1;
+	margin-left: 1em;
+}
+summary + ol > li > * { min-width: 5em }
 .hostgame #tgame {
 	position: absolute;
 	top: 0; bottom: 0; left: 0;

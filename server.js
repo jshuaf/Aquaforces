@@ -159,18 +159,18 @@ let serverHandler = o(function*(req, res) {
 			}
 		}));
 	} else if (req.url.pathname == '/console/') {
-		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
+		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
 		dbcs.qsets.find().sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
 				qset.questions.forEach(function(question) {
-					qsetstr += '<li><h3>Question: ' + question.text + '</h3><p>Answer: ' + question.answer + '</p><p>Wrong answers:</p><ul>';
+					qsetstr += '<li><h3>' + question.text + '</h3><div><p>Correct: ' + question.answer + '</p><ul>';
 					question.incorrectAnswers.forEach(function(answer) {
 						qsetstr += '<li>' + answer + '</li>';
 					});
-					qsetstr += '</ul></li>';
+					qsetstr += '</ul></div></li>';
 				});
 				qsetstr += '</ol></details>';
 			} else {
