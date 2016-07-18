@@ -332,7 +332,7 @@ h2 {
 	-webkit-animation-fill-mode: both;
 	animation-fill-mode: both;
 }
-@-webkit-keyframes bounceInDown {
+@-webkit-keyframes bounceindown {
 	from, 60%, 75%, 90%, to {
 		-webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 		animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -360,7 +360,7 @@ h2 {
 		transform: none;
 	}
 }
-@keyframes bounceInDown {
+@keyframes bounceindown {
 	from, 60%, 75%, 90%, to {
 		-webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 		animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -392,7 +392,7 @@ h2 {
 	-webkit-animation-name: bounceindown;
 	animation-name: bounceindown;
 }
-@-webkit-keyframes bounceOutUp {
+@-webkit-keyframes bounceoutup {
 	20% {
 		-webkit-transform: translate3d(0, -10px, 0);
 		transform: translate3d(0, -10px, 0);
@@ -408,7 +408,7 @@ h2 {
 		transform: translate3d(0, -2000px, 0);
 	}
 }
-@keyframes bounceOutUp {
+@keyframes bounceoutup {
 	20% {
 		-webkit-transform: translate3d(0, -10px, 0);
 		transform: translate3d(0, -10px, 0);
