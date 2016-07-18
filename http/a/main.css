@@ -320,6 +320,8 @@ h2 {
 	box-shadow: 0 3px 5px rgba(0,0,0,0.05);
 	width: 100vw;
 	z-index: 100;
+	left: 0;
+	top: 0;
 }
 #notification > .container {
 	padding: 20px;

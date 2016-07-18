@@ -39,7 +39,7 @@ const Game = React.createClass({
 		this.setState({update: <Update title = {title} text = {text} animationText = 'bounceInDown animated'></Update>});
 		setTimeout(function() {
 			this.setState({update: <Update title = {title} text = {text} animationText = 'bounceOutUp animated'></Update>});
-		}, 2500);
+		}.bind(this), 2000);
 	},
 
 	gameTimerOver() {
@@ -437,9 +437,10 @@ const River = React.createClass({
 			this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
 		});
 		*/
+		const rockAnimation = requestAnimationFrame(this.animateRock);
 		setTimeout(function() {
 			this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
-		}, 2000);
+		}.bind(this), 2000);
 	},
 
 	animateRock(timestamp) {
@@ -947,7 +948,7 @@ const WhirlpoolQuestion = React.createClass({
 				<div className="container">
 					<div className="row">
 						<div className="twelve columns">
-							<h2 className="marginless">{this.props.title}</h2>
+							<h2 className="marginless"><b>{this.props.title}</b></h2>
 							<h2>{this.props.text}</h2>
 						</div>
 					</div>
