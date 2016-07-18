@@ -29,7 +29,6 @@ function request(uri, callback, params) {
 	};
 	return i;
 }
-
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
   while (currentIndex !== 0) {
