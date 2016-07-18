@@ -99,7 +99,7 @@ label {
 .button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
 	border-radius: 30px;
 	margin-top: 10px;
-	background-color: #2ABB9B;
+	background-color: #2abb9b;
 	border: none;
 	letter-spacing: normal;
 	text-transform: none;
@@ -107,7 +107,7 @@ label {
 	font-weight: bold;
 }
 .button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active, .button.button-primary:focus, button.button-primary:focus, input[type=submit].button-primary:focus, input[type=reset].button-primary:focus, input[type=button].button-primary:focus {
-	background-color: #16A085;
+	background-color: #16a085;
 }
 .navbar-logo {
 	height: 4rem;
