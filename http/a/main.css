@@ -43,6 +43,14 @@ section {
 		background-color: #bee6f1;
 	}
 }
+.white {
+	color: white;
+}
+.landing-bottom {
+	background: url('/img/bottom.svg') no-repeat center bottom;
+	background-size: cover;
+	padding-bottom: 50vh;
+}
 .landing-body {
 	background: #bee6f1;
 }
@@ -99,7 +107,7 @@ label {
 .button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
 	border-radius: 30px;
 	margin-top: 10px;
-	background-color: #f1c40f;
+	background-color: #54a543;
 	border: none;
 	letter-spacing: normal;
 	text-transform: none;
@@ -108,7 +116,7 @@ label {
 	color: white;
 }
 .button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active, .button.button-primary:focus, button.button-primary:focus, input[type=submit].button-primary:focus, input[type=reset].button-primary:focus, input[type=button].button-primary:focus {
-	background-color: #e1b400;
+	background-color: #449533;
 }
 .navbar-logo {
 	height: 4rem;
