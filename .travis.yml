@@ -17,5 +17,6 @@ script:
 - eslint ./
 - stylelint ./*/*.css ./*/*/*.css -f verbose
 deploy:
+  provider: heroku
   api_key:
     secure: POcHt+IVMbLq5FMailujtsVYldUZJUKUduh6nnxJGhG9nRoedZRX86oXgbbjq37lC52sPaPfzElGP86Jx71b+SG4CMBgIIUtmA1vhBq0dIprMwIF6pbsGvUfW55rAHr6HPjJde1231Evmu2a+CIC+lJ+vkRWISEmUHczXH2676NMYhzeQcX1Qczio15XUPUWwULjojv2YA638DeLUFlXVSjczP5ksnlOAiaVD89Yvf9CddG+s54McCPHFrnIFcRZCfm3IW3UfkkMXpDZGhslaQLpwEyLfUfu0zI38/BtNFiAosYcJ6zFCk9Sy6ek0cB/nIb7dBPaoM440QqHTezQZO7804DDLYLAWQoQJv8zf8I1OpFKgLlhrhIxmm6X8SjZB67DUoirVFYIKxk1QdaFKNrxCuiJX17fBWuQoFRLTRk1NNBgzLe7O0nmt7To5ve56W5DvFUoZSvCg/GYnEJP1FACKYRcqoyS/KZNjRtGLPVapmMuUPd0rEZL82HUs5Z2RVShnsgIKoTDy2/DO/sU7yDXoa6mvWkjLatz6eEOof+xf5gBsrTNYMLtDGxjpYI+QxZ0coWMhFwc/fvkc4lwPVkDkGbEYxJmgM9GSuzdfJ99/o4oQTo0Gr02HYrxZg9xAz2pP180VmpondgCRw769qjGlok82IUX6RJZbaK7qdo=
