@@ -833,7 +833,8 @@ const Rock = React.createClass({
 			textAlign: "center",
 			height: "12%",
 			margin: "0 auto",
-			transform: `translate(0px, ${this.props.y}px)`
+			transform: `translate(0px, ${this.props.y}px)`,
+			display: 'inline-block'
 		};
 		return (
 			<div style={containerStyle}>
