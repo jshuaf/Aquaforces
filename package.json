@@ -7,7 +7,7 @@
 	"license": "UNLICENSED",
 	"main": "server.js",
 	"scripts": {
-		"start": "node server",
+		"start": "node server --production",
 		"test": "node server --test"
 	},
 	"author": "BoniO Interns",
