@@ -136,14 +136,18 @@ button[disabled] {
 #joinbtn { margin: 0.2em auto }
 #error {
 	color: #f00;
-	transition: padding-top 0.3s, padding-bottom 0.3s, height 0.3s, margin-bottom 0.3s;
+	transition: padding-top 0.3s, padding-bottom 0.3s, height 0.3s;
 	background: #fff;
 	padding: 1em;
-	margin: 0 0 1em;
+	margin: -1em -1.3em 1em;
+	z-index: 1;
+	position: relative;
+	height: 3em;
 }
 #error:empty {
 	padding: 0;
 	height: 0;
+	margin: 0;
 }
 a {
 	color: #00f;
