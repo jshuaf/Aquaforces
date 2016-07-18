@@ -560,7 +560,7 @@ const River = React.createClass({
 				if (updateTimeDifference > 0 && updateTimeDifference < 1000) {
 					if (this.props.HP > 0) {
 						currentGroups[i].y += (timeSinceLastAnimation / 1000) *
-							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 1.8));
+							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 2.5));
 					} else {
 						currentGroups[i].y += (timeSinceLastAnimation / 1000) *
 							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 3));
@@ -848,11 +848,11 @@ const GameTimer = React.createClass({
 const Rock = React.createClass({
 	render() {
 		const rockStyle = {
-			width: "100%"
+			height: "100%"
 		};
 		let containerStyle = {
 			textAlign: "center",
-			width: "8%",
+			height: "12%",
 			margin: "0 auto",
 			transform: `translate(0px, ${this.props.y}px)`
 		};

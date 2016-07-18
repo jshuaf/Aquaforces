@@ -1,18 +1,25 @@
 language: node_js
 node_js:
-  - stable
+- stable
 services:
-  - mongodb
+- mongodb
 install:
-  - npm install
-  - npm install -g snyk
-  - npm install -g nsp
-  - npm install -g eslint
-  - npm install -g stylelint
-  - npm install -g babel-eslint
+- npm install
+- npm install -g snyk
+- npm install -g nsp
+- npm install -g eslint
+- npm install -g stylelint
+- npm install -g babel-eslint
 script:
-  - npm test
-  - snyk test
-  - nsp check
-  - eslint ./
-  - stylelint ./*/*.css ./*/*/*.css -f verbose
+- npm test
+- snyk test
+- nsp check
+- eslint ./
+- stylelint ./*/*.css ./*/*/*.css -f verbose
+deploy:
+  provider: heroku
+  api_key:
+    secure: SMYtEs0aEOmHYHDqg8ErP5gCUSr8G72eFzgCXiZSyZ0FmUUw40IvcEMNdtS5wCzMrThTUPrmswwzW8e8/JuZUDpLXyQlZPzFyO8Tx4uBn1vZrOXe1BZyiJyd0iRs0N8jbqGUCcHT4SaE45eqOsG33WXnScvR1f/tdC+yA56OcRls8CiEI0VDEIwBemBTamBKQiaHhZuTDUjzRbr+f0WyjVmdt+5XHp3dpzuhhm9RFMgW/1anUjFG3TabHJ0at0XceOezStxR069SE20m1MxuxvTa4Mkdb+13gNf6DTeaACjgrMnCNPlOUDBwl0RSYDeoOr5nKjGl9aT154l62xyGdIYoE1Tq9GAKP85yenXaPr8KO+5sFFrguyDMbr3OB7yOoBW0omy5aQxmftBj0FOSgF6oPHEPjsMuL77/UG3LV7ytfBn+fz51jYo+/6n7goAjXqSp+xtAYEZR0QuL6lqLlaf7Y7GhsIMurezuPB6TdSUjrtkKvBI9L2IBPKbGmO9KC/11Akucm4XL0r4Vn8SASFalHbK9WuPdi9iH5NYyBNmr1c8a9PUWSMBmyiZed5W0Itn/z2BYAoHuhIiN2uPOdaRZg50JQPv+0es+hxcQUMtO/6yE9of9nKLIuh7uZAUHA/Ew3F26XKoxnu6AvkcF8wnVTuGtYy3ZeccKY2lWtDY=
+  app: aquaforces
+  on:
+    repo: jshuaf/Aquaforces
