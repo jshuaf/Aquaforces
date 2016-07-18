@@ -316,7 +316,7 @@ const Canoe = React.createClass({
 			height: '50%',
 			margin: "0 auto",
 			transform: `translate(0px, ${window.innerHeight / 3.5}px)`,
-			display: 'inline-block'
+			display: 'table'
 		};
 
 		return (
@@ -834,7 +834,7 @@ const Rock = React.createClass({
 			height: "12%",
 			margin: "0 auto",
 			transform: `translate(0px, ${this.props.y}px)`,
-			display: 'inline-block'
+			display: 'table'
 		};
 		return (
 			<div style={containerStyle}>
