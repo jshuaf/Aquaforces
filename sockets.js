@@ -202,7 +202,7 @@ module.exports = (server) => {
 								if (pastAnswer.time < maxFuzzyTime) {
 									if (pastAnswer.text == m.answer) {
 										tws.sendAnswerEvent(true, m.crewNumber);
-										if (!tws.crew().rock.length && !tws.whirlpool) tws.crew().streak += 1;
+										if (!tws.crew().rock && !tws.whirlpool) tws.crew().streak += 1;
 									}
 								} else {
 									const pastAnswerIndex = crew.recentCorrectAnswers.indexOf(pastAnswer);
@@ -217,11 +217,11 @@ module.exports = (server) => {
 									tws.crew().activeQuestions.splice(tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
 									tws.sendAnswerEvent(true, m.crewNumber);
 									tws.questionsDone.push(correspondingQuestion);
-									if (!tws.crew().rock.length && !tws.whirlpool) tws.crew().streak += 1;
+									if (!tws.crew().rock && !tws.whirlpool) tws.crew().streak += 1;
 									if (tws.crew().rock) {
-										tws.crew().rock.streak += 1;
-										if (tws.crew().rock.streak >= 5) {
-											tws.crew().rock = {};
+										tws.crew().rock.correctAnswers += 1;
+										if (tws.crew().rock.correctAnswers >= 5) {
+											tws.crew().rock = false;
 											tws.crew().members.forEach((crewMember) => {
 												crewMember.trysend({
 													event: 'endRock'
@@ -329,6 +329,11 @@ module.exports = (server) => {
 								tws.trysend({event: 'whirlpoolConclusion', wasCorrect: false});
 								tws.sendToGameHost({event: 'whirlpoolStatusChanged', status: 'wrongAnswer', crewNumber: tws.crewNumber});
 							}
+							break;
+						}
+
+						case 'rockHit': {
+							tws.crew().rock = false;
 							break;
 						}
 
