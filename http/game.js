@@ -48,17 +48,26 @@ socket.onmessage = function(m) {
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
 	if (m.event == 'answer-status') flash(m.correct ? 'green' : 'red');
+	if (m.event == 'answer-submitted') addSubmittedAnswer(m.text, m.correct);
 	if (m.event == 'rock') initRock();
 	if (m.event == 'rock-answer-status') moveRock(m.streak);
 	if (m.event == 'collide-rock') collideRock();
 	if (m.event == 'end-rock') moveRock(7);
 	if (m.event == 'end-game') gameHasEnded = true;
 };
+function addSubmittedAnswer(text, correct) {
+	var span = document.createElement('span');
+	span.appendChild(document.createTextNode(text));
+	if (correct) span.className = 'correct';
+	document.getElementById('past-answers').insertBefore(span, document.getElementById('past-answers').firstChild);
+}
 function collideRock() {
+	document.getElementById('subheading').hidden = true;
 	rock.shown = false;
 	flash('red-double');
 }
 function initRock() {
+	document.getElementById('subheading').hidden = false;
 	rock.shown = true;
 	rock.x = innerWidth / 2;
 	rock.y = 0;
@@ -68,7 +77,7 @@ function initRock() {
 	rock.position = 0;
 }
 function moveRock(newPosition) {
-	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 20000;
+	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 60000;
 }
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
@@ -179,9 +188,7 @@ function animationUpdate() {
 		rock.vx /= 1 + dt * 0.001;
 		rockEl.removeAttribute('hidden');
 		rockEl.style.transform = 'translate(' + rock.x + 'px, ' + rock.y + 'px)';
-		document.getElementById('subheading').hidden = false;
 	} else rockEl.setAttribute('hidden');
-	document.getElementById('subheading').hidden = true;
 	lastTime = thisTime;
 	if (!gameHasEnded) requestAnimationFrame(animationUpdate);
 }

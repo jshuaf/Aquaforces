@@ -29,8 +29,7 @@
 		<p>Waiting for other sailors…</p>
 	</form>
 	<form id="game" hidden="">
-		<h1 id="question"><span> </span> <div id="timebar"></div></h1>
-		<h2 id="subheading" hidden="">Rock! Answer 5 questions in a row before the rock hits you.</h2>
+		<div id="question"><h1> </h1> <div id="timebar"></div></div>
 		<div id="prequestion">
 			<div id="canoe"></div>
 			<div id="answers"></div>
@@ -45,6 +44,10 @@
 				<polygon fill="#222" points="51 127 44 136 77 142 116 112 116 102 73 131 51 127" />
 				<polygon fill="#333" points="44 136 0 110 3 72 6 105 51 127" />
 			</svg>
+		</div>
+		<div id="footer">
+			<h2 id="subheading" hidden="">Rock! Answer 6 questions correctly in a row before the rock hits you.</h2>
+			<div id="past-answers"> </div>
 		</div>
 	</form>
 	<form id="game-ended" hidden="">

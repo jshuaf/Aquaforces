@@ -73,6 +73,9 @@ module.exports = function(server) {
 						if (question.answer == m.text) tquestion = question;
 					});
 					tws.trysend(JSON.stringify({event: 'answer-status', correct: !!tquestion}));
+					tws.crew.members.forEach(function(ttws) {
+						ttws.trysend(JSON.stringify({event: 'answer-submitted', correct: !!tquestion, text: m.text}));
+					});
 					tws.game.host.trysend(JSON.stringify({event: 'answer', correct: !!tquestion, crewnum: tws.crewnum}));
 					if (tquestion) {
 						tws.crew.activeQuestions.splice(tws.crew.activeQuestions.indexOf(tquestion), 1);
