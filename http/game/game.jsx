@@ -44,6 +44,10 @@ socket.onmessage = function(m) {
 	switch (m.event) {
 	case 'ping':
 		break;
+	case 'notice':
+		errorEl.textContent = m.body;
+		errorEl.scrollIntoView();
+		break;
 	case 'error':
 		sweetAlert(m.title, m.text, "error");
 		break;
