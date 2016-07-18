@@ -11,7 +11,7 @@ require('./essentials.js');
 require('colors');
 global.dbcs = {};
 const usedDBCs = [
-	'questions'
+	'qsets'
 ];
 const http = require('http'),
 	uglifyJS = require('uglify-js'),
@@ -140,7 +140,27 @@ let serverHandler = o(function*(req, res) {
 					res.end(yield fs.readFile('./html/a/foot.html', yield));
 				}
 			}));
-		} else {
+		} else if (req.url.pathname == '/console/') {
+		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
+		var qsetstr = '';
+		dbcs.qsets.find().sort({timeAdded: -1}).each(o(function*(err, qset) {
+			if (err) throw err;
+			if (qset) {
+				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
+				qset.questions.forEach(function(question) {
+					qsetstr += '<li><h3>Question: ' + question.text + '</h3><p>Answer: ' + question.answer + '</p><p>Wrong answers:</p><ul>';
+					question.incorrectAnswers.forEach(function(answer) {
+						qsetstr += '<li>' + answer + '</li>';
+					});
+					qsetstr += '</ul></li>';
+				});
+				qsetstr += '</ol></details>';
+			} else {
+				res.write((yield fs.readFile('./html/console.html', yield)).toString().replace('$qsets', qsetstr));
+				res.end(yield fs.readFile('./html/a/foot.html', yield));
+			}
+		}));
+	} else {
 			let data;
 			try {
 				data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);

@@ -375,40 +375,29 @@ module.exports = (server) => {
 						}
 
 						case 'newGame': {
-							const id = Math.floor(Math.random() * 1e4);
-							games[id] = {
-								host: tws,
-								crews: [],
-								usernames: [],
-								users: [],
-								questions: [],
-								hasStarted: false
-							};
-
-							// generate random math questions
-							// MARK: pull data from database
-							for (let i = 0; i < 100; i++) {
-								games[id].questions.push({
-									text: 'What\'s ' + i + ' + ' + i + '?',
-									answer: (2 * i).toString(),
-									incorrectAnswers: [i.toString(), i.toString() + i.toString(),
-										(2 * i + 1).toString(), (2 * i - 1).toString()]
-								});
-							}
-
-							tws.game = games[id];
-							tws.trysend({event: 'newGame', id});
-							const answers = [];
-							for (const question of tws.game.questions) {
-								if (!answers.includes(question.answer)) {
-									answers.push(question.answer);
+							dbcs.qsets.findOne({_id: m.qsetID}, function(err, qset) {
+								if (err) throw err;
+								if (!qset) return tws.error('Question set not found.', 'dashboard');
+								let id = Math.floor(Math.random() * 1e6);
+								games[id] = {
+									host: tws,
+									crews: [],
+									usernames: [],
+									users: [],
+									questions: qset.questions,
+									hasStarted: false
+								};
+								tws.game = games[id];
+								tws.trysend({event: 'new-game', id});
+								var answers = [];
+								for (let question of tws.game.questions) {
+									if (!answers.includes(question.answer)) answers.push(question.answer);
+									for (let answer of question.incorrectAnswers) {
+										if (!answers.includes(answer)) answers.push(answer);
+									}
 								}
-								for (const answer of question.incorrectAnswers) {
-									if (!answers.includes(answer)) answers.push(answer);
-								}
-							}
-
-							tws.game.answers = answers;
+								tws.game.answers = answers;
+							});
 							break;
 						}
 
