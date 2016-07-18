@@ -75,7 +75,11 @@ socket.onclose = function() {
 	errorEl.scrollIntoView();
 };
 document.getElementById('game-code').addEventListener('input', function() {
+	var sS = this.selectionStart,
+		sE = this.selectionEnd;
 	this.value = this.value.toUpperCase();
+	this.selectionStart = sS;
+	this.selectionEnd = sE;
 });
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
