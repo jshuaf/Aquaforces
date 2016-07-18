@@ -66,16 +66,15 @@ newQSet.addEventListener('submit', function(e) {
 				var li = document.createElement('li');
 				li.appendChild(document.createElement('h3'));
 				li.lastChild.appendChild(document.createTextNode(question.text));
-				li.appendChild(document.createElement('p'));
-				li.lastChild.appendChild(document.createTextNode('Answer: ' + question.answer));
-				li.appendChild(document.createElement('p'));
-				li.lastChild.appendChild(document.createTextNode('Wrong answers:'));
+				li.appendChild(document.createElement('div'));
+				li.lastChild.appendChild(document.createElement('p'));
+				li.lastChild.lastChild.appendChild(document.createTextNode('Correct: ' + question.answer));
 				var ul = document.createElement('ul');
 				question.incorrectAnswers.forEach(function(answer) {
 					ul.appendChild(document.createElement('li'));
 					ul.lastChild.appendChild(document.createTextNode(answer));
 				});
-				li.appendChild(ul);
+				li.lastChild.appendChild(ul);
 				details.lastChild.appendChild(li);
 			});
 			newQSet.parentNode.insertAfter(details, newQSet);
@@ -85,3 +84,5 @@ newQSet.addEventListener('submit', function(e) {
 		}
 	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)));
 });
+var target = document.querySelector('details:target');
+if (target) target.setAttribute('open');
