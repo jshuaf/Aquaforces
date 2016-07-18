@@ -1,6 +1,5 @@
-let socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
+let socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/play/');
 const cont = document.getElementById('cont');
-const errorEl = document.getElementById('error');
 let gameHasEnded = false;
 let answers = [];
 
@@ -9,7 +8,6 @@ let username;
 let crewNumber;
 
 function setState(id) {
-	errorEl.textContent = '';
 	cont.children.forEach((e) => {
 		if (e.id !== id) {
 			e.hidden = true;
@@ -19,14 +17,18 @@ function setState(id) {
 	// if filling out form, automatically focus
 	// to the next input field
 	var e = document.getElementById(id).getElementsByTagName('input');
-	if (e.length) e[e.length - 1].focus();
+	if (e.length) e[0].focus();
 }
 
 function setupGameEnvironment() {
 	document.getElementById('content').hidden = true;
 	document.body.style.cssText =
-		`background: #e3d393 url('/img/beach-background.png')
+		`background: #e3d393 url('/img/backgrounds/beach-with-trees.png')
 		repeat-x center top; background-size: cover;`;
+}
+
+function confirmMessageRecieved() {
+	socket.send(JSON.stringify({event: 'messageRecieved'}));
 }
 
 socket.onmessage = function(m) {
@@ -34,8 +36,10 @@ socket.onmessage = function(m) {
 		m = JSON.parse(m.data);
 	} catch (e) {
 		console.log(e);
-		return alert('Socket error.');
+		return sweetAlert('Socket error.');
 	}
+
+	confirmMessageRecieved();
 
 	switch (m.event) {
 	case 'ping':
@@ -45,8 +49,7 @@ socket.onmessage = function(m) {
 		errorEl.scrollIntoView();
 		break;
 	case 'error':
-		errorEl.textContent = m.body;
-		errorEl.scrollIntoView();
+		sweetAlert(m.title, m.text, "error");
 		break;
 	case 'addUser':
 		setState('crew');
@@ -91,9 +94,18 @@ socket.onmessage = function(m) {
 		game.endRock();
 		break;
 	case 'whirlpoolAhead':
-		game.initiateWhirlpoolTap();
+		game.addWhirlpoolTap();
 		break;
 	case 'whirlpoolQuestion':
+		game.addWhirlpoolQuestion(m.question);
+		break;
+	case 'whirlpoolBonusReceived':
+		console.log('Bonus received');
+		game.setState({whirlpoolBonus: m.amount});
+		break;
+	case 'whirlpoolConclusion':
+		game.setState({whirlpool: false});
+		game.state.whirlpoolTimebar.reset();
 		break;
 	case 'correctAnswer':
 		game.addCorrectAnswer(m.answer);
@@ -110,8 +122,8 @@ socket.onmessage = function(m) {
 	}
 };
 
-socket.onclose = function() {
-	errorEl.textContent = 'Socket closed.';
+socket.onclose = () => {
+	sweetAlert("Server connection died.", "We're sorry about that.", "error");
 };
 document.getElementById('join').addEventListener('submit', (e) => {
 	e.preventDefault();
