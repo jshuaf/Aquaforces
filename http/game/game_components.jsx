@@ -418,10 +418,10 @@ const River = React.createClass({
 		const timeFromStart = (currentTime - this.state.rockStartTime) / 1000;
 		const timeFromLast = (currentTime - this.state.rockLastAnimationTime) / 1000;
 		const timeUntilImpact = 10;
+		const rock = ReactDOM.findDOMNode(this.refs.rock);
+		const canoeBounds = this.refs.canoe.getBounds();
+		const impactDistance = canoeBounds.top - this.riverBounds().top - rock.offsetHeight;
 		if (timeFromStart > 0 && timeFromStart < timeUntilImpact) {
-			const rock = ReactDOM.findDOMNode(this.refs.rock);
-			const canoeBounds = this.refs.canoe.getBounds();
-			const impactDistance = canoeBounds.top - this.riverBounds().top - rock.offsetHeight;
 			const distanceToGo = impactDistance - this.state.rockYPosition;
 			const impactVelocity = distanceToGo / (timeUntilImpact - timeFromStart);
 			const rockYPosition = this.state.rockYPosition + timeFromLast * impactVelocity;
@@ -431,6 +431,10 @@ const River = React.createClass({
 			} else {
 				this.setState({rockYPosition, rockLastAnimationTime: currentTime});
 			}
+		} else if (timeFromStart > timeUntilImpact) {
+			cancelAnimationFrame(this.state.rockAnimation);
+			this.setState({rockYPosition: impactDistance});
+			this.rockHit();
 		}
 		this.setState({rockAnimation: requestAnimationFrame(this.animateRock)});
 	},
@@ -443,6 +447,7 @@ const River = React.createClass({
 		});
 		this.flashRedTwice();
 		this.props.updateHP(this.props.canoeHP - 30);
+		this.props.rockHit();
 	},
 
 	endRock() {
