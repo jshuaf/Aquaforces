@@ -408,8 +408,17 @@ const River = React.createClass({
 	},
 
 	addRock(rockStartTime) {
-		const rockAnimation = requestAnimationFrame(this.animateRock);
-		this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
+		sweetAlert({
+			title: "Rock approaching!",
+			text: "Answer questions quickly to avoid being hit!",
+			imageUrl: "../img/obstacles/rock.svg",
+			timer: 2500,
+			showConfirmButton: false
+		}, () => {
+			sweetAlert.close();
+			const rockAnimation = requestAnimationFrame(this.animateRock);
+			this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
+		});
 	},
 
 	animateRock(timestamp) {
