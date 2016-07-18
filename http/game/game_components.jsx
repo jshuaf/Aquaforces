@@ -36,10 +36,10 @@ const Game = React.createClass({
 	},
 
 	showUpdate(title, text) {
-		this.setState({update: <Update title = {title} text = {text} animationText = 'bounceInDown animated'></Update>});
+		this.setState({update: <Update title = {title} text = {text} animationText = 'bounceindown animated'></Update>});
 		let rock = this;
 		setTimeout(function() {
-			this.setState({update: <Update title = {title} text = {text} animationText = 'bounceOutUp animated'></Update>});
+			this.setState({update: <Update title = {title} text = {text} animationText = 'bounceoutup animated'></Update>});
 		}.bind(rock), 2500);
 	},
 
