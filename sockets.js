@@ -147,7 +147,6 @@ module.exports = function(server) {
 					tws.trysend(JSON.stringify({event: 'question', question: question.text}));
 					let ttws = tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)];
 					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
-					if (!ttws.questionIDsDone.includes(questionID)) ttws.questionIDsDone.push(questionID);
 				} else if (m.event == 'resend-answer') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (typeof m.text != 'string') return tws.error('No answer text sent.');
@@ -233,9 +232,9 @@ module.exports = function(server) {
 								owner: member
 							});
 							member.trysend(JSON.stringify({event: 'question', question: question.text}));
+							member.questionIDsDone.push(questionID);
 							let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
-							ttws.questionIDsDone.push(questionID);
 						});
 					});
 				} else if (m.event == 'end-game') {
