@@ -73,6 +73,9 @@ module.exports = function(server) {
 						if (question.answer == m.text) tquestion = question;
 					});
 					tws.trysend(JSON.stringify({event: 'answer-status', correct: !!tquestion}));
+					tws.crew.members.forEach(function(ttws) {
+						ttws.trysend(JSON.stringify({event: 'answer-submitted', correct: !!tquestion, text: m.text}));
+					});
 					tws.game.host.trysend(JSON.stringify({event: 'answer', correct: !!tquestion, crewnum: tws.crewnum}));
 					if (tquestion) {
 						tws.crew.activeQuestions.splice(tws.crew.activeQuestions.indexOf(tquestion), 1);
@@ -110,7 +113,7 @@ module.exports = function(server) {
 							tws.game.host.trysend(JSON.stringify({event: 'end-rock', crewnum: tws.crewnum}));
 						}
 					}
-					if (Math.random() < tws.crew.streak / 2 && !tws.crew.rock) {
+					if (Math.random() < tws.crew.streak / 20 && !tws.crew.rock) {
 						tws.crew.rock = true;
 						tws.crew.streak = 0;
 						setTimeout(function() {
@@ -147,7 +150,6 @@ module.exports = function(server) {
 					tws.trysend(JSON.stringify({event: 'question', question: question.text}));
 					let ttws = tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)];
 					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
-					if (!ttws.questionIDsDone.includes(questionID)) ttws.questionIDsDone.push(questionID);
 				} else if (m.event == 'resend-answer') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (typeof m.text != 'string') return tws.error('No answer text sent.');
@@ -233,9 +235,9 @@ module.exports = function(server) {
 								owner: member
 							});
 							member.trysend(JSON.stringify({event: 'question', question: question.text}));
+							member.questionIDsDone.push(questionID);
 							let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
-							ttws.questionIDsDone.push(questionID);
 						});
 					});
 				} else if (m.event == 'end-game') {

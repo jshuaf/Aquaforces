@@ -136,6 +136,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	});
 	header.removeChild(header.lastChild);
 	header.removeChild(header.firstChild);
+	document.getElementById('subheader').hidden = true;
 	lastTime = timeStart = new Date().getTime();
 	animationUpdate();
 });

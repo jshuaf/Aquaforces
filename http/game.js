@@ -25,7 +25,8 @@ function flash(color) {
 }
 var rock = {},
 	answers = [],
-	correctAnswerQueue = [];
+	correctAnswerQueue = [],
+	addAnswerInterval;
 socket.onmessage = function(m) {
 	console.log(m.data);
 	try {
@@ -43,22 +44,35 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addAnswer, 1500);
+		addAnswerInterval = setInterval(addAnswer, 1500);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
 	if (m.event == 'answer-status') flash(m.correct ? 'green' : 'red');
+	if (m.event == 'answer-submitted') addSubmittedAnswer(m.text, m.correct);
 	if (m.event == 'rock') initRock();
 	if (m.event == 'rock-answer-status') moveRock(m.streak);
 	if (m.event == 'collide-rock') collideRock();
 	if (m.event == 'end-rock') moveRock(7);
 	if (m.event == 'end-game') gameHasEnded = true;
 };
+document.addEventListener('visibilitychange', function() {
+	if (document.hidden) clearInterval(addAnswerInterval);
+	else addAnswerInterval = setInterval(addAnswer, 1500);
+});
+function addSubmittedAnswer(text, correct) {
+	var span = document.createElement('span');
+	span.appendChild(document.createTextNode(text));
+	if (correct) span.className = 'correct';
+	document.getElementById('past-answers').insertBefore(span, document.getElementById('past-answers').firstChild);
+}
 function collideRock() {
+	document.getElementById('subheading').hidden = true;
 	rock.shown = false;
 	flash('red-double');
 }
 function initRock() {
+	document.getElementById('subheading').hidden = false;
 	rock.shown = true;
 	rock.x = innerWidth / 2;
 	rock.y = 0;
@@ -69,13 +83,18 @@ function initRock() {
 }
 function moveRock(newPosition) {
 	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 10000;
+	rock.position = newPosition;
 }
 socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
 	errorEl.scrollIntoView();
 };
 document.getElementById('game-code').addEventListener('input', function() {
+	var sS = this.selectionStart,
+		sE = this.selectionEnd;
 	this.value = this.value.toUpperCase();
+	this.selectionStart = sS;
+	this.selectionEnd = sE;
 });
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
@@ -175,9 +194,7 @@ function animationUpdate() {
 		rock.vx /= 1 + dt * 0.001;
 		rockEl.removeAttribute('hidden');
 		rockEl.style.transform = 'translate(' + rock.x + 'px, ' + rock.y + 'px)';
-		document.getElementById('subheading').hidden = false;
-	} else rockEl.setAttribute('hidden');
-	document.getElementById('subheading').hidden = true;
+	} else rockEl.setAttribute('hidden', true);
 	lastTime = thisTime;
 	if (!gameHasEnded) requestAnimationFrame(animationUpdate);
 }

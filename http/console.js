@@ -85,4 +85,4 @@ newQSet.addEventListener('submit', function(e) {
 	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)));
 });
 var target = document.querySelector('details:target');
-if (target) target.setAttribute('open');
+if (target) target.setAttribute('open', true);
