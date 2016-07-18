@@ -188,7 +188,7 @@ function animationUpdate() {
 		rock.vx /= 1 + dt * 0.001;
 		rockEl.removeAttribute('hidden');
 		rockEl.style.transform = 'translate(' + rock.x + 'px, ' + rock.y + 'px)';
-	} else rockEl.setAttribute('hidden');
+	} else rockEl.setAttribute('hidden', true);
 	lastTime = thisTime;
 	if (!gameHasEnded) requestAnimationFrame(animationUpdate);
 }
