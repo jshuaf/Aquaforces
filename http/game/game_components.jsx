@@ -827,11 +827,11 @@ const GameTimer = React.createClass({
 const Rock = React.createClass({
 	render() {
 		const rockStyle = {
-			width: "100%"
+			height: "100%"
 		};
 		const containerStyle = {
 			textAlign: "center",
-			width: "8%",
+			height: "12%",
 			margin: "0 auto",
 			transform: `translate(0px, ${this.props.y}px)`
 		};
