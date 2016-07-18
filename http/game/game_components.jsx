@@ -439,9 +439,7 @@ const River = React.createClass({
 		});
 		*/
 		const rockAnimation = requestAnimationFrame(this.animateRock);
-		setTimeout(function() {
-			this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
-		}.bind(this), 2000);
+		this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
 	},
 
 	animateRock(timestamp) {
