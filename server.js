@@ -1,6 +1,6 @@
 'use strict';
 const config = {
-	port: 3000
+	port: process.argv.includes('--production') ? 80 : 3000
 };
 require('./essentials.js');
 require('colors');
@@ -191,10 +191,10 @@ mongo.connect('mongodb://localhost:27017/Aquaforces', function(err, db) {
 	while (i--) db.collection(usedDBCs[i], handleCollection);
 	console.log('Connected to mongodb.'.cyan);
 	let server = http.createServer(serverHandler).listen(config.port);
-	console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
+	console.log('Aquaforces running on port ' + config.port + ' over plain HTTP.'.cyan);
 	require('./sockets.js')(server);
-	console.log('Sockets running on port 3000 over plain WS.'.cyan);
-	if (process.argv.indexOf('--test') >= 0) {
+	console.log('Sockets running on port ' + config.port + ' over plain WS.'.cyan);
+	if (process.argv.includes('--test')) {
 		console.log('Running test, process will terminate when finished.'.yellow);
 		http.get({
 			port: config.port,
