@@ -25,7 +25,8 @@ function flash(color) {
 }
 var rock = {},
 	answers = [],
-	correctAnswerQueue = [];
+	correctAnswerQueue = [],
+	addAnswerInterval;
 socket.onmessage = function(m) {
 	console.log(m.data);
 	try {
@@ -43,7 +44,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		setInterval(addAnswer, 1500);
+		addAnswerInterval = setInterval(addAnswer, 1500);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -55,6 +56,10 @@ socket.onmessage = function(m) {
 	if (m.event == 'end-rock') moveRock(7);
 	if (m.event == 'end-game') gameHasEnded = true;
 };
+document.addEventListener('visibilitychange', function() {
+	if (document.hidden) clearInterval(addAnswerInterval);
+	else addAnswerInterval = setInterval(addAnswer, 1500);
+});
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
 	span.appendChild(document.createTextNode(text));
