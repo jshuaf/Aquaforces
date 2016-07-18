@@ -255,7 +255,7 @@ module.exports = (server) => {
 								return tws.error('No question text sent.');
 							}
 
-							let correspondingQuestion;
+							let correspondingQuestion = null;
 							tws.crew().activeQuestions.forEach((activeQuestion) => {
 								if (activeQuestion.text == m.question) {
 									correspondingQuestion = activeQuestion;
