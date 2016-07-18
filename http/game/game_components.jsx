@@ -381,7 +381,7 @@ const River = React.createClass({
 		const answersToRemove = this.state.answersToRemove;
 
 		let newAnswer = answersToAdd.shift();
-		if (answersToAdd.length > 0 && currentAnswers.indexOf(newAnswer) < 0) {
+		if (newAnswer && currentAnswers.indexOf(newAnswer) < 0) {
 			this.setState({answersToAdd});
 		} else {
 			if (newAnswer) answersToAdd.unshift(newAnswer);
