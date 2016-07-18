@@ -539,7 +539,7 @@ const River = React.createClass({
 				if (updateTimeDifference > 0 && updateTimeDifference < 1000) {
 					if (this.props.HP > 0) {
 						currentGroups[i].y += (timeSinceLastAnimation / 1000) *
-							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 1.8));
+							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 2.5));
 					} else {
 						currentGroups[i].y += (timeSinceLastAnimation / 1000) *
 							(riverHeight / Math.abs((300 - updateTimeDifference) / 500 + 3));
