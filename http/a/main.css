@@ -17,6 +17,9 @@ strong, b {
 section {
 	overflow-y: hidden;
 }
+.container {
+	max-width: 1300px;
+}
 .landing-neg > .container > .row > div > *, .landing-neg > .container > .row > div > * > * {
 	color: white;
 }
@@ -87,7 +90,7 @@ label {
 	top: 0;
 	left: 0;
 	width: 100%;
-	padding: 20px;
+	padding: 20px 0;
 	margin-bottom: 2rem;
 }
 #landing-img {
@@ -96,15 +99,15 @@ label {
 .button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
 	border-radius: 30px;
 	margin-top: 10px;
-	background-color: #7eb530;
+	background-color: #2abb9b;
 	border: none;
 	letter-spacing: normal;
 	text-transform: none;
 	font-size: 1.5rem;
 	font-weight: bold;
 }
-.button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active {
-	background-color: #5e9e43;
+.button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active, .button.button-primary:focus, button.button-primary:focus, input[type=submit].button-primary:focus, input[type=reset].button-primary:focus, input[type=button].button-primary:focus {
+	background-color: #16a085;
 }
 .navbar-logo {
 	height: 4rem;
