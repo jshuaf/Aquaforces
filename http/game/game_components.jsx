@@ -107,11 +107,7 @@ const Game = React.createClass({
 	},
 
 	endRock() {
-		this.setState({
-			rock: false,
-			rockYPosition: -window.innerHeight * 0.2
-		});
-		sweetAlert("saved from rock");
+		this.refs.river.endRock();
 	},
 
 	render() {
@@ -346,7 +342,7 @@ const River = React.createClass({
 			// Rock
 			rockStartTime: false,
 			rockAnimation: null,
-			rockYPosition: -window.innerHeight * 0.2
+			rockYPosition: -window.innerHeight * 0.1
 		};
 	},
 
@@ -409,26 +405,27 @@ const River = React.createClass({
 
 	addRock(rockStartTime) {
 		const rockAnimation = requestAnimationFrame(this.animateRock);
-		this.setState({rockStartTime, rockAnimation});
+		this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
 	},
 
 	animateRock(timestamp) {
 		if (!this.state.rockStartTime) return;
-		const timeDifference = (Date.now() - this.state.rockStartTime) / 1000;
+		const currentTime = Date.now();
+		const timeFromStart = (currentTime - this.state.rockStartTime) / 1000;
+		const timeFromLast = (currentTime - this.state.rockLastAnimationTime) / 1000;
 		const timeUntilImpact = 10;
-		if (timeDifference > 0 && timeDifference < timeUntilImpact) {
-			console.log(timeDifference);
+		if (timeFromStart > 0 && timeFromStart < timeUntilImpact) {
 			const rock = ReactDOM.findDOMNode(this.refs.rock);
 			const canoeBounds = this.refs.canoe.getBounds();
 			const impactDistance = canoeBounds.top - this.riverBounds().top - rock.offsetHeight;
 			const distanceToGo = impactDistance - this.state.rockYPosition;
-			const impactVelocity = distanceToGo / (timeUntilImpact - timeDifference);
-			const rockYPosition = timeDifference * impactVelocity;
+			const impactVelocity = distanceToGo / (timeUntilImpact - timeFromStart);
+			const rockYPosition = this.state.rockYPosition + timeFromLast * impactVelocity;
 			if (rockYPosition > impactDistance) {
 				cancelAnimationFrame(this.state.rockAnimation);
 				this.rockHit();
 			} else {
-				this.setState({rockYPosition});
+				this.setState({rockYPosition, rockLastAnimationTime: currentTime});
 			}
 		}
 		this.setState({rockAnimation: requestAnimationFrame(this.animateRock)});
@@ -436,8 +433,17 @@ const River = React.createClass({
 
 	rockHit() {
 		this.flashRedTwice();
-		this.setState({rockYPosition: -window.innerHeight * 0.2});
+		this.setState({rockYPosition: -innerHeight * 0.1});
 		this.props.updateHP(this.props.canoeHP - 30);
+	},
+
+	endRock() {
+		this.setState({
+			rockStartTime: null,
+			rockAnimation: null,
+			rockYPosition: -innerHeight * 0.1
+		});
+		sweetAlert("Congratulations! You were saved from the rock.", "success");
 	},
 
 	clearFlash() {
