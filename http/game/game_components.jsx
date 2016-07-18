@@ -212,7 +212,7 @@ const Answer = React.createClass({
 		positionY += (velocityY) * dt;
 
 		// check if it's passing the threshold for the first time
-		if (positionY > this.props.riverBounds.bottom) {
+		if (positionY > this.props.riverBounds.bottom - this.props.riverBounds.top) {
 			this.setState({
 				passedThreshold: true
 			});
@@ -316,7 +316,7 @@ const Canoe = React.createClass({
 			height: '50%',
 			margin: "0 auto",
 			transform: `translate(0px, ${window.innerHeight / 3.5}px)`,
-			display: 'inline-block'
+			display: 'table'
 		};
 
 		return (
@@ -380,11 +380,11 @@ const River = React.createClass({
 		const answersToAdd = this.state.answersToAdd;
 		const answersToRemove = this.state.answersToRemove;
 
-		let newAnswer;
-		if (answersToAdd.length > 0) {
-			newAnswer = answersToAdd.shift();
+		let newAnswer = answersToAdd.shift();
+		if (newAnswer && currentAnswers.indexOf(newAnswer) < 0) {
 			this.setState({answersToAdd});
 		} else {
+			if (newAnswer) answersToAdd.unshift(newAnswer);
 			let randomData = this.state.answerData[Math.floor(
 				Math.random() * this.state.answerData.length)];
 			while (currentAnswers.indexOf(randomData) >= 0) {
@@ -465,7 +465,7 @@ const River = React.createClass({
 			rockAnimation: null,
 			rockYPosition: -innerHeight * 0.1
 		});
-		sweetAlert("Congratulations! You were saved from the rock.", "success");
+		sweetAlert("Congratulations!", "You were saved from the rock.", "success");
 	},
 
 	clearFlash() {
@@ -671,7 +671,7 @@ const River = React.createClass({
 		const incorrectAnswersToAdd = Math.floor(Math.random() * 1.5);
 		for (let i = 0; i < incorrectAnswersToAdd; i++) {
 			let randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
-			while (currentAnswers.indexOf(randomData) >= 0 || incorrectAnswers.indexOf(randomData) >= 0) {
+			while (currentAnswers.indexOf(randomData) >= 0 || incorrectAnswers.indexOf(randomData) >= 0 || oldAnswersToAdd.indexOf(randomData) >= 0) {
 				randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
 			}
 			incorrectAnswers.push(randomData);
@@ -833,7 +833,8 @@ const Rock = React.createClass({
 			textAlign: "center",
 			height: "12%",
 			margin: "0 auto",
-			transform: `translate(0px, ${this.props.y}px)`
+			transform: `translate(0px, ${this.props.y}px)`,
+			display: 'table'
 		};
 		return (
 			<div style={containerStyle}>

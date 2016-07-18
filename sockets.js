@@ -56,7 +56,7 @@ module.exports = (server) => {
 				return;
 			}
 			tws.crew().rock = {
-				streak: 0
+				correctAnswers: 0
 			};
 			tws.crew().members.forEach((crewMember) => {
 				crewMember.trysend({
