@@ -166,6 +166,7 @@ const Game = React.createClass({
 					reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
 					updateHP = {this.updateHP}
 					rockHit = {this.rockHit}
+					rockPresent = {this.state.rock}
 				/>
       </div>
     );
@@ -715,7 +716,7 @@ const River = React.createClass({
 							key = {riverReflectionGroup.key}
 						/>
 					)}
-					<Rock y = {this.state.rockYPosition} ref = "rock"/>
+					<Rock y = {this.state.rockYPosition} present = {this.props.rockPresent} ref = "rock"/>
 					<Canoe initialImage = {this.props.initialImage}
 						ref = "canoe" hp = {this.props.canoeHP} crewSize = {this.props.crewSize}
 					/>
@@ -829,12 +830,14 @@ const Rock = React.createClass({
 		const rockStyle = {
 			width: "100%"
 		};
-		const containerStyle = {
+		let containerStyle = {
 			textAlign: "center",
 			width: "8%",
 			margin: "0 auto",
 			transform: `translate(0px, ${this.props.y}px)`
 		};
+		if (!this.props.present)
+			containerStyle.display = "none";
 		return (
 			<div style={containerStyle}>
 				<img src = "../img/obstacles/rock.svg" style = {rockStyle}></img>
