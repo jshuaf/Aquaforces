@@ -212,7 +212,7 @@ const Answer = React.createClass({
 		positionY += (velocityY) * dt;
 
 		// check if it's passing the threshold for the first time
-		if (positionY > this.props.riverBounds.bottom) {
+		if (positionY > this.props.riverBounds.bottom - this.props.riverBounds.top) {
 			this.setState({
 				passedThreshold: true
 			});
@@ -384,7 +384,7 @@ const River = React.createClass({
 		if (answersToAdd.length > 0 && currentAnswers.indexOf(newAnswer) < 0) {
 			this.setState({answersToAdd});
 		} else {
-			answerToAdd.unshift(newAnswer);
+			if (newAnswer) answersToAdd.unshift(newAnswer);
 			let randomData = this.state.answerData[Math.floor(
 				Math.random() * this.state.answerData.length)];
 			while (currentAnswers.indexOf(randomData) >= 0) {
