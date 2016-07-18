@@ -1,7 +1,7 @@
 'use strict';
 function smoothScroll(el, t, p, s) {
 	p = t - p;
-	var dist = el.getBoundingClientRect().top,
+	var dist = el.getBoundingClientRect().top + 8,
 		now = new Date().getTime();
 	s = s || now;
 	var elapsed = now - s;

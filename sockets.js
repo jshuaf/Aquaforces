@@ -173,7 +173,12 @@ module.exports = function(server) {
 					dbcs.qsets.findOne({_id: m.qsetID}, function(err, qset) {
 						if (err) throw err;
 						if (!qset) return tws.error('Question set not found.', 'dashboard');
-						let id = Math.floor(Math.random() * 1e6);
+						let idn = Math.floor(Math.random() * Math.pow(26, 6)),
+							id = '';
+						for (var i = 0; i < 6; i++) {
+							id += String.fromCharCode(65 + idn % 26);
+							idn = Math.floor(idn / 26);
+						}
 						games[id] = {
 							host: tws,
 							crews: [],

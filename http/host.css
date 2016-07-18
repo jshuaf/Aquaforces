@@ -83,3 +83,11 @@ summary h2 {
 	font-size: 1em;
 }
 [open] > summary { margin-bottom: 1em }
+h2 { margin-bottom: 0.3em }
+#new-game > * {
+	display: inline-block;
+	vertical-align: top;
+}
+#new-game label { margin-top: 0 }
+#new-game select { display: block }
+#new-game button { margin-left: 1em }

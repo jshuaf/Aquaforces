@@ -74,11 +74,14 @@ socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
 	errorEl.scrollIntoView();
 };
+document.getElementById('game-code').addEventListener('input', function() {
+	this.value = this.value.toUpperCase();
+});
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'new-user',
-		code: parseInt(document.getElementById('game-code').value),
+		code: document.getElementById('game-code').value.toUpperCase(),
 		name: document.getElementById('crewmember-name').value
 	}));
 	setState('crew');

@@ -4,8 +4,8 @@
 	-webkit-overflow-scrolling: touch;
 }
 html {
-	font: 100% sans-serif;
-	background: #39f;
+	font: 100% 'Helvetica', sans-serif;
+	background: #6cf;
 }
 body { margin: 1em 1.3em }
 html:not(.hostgame):not(.no-bg) { background-color: #bee6f1 }
@@ -53,6 +53,7 @@ h1 { margin: 0 0 0.4em }
 	position: absolute;
 	z-index: 2;
 	top: 0; right: 0; bottom: 0; left: 0;
+	pointer-events: none;
 }
 .white { color: #eee }
 .white a { color: #fff }
@@ -112,7 +113,7 @@ button, .button {
 	display: block;
 	margin: 0.2em 0;
 	padding: 0.2em 1em;
-	background: #fa4;
+	background: #ffa233;
 	font-size: 1.6rem;
 	transition: background-color 0.1s;
 	border: 1px solid #aaa;
