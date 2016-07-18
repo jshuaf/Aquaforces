@@ -81,7 +81,7 @@ section > h2 {
 section > p {
 	display: table;
 	margin: 0 auto;
-	font-size: 1.4em;
+	font-size: calc(1em + 0.3vw);
 	line-height: 1.4;
 }
 #bottom-bg {
@@ -99,6 +99,4 @@ section > p {
 	z-index: 1;
 	position: relative;
 }
-#about section:first-child {
-	margin-bottom: 8em;
-}
+#about section:first-child { margin-bottom: 8em }
