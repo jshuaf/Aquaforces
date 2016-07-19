@@ -58,6 +58,7 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	callback();
 });
 let cache = {};
+const redirectURLs = ['/host', '/play', '/console'];
 let serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	console.log(req.method, req.url.pathname);
@@ -169,9 +170,9 @@ let serverHandler = o(function*(req, res) {
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
 				qset.questions.forEach(function(question) {
-					qsetstr += '<li><h3>' + question.text + '</h3><div><p>Correct: ' + question.answer + '</p><ul>';
+					qsetstr += '<li><h3>' + html(question.text) + '</h3><div><p>Correct: ' + html(question.answer) + '</p><ul>';
 					question.incorrectAnswers.forEach(function(answer) {
-						qsetstr += '<li>' + answer + '</li>';
+						qsetstr += '<li>' + html(answer) + '</li>';
 					});
 					qsetstr += '</ul></div></li>';
 				});
@@ -181,6 +182,9 @@ let serverHandler = o(function*(req, res) {
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
+	} else if (redirectURLs.includes(req.url.pathname)) {
+		res.writeHead(303, {'Location': req.url.pathname + '/'});
+		res.end();
 	} else return errorNotFound(req, res);
 });
 console.log('Connecting to mongodb…'.cyan);
