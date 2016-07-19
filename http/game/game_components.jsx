@@ -486,11 +486,7 @@ const River = React.createClass({
 			rockAnimation: null,
 			rockYPosition: -innerHeight * 0.1
 		});
-<<<<<<< HEAD
 		this.showUpdate("Congratulations!", "You were saved from the rock.");
-=======
-		sweetAlert("Congratulations!", "You were saved from the rock.", "success");
->>>>>>> master
 	},
 
 	clearFlash() {
