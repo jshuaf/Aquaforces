@@ -513,6 +513,11 @@ module.exports = (server) => {
 					for (let gameID in games) {
 						const game = games[gameID];
 						if (game.host == tws) {
+							for (let user of game.users) {
+								user.trysend({
+									event: 'endGame'
+								});
+							}
 							delete games[gameID];
 						}
 					}
