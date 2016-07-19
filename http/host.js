@@ -114,7 +114,8 @@ document.getElementById('dashboard').addEventListener('submit', function(e) {
 	socket.send(JSON.stringify({event: 'new-game', qsetID: document.getElementById('qsets').value}));
 	setState('tgame');
 });
-var progress = document.getElementById('progress'), lastTime;
+var progress = document.getElementById('progress'), lastTime,
+	animateInterval;
 document.getElementById('tgame').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'start-game'}));
@@ -141,8 +142,15 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	document.getElementById('subheader').hidden = true;
 	lastTime = timeStart = new Date().getTime();
 	animationUpdate();
+	document.addEventListener('visibilitychange', function() {
+		if (document.hidden && ms >= 0) animateInterval = setInterval(animationUpdate, 0);
+		else {
+			clearInterval(animateInterval);
+			animateInterval = false;
+		}
+	});
 });
-var timeStart,
+var timeStart, ms,
 	timeTotal = 300000;
 function zeroPad(t) {
 	if (t < 10) return '0' + t;
@@ -189,13 +197,14 @@ function animationUpdate() {
 		document.getElementById('boat' + id).style.transform = 'translateX(' + ((b.p - cameraP + 0.5) * 0.75 + 0.25) * innerWidth * cameraS + 'px)';
 	}
 	lastTime = thisTime;
-	var ms = timeTotal - new Date().getTime() + timeStart + 1000, t = '';
+	ms = timeTotal - new Date().getTime() + timeStart + 1000;
+	var t = '';
 	if (ms < 0) t = 'Time\'s up!';
 	else if (ms < 10000) t = Math.floor(ms / 60000) + ':0' + (ms / 1000).toFixed(2);
 	else t = Math.floor(ms / 60000) + ':' + zeroPad(Math.floor(ms / 1000 % 60));
 	header.firstChild.nodeValue = t;
 	if (ms < 0) endGame();
-	else requestAnimationFrame(animationUpdate);
+	else if (!animateInterval) requestAnimationFrame(animationUpdate);
 }
 function endGame() {
 	crewsEl.children.forEach(function(e, i) {
