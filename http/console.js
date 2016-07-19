@@ -47,7 +47,7 @@ newQSet.addEventListener('submit', function(e) {
 			answer: ins[1].value,
 			incorrectAnswers: []
 		};
-		for (var i = 2; i < ins.length; i++) question.incorrectAnswers.push(ins[i].value);
+		for (var i = 2; i < ins.length; i++) if (ins[i].value) question.incorrectAnswers.push(ins[i].value);
 		questions.push(question);
 	});
 	request('/api/new-qset', function(res) {
