@@ -196,6 +196,9 @@ a:active { color: #f44 }
 	padding: 0.2em 0.5em;
 	color: #000;
 	max-width: 10em;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
 }
 #rock {
 	position: absolute;
