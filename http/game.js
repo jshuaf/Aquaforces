@@ -56,10 +56,11 @@ socket.onmessage = function(m) {
 	if (m.event == 'end-rock') moveRock(7);
 	if (m.event == 'end-game') gameHasEnded = true;
 	if (m.event == 'update-rank') document.getElementById('rank').firstChild.nodeValue = m.rank;
+	if (m.event == 'end-game') endGame();
 };
 document.addEventListener('visibilitychange', function() {
 	if (document.hidden) clearInterval(addAnswerInterval);
-	//else addAnswerInterval = setInterval(addAnswer, 1500);
+	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1500);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
@@ -191,4 +192,8 @@ function animationUpdate() {
 	} else rockEl.setAttribute('hidden', true);
 	lastTime = thisTime;
 	if (!gameHasEnded) requestAnimationFrame(animationUpdate);
+}
+function endGame() {
+	clearInterval(addAnswerInterval);
+	addAnswerInterval = false;
 }
