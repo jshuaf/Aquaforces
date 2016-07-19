@@ -76,7 +76,7 @@ input {
 	font-size: 1.1em;
 	margin-left: 0.5ch;
 }
-label input:not([min]) { width: 200% }
+label input:not(#crewnum) { width: 200% }
 @media (min-width: 500px) {
 	.pregamescreen form { padding: 0 10% }
 }

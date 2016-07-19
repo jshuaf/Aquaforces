@@ -14,11 +14,11 @@
 			<path d="M182.2,30H171.5c0-1.58-.1-3.21-0.1-4.78l10.8,0.15A1.16,1.16,0,0,0,183,25a1.08,1.08,0,0,0,.35-0.84,0.59,0.59,0,0,0-.35-0.64,2.13,2.13,0,0,0-.84-0.15h-4.88A5.82,5.82,0,0,1,175,23a6,6,0,0,1-1.87-1.28,5.39,5.39,0,0,1-1.23-1.87,6,6,0,0,1,0-4.54,6.86,6.86,0,0,1,1.23-1.87A5.39,5.39,0,0,1,175,12.16a5.82,5.82,0,0,1,2.27-.44l9.27,0.3c0.1,1.43.15,2.91,0.25,4.34h-9.52a1.19,1.19,0,0,0-.84,2,1.08,1.08,0,0,0,.84.35h4.88a6.85,6.85,0,0,1,2.27.39,5.62,5.62,0,0,1,1.87,1.13A4.82,4.82,0,0,1,187.56,22a5.57,5.57,0,0,1,.44,2.22,5.82,5.82,0,0,1-.44,2.27,6.86,6.86,0,0,1-1.23,1.87,5.39,5.39,0,0,1-1.87,1.23A7.13,7.13,0,0,1,182.2,30Z" />
 		</svg>
 		<div class="centerbox">
-			<label><span>Code</span> <input type="text" id="game-code" autocomplete="off" autocorrect="off" autofocus="" /></label>
+			<label><span>Code</span> <input type="number" id="game-code" autocomplete="off" autofocus="" min="0" max="999999999" /></label>
 			<label><span>Name</span> <input type="text" id="crewmember-name" autocomplete="username" maxlength="24" /></label>
 		</div>
 		<button id="joinbtn">Join</button>
-		<p><a href="host/">Are you a teacher?</a></p>
+		<p><a href="/host/">Are you a teacher?</a></p>
 	</form>
 	<form id="crew" hidden="">
 		<label>Crew # <input type="number" id="crewnum" min="1" max="12" /></label>

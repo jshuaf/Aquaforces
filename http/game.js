@@ -89,18 +89,11 @@ socket.onclose = function() {
 	errorEl.textContent = 'Socket closed.';
 	errorEl.scrollIntoView();
 };
-document.getElementById('game-code').addEventListener('input', function() {
-	var sS = this.selectionStart,
-		sE = this.selectionEnd;
-	this.value = this.value.toUpperCase();
-	this.selectionStart = sS;
-	this.selectionEnd = sE;
-});
 document.getElementById('join').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'new-user',
-		code: document.getElementById('game-code').value.toUpperCase(),
+		code: parseInt(document.getElementById('game-code').value),
 		name: document.getElementById('crewmember-name').value
 	}));
 	setState('crew');

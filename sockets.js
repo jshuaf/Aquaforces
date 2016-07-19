@@ -175,12 +175,7 @@ module.exports = function(server) {
 					dbcs.qsets.findOne({_id: m.qsetID}, function(err, qset) {
 						if (err) throw err;
 						if (!qset) return tws.error('Question set not found.', 'dashboard');
-						let idn = Math.floor(Math.random() * Math.pow(26, 6)),
-							id = '';
-						for (var i = 0; i < 6; i++) {
-							id += String.fromCharCode(65 + idn % 26);
-							idn = Math.floor(idn / 26);
-						}
+						let id = Math.floor(Math.random() * 1e9);
 						games[id] = {
 							host: tws,
 							crews: [],
@@ -190,6 +185,7 @@ module.exports = function(server) {
 							hasStarted: false
 						};
 						tws.game = games[id];
+						id = id.toString();
 						tws.trysend(JSON.stringify({event: 'new-game', id}));
 						var answers = [];
 						for (let question of tws.game.questions) {
