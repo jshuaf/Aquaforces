@@ -1,7 +1,7 @@
 'use strict';
 /*eslint-disable no-process-env*/
 const config = {
-	port: process.env.PORT || process.argv.includes('--production') ? 80 : 3000,
+	port: process.env.PORT || (process.argv.includes('--production') ? 80 : 3000),
 	mongoPath: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/Aquaforces'
 };
 /*eslint-enable no-process-env*/
