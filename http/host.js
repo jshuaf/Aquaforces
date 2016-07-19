@@ -17,6 +17,8 @@ function Boat() {
 	this.cf = 0.0005;
 	this.vf = 0.00001;
 	this.raft = false;
+	this.rank = 0;
+	this.prevRank = 0;
 }
 function setState(id) {
 	errorEl.textContent = '';
@@ -159,6 +161,22 @@ function animationUpdate() {
 		meanP += b.p;
 		minP = Math.min(minP, b.p);
 		maxP = Math.min(maxP, b.p);
+		b.prevRank = b.rank;
+		b.rank = 1;
+	}
+	for (var id in boats) {
+		var b = boats[id];
+		for (var id in boats) {
+			var bb = boats[id];
+			if (bb.p > b.p) b.rank++;
+		}
+		if (b.rank != b.prevRank) {
+			socket.send(JSON.stringify({
+				event: 'update-rank',
+				crewnum: id,
+				rank: b.rank
+			}));
+		}
 	}
 	meanP /= progress.childElementCount;
 	var pRange = Math.max(meanP - minP, maxP - minP) * 3 / innerWidth,

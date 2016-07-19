@@ -236,6 +236,10 @@ module.exports = function(server) {
 							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						});
 					});
+				} else if (m.event == 'update-rank') {
+					tws.game.crews[m.crewnum].members.forEach(function(ttws) {
+						ttws.trysend(JSON.stringify({event: 'update-rank', rank: m.rank}));
+					});
 				} else if (m.event == 'end-game') {
 					if (!tws.game) return tws.error('Game not found.', 'dashboard');
 					tws.game.users.forEach(function(ttws) {

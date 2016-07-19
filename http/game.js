@@ -55,10 +55,11 @@ socket.onmessage = function(m) {
 	if (m.event == 'collide-rock') collideRock();
 	if (m.event == 'end-rock') moveRock(7);
 	if (m.event == 'end-game') gameHasEnded = true;
+	if (m.event == 'update-rank') document.getElementById('rank').firstChild.nodeValue = m.rank;
 };
 document.addEventListener('visibilitychange', function() {
 	if (document.hidden) clearInterval(addAnswerInterval);
-	else addAnswerInterval = setInterval(addAnswer, 1500);
+	//else addAnswerInterval = setInterval(addAnswer, 1500);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');

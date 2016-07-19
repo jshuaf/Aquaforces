@@ -265,12 +265,15 @@ ol.studentselect > li > span:hover::before { width: 2ch }
 	font-size: 1.1em;
 	margin: 0 0 0.2em;
 }
+#footer > div { display: flex }
+#rank { flex-shrink: 0 }
 @keyframes past-answer-in {
 	0% { opacity: 0 }
 }
 #past-answers {
 	white-space: pre;
 	overflow: hidden;
+	flex-grow: 1;
 }
 #past-answers span {
 	display: inline-block;
