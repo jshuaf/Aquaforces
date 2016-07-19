@@ -278,7 +278,7 @@ module.exports = (server) => {
 								}
 							});
 							if (!correspondingQuestion) {
-								console.log("Unknown question timed out.");
+								tws.error("Unknown question timed out.");
 							}
 							break;
 						}
