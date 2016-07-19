@@ -72,7 +72,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		game = ReactDOM.render(<Game
   socket={socket} username={username}
-  crewNumber={crewNumber} initialAnswers={m.answers}
+  crewNumber={crewNumber} answerData={m.answers}
 	crewSize={m.crewSize}
   />,
 			document.getElementById('mountNode'));
