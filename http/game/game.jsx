@@ -114,6 +114,8 @@ socket.onmessage = function(m) {
 		break;
 	case 'endGame':
 		gameHasEnded = true;
+		sweetAlert("The game finished. How'd it go?");
+		setState('join');
 		break;
 	default:
 		console.log('Game recieved unknown event: ', m.event);
