@@ -170,9 +170,9 @@ let serverHandler = o(function*(req, res) {
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
 				qset.questions.forEach(function(question) {
-					qsetstr += '<li><h3>' + question.text + '</h3><div><p>Correct: ' + question.answer + '</p><ul>';
+					qsetstr += '<li><h3>' + html(question.text) + '</h3><div><p>Correct: ' + html(question.answer) + '</p><ul>';
 					question.incorrectAnswers.forEach(function(answer) {
-						qsetstr += '<li>' + answer + '</li>';
+						qsetstr += '<li>' + html(answer) + '</li>';
 					});
 					qsetstr += '</ul></div></li>';
 				});
