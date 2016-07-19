@@ -185,8 +185,8 @@ module.exports = function(server) {
 							hasStarted: false
 						};
 						tws.game = games[id];
-						id = id.toString();
-						tws.trysend(JSON.stringify({event: 'new-game', id: id.substr(0, 3) + '\u2009' + id.substr(3, 3) + '\u2009' + id.substr(6)}));
+						id = '000000000' + id.toString();
+						tws.trysend(JSON.stringify({event: 'new-game', id: id.substr(-9, 3) + '\u2009' + id.substr(-6, 3) + '\u2009' + id.substr(-3)}));
 						var answers = [];
 						for (let question of tws.game.questions) {
 							if (!answers.includes(question.answer)) answers.push(question.answer);
