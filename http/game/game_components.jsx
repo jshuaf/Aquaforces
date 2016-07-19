@@ -189,7 +189,7 @@ const Answer = React.createClass({
 			disappeared: false,
 			passedThreshold: false,
 			shake: {
-				angle: null,
+				angle: 0,
 				time: null
 			}
 		};
@@ -232,13 +232,18 @@ const Answer = React.createClass({
 	setAngle() {
 		const currentTime = Date.now();
 		const shakeTime = this.state.shake.time;
-		const timeDifference = (shakeTime - currentTime) / 1000;
-		if (shakeTime && timeDifference > 0 && timeDifference < 0.6) {
+		const timeDifference = (currentTime - shakeTime) / 1000;
+		if (shakeTime && timeDifference > 0 && timeDifference <= 0.6) {
 			const scaledTime = timeDifference / (0.6 / 8);
 			const shakeAngle = 30 * Math.sin(Math.PI * scaledTime / 2);
 			this.setState({shake: {
 				angle: shakeAngle,
 				time: shakeTime
+			}});
+		} else {
+			this.setState({shake: {
+				angle: 0,
+				time: null
 			}});
 		}
 	},
@@ -265,7 +270,10 @@ const Answer = React.createClass({
 	},
 
 	shake() {
-		this.setState({shakeTime: Date.now()});
+		this.setState({shake: {
+			time: Date.now(),
+			angle: 0
+		}});
 	},
 
 	animate(timestamp) {
