@@ -38,6 +38,11 @@ section {
 		background-size: cover;
 	}
 }
+@media (min-width: 800px) {
+	.mobileless {
+		display: none;
+	}
+}
 @media (max-width: 800px) {
 	.landing-river {
 		background-color: #bee6f1;
