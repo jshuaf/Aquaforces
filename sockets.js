@@ -94,10 +94,11 @@ module.exports = (server) => {
 			return newQuestion;
 		};
 
-		tws.sendAnswerEvent = (wasCorrectAnswer, crewNumber) => {
+		tws.sendAnswerEvent = (wasCorrectAnswer, crewNumber, answer) => {
 			tws.trysend({
 				event: 'answerSelected',
-				wasCorrectAnswer
+				wasCorrectAnswer,
+				answer
 			});
 			return tws.sendToGameHost({
 				event: 'answerSelected',
@@ -201,7 +202,7 @@ module.exports = (server) => {
 							crew.recentCorrectAnswers.forEach((pastAnswer) => {
 								if (pastAnswer.time < maxFuzzyTime) {
 									if (pastAnswer.text == m.answer) {
-										tws.sendAnswerEvent(true, m.crewNumber);
+										tws.sendAnswerEvent(true, m.crewNumber, m.answer);
 										if (!tws.crew().rock && !tws.whirlpool) tws.crew().streak += 1;
 									}
 								} else {
@@ -215,7 +216,7 @@ module.exports = (server) => {
 								if (activeQuestion.answer == m.answer) {
 									correspondingQuestion = activeQuestion;
 									tws.crew().activeQuestions.splice(tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
-									tws.sendAnswerEvent(true, m.crewNumber);
+									tws.sendAnswerEvent(true, m.crewNumber, m.answer);
 									tws.questionsDone.push(correspondingQuestion);
 									if (!tws.crew().rock && !tws.whirlpool) tws.crew().streak += 1;
 									if (tws.crew().rock) {
@@ -238,7 +239,7 @@ module.exports = (server) => {
 								// incorrect answers
 								tws.crew().hp -= 5;
 								tws.crew().streak = 0;
-								tws.sendAnswerEvent(false, m.crewNumber);
+								tws.sendAnswerEvent(false, m.crewNumber, m.answer);
 								tws.crew().members.forEach((member) => {
 									member.trysend({
 										event: 'updateHP',

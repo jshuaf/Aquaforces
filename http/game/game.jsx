@@ -79,9 +79,9 @@ socket.onmessage = function(m) {
 		break;
 	case 'answerSelected':
 		if (m.wasCorrectAnswer) {
-			game.correctAnswer();
+			game.correctAnswer(m.answer);
 		} else {
-			game.incorrectAnswer();
+			game.incorrectAnswer(m.answer);
 		}
 		break;
 	case 'updateHP':
