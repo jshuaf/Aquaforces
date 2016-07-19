@@ -172,6 +172,7 @@ a:active { color: #f44 }
 #prequestion {
 	position: absolute;
 	top: 0; right: 0; bottom: 0; left: 0;
+	overflow: hidden;
 }
 #canoe {
 	width: 24.52vmin;
@@ -266,7 +267,10 @@ ol.studentselect > li > span:hover::before { width: 2ch }
 	margin: 0 0 0.2em;
 }
 #footer > div { display: flex }
-#rank { flex-shrink: 0 }
+#rank-cont {
+	flex-shrink: 0;
+	margin-left: 1em;
+}
 @keyframes past-answer-in {
 	0% { opacity: 0 }
 }
