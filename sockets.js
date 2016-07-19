@@ -185,8 +185,8 @@ module.exports = function(server) {
 							hasStarted: false
 						};
 						tws.game = games[id];
-						id = id.toString();
-						tws.trysend(JSON.stringify({event: 'new-game', id: id.substr(0, 3) + '\u2009' + id.substr(3, 3) + '\u2009' + id.substr(6)}));
+						id = '000000000' + id.toString();
+						tws.trysend(JSON.stringify({event: 'new-game', id: id.substr(-9, 3) + '\u2009' + id.substr(-6, 3) + '\u2009' + id.substr(-3)}));
 						var answers = [];
 						for (let question of tws.game.questions) {
 							if (!answers.includes(question.answer)) answers.push(question.answer);
@@ -235,6 +235,10 @@ module.exports = function(server) {
 							let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
 							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						});
+					});
+				} else if (m.event == 'update-rank') {
+					tws.game.crews[m.crewnum].members.forEach(function(ttws) {
+						ttws.trysend(JSON.stringify({event: 'update-rank', rank: m.rank}));
 					});
 				} else if (m.event == 'end-game') {
 					if (!tws.game) return tws.error('Game not found.', 'dashboard');

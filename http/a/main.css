@@ -172,6 +172,7 @@ a:active { color: #f44 }
 #prequestion {
 	position: absolute;
 	top: 0; right: 0; bottom: 0; left: 0;
+	overflow: hidden;
 }
 #canoe {
 	width: 24.52vmin;
@@ -196,6 +197,9 @@ a:active { color: #f44 }
 	padding: 0.2em 0.5em;
 	color: #000;
 	max-width: 10em;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
 }
 #rock {
 	position: absolute;
@@ -262,12 +266,18 @@ ol.studentselect > li > span:hover::before { width: 2ch }
 	font-size: 1.1em;
 	margin: 0 0 0.2em;
 }
+#footer > div { display: flex }
+#rank-cont {
+	flex-shrink: 0;
+	margin-left: 1em;
+}
 @keyframes past-answer-in {
 	0% { opacity: 0 }
 }
 #past-answers {
 	white-space: pre;
 	overflow: hidden;
+	flex-grow: 1;
 }
 #past-answers span {
 	display: inline-block;

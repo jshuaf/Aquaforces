@@ -17,6 +17,8 @@ function Boat() {
 	this.cf = 0.0005;
 	this.vf = 0.00001;
 	this.raft = false;
+	this.rank = 0;
+	this.prevRank = 0;
 }
 function setState(id) {
 	errorEl.textContent = '';
@@ -70,6 +72,7 @@ socket.onmessage = function(m) {
 		li.onclick = removeUser;
 		document.getElementById('loneusers').appendChild(li);
 	} else if (m.event == 'add-user-to-crew') {
+		if (playing) return;
 		document.getElementById('loneusers').childNodes.forEach(function(e) {
 			if (e.firstChild.nodeValue == m.user) e.parentNode.removeChild(e);
 		});
@@ -81,6 +84,7 @@ socket.onmessage = function(m) {
 		crewsEl.children[m.crew - 1].dataset.n++;
 		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 	} else if (m.event == 'remove-user') {
+		if (playing) return;
 		var e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
 		if (e) {
 			if (e.parentNode.dataset.n) e.parentNode.dataset.n--;
@@ -112,7 +116,8 @@ document.getElementById('dashboard').addEventListener('submit', function(e) {
 	socket.send(JSON.stringify({event: 'new-game', qsetID: document.getElementById('qsets').value}));
 	setState('tgame');
 });
-var progress = document.getElementById('progress'), lastTime;
+var progress = document.getElementById('progress'), lastTime,
+	animateInterval;
 document.getElementById('tgame').addEventListener('submit', function(e) {
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'start-game'}));
@@ -139,8 +144,15 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	document.getElementById('subheader').hidden = true;
 	lastTime = timeStart = new Date().getTime();
 	animationUpdate();
+	document.addEventListener('visibilitychange', function() {
+		if (document.hidden && ms >= 0) animateInterval = setInterval(animationUpdate, 0);
+		else {
+			clearInterval(animateInterval);
+			animateInterval = false;
+		}
+	});
 });
-var timeStart,
+var timeStart, ms,
 	timeTotal = 300000;
 function zeroPad(t) {
 	if (t < 10) return '0' + t;
@@ -159,6 +171,22 @@ function animationUpdate() {
 		meanP += b.p;
 		minP = Math.min(minP, b.p);
 		maxP = Math.min(maxP, b.p);
+		b.prevRank = b.rank;
+		b.rank = 1;
+	}
+	for (var id in boats) {
+		var b = boats[id];
+		for (var id in boats) {
+			var bb = boats[id];
+			if (bb.p > b.p) b.rank++;
+		}
+		if (b.rank != b.prevRank) {
+			socket.send(JSON.stringify({
+				event: 'update-rank',
+				crewnum: id,
+				rank: b.rank
+			}));
+		}
 	}
 	meanP /= progress.childElementCount;
 	var pRange = Math.max(meanP - minP, maxP - minP) * 3 / innerWidth,
@@ -171,13 +199,14 @@ function animationUpdate() {
 		document.getElementById('boat' + id).style.transform = 'translateX(' + ((b.p - cameraP + 0.5) * 0.75 + 0.25) * innerWidth * cameraS + 'px)';
 	}
 	lastTime = thisTime;
-	var ms = timeTotal - new Date().getTime() + timeStart + 1000, t = '';
+	ms = timeTotal - new Date().getTime() + timeStart + 1000;
+	var t = '';
 	if (ms < 0) t = 'Time\'s up!';
 	else if (ms < 10000) t = Math.floor(ms / 60000) + ':0' + (ms / 1000).toFixed(2);
 	else t = Math.floor(ms / 60000) + ':' + zeroPad(Math.floor(ms / 1000 % 60));
 	header.firstChild.nodeValue = t;
 	if (ms < 0) endGame();
-	else requestAnimationFrame(animationUpdate);
+	else if (!animateInterval) requestAnimationFrame(animationUpdate);
 }
 function endGame() {
 	crewsEl.children.forEach(function(e, i) {
