@@ -32,7 +32,7 @@ html.hostgame {
 	background-size: contain;
 	text-shadow: 1px 1px 3px #000;
 }
-#progress > div.raft { background: #950 }
+#progress > div.raft { background: url('/img/raftside.svg') no-repeat }
 .qset {
 	padding: 2em;
 	margin: 1em 0;

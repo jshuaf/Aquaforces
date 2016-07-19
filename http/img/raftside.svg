@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 406.5 201">
+	<style>
+		.c1{fill:#895fa8;}.c2{fill:#231f20;}.c3{fill:#fdcc9a;}.c4{fill:#fcee22;}.c5{fill:#7f4e20;}.c6{fill:#161b0e;}.c7{fill:none;stroke:#161b0e;stroke-miterlimit:10;}.c8{fill:#ef3f3f;}.c9{fill:#f7b760;}.c10{fill:#06538e;}
+	</style>
+	<path class="c1" d="M253.87,180.75c19.55,8.29,28.61,6.48,33.2,2.68,3.86-3.19,4.47-7.72,9.79-9.94,6.38-2.67,14.35.16,20.4,3.22l-17.32-27.22a25.85,25.85,0,0,0-12,2.07c-5,2.3-7.5,5.66-8.92,7.14-3.88,4-12.53,6.73-33.81.08Z" transform="translate(-245.19 -120.94)" />
+	<rect class="c2" x="276.33" y="183.12" width="88.94" height="4.29" rx="0.82" ry="0.82" transform="translate(61.72 -305.86) rotate(57.84)" />
+	<ellipse class="c3" cx="237.73" cy="26.68" rx="27.7" ry="25.6" />
+	<rect class="c3" x="229.72" y="45.95" width="15.2" height="11.62" rx="4.7" ry="4.7" />
+	<rect class="c4" x="212.87" y="54.37" width="47.3" height="42.87" rx="17.43" ry="17.43" />
+	<path class="c5" d="M454.76,147.17c0-14.49,13.6-26.23,30.38-26.23a32.45,32.45,0,0,1,23.14,9.24l-52.57,23.51A22.89,22.89,0,0,1,454.76,147.17Z" transform="translate(-245.19 -120.94)" />
+	<circle class="c6" cx="252.17" cy="26.68" r="2.9" />
+	<path class="c7" d="M504.07,161.43s-6.41,6.67-11.62,0" transform="translate(-245.19 -120.94)" />
+	<rect class="c3" x="482.29" y="191.64" width="11.31" height="23.78" rx="4.85" ry="4.85" transform="translate(-283.02 27.19) rotate(-16.63)" />
+	<rect class="c3" x="491.48" y="194.44" width="11.31" height="23.78" rx="4.85" ry="4.85" transform="translate(204.26 -450.74) rotate(62.38)" />
+	<path class="c8" d="M479.89,179.74a8.81,8.81,0,0,0-4.89,4.56c-1.55,3.43-.68,7.41.23,11.59a39.73,39.73,0,0,0,2,6.48l16.84-5.21L491,187.21a11.13,11.13,0,0,0-3.61-6.24A7.45,7.45,0,0,0,479.89,179.74Z" transform="translate(-245.19 -120.94)" />
+	<ellipse class="c3" cx="332.3" cy="27.28" rx="27.7" ry="25.6" />
+	<rect class="c3" x="324.29" y="46.56" width="15.2" height="11.62" rx="4.7" ry="4.7" />
+	<rect class="c4" x="307.44" y="54.97" width="47.3" height="42.87" rx="17.43" ry="17.43" />
+	<path class="c5" d="M549.33,147.77c0-14.49,13.6-26.23,30.38-26.23a32.45,32.45,0,0,1,23.14,9.24L550.28,154.3A22.89,22.89,0,0,1,549.33,147.77Z" transform="translate(-245.19 -120.94)" />
+	<circle class="c6" cx="346.74" cy="27.28" r="2.9" />
+	<path class="c7" d="M598.64,162s-6.41,6.67-11.62,0" transform="translate(-245.19 -120.94)" />
+	<rect class="c3" x="576.86" y="192.25" width="11.31" height="23.78" rx="4.85" ry="4.85" transform="matrix(0.96, -0.29, 0.29, 0.96, -279.24, 54.27)" />
+	<rect class="c3" x="586.05" y="195.05" width="11.31" height="23.78" rx="4.85" ry="4.85" transform="translate(255.51 -534.21) rotate(62.38)" />
+	<path class="c8" d="M574.46,180.34a8.81,8.81,0,0,0-4.89,4.56c-1.55,3.43-.68,7.41.23,11.59a39.73,39.73,0,0,0,2,6.48l16.84-5.21-3.08-9.95a11.13,11.13,0,0,0-3.61-6.24A7.45,7.45,0,0,0,574.46,180.34Z" transform="translate(-245.19 -120.94)" />
+	<ellipse class="c3" cx="143.59" cy="27.53" rx="27.7" ry="25.6" />
+	<rect class="c3" x="135.57" y="46.81" width="15.2" height="11.62" rx="4.7" ry="4.7" />
+	<rect class="c4" x="118.72" y="55.22" width="47.3" height="42.87" rx="17.43" ry="17.43" />
+	<path class="c5" d="M360.61,148c0-14.49,13.6-26.23,30.38-26.23A32.45,32.45,0,0,1,414.13,131l-52.57,23.51A22.89,22.89,0,0,1,360.61,148Z" transform="translate(-245.19 -120.94)" />
+	<circle class="c6" cx="158.02" cy="27.53" r="2.9" />
+	<path class="c7" d="M409.92,162.29s-6.41,6.67-11.62,0" transform="translate(-245.19 -120.94)" />
+	<rect class="c3" x="388.14" y="192.5" width="11.31" height="23.78" rx="4.85" ry="4.85" transform="translate(-287.2 0.28) rotate(-16.63)" />
+	<rect class="c3" x="397.34" y="195.3" width="11.31" height="23.78" rx="4.85" ry="4.85" transform="translate(154.52 -366.87) rotate(62.38)" />
+	<path class="c8" d="M385.75,180.59a8.81,8.81,0,0,0-4.89,4.56c-1.55,3.43-.68,7.41.23,11.59a39.73,39.73,0,0,0,2,6.48L399.93,198l-3.08-9.95a11.13,11.13,0,0,0-3.61-6.24A7.45,7.45,0,0,0,385.75,180.59Z" transform="translate(-245.19 -120.94)" />
+	<rect class="c9" x="87.51" y="91.68" width="318.99" height="59.95" rx="29.98" ry="29.98" />
+	<rect class="c10" x="338.01" y="293.44" width="35.25" height="19.96" rx="4.67" ry="4.67" transform="translate(556.61 42.9) rotate(122.16)" />
+	<rect class="c10" x="330.75" y="236.23" width="132.05" height="3.52" rx="0.82" ry="0.82" transform="translate(564.25 -92.19) rotate(122.16)" />
+	<rect class="c10" x="432.81" y="291.02" width="35.25" height="19.96" rx="4.67" ry="4.67" transform="translate(699.82 -41.06) rotate(122.16)" />
+	<rect class="c10" x="425.55" y="233.81" width="132.05" height="3.52" rx="0.82" ry="0.82" transform="translate(707.45 -176.16) rotate(122.16)" />
+	<rect class="c10" x="528.68" y="291.02" width="35.25" height="19.96" rx="4.67" ry="4.67" transform="translate(846.71 -122.22) rotate(122.16)" />
+	<rect class="c10" x="521.42" y="233.81" width="132.05" height="3.52" rx="0.82" ry="0.82" transform="translate(854.35 -257.32) rotate(122.16)" />
+</svg>
