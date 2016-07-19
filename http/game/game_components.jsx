@@ -79,13 +79,13 @@ const Game = React.createClass({
 		this.refs.questionTimebar.reset();
 	},
 
-	correctAnswer() {
-		// MARK: correct answer animation
+	correctAnswer(answer) {
 		this.setState({reflectionGroupUpdate: Date.now()});
+		this.refs.river.wasCorrectAnswer(answer);
 	},
 
-	incorrectAnswer() {
-		// MARK: incorrect answer animation
+	incorrectAnswer(answer) {
+		this.refs.river.wasIncorrectAnswer(answer);
 	},
 
 	addCorrectAnswer(answer) {
@@ -173,7 +173,7 @@ const Game = React.createClass({
 						</div>
 					</div>
 					<River ref = "river"
-						initialAnswers = {this.props.initialAnswers}
+						answerData = {this.props.answerData}
 						answerSelected = {this.answerSelected}
 						answerPassedThreshold = {this.answerPassedThreshold}
 						canoeHP = {this.state.canoeHP}
@@ -181,10 +181,9 @@ const Game = React.createClass({
 						reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
 						updateHP = {this.updateHP}
 						rockHit = {this.rockHit}
-						rockPresent = {this.state.rock}
 					/>
 				</div>
-			</div>
+      </div>
     );
 	}
 });
@@ -204,7 +203,11 @@ const Answer = React.createClass({
 				vy
 			},
 			disappeared: false,
-			passedThreshold: false
+			passedThreshold: false,
+			shake: {
+				angle: 0,
+				time: null
+			}
 		};
 	},
 
@@ -242,6 +245,25 @@ const Answer = React.createClass({
 		});
 	},
 
+	setAngle() {
+		const currentTime = Date.now();
+		const shakeTime = this.state.shake.time;
+		const timeDifference = (currentTime - shakeTime) / 1000;
+		if (shakeTime && timeDifference > 0 && timeDifference <= 0.6) {
+			const scaledTime = timeDifference / (0.6 / 8);
+			const shakeAngle = 30 * Math.sin(Math.PI * scaledTime / 2);
+			this.setState({shake: {
+				angle: shakeAngle,
+				time: shakeTime
+			}});
+		} else {
+			this.setState({shake: {
+				angle: 0,
+				time: null
+			}});
+		}
+	},
+
 	componentDidMount() {
 		const currentTime = Date.now();
 		const initialX = this.props.generateAnswerPosition(this.refs.answer.offsetWidth);
@@ -257,28 +279,41 @@ const Answer = React.createClass({
 		});
 	},
 
-	handleClick() {
+	disappear() {
 		this.setState({
 			disappeared: true
 		});
-		this.props.onClick(this.props.text);
+	},
+
+	shake() {
+		this.setState({shake: {
+			time: Date.now(),
+			angle: 0
+		}});
 	},
 
 	animate(timestamp) {
 		if (this.props.keepRunning && !(this.state.passedThreshold)) {
 			this.setPosition();
+			this.setAngle();
 			requestAnimationFrame(this.animate);
 		} else {
 			this.props.answerPassedThreshold(this.props.text);
 		}
 	},
 
+	handleClick() {
+		this.props.onClick(this.props.text);
+	},
+
 	render() {
+		const x = this.state.position.x; const y = this.state.position.y;
 		const style = {
-			transform: 'translate(' + this.state.position.x + 'px, ' + this.state.position.y + 'px)'
+			transform: `translate(${x}px, ${y}px) rotate(${this.state.shake.angle}deg)`
 		};
 		if (!this.state.disappeared)
-			return <span style={style} onClick={this.handleClick} ref = "answer" className = "pill">{this.props.text}</span>;
+			return <span style={style} onClick={this.handleClick}
+				ref = "answer" className = "pill">{this.props.text}</span>;
 		else {
 			return null;
 		}
@@ -351,7 +386,6 @@ const River = React.createClass({
 			answers: [],
 			answersToAdd: [],
 			answersToRemove: [],
-			answerData: this.props.initialAnswers,
 			initialAnswerXPositions: [],
 			// River Reflections
 			riverReflectionGroups: [],
@@ -402,11 +436,11 @@ const River = React.createClass({
 			this.setState({answersToAdd});
 		} else {
 			if (newAnswer) answersToAdd.unshift(newAnswer);
-			let randomData = this.state.answerData[Math.floor(
-				Math.random() * this.state.answerData.length)];
+			let randomData = this.props.answerData[Math.floor(
+				Math.random() * this.props.answerData.length)];
 			while (currentAnswers.indexOf(randomData) >= 0) {
-				randomData = this.state.answerData[Math.floor(
-					Math.random() * this.state.answerData.length)];
+				randomData = this.props.answerData[Math.floor(
+					Math.random() * this.props.answerData.length)];
 			}
 			newAnswer = randomData;
 		}
@@ -422,6 +456,16 @@ const River = React.createClass({
 		this.setState({
 			answers: currentAnswers
 		});
+	},
+
+	wasCorrectAnswer(answer) {
+		const answerIndex = this.props.answerData.indexOf(answer);
+		this.refs[`${answerIndex}`].disappear();
+	},
+
+	wasIncorrectAnswer(answer) {
+		const answerIndex = this.props.answerData.indexOf(answer);
+		this.refs[`${answerIndex}`].shake();
 	},
 
 	addRock(rockStartTime) {
@@ -691,9 +735,9 @@ const River = React.createClass({
 		const incorrectAnswers = [];
 		const incorrectAnswersToAdd = Math.floor(Math.random() * 1.5);
 		for (let i = 0; i < incorrectAnswersToAdd; i++) {
-			let randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
+			let randomData = this.props.answerData[Math.floor(Math.random() * this.props.answerData.length)];
 			while (currentAnswers.indexOf(randomData) >= 0 || incorrectAnswers.indexOf(randomData) >= 0 || oldAnswersToAdd.indexOf(randomData) >= 0) {
-				randomData = this.state.answerData[Math.floor(Math.random() * this.state.answerData.length)];
+				randomData = this.props.answerData[Math.floor(Math.random() * this.props.answerData.length)];
 			}
 			incorrectAnswers.push(randomData);
 		}
@@ -716,12 +760,13 @@ const River = React.createClass({
 		for (let i = 0; i < this.state.answers.length; i++) {
 			answers.push(<Answer
 				text={this.state.answers[i]}
-				key={this.state.answerData.indexOf(this.state.answers[i])}
+				key={this.props.answerData.indexOf(this.state.answers[i])}
 				onClick={this.props.answerSelected}
 				answerPassedThreshold={this.answerPassedThreshold}
 				generateAnswerPosition={this.generateAnswerPosition}
 				riverBounds={this.riverBounds()}
 				keepRunning={!this.props.whirlpool}
+				ref={`${this.props.answerData.indexOf(this.state.answers[i])}`}
 			/>);
 		}
 		return (
