@@ -279,6 +279,23 @@ h2 {
 .modal-background > * {
 	position: relative;
 }
+@keyframes incorrect-answer-shake {
+	0% {
+		transform: rotate(30 deg);
+	}
+	25% {
+		transform: rotate(-30 deg);
+	}
+	50% {
+		transform: rotate(30 deg);
+	}
+	75% {
+		transform: rotate(-30 deg);
+	}
+}
+.incorrect-answer-shake {
+	animation: incorrect-answer-shake 0.6s;
+}
 @keyframes flash-red-twice {
 	0% {
 		background: #c0392b;
