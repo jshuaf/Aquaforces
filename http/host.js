@@ -72,6 +72,7 @@ socket.onmessage = function(m) {
 		li.onclick = removeUser;
 		document.getElementById('loneusers').appendChild(li);
 	} else if (m.event == 'add-user-to-crew') {
+		if (playing) return;
 		document.getElementById('loneusers').childNodes.forEach(function(e) {
 			if (e.firstChild.nodeValue == m.user) e.parentNode.removeChild(e);
 		});
@@ -83,6 +84,7 @@ socket.onmessage = function(m) {
 		crewsEl.children[m.crew - 1].dataset.n++;
 		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 	} else if (m.event == 'remove-user') {
+		if (playing) return;
 		var e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
 		if (e) {
 			if (e.parentNode.dataset.n) e.parentNode.dataset.n--;
