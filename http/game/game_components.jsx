@@ -187,7 +187,8 @@ const Answer = React.createClass({
 				vy
 			},
 			disappeared: false,
-			passedThreshold: false
+			passedThreshold: false,
+			shakeClass: ""
 		};
 	},
 
@@ -244,6 +245,20 @@ const Answer = React.createClass({
 		this.setState({
 			disappeared: true
 		});
+	},
+
+	clearShake() {
+		setTimeout(() => {
+			this.setState({
+				shakeClass: ""
+			});
+		}, 1000);
+	},
+
+	shake() {
+		this.setState({
+			shakeClass: " incorrect-answer-shake"
+		}, this.clearShake);
 	},
 
 	animate(timestamp) {
@@ -407,10 +422,12 @@ const River = React.createClass({
 
 	wasCorrectAnswer(answer) {
 		const answerIndex = this.props.answerData;
+		this.refs[`${answerIndex}`].disappear();
 	},
 
 	wasIncorrectAnswer(answer) {
-
+		const answerIndex = this.props.answerData;
+		this.refs[`${answerIndex}`].shake();
 	},
 
 	addRock(rockStartTime) {
@@ -707,6 +724,7 @@ const River = React.createClass({
 				generateAnswerPosition={this.generateAnswerPosition}
 				riverBounds={this.riverBounds()}
 				keepRunning={!this.props.whirlpool}
+				ref={`${this.props.answerData.indexOf(this.state.answers[i])}`}
 			/>);
 		}
 		return (
