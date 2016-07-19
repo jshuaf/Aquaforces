@@ -23,8 +23,7 @@ function setState(id) {
 function setupGameEnvironment() {
 	document.getElementById('content').hidden = true;
 	document.body.style.cssText =
-		`background: #e3d393 url('/img/backgrounds/beach-with-trees.png')
-		repeat-x center top; background-size: cover;`;
+		`background: #32c0cf repeat-x center top; background-size: cover;`;
 }
 
 function confirmMessageRecieved() {
@@ -72,16 +71,16 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		game = ReactDOM.render(<Game
   socket={socket} username={username}
-  crewNumber={crewNumber} initialAnswers={m.answers}
+  crewNumber={crewNumber} answerData={m.answers}
 	crewSize={m.crewSize}
   />,
 			document.getElementById('mountNode'));
 		break;
 	case 'answerSelected':
 		if (m.wasCorrectAnswer) {
-			game.correctAnswer();
+			game.correctAnswer(m.answer);
 		} else {
-			game.incorrectAnswer();
+			game.incorrectAnswer(m.answer);
 		}
 		break;
 	case 'updateHP':
@@ -115,6 +114,8 @@ socket.onmessage = function(m) {
 		break;
 	case 'endGame':
 		gameHasEnded = true;
+		sweetAlert("The game finished. How'd it go?");
+		setState('join');
 		break;
 	default:
 		console.log('Game recieved unknown event: ', m.event);
