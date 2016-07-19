@@ -232,8 +232,14 @@ const Answer = React.createClass({
 	setAngle() {
 		const currentTime = Date.now();
 		const shakeTime = this.state.shake.time;
-		if (shakeTime && currentTime > shakeTime) {
-			const timeDifference = shakeTime - currentTime;
+		const timeDifference = (shakeTime - currentTime) / 1000;
+		if (shakeTime && timeDifference > 0 && timeDifference < 0.6) {
+			const scaledTime = timeDifference / (0.6 / 8);
+			const shakeAngle = 30 * Math.sin(Math.PI * scaledTime / 2);
+			this.setState({shake: {
+				angle: shakeAngle,
+				time: shakeTime
+			}});
 		}
 	},
 
@@ -283,7 +289,7 @@ const Answer = React.createClass({
 		};
 		if (!this.state.disappeared)
 			return <span style={style} onClick={this.handleClick}
-				ref = "answer" className = {className}>{this.props.text}</span>;
+				ref = "answer" className = "pill">{this.props.text}</span>;
 		else {
 			return null;
 		}
