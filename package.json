@@ -24,5 +24,8 @@
 		"uglify-js": "^2.6.4",
 		"clean-css": "^3.4.18",
 		"mongodb": "^2.1.18"
+	},
+	"engines": {
+		"node": "^6.3.0"
 	}
 }
