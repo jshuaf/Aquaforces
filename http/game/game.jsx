@@ -78,7 +78,6 @@ socket.onmessage = function(m) {
 			document.getElementById('mountNode'));
 		break;
 	case 'answerSelected':
-		console.log("answer selected");
 		if (m.wasCorrectAnswer) {
 			game.correctAnswer(m.answer);
 		} else {

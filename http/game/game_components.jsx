@@ -188,7 +188,10 @@ const Answer = React.createClass({
 			},
 			disappeared: false,
 			passedThreshold: false,
-			shakeClass: ""
+			shake: {
+				angle: null,
+				time: null
+			}
 		};
 	},
 
@@ -226,6 +229,14 @@ const Answer = React.createClass({
 		});
 	},
 
+	setAngle() {
+		const currentTime = Date.now();
+		const shakeTime = this.state.shake.time;
+		if (shakeTime && currentTime > shakeTime) {
+			const timeDifference = shakeTime - currentTime;
+		}
+	},
+
 	componentDidMount() {
 		const currentTime = Date.now();
 		const initialX = this.props.generateAnswerPosition(this.refs.answer.offsetWidth);
@@ -247,23 +258,14 @@ const Answer = React.createClass({
 		});
 	},
 
-	clearShake() {
-		setTimeout(() => {
-			this.setState({
-				shakeClass: ""
-			});
-		}, 1000);
-	},
-
 	shake() {
-		this.setState({
-			shakeClass: " incorrect-answer-shake"
-		}, this.clearShake);
+		this.setState({shakeTime: Date.now()});
 	},
 
 	animate(timestamp) {
 		if (this.props.keepRunning && !(this.state.passedThreshold)) {
 			this.setPosition();
+			this.setAngle();
 			requestAnimationFrame(this.animate);
 		} else {
 			this.props.answerPassedThreshold(this.props.text);
@@ -275,10 +277,10 @@ const Answer = React.createClass({
 	},
 
 	render() {
+		const x = this.state.position.x; const y = this.state.position.y;
 		const style = {
-			transform: 'translate(' + this.state.position.x + 'px, ' + this.state.position.y + 'px)'
+			transform: `translate(${x}px, ${y}px) rotate(${this.state.shake.angle}deg)`
 		};
-		const className = "pill" + this.state.shakeClass;
 		if (!this.state.disappeared)
 			return <span style={style} onClick={this.handleClick}
 				ref = "answer" className = {className}>{this.props.text}</span>;
@@ -427,12 +429,12 @@ const River = React.createClass({
 	},
 
 	wasCorrectAnswer(answer) {
-		const answerIndex = this.props.answerData;
+		const answerIndex = this.props.answerData.indexOf(answer);
 		this.refs[`${answerIndex}`].disappear();
 	},
 
 	wasIncorrectAnswer(answer) {
-		const answerIndex = this.props.answerData;
+		const answerIndex = this.props.answerData.indexOf(answer);
 		this.refs[`${answerIndex}`].shake();
 	},
 
