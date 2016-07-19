@@ -509,6 +509,14 @@ module.exports = (server) => {
 						}
 					}
 				});
+				tws.on('close', () => {
+					for (let gameID in games) {
+						const game = games[gameID];
+						if (game.host == tws) {
+							delete games[gameID];
+						}
+					}
+				});
 				break;
 			}
 
