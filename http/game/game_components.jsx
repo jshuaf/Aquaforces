@@ -158,7 +158,7 @@ const Game = React.createClass({
 					</div>
 				</div>
 				<River ref = "river"
-					initialAnswers = {this.props.initialAnswers}
+					answerData = {this.props.answerData}
 					answerSelected = {this.answerSelected}
 					answerPassedThreshold = {this.answerPassedThreshold}
 					canoeHP = {this.state.canoeHP}
@@ -383,11 +383,11 @@ const River = React.createClass({
 			this.setState({answersToAdd});
 		} else {
 			if (newAnswer) answersToAdd.unshift(newAnswer);
-			let randomData = this.props.initialAnswers[Math.floor(
-				Math.random() * this.props.initialAnswers.length)];
+			let randomData = this.props.answerData[Math.floor(
+				Math.random() * this.props.answerData.length)];
 			while (currentAnswers.indexOf(randomData) >= 0) {
-				randomData = this.props.initialAnswers[Math.floor(
-					Math.random() * this.props.initialAnswers.length)];
+				randomData = this.props.answerData[Math.floor(
+					Math.random() * this.props.answerData.length)];
 			}
 			newAnswer = randomData;
 		}
@@ -406,7 +406,7 @@ const River = React.createClass({
 	},
 
 	wasCorrectAnswer(answer) {
-
+		const answerIndex = this.props.answerData;
 	},
 
 	wasIncorrectAnswer(answer) {
@@ -676,9 +676,9 @@ const River = React.createClass({
 		const incorrectAnswers = [];
 		const incorrectAnswersToAdd = Math.floor(Math.random() * 1.5);
 		for (let i = 0; i < incorrectAnswersToAdd; i++) {
-			let randomData = this.props.initialAnswers[Math.floor(Math.random() * this.props.initialAnswers.length)];
+			let randomData = this.props.answerData[Math.floor(Math.random() * this.props.answerData.length)];
 			while (currentAnswers.indexOf(randomData) >= 0 || incorrectAnswers.indexOf(randomData) >= 0 || oldAnswersToAdd.indexOf(randomData) >= 0) {
-				randomData = this.props.initialAnswers[Math.floor(Math.random() * this.props.initialAnswers.length)];
+				randomData = this.props.answerData[Math.floor(Math.random() * this.props.answerData.length)];
 			}
 			incorrectAnswers.push(randomData);
 		}
@@ -701,7 +701,7 @@ const River = React.createClass({
 		for (let i = 0; i < this.state.answers.length; i++) {
 			answers.push(<Answer
 				text={this.state.answers[i]}
-				key={this.props.initialAnswers.indexOf(this.state.answers[i])}
+				key={this.props.answerData.indexOf(this.state.answers[i])}
 				onClick={this.props.answerSelected}
 				answerPassedThreshold={this.answerPassedThreshold}
 				generateAnswerPosition={this.generateAnswerPosition}
