@@ -16,11 +16,13 @@ const Game = React.createClass({
 			whirlpoolQuestion: {},
 			whirlpoolTimebar: null,
 			whirlpoolBonus: 0,
+			rock: false,
 			canoeHP: 100,
 			canoeTopPosition: null,
 			canoeHeight: null,
 			// River Reflections
-			reflectionGroupUpdate: null
+			reflectionGroupUpdate: null,
+			update: null
 		};
 	},
 
@@ -31,6 +33,14 @@ const Game = React.createClass({
 			username: this.props.username,
 			crewNumber: this.props.crewNumber
 		}));
+	},
+
+	showUpdate(title, text) {
+		this.setState({update: <Update title = {title} text = {text} animationText = 'bounceindown animated'></Update>});
+		let rock = this;
+		setTimeout(function() {
+			this.setState({update: <Update title = {title} text = {text} animationText = 'bounceoutup animated'></Update>});
+		}.bind(rock), 2500);
 	},
 
 	gameTimerOver() {
@@ -103,11 +113,14 @@ const Game = React.createClass({
 	},
 
 	addRock(rockStartTime) {
+		this.state.rock = true;
+		this.showUpdate('Rock approaching', 'Answer questions faster to avoid hitting it!');
 		this.refs.river.addRock(rockStartTime);
 	},
 
 	endRock() {
 		this.refs.river.endRock();
+		this.state.rock = false;
 	},
 
 	rockHit() {
@@ -146,28 +159,32 @@ const Game = React.createClass({
 		}
 		const timePerQuestion = this.state.rock ? 10000 : 15000;
 		return (
-			<div className="container" hidden={this.state.gameFinished}>
-				<div>{whirlpoolValue}</div>
-				<div className="panel-group">
-					<div className="panel-top">
-						<GameTimer onFinish={this.gameTimerOver} totalTime={900000} />
-						<Question text={this.state.questionText} />
+			<div>
+				<div>{this.state.update}</div>
+				<div className="container" hidden={this.state.gameFinished}>
+					<div>{whirlpoolValue}</div>
+					<div className="panel-group">
+						<div className="panel-top">
+							<GameTimer onFinish={this.gameTimerOver} totalTime={900000} />
+							<Question text={this.state.questionText} />
+						</div>
+						<div className="panel-bottom">
+							<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={timePerQuestion} ref="questionTimebar" keepRunning={!this.state.whirlpool}></QuestionTimebar>
+						</div>
 					</div>
-					<div className="panel-bottom">
-						<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={timePerQuestion} ref="questionTimebar" keepRunning={!this.state.whirlpool}></QuestionTimebar>
-					</div>
+					<River ref = "river"
+						initialAnswers = {this.props.initialAnswers}
+						answerSelected = {this.answerSelected}
+						answerPassedThreshold = {this.answerPassedThreshold}
+						canoeHP = {this.state.canoeHP}
+						crewSize = {this.props.crewSize}
+						reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
+						updateHP = {this.updateHP}
+						rockHit = {this.rockHit}
+						rockPresent = {this.state.rock}
+					/>
 				</div>
-				<River ref = "river"
-					initialAnswers = {this.props.initialAnswers}
-					answerSelected = {this.answerSelected}
-					answerPassedThreshold = {this.answerPassedThreshold}
-					canoeHP = {this.state.canoeHP}
-					crewSize = {this.props.crewSize}
-					reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
-					updateHP = {this.updateHP}
-					rockHit = {this.rockHit}
-				/>
-      </div>
+			</div>
     );
 	}
 });
@@ -408,6 +425,7 @@ const River = React.createClass({
 	},
 
 	addRock(rockStartTime) {
+		/*
 		sweetAlert({
 			title: "Rock approaching!",
 			text: "Answer questions quickly to avoid being hit!",
@@ -419,6 +437,9 @@ const River = React.createClass({
 			const rockAnimation = requestAnimationFrame(this.animateRock);
 			this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
 		});
+		*/
+		const rockAnimation = requestAnimationFrame(this.animateRock);
+		this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
 	},
 
 	animateRock(timestamp) {
@@ -465,7 +486,7 @@ const River = React.createClass({
 			rockAnimation: null,
 			rockYPosition: -innerHeight * 0.1
 		});
-		sweetAlert("Congratulations!", "You were saved from the rock.", "success");
+		this.showUpdate("Congratulations!", "You were saved from the rock.");
 	},
 
 	clearFlash() {
@@ -715,7 +736,7 @@ const River = React.createClass({
 							key = {riverReflectionGroup.key}
 						/>
 					)}
-					<Rock y = {this.state.rockYPosition} ref = "rock"/>
+					<Rock y = {this.state.rockYPosition} present = {this.props.rockPresent} ref = "rock"/>
 					<Canoe initialImage = {this.props.initialImage}
 						ref = "canoe" hp = {this.props.canoeHP} crewSize = {this.props.crewSize}
 					/>
@@ -829,13 +850,15 @@ const Rock = React.createClass({
 		const rockStyle = {
 			height: "100%"
 		};
-		const containerStyle = {
+		let containerStyle = {
 			textAlign: "center",
 			height: "12%",
 			margin: "0 auto",
 			transform: `translate(0px, ${this.props.y}px)`,
 			display: 'table'
 		};
+		if (!this.props.present)
+			containerStyle.display = "none";
 		return (
 			<div style={containerStyle}>
 				<img src = "../img/obstacles/rock.svg" style = {rockStyle}></img>
@@ -916,6 +939,24 @@ const WhirlpoolQuestion = React.createClass({
 			</div>
 		);
 	}
+});
+
+	const Update = React.createClass({
+		render() {
+			return (
+			<div className = {this.props.animationText} id="notification">
+				<div className="container">
+					<div className="row">
+						<div className="twelve columns">
+							<h2 className="marginless"><b>{this.props.title}</b></h2>
+							<h2>{this.props.text}</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+		}
+	});
 
 	// popup - everything stops
 	// one person gets a challenge question - multiple choice
@@ -926,7 +967,6 @@ const WhirlpoolQuestion = React.createClass({
 	// for every 10 clicks, the timebar gets a 1 second boost
 	// if correct answer for Whirlpool
 	// increment by 5x correct questions
-});
 
 const RiverReflectionGroup = React.createClass({
 	getInitialState() {
