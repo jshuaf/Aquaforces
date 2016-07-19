@@ -58,6 +58,7 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	callback();
 });
 let cache = {};
+const redirectURLs = ['/host', '/play', '/console'];
 let serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	console.log(req.method, req.url.pathname);
@@ -181,6 +182,9 @@ let serverHandler = o(function*(req, res) {
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
+	} else if (redirectURLs.includes(req.url.pathname)) {
+		res.writeHead(303, {'Location': req.url.pathname + '/'});
+		res.end();
 	} else return errorNotFound(req, res);
 });
 console.log('Connecting to mongodb…'.cyan);
