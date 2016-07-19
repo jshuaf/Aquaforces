@@ -71,16 +71,16 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		game = ReactDOM.render(<Game
   socket={socket} username={username}
-  crewNumber={crewNumber} initialAnswers={m.answers}
+  crewNumber={crewNumber} answerData={m.answers}
 	crewSize={m.crewSize}
   />,
 			document.getElementById('mountNode'));
 		break;
 	case 'answerSelected':
 		if (m.wasCorrectAnswer) {
-			game.correctAnswer();
+			game.correctAnswer(m.answer);
 		} else {
-			game.incorrectAnswer();
+			game.incorrectAnswer(m.answer);
 		}
 		break;
 	case 'updateHP':
