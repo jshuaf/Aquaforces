@@ -168,8 +168,8 @@ module.exports = (server) => {
 									activeQuestions: [],
 									hp: 100
 								};
-							} else if (tws.game.crews[m.crewNumber].members.length >= 6) {
-								return tws.error('Your crew is full.', 'Crews can have 2 - 6 sailors.');
+							} else if (tws.game.crews[m.crewNumber].members.length >= 4) {
+								return tws.error('Your crew is full.', 'Crews can have 2 - 4 sailors.');
 							}
 							else tws.game.crews[m.crewNumber].members.push(tws);
 							tws.crewNumber = m.crewNumber;
@@ -455,7 +455,7 @@ module.exports = (server) => {
 							Object.keys(tws.game.crews).forEach((crewNumber) => {
 								const crew = tws.game.crews[crewNumber];
 								if (crew.members.length < 2) return tws.error('Need at least two people in every crew.');
-								else if (crew.members.length > 6) return tws.error('Maximum six people in every crew.');
+								else if (crew.members.length > 4) return tws.error('Maximum four people in every crew.');
 							});
 							tws.game.hasStarted = true;
 							tws.game.crews.forEach((crew) => {
