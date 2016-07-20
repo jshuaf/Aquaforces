@@ -109,7 +109,7 @@ socket.onmessage = function(m) {
 	}
 };
 socket.onclose = function() {
-	errorEl.textContent = 'Socket closed.';
+	errorEl.textContent = 'Connection lost.';
 };
 document.getElementById('dashboard').addEventListener('submit', function(e) {
 	e.preventDefault();

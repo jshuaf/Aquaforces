@@ -88,7 +88,7 @@ function moveRock(newPosition) {
 	rock.position = newPosition;
 }
 socket.onclose = function() {
-	errorEl.textContent = 'Socket closed.';
+	errorEl.textContent = 'Connection lost.';
 	errorEl.scrollIntoView();
 };
 document.getElementById('join').addEventListener('submit', function(e) {
