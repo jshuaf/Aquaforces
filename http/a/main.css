@@ -194,9 +194,10 @@ a:active { color: #f44 }
 	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
 }
 #answers > div > div {
-	padding: 0.2em 0.5em;
+	padding: 1em;
 	color: #000;
-	max-width: 10em;
+	max-width: 12em;
+	text-align: center;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;
