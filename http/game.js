@@ -44,7 +44,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		addAnswerInterval = setInterval(addAnswer, 2000);
+		addAnswerInterval = setInterval(addAnswer, 2500);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -60,7 +60,7 @@ socket.onmessage = function(m) {
 };
 document.addEventListener('visibilitychange', function() {
 	if (document.hidden) clearInterval(addAnswerInterval);
-	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 2000);
+	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 2500);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
