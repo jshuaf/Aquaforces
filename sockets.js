@@ -349,7 +349,7 @@ module.exports = (server) => {
 							event: 'removeUser',
 							user: tws.user
 						});
-						if (!tws.crew()) {
+						if (tws.crew()) {
 							const index = tws.game.users.indexOf(tws);
 							const crewMembers = tws.crew().members;
 							tws.game.users.splice(index, 1);
