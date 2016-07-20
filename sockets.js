@@ -265,22 +265,25 @@ module.exports = (server) => {
 
 									correspondingQuestion.owner.addNewQuestion();
 									tws.crew().streak = 0;
-								} else if (m.event == 'resendAnswer') {
-									tws.checkGameExists();
-									if (typeof m.text != 'string') {
-										return tws.error('No answer text sent.');
-									}
-									const crew = tws.crew();
-									const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-									ttws.trysend({
-										event: 'correctAnswer',
-										answer: m.answer
-									});
 								}
 							});
 							if (!correspondingQuestion) {
-								tws.error("Unknown question timed out.");
+								console.log("Unknown question timed out.", m.question, tws.crew().activeQuestions);
 							}
+							break;
+						}
+
+						case 'resendAnswer': {
+							tws.checkGameExists();
+							if (typeof m.text != 'string') {
+								return;
+							}
+							const crew = tws.crew();
+							const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+							ttws.trysend({
+								event: 'correctAnswer',
+								answer: m.answer
+							});
 							break;
 						}
 
@@ -506,6 +509,19 @@ module.exports = (server) => {
 
 						default: {
 							tws.error('Unknown socket event ' + m.event + ' received.');
+						}
+					}
+				});
+				tws.on('close', () => {
+					for (let gameID in games) {
+						const game = games[gameID];
+						if (game.host == tws) {
+							for (let user of game.users) {
+								user.trysend({
+									event: 'endGame'
+								});
+							}
+							delete games[gameID];
 						}
 					}
 				});
