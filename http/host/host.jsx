@@ -140,12 +140,14 @@ socket.onclose = () => {
 	sweetAlert("Server connection died.", "We're sorry about that.", "error");
 };
 document.getElementById('dashboard').addEventListener('submit', function(e) {
+	document.getElementById('dashboard').disabled = true;
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'newGame'}));
 	setState('tgame');
 });
 
 document.getElementById('start-game-btn').addEventListener('click', function(e) {
+	document.getElementById('start-game-btn').disabled = true;
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'startGame'

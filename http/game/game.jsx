@@ -48,6 +48,8 @@ socket.onmessage = function(m) {
 		errorEl.scrollIntoView();
 		break;
 	case 'error':
+		document.getElementById('crew').disabled = false;
+		document.getElementById('join').disabled = false;
 		sweetAlert(m.title, m.text, "error");
 		break;
 	case 'addUser':
@@ -126,6 +128,7 @@ socket.onclose = () => {
 };
 document.getElementById('join').addEventListener('submit', (e) => {
 	e.preventDefault();
+	document.getElementById('join').disabled = true;
 	socket.send(JSON.stringify({
 		event: 'addUser',
 		code: parseInt(document.getElementById('game-code').value, 10),
@@ -135,6 +138,7 @@ document.getElementById('join').addEventListener('submit', (e) => {
 });
 
 document.getElementById('crew').addEventListener('submit', (e) => {
+	document.getElementById('crew').disabled = true;
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'addUserToCrew',
