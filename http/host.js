@@ -205,7 +205,7 @@ function animationUpdate() {
 	else if (ms < 10000) t = Math.floor(ms / 60000) + ':0' + (ms / 1000).toFixed(2);
 	else t = Math.floor(ms / 60000) + ':' + zeroPad(Math.floor(ms / 1000 % 60));
 	header.firstChild.nodeValue = t;
-	if (ms < 0) endGame();
+	if (!animateInterval && ms < 0) endGame();
 	else if (!animateInterval) requestAnimationFrame(animationUpdate);
 }
 function endGame() {
