@@ -833,9 +833,11 @@ const QuestionTimebar = React.createClass({
 	},
 
 	render() {
+		const timebarPercentage = this.state.timeLeft / this.props.timePerQuestion;
+		const timebarBackgroundColor = tinycolor(`hsv ${timebarPercentage * 145} 77% ${95 - 30 * timebarPercentage}%`);
 		const style = {
-			width: (this.state.timeLeft / this.props.timePerQuestion * 100).toString() + '%',
-			backgroundColor: '#26A65B',
+			width: (timebarPercentage * 100).toString() + '%',
+			backgroundColor: `#${timebarBackgroundColor.toHex()}`,
 			height: '100%'
 		};
 		return <div style={style} className="questionTime"></div>;
