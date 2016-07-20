@@ -48,8 +48,8 @@ socket.onmessage = function(m) {
 		errorEl.scrollIntoView();
 		break;
 	case 'error':
-		document.getElementById('crew').disabled = false;
-		document.getElementById('join').disabled = false;
+		document.getElementById('joinCrewButton').disabled = false;
+		document.getElementById('joinGameButton').disabled = false;
 		sweetAlert(m.title, m.text, "error");
 		break;
 	case 'addUser':
