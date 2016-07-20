@@ -16,6 +16,12 @@ module.exports = function(server) {
 		tws.error = function(body, state) {
 			return tws.trysend(JSON.stringify({event: 'error', body, state}));
 		};
+		tws.interval = setInterval(function() {
+			tws.send('{}');
+		}, 25000);
+		tws.on('close', function() {
+			clearInterval(tws.interval);
+		});
 		if (tws.upgradeReq.url == '/') {
 			tws.on('message', function(m, raw) {
 				console.log(m);
