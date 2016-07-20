@@ -81,6 +81,7 @@ socket.onmessage = function(m) {
 		break;
 	case 'newGame':
 		document.getElementById('game-code-cont').appendChild(document.createTextNode(m.id));
+		setState('tgame');
 		break;
 	case 'addNewUser':
 		let li = document.createElement('li');
@@ -140,14 +141,13 @@ socket.onclose = () => {
 	sweetAlert("Server connection died.", "We're sorry about that.", "error");
 };
 document.getElementById('dashboard').addEventListener('submit', function(e) {
-	document.getElementById('dashboard').disabled = true;
+	document.getElementById('newGameButton').disabled = true;
 	e.preventDefault();
 	socket.send(JSON.stringify({event: 'newGame'}));
-	setState('tgame');
 });
 
-document.getElementById('start-game-btn').addEventListener('click', function(e) {
-	document.getElementById('start-game-btn').disabled = true;
+document.getElementById('startGameButton').addEventListener('click', function(e) {
+	document.getElementById('startGameButton').disabled = true;
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'startGame'

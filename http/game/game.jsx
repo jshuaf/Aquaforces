@@ -128,7 +128,7 @@ socket.onclose = () => {
 };
 document.getElementById('join').addEventListener('submit', (e) => {
 	e.preventDefault();
-	document.getElementById('join').disabled = true;
+	document.getElementById('joinGameButton').disabled = true;
 	socket.send(JSON.stringify({
 		event: 'addUser',
 		code: parseInt(document.getElementById('game-code').value, 10),
@@ -138,7 +138,7 @@ document.getElementById('join').addEventListener('submit', (e) => {
 });
 
 document.getElementById('crew').addEventListener('submit', (e) => {
-	document.getElementById('crew').disabled = true;
+	document.getElementById('joinCrewButton').disabled = true;
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'addUserToCrew',
