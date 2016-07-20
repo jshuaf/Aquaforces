@@ -54,7 +54,6 @@ socket.onmessage = function(m) {
 	if (m.event == 'rock-answer-status') moveRock(m.streak);
 	if (m.event == 'collide-rock') collideRock();
 	if (m.event == 'end-rock') moveRock(7);
-	if (m.event == 'end-game') gameHasEnded = true;
 	if (m.event == 'update-rank') document.getElementById('rank').firstChild.nodeValue = m.rank;
 	if (m.event == 'end-game') endGame();
 };
@@ -200,6 +199,7 @@ function animationUpdate() {
 	if (!gameHasEnded) requestAnimationFrame(animationUpdate);
 }
 function endGame() {
+	gameHasEnded = true;
 	clearInterval(addAnswerInterval);
 	addAnswerInterval = false;
 }

@@ -16,6 +16,10 @@ html:not(.hostgame):not(.no-bg) { background-color: #bee6f1 }
 		background-repeat: no-repeat;
 		background-position: bottom left;
 	}
+	html:not(.hostgame).gameover {
+		background-image: url('/img/gameover.svg');
+		background-position: center top;
+	}
 }
 html, #progress { height: 100% }
 #cont { height: 50% }
