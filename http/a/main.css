@@ -16,6 +16,10 @@ html:not(.hostgame):not(.no-bg) { background-color: #bee6f1 }
 		background-repeat: no-repeat;
 		background-position: bottom left;
 	}
+	html:not(.hostgame).gameover {
+		background-image: url('/img/gameover.svg');
+		background-position: center top;
+	}
 }
 html, #progress { height: 100% }
 #cont { height: 50% }
@@ -194,9 +198,10 @@ a:active { color: #f44 }
 	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
 }
 #answers > div > div {
-	padding: 0.2em 0.5em;
+	padding: 1em;
 	color: #000;
-	max-width: 10em;
+	max-width: 12em;
+	text-align: center;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	user-select: none;

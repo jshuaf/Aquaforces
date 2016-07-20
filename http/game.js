@@ -44,7 +44,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		addAnswerInterval = setInterval(addAnswer, 1500);
+		addAnswerInterval = setInterval(addAnswer, 2500);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -54,13 +54,12 @@ socket.onmessage = function(m) {
 	if (m.event == 'rock-answer-status') moveRock(m.streak);
 	if (m.event == 'collide-rock') collideRock();
 	if (m.event == 'end-rock') moveRock(7);
-	if (m.event == 'end-game') gameHasEnded = true;
 	if (m.event == 'update-rank') document.getElementById('rank').firstChild.nodeValue = m.rank;
 	if (m.event == 'end-game') endGame();
 };
 document.addEventListener('visibilitychange', function() {
 	if (document.hidden) clearInterval(addAnswerInterval);
-	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1500);
+	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 2500);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
@@ -88,7 +87,7 @@ function moveRock(newPosition) {
 	rock.position = newPosition;
 }
 socket.onclose = function() {
-	errorEl.textContent = 'Socket closed.';
+	errorEl.textContent = 'Connection lost.';
 	errorEl.scrollIntoView();
 };
 document.getElementById('join').addEventListener('submit', function(e) {
@@ -163,10 +162,16 @@ function animationUpdate() {
 	if (timeProportion < 0) failQuestion();
 	answersEl.children.forEach(function(e) {
 		if (+e.dataset.x + e.offsetWidth / 2 < innerWidth / 2) {
-			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x) / 100) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth * 0.42) / 100)) || 0);
+			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x) / 30) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth * 0.42) / 30)) || 0);
 		} else {
-			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x + innerWidth * 0.58) / 100) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth) / 100)) || 0);
+			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x + innerWidth * 0.58) / 30) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth) / 30)) || 0);
 		}
+		answersEl.children.forEach(function(f) {
+			if (e == f) return;
+			var sd = (+e.dataset.vx - f.dataset.vx) * (+e.dataset.vx - f.dataset.vx) + (+e.dataset.vy - f.dataset.vy) * (+e.dataset.vy - f.dataset.vy);
+			e.dataset.vx = +e.dataset.vx - 1e-5 * (+e.dataset.vx - f.dataset.vx) / sd;
+			e.dataset.vx = +e.dataset.vx - 1e-5 * (+e.dataset.vy - f.dataset.vy) / sd;
+		});
 		e.dataset.vx /= 1.05;
 		e.dataset.vy = +e.dataset.vy + dt * ((Math.random() - 0.5) / 10000);
 		if (+e.dataset.vy < 0.01) e.dataset.vy = +e.dataset.vy + 0.005;
@@ -194,6 +199,7 @@ function animationUpdate() {
 	if (!gameHasEnded) requestAnimationFrame(animationUpdate);
 }
 function endGame() {
+	gameHasEnded = true;
 	clearInterval(addAnswerInterval);
 	addAnswerInterval = false;
 }
