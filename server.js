@@ -160,12 +160,11 @@ let serverHandler = o(function*(req, res) {
 		const requestCookies = req.headers.cookie;
 		const userID = cookie.parse(requestCookies).userID;
 		let qsetID = null;
-		dbcs.qsets.find({title: true}, {author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
+		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
 				qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
-			}
-			else {
+			} else {
 				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
