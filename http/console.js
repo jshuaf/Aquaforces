@@ -6,9 +6,9 @@ function inputParentRemove() {
 	if (!this.value) this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 }
 
-const userID = localStorage.getItem('userID');
+const userID = Cookies.get('userID');
 if (!userID) {
-	document.body.innerHTML = "<p>You're not logged in.</p><a onclick=authorizeUser()>Login here.</a>";
+	errorEl.innerHTML = "<p>You're not logged in.</p><a onclick='authorizeUser()'>Login here.</a>";
 }
 
 var newQSet = document.getElementById('new-qset'),

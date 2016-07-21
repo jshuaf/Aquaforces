@@ -44,16 +44,6 @@ function requestGet(url, callback) {
 	xmlHttp.send(null);
 }
 
-const CLIENT_ID = '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com';
-
-gapi.load('auth2', () => {
-	gapi.auth2.init({
-		'client_id': CLIENT_ID,
-		'scope': 'profile',
-		'fetch_basic_profile': false
-	});
-});
-
 function authorizeUser() {
 	const auth = gapi.auth2.getAuthInstance();
 	auth.signIn().then(() => {
@@ -64,7 +54,7 @@ function authorizeUser() {
 			const responseObject = JSON.parse(responseText);
 			if (responseObject.aud == CLIENT_ID) {
 				const userID = responseObject.sub;
-				localStorage.setItem('userID', userID);
+				Cookies.set('userID', userID);
 			}
 			else {
 				alert("ID Token integrity compromised.");
@@ -72,3 +62,13 @@ function authorizeUser() {
 		});
 	});
 }
+
+const CLIENT_ID = '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com';
+
+gapi.load('auth2', () => {
+	gapi.auth2.init({
+		'client_id': CLIENT_ID,
+		'scope': 'profile',
+		'fetch_basic_profile': false
+	});
+});
