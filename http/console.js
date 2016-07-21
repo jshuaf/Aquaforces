@@ -8,7 +8,7 @@ function inputParentRemove() {
 
 const userID = Cookies.get('userID');
 if (!userID) {
-	errorEl.innerHTML = "<p>You're not logged in.</p><a onclick='authorizeUser()'>Login here.</a>";
+	document.getElementById('error').innerHTML = "<p>You're not logged in.</p><a onclick='authorizeUser()'>Login here.</a>";
 }
 
 var newQSet = document.getElementById('new-qset'),
