@@ -55,6 +55,8 @@ function authorizeUser() {
 			if (responseObject.aud == CLIENT_ID) {
 				const userID = responseObject.sub;
 				Cookies.set('userID', userID);
+				requestPost('/api/login', null, null);
+				location.reload();
 			}
 			else {
 				alert("ID Token integrity compromised.");
