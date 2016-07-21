@@ -222,7 +222,7 @@ module.exports = function(server) {
 					});
 				} else if (m.event == 'start-game') {
 					if (!tws.game) return tws.error('Game not found.', 'dashboard');
-					if (tws.game.crews.length < 1) return tws.error('Need more crews to begin game.');
+					if (tws.game.crews.length < 1) return tws.error('Need at least one crew to begin game.');
 					tws.game.hasStarted = true;
 					tws.game.users.forEach(function(ttws) {
 						ttws.trysend(JSON.stringify({event: 'start-game', state: 'game', answers: tws.game.answers}));

@@ -202,4 +202,5 @@ function endGame() {
 	gameHasEnded = true;
 	clearInterval(addAnswerInterval);
 	addAnswerInterval = false;
+	document.documentElement.classList.add('gameover');
 }

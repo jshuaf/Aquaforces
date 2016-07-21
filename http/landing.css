@@ -8,21 +8,21 @@ body {
 	margin: 0;
 	line-height: 1.35;
 }
-section { padding: calc(2em + 2vh) 5% }
+section { padding: calc(2em + 2vh) calc(0.8em + 3.5%) }
 main > section:first-of-type {
 	position: absolute;
 	top: 0; left: 0; right: 0;
-	margin-top: 22vh;
-	transform: translateY(-22%);
+	margin-top: calc(16vh + 4em);
+	transform: translateY(-16%);
 	text-align: center;
 }
 main > section:first-of-type p { display: none }
-#summary {
-	margin-top: 100vh;
-	background: #223;
-	color: #fff;
+#summary { margin-top: 100vh }
+#summary, #call-to-action {
+	background: #256;
+	color: #eee;
 }
-#benefits { background: #fff }
+#benefits { background: #eee }
 section::after {
 	content: '';
 	display: table;
@@ -40,6 +40,7 @@ section div {
 }
 section div h2 { text-align: center }
 section div h2, section div p { margin: 0.3em 0 }
+section div p { text-align: center }
 section div svg {
 	display: block;
 	margin: 0 auto;
@@ -50,21 +51,42 @@ section div svg {
 		margin-top: 32vh;
 		transform: translateY(-32%);
 	}
+}
+@media (min-height: 600px) and (min-width: 600px) {
 	main > section:first-of-type p {
 		display: block;
 		margin-top: 10vh;
 		font-size: calc(1.2rem + 1vmin);
 	}
 }
-#logo {
-	width: calc(14em + 10%);
+header {
+	padding: 0.3em;
 	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+#logo {
+	margin: 1em auto;
+	display: block;
+	width: calc(12em + 10%);
 	max-width: 100%;
-	top: 1em;
-	left: 2.5em;
+}
+#log-in { display: none }
+@media (min-width: 27em) {
+	#log-in {
+		display: block;
+		position: absolute;
+		top: 50%;
+		right: 0;
+		transform: translateY(-50%);
+		margin: 0 calc(0.5rem + 2%) 0 0;
+		font-size: 1.5rem;
+	}
+	#logo { margin: 0.5em 0 0 calc(0.5rem + 2%) }
 }
 h1 {
-	font-size: calc(2rem + 1vw);
+	font-size: calc(2rem + 1.5vw);
 	margin: 0.4em 0;
 }
 button {
@@ -82,7 +104,7 @@ section > p {
 	display: table;
 	margin: 0 auto;
 	font-size: calc(1em + 0.3vw);
-	line-height: 1.4;
+	line-height: 1.5;
 }
 #bottom-bg {
 	position: absolute;
@@ -92,7 +114,7 @@ section > p {
 	background: #4ac;
 	position: relative;
 	overflow: hidden;
-	color: #fff;
+	color: #eee;
 	padding-bottom: 15%;
 }
 #about section {

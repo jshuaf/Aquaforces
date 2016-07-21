@@ -102,7 +102,7 @@ socket.onmessage = function(m) {
 				document.getElementById('boat' + m.crewnum).classList.add('raft');
 			}
 		}
-	} else if (m.event = 'collide-rock') {
+	} else if (m.event == 'collide-rock') {
 		var b = boats[m.crewnum];
 		if (m.raft) b.dv *= 0.8;
 		else b.hp += b.bdhp;
