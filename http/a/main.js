@@ -55,6 +55,7 @@ function authorizeUser() {
 			if (responseObject.aud == CLIENT_ID) {
 				const userID = responseObject.sub;
 				localStorage.setItem('userID', userID);
+				requestPost('/api/login', null, 'userID=' + userID);
 			}
 			else {
 				alert("ID Token integrity compromised.");
