@@ -217,3 +217,5 @@ function endGame() {
 		event: 'end-game'
 	}));
 }
+
+console.log(localStorage.getItem('id'));

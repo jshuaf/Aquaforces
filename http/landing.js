@@ -33,15 +33,12 @@ function authorizeUser() {
 		httpGetAsync(tokenVerificationURL, (responseText) => {
 			const responseObject = JSON.parse(responseText);
 			if (responseObject.aud == CLIENT_ID) {
-				verifyID(responseObject.sub);
+				const id = responseObject.sub;
+				localStorage.setItem('id', id);
 			}
 			else {
 				alert("ID Token integrity compromised.");
 			}
 		});
 	});
-}
-
-function verifyID(id) {
-	console.log(id);
 }

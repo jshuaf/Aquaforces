@@ -36,6 +36,7 @@ module.exports = function(req, res, post) {
 			timeAdded: new Date().getTime()
 		});
 		res.end(qsetID);
+	} else if (req.url.pathname == '/get-qsets') {
 	} else {
 		res.writeHead(404);
 		res.end('The API feature requested has not been implemented.');
