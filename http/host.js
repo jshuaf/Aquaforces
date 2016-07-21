@@ -5,7 +5,7 @@ var cont = document.getElementById('cont'),
 
 const userID = localStorage.getItem('userID');
 if (!userID) {
-	document.body.innerHTML = "<p>You're not logged in.</p><a onclick='authorizeUser()'>Login here.</a>";
+	errorEl.innerHTML = "<p>You're not logged in.</p><a onclick='authorizeUser()'>Login here.</a>";
 }
 
 var boats = {},
