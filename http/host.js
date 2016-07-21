@@ -2,6 +2,12 @@
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/');
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
+
+const userID = localStorage.getItem('id');
+if (!userID) {
+	document.body.innerHTML = "<p>You're not logged in.</p><a onclick=authorizeUser()>Login here.</a>";
+}
+
 var boats = {},
 	cameraP = 0,
 	cameraS = 1;
@@ -217,5 +223,3 @@ function endGame() {
 		event: 'end-game'
 	}));
 }
-
-console.log(localStorage.getItem('id'));
