@@ -38,6 +38,10 @@ module.exports = function(req, res, post, cookie) {
 			timeAdded: new Date().getTime(),
 			author: userID
 		});
+		dbcs.users.update(
+			{_id: userID},
+			{$push: {qsets: qsetID}}
+		);
 		res.end(qsetID);
 	} else if (req.url.pathname == '/login') {
 		const requestCookies = req.headers.cookie;

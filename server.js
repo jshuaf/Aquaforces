@@ -159,9 +159,12 @@ let serverHandler = o(function*(req, res) {
 		var qsetstr = '';
 		const requestCookies = req.headers.cookie;
 		const userID = cookie.parse(requestCookies).userID;
-		dbcs.qsets.find({}, {title: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
+		let qsetID = null;
+		dbcs.qsets.find({title: true}, {author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
-			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
+			if (qset) {
+				qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
+			}
 			else {
 				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
@@ -170,7 +173,9 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		dbcs.qsets.find().sort({timeAdded: -1}).each(o(function*(err, qset) {
+		const requestCookies = req.headers.cookie;
+		const userID = cookie.parse(requestCookies).userID;
+		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
