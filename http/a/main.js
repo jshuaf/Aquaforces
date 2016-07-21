@@ -46,11 +46,11 @@ function requestGet(url, callback) {
 
 function authorizeUser() {
 	const auth = gapi.auth2.getAuthInstance();
-	auth.signIn().then(() => {
+	auth.signIn().then(function() {
 		const authResponse = auth.currentUser.get().getAuthResponse();
 		const idToken = authResponse.id_token;
 		const tokenVerificationURL = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + idToken;
-		requestGet(tokenVerificationURL, (responseText) => {
+		requestGet(tokenVerificationURL, function(responseText) {
 			const responseObject = JSON.parse(responseText);
 			if (responseObject.aud == CLIENT_ID) {
 				const userID = responseObject.sub;
@@ -65,7 +65,7 @@ function authorizeUser() {
 
 const CLIENT_ID = '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com';
 
-gapi.load('auth2', () => {
+gapi.load('auth2', function() {
 	gapi.auth2.init({
 		'client_id': CLIENT_ID,
 		'scope': 'profile',

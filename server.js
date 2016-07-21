@@ -157,15 +157,16 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/host/') {
 		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-			dbcs.qsets.find({}, {title: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
-				if (err) throw err;
-				console.log(qset);
-				if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
-				else {
-					res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
-					res.end(yield fs.readFile('./html/a/foot.html', yield));
-				}
-			}));
+		const requestCookies = req.headers.cookie;
+		const userID = cookie.parse(requestCookies).userID;
+		dbcs.qsets.find({}, {title: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
+			if (err) throw err;
+			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
+			else {
+				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
+				res.end(yield fs.readFile('./html/a/foot.html', yield));
+			}
+		}));
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
