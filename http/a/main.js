@@ -53,8 +53,8 @@ function authorizeUser() {
 		requestGet(tokenVerificationURL, (responseText) => {
 			const responseObject = JSON.parse(responseText);
 			if (responseObject.aud == CLIENT_ID) {
-				const id = responseObject.sub;
-				localStorage.setItem('id', id);
+				const userID = responseObject.sub;
+				localStorage.setItem('userID', userID);
 			}
 			else {
 				alert("ID Token integrity compromised.");

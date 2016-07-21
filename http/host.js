@@ -3,7 +3,7 @@ var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') +
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
 
-const userID = localStorage.getItem('id');
+const userID = localStorage.getItem('userID');
 if (!userID) {
 	document.body.innerHTML = "<p>You're not logged in.</p><a onclick=authorizeUser()>Login here.</a>";
 }

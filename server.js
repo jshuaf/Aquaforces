@@ -8,9 +8,8 @@ const config = {
 require('./essentials.js');
 require('colors');
 global.dbcs = {};
-const usedDBCs = [
-	'qsets'
-];
+const usedDBCs = ['qsets', 'users'];
+
 const http = require('http'),
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
@@ -57,6 +56,7 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	res.write(yield addVersionNonces(data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"').replace('$title', (title ? title + ' · ' : '') + 'Aquaforces').replace('$inhead', inhead), req.url.pathname, yield));
 	callback();
 });
+global.userID = null;
 let cache = {};
 const redirectURLs = ['/host', '/play', '/console'];
 let serverHandler = o(function*(req, res) {
@@ -158,14 +158,20 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/host/') {
 		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		dbcs.qsets.find({}, {title: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
-			if (err) throw err;
-			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
-			else {
-				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
-				res.end(yield fs.readFile('./html/a/foot.html', yield));
-			}
-		}));
+		if (!userID) {
+			res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
+			res.end(yield fs.readFile('./html/a/foot.html', yield));
+		} else {
+			dbcs.qsets.find({}, {title: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
+				if (err) throw err;
+				console.log(qset);
+				if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
+				else {
+					res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
+					res.end(yield fs.readFile('./html/a/foot.html', yield));
+				}
+			}));
+		}
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';

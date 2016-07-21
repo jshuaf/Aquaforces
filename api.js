@@ -36,6 +36,13 @@ module.exports = function(req, res, post) {
 			timeAdded: new Date().getTime()
 		});
 		res.end(qsetID);
+	} else if (req.url.pathname == 'login') {
+		if (!post.userID) {
+			return res.writeHead(400) || res.end('No ID supplied for login.');
+		} else {
+			userID = post.userID;
+			res.end();
+		}
 	} else if (req.url.pathname == '/get-qsets') {
 	} else {
 		res.writeHead(404);
