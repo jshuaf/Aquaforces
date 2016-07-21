@@ -110,25 +110,22 @@ button, .button {
 	display: block;
 	margin: 0.2em 0;
 	padding: 0.2em 1em;
-	background: #ffa233;
+	background: #6b0;
 	font-size: 1.6rem;
 	transition: background-color 0.1s;
-	border: 1px solid #aaa;
+	border: none;
 	border-radius: 1em;
-	color: #224;
+	color: #fff;
 	cursor: pointer;
 	text-decoration: none;
 }
 .button { display: inline-table }
-button:hover, .button:hover { background: #fb6 }
-.button:hover { color: #224 }
-button:active, .button:active {
-	background: #f70;
-	color: #fff;
-}
+button:hover, .button:hover { background: #6a4 }
+.button:hover, button:active, .button:active { color: #fff }
 button[disabled] {
-	background: #aaa;
-	color: #444;
+	background: #999;
+	color: #000;
+	cursor: not-allowed;
 }
 #joinbtn { margin: 0.2em auto }
 #error {
