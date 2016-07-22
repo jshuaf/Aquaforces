@@ -9,7 +9,7 @@ html {
 	color: #223;
 }
 body { margin: 1em 1.3em }
-html:not(.hostgame):not(.no-bg) { background-color: #bee6f1 }
+html:not(.hostgame):not(.no-bg) { background-color: #bef }
 @media (min-height: 32em) {
 	html:not(.hostgame):not(.no-bg) {
 		background-image: url('/img/background.svg');
@@ -62,26 +62,35 @@ h1 { margin: 0 0 0.4em }
 	pointer-events: none;
 }
 [hidden] > * { display: none }
-#cont label {
-	font-size: 1.3em;
-	margin: 0.5em 0.5em 0.5em 0;
-}
+#cont label { font-size: 1.3em }
 form:not(.left-align) { margin: 0 auto }
 .centerbox {
 	display: table;
-	margin: 0 auto;
-	max-width: 24em;
-}
-.centerbox span { min-width: 4.8ch }
-label {
-	display: flex;
-	align-items: center;
+	margin: 1em auto;
+	max-width: 28em;
 }
 input {
 	font-size: 1.1em;
-	margin-left: 0.5ch;
+	border-radius: 1em;
+	padding: 0.25em 1em;
+	border: 2px solid #aaa;
 }
-label input:not(#crewnum) { width: 200% }
+label input:not(#crewnum) { width: 100% }
+#crewnum { margin-bottom: 0.8em }
+#join {
+	width: 100%;
+	max-width: 26em;
+}
+#join > p.center { margin-top: 1.5em }
+#join > *, #join .button { width: 100% }
+.centerbox label input {
+	margin-top: 0.2em;
+	margin-bottom: 0.7em;
+}
+.centerbox label span {
+	margin: 0 auto;
+	display: table;
+}
 @media (min-width: 500px) {
 	.pregamescreen form { padding: 0 10% }
 }
