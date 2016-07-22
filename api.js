@@ -1,5 +1,5 @@
 'use strict';
-module.exports = function(req, res, post) {
+module.exports = function(req, res, post, cookie) {
 	if (req.url.pathname == '/new-qset') {
 		if (!post.name) return res.writeHead(400) || res.end('Set name is required.');
 		if (typeof post.name != 'string') return res.writeHead(400) || res.end('Set name must be a string.');
@@ -29,13 +29,31 @@ module.exports = function(req, res, post) {
 			});
 		}
 		const qsetID = generateID();
+		const requestCookies = req.headers.cookie;
+		const userID = cookie.parse(requestCookies).userID;
 		dbcs.qsets.insert({
 			_id: qsetID,
 			title: post.name,
 			questions,
-			timeAdded: new Date().getTime()
+			timeAdded: new Date().getTime(),
+			author: userID
 		});
+		dbcs.users.update(
+			{_id: userID},
+			{$push: {qsets: qsetID}}
+		);
 		res.end(qsetID);
+	} else if (req.url.pathname == '/login') {
+		const requestCookies = req.headers.cookie;
+		const userID = cookie.parse(requestCookies).userID;
+		const existingUser = dbcs.users.find({userID});
+		if (!existingUser) {
+			dbcs.users.insert({
+				_id: userID,
+				qsets: []
+			});
+		}
+		res.end();
 	} else {
 		res.writeHead(404);
 		res.end('The API feature requested has not been implemented.');

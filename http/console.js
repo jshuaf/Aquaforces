@@ -5,6 +5,12 @@ function inputRemove() {
 function inputParentRemove() {
 	if (!this.value) this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 }
+
+const userID = Cookies.get('userID');
+if (!userID) {
+	document.getElementById('error').innerHTML = "<p>You're not logged in.</p><a onclick='authorizeUser()'>Login here.</a>";
+}
+
 var newQSet = document.getElementById('new-qset'),
 	protoLi = document.getElementById('questions').firstElementChild.cloneNode(true),
 	protoDetails = newQSet.firstElementChild.cloneNode(true);
@@ -50,7 +56,7 @@ newQSet.addEventListener('submit', function(e) {
 		for (var i = 2; i < ins.length; i++) if (ins[i].value) question.incorrectAnswers.push(ins[i].value);
 		questions.push(question);
 	});
-	request('/api/new-qset', function(res) {
+	requestPost('/api/new-qset', function(res) {
 		newQSet.classList.remove('validating');
 		if (res.indexOf('Error') == 0) {
 			alert(res);

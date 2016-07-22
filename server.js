@@ -8,9 +8,8 @@ const config = {
 require('./essentials.js');
 require('colors');
 global.dbcs = {};
-const usedDBCs = [
-	'qsets'
-];
+const usedDBCs = ['qsets', 'users'];
+
 const http = require('http'),
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
@@ -84,7 +83,7 @@ let serverHandler = o(function*(req, res) {
 		req.on('end', function() {
 			if (req.abort) return;
 			post = querystring.parse(post);
-			apiServer(req, res, post);
+			apiServer(req, res, post, cookie);
 		});
 	} else if (req.url.pathname.includes('.')) {
 		let stats;
@@ -131,11 +130,15 @@ let serverHandler = o(function*(req, res) {
 			} catch (e) {
 				return errorNotFound(req, res);
 			}
-			switch (path.extname(req.url.pathname)) {
-				case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
-				break;
-				case '.css': data = new CleanCSS().minify(data).styles;
-				break;
+			try {
+				switch (path.extname(req.url.pathname)) {
+					case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
+					break;
+					case '.css': data = new CleanCSS().minify(data).styles;
+					break;
+				}
+			} catch (e) {
+				console.error(e);
 			}
 			cache[req.url.pathname] = {
 				raw: data,
@@ -154,10 +157,14 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/host/') {
 		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		dbcs.qsets.find({}, {title: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
+		const requestCookies = req.headers.cookie;
+		const userID = cookie.parse(requestCookies).userID;
+		let qsetID = null;
+		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
-			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
-			else {
+			if (qset) {
+				qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
+			} else {
 				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
@@ -165,7 +172,9 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		dbcs.qsets.find().sort({timeAdded: -1}).each(o(function*(err, qset) {
+		const requestCookies = req.headers.cookie;
+		const userID = cookie.parse(requestCookies).userID;
+		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
