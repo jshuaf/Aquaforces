@@ -58,7 +58,7 @@ module.exports = function(server) {
 							recentAnswers: [],
 							streak: 0
 						};
-					} else if (tws.game.crews[m.crewnum].members.length >= 6) return tws.error('Crew cannot have more than 6 sailors.', 'crew');
+					} else if (tws.game.crews[m.crewnum].members.length >= 4) return tws.error('Crew cannot have more than 4 sailors.', 'crew');
 					else (tws.crew = tws.game.crews[m.crewnum]).members.push(tws);
 					tws.crewnum = m.crewnum;
 					tws.game.host.trysend(JSON.stringify({
