@@ -49,7 +49,7 @@ module.exports = function(server) {
 				} else if (m.event == 'add-user-to-crew') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (!m.crewnum || typeof m.crewnum != 'number') return tws.error('You must enter a crew number.', 'crew');
-					if (!(m.crewnum <= 12 && m.crewnum >= 1)) return tws.error('Crew number must be between 1 and 12, inclusive.', 'crew');
+					if (!(m.crewnum <= 9 && m.crewnum >= 1)) return tws.error('Crew number must be between 1 and 9, inclusive.', 'crew');
 					if (tws.game.hasStarted) return tws.error('Game has started.', 'join');
 					if (!tws.game.crews[m.crewnum]) {
 						tws.crew = tws.game.crews[m.crewnum] = {
