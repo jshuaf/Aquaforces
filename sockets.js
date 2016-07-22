@@ -34,7 +34,7 @@ module.exports = function(server) {
 					let tgame = games[m.code];
 					if (!tgame) return tws.error('Invalid game code.', 'join');
 					if (!m.name) return tws.error('You must enter a username.', 'join');
-					if (m.name.length > 18) return tws.error('You must enter a username less than 18 characters.', 'join');
+					if (m.name.length > 18) return tws.error('You must enter a username with less than 18 characters.', 'join');
 					if (tgame.usernames.includes(m.name)) return tws.error('Your username has been taken', 'join');
 					if (tgame.hasStarted) return tws.error('Game has started.', 'join');
 					tws.user = m.name;
