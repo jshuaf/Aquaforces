@@ -24,7 +24,7 @@ function Boat() {
 
 var userID = Cookies.get('userID');
 if (!userID) {
-	document.getElementById('content').children.forEach((child) => {
+	document.getElementById('content').children.forEach(function(child) {
 		child.hidden = (child.id !== 'log-in');
 	});
 }
