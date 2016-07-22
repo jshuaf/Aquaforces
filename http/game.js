@@ -44,7 +44,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		addAnswerInterval = setInterval(addAnswer, 2500);
+		addAnswerInterval = setInterval(addAnswer, 1800);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -59,7 +59,7 @@ socket.onmessage = function(m) {
 };
 document.addEventListener('visibilitychange', function() {
 	if (document.hidden) clearInterval(addAnswerInterval);
-	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 2500);
+	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
@@ -137,7 +137,7 @@ function addAnswer() {
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
 	answerEl.dataset.y = 0;
 	answerEl.dataset.vx = (Math.random() - 0.5) / 100;
-	answerEl.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 10000;
+	answerEl.dataset.vy = (Math.random() - 0.5) / 100 + innerHeight / 6000;
 	answerEl.addEventListener('click', answerClickListener);
 	if (correctAnswer) answerEl.classList.add('correct-answer');
 }
