@@ -1,5 +1,6 @@
 'use strict';
-module.exports = function(req, res, post, cookie) {
+const cookie = require('cookie');
+module.exports = function(req, res, post) {
 	if (req.url.pathname == '/new-qset') {
 		if (!post.name) return res.writeHead(400) || res.end('Set name is required.');
 		if (typeof post.name != 'string') return res.writeHead(400) || res.end('Set name must be a string.');
@@ -29,8 +30,7 @@ module.exports = function(req, res, post, cookie) {
 			});
 		}
 		const qsetID = generateID();
-		const requestCookies = req.headers.cookie;
-		const userID = cookie.parse(requestCookies).userID;
+		const userID = cookie.parse(req.headers.cookie).userID;
 		dbcs.qsets.insert({
 			_id: qsetID,
 			title: post.name,
@@ -44,8 +44,7 @@ module.exports = function(req, res, post, cookie) {
 		);
 		res.end(qsetID);
 	} else if (req.url.pathname == '/login') {
-		const requestCookies = req.headers.cookie;
-		const userID = cookie.parse(requestCookies).userID;
+		const userID = cookie.parse(req.headers.cookie).userID;
 		const existingUser = dbcs.users.find({userID});
 		if (!existingUser) {
 			dbcs.users.insert({
