@@ -15,7 +15,9 @@ html.hostgame {
 #tgame h2 { text-align: center }
 #progress {
 	position: absolute;
-	top: 0; bottom: 0;
+	top: 0; right: 0; bottom: 0; left: 0;
+	overflow: hidden;
+	z-index: -1;
 }
 #progress.hide {
 	opacity: 0;
@@ -71,7 +73,7 @@ summary + ol > li > * { min-width: 5em }
 .hostgame #tgame {
 	position: absolute;
 	top: 0; bottom: 0; left: 0;
-	width: 30%;
+	width: calc(4em + 30%);
 	padding: 1em;
 	background: rgba(255, 255, 255, 0.8);
 	height: 100%;
