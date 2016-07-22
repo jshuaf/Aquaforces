@@ -3,11 +3,6 @@ var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') +
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
 
-const userID = Cookies.get('userID');
-if (!userID) {
-	errorEl.innerHTML = "<p>You're not logged in.</p><a onclick='authorizeUser()'>Login here.</a>";
-}
-
 var boats = {},
 	cameraP = 0,
 	cameraS = 1;
@@ -107,11 +102,23 @@ socket.onmessage = function(m) {
 				b.raft = true;
 				document.getElementById('boat' + m.crewnum).classList.add('raft');
 			}
+			socket.send(JSON.stringify({
+				event: 'update-hp',
+				crewnum: m.crewnum,
+				hp: b.hp
+			}));
 		}
 	} else if (m.event == 'collide-rock') {
 		var b = boats[m.crewnum];
 		if (m.raft) b.dv *= 0.8;
-		else b.hp += b.bdhp;
+		else {
+			b.hp += b.bdhp;
+			socket.send(JSON.stringify({
+				event: 'update-hp',
+				crewnum: m.crewnum,
+				hp: b.hp
+			}));
+		}
 	}
 };
 socket.onclose = function() {
@@ -130,7 +137,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	playing = true;
 	document.documentElement.classList.add('hostgame');
 	document.getElementById('lonelyfolks').classList.add('hide');
-	document.getElementById('crew-header').hidden = document.getElementById('start-game-btn').hidden = true;
+	document.getElementById('crew-header').hidden = document.getElementById('start-game-btn').hidden = document.getElementById('crew-info-p').hidden = true;
 	crewsEl.classList.remove('studentselect');
 	crewsEl.classList.add('leaderboard');
 	crewsEl.children.forEach(function(e, i) {
@@ -216,7 +223,7 @@ function animationUpdate() {
 }
 function endGame() {
 	crewsEl.children.forEach(function(e, i) {
-		if (boats[i + 1]) e.appendChild(document.createTextNode(boats[i + 1].p.toFixed(1) + '\u2006km'));
+		if (boats[i + 1]) e.appendChild(document.createTextNode((boats[i + 1].p * 100).toFixed(0) + '\u2006m'));
 	});
 	progress.classList.add('hide');
 	socket.send(JSON.stringify({

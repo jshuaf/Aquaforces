@@ -31,46 +31,41 @@ function requestPost(uri, callback, params) {
 	return i;
 }
 
-function requestGet(url, callback) {
-	var xmlHttp = new XMLHttpRequest();
-	xmlHttp.onreadystatechange = function() {
-		if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-			return callback(xmlHttp.responseText);
-		} else {
-			return false;
-		}
+function requestGet(uri, callback) {
+	var i = new XMLHttpRequest();
+	i.open('GET', uri, true);
+	i.onload = function() {
+		callback(this.status == 204 ? 'Success' : this.responseText);
 	};
-	xmlHttp.open("GET", url, true);
-	xmlHttp.send(null);
+	i.send(null);
 }
 
-function authorizeUser() {
-	const auth = gapi.auth2.getAuthInstance();
-	auth.signIn().then(function() {
-		const authResponse = auth.currentUser.get().getAuthResponse();
-		const idToken = authResponse.id_token;
-		const tokenVerificationURL = "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + idToken;
-		requestGet(tokenVerificationURL, function(responseText) {
-			const responseObject = JSON.parse(responseText);
-			if (responseObject.aud == CLIENT_ID) {
-				const userID = responseObject.sub;
-				Cookies.set('userID', userID);
-				requestPost('/api/login', null, null);
-				location.reload();
-			}
-			else {
-				alert("ID Token integrity compromised.");
-			}
+var gAuthClientID = '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com';
+
+addEventListener('DOMContentLoaded', function() {
+	var logInButton = document.getElementById('log-in');
+	if (logInButton) {
+		gapi.load('auth2', function() {
+			gapi.auth2.init({
+				'client_id': gAuthClientID,
+				'scope': 'profile',
+				'fetch_basic_profile': false
+			});
 		});
-	});
-}
-
-const CLIENT_ID = '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com';
-
-gapi.load('auth2', function() {
-	gapi.auth2.init({
-		'client_id': CLIENT_ID,
-		'scope': 'profile',
-		'fetch_basic_profile': false
-	});
+		logInButton.addEventListener('click', function() {
+			var auth = gapi.auth2.getAuthInstance();
+			auth.signIn().then(function() {
+				console.log(auth.currentUser.get().getAuthResponse().id_token);
+				requestGet('https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + auth.currentUser.get().getAuthResponse().id_token, function(res) {
+					try {
+						res = JSON.parse(res);
+					} catch (e) {
+						alert('Error: Invalid JSON response from Google.');
+					}
+					if (res.aud == gAuthClientID) requestPost('/api/login', location.reload, 'id=' + encodeURIComponent(res.sub));
+					else alert('Error: Google ID Token integrity compromised.');
+				});
+			});
+		});
+	}
 });
