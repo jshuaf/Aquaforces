@@ -12,8 +12,8 @@
 	} else if (typeof exports === 'object') {
 		module.exports = factory();
 	} else {
-		let OldCookies = window.Cookies;
-		let api = window.Cookies = factory();
+		var OldCookies = window.Cookies;
+		var api = window.Cookies = factory();
 		api.noConflict = function() {
 			window.Cookies = OldCookies;
 			return api;
@@ -21,11 +21,11 @@
 	}
 }(function() {
 	function extend() {
-		let i = 0;
-		let result = {};
+		var i = 0;
+		var result = {};
 		for (; i < arguments.length; i++) {
-			let attributes = arguments[i];
-			for (let key in attributes) {
+			var attributes = arguments[i];
+			for (var key in attributes) {
 				result[key] = attributes[key];
 			}
 		}
@@ -34,7 +34,7 @@
 
 	function init(converter) {
 		function api(key, value, attributes) {
-			let result;
+			var result;
 			if (typeof document === 'undefined') {
 				return;
 			}
@@ -47,7 +47,7 @@
 				}, api.defaults, attributes);
 
 				if (typeof attributes.expires === 'number') {
-					let expires = new Date();
+					var expires = new Date();
 					expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
 					attributes.expires = expires;
 				}
@@ -88,19 +88,19 @@
 			//To prevent the for loop in the first place assign an empty array
 			//in case there are no cookies at all. Also prevents odd result when
 			//calling "get()"
-			let cookies = document.cookie ? document.cookie.split('; ') : [];
-			let rdecode = /(%[0-9A-Z]{2})+/g;
-			let i = 0;
+			var cookies = document.cookie ? document.cookie.split('; ') : [];
+			var rdecode = /(%[0-9A-Z]{2})+/g;
+			var i = 0;
 
 			for (; i < cookies.length; i++) {
-				let parts = cookies[i].split('=');
-				let cookie = parts.slice(1).join('=');
+				var parts = cookies[i].split('=');
+				var cookie = parts.slice(1).join('=');
 				if (cookie.charAt(0) === '"') {
 					cookie = cookie.slice(1, -1);
 				}
 
 				try {
-					let name = parts[0].replace(rdecode, decodeURIComponent);
+					var name = parts[0].replace(rdecode, decodeURIComponent);
 					cookie = converter.read ?
 						converter.read(cookie, name) : converter(cookie, name) ||
 						cookie.replace(rdecode, decodeURIComponent);

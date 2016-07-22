@@ -13,13 +13,13 @@ if (!userID) {
 	});
 }
 
-let newQSet = document.getElementById('new-qset'),
+var newQSet = document.getElementById('new-qset'),
 	protoLi = document.getElementById('questions').firstElementChild.cloneNode(true),
 	protoDetails = newQSet.firstElementChild.cloneNode(true);
 function moreWrong() {
-	let li = this.parentNode.parentNode.previousElementSibling;
+	var li = this.parentNode.parentNode.previousElementSibling;
 	li.parentNode.insertBefore(li.cloneNode(true), li.nextElementSibling);
-	let input = li.nextElementSibling.firstChild;
+	var input = li.nextElementSibling.firstChild;
 	input.value = '';
 	input.focus();
 	input.onblur = inputRemove;
@@ -32,9 +32,9 @@ function bindListeners() {
 	});
 	document.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
 	document.getElementById('more-questions').addEventListener('click', function() {
-		let li = this.parentNode.parentNode;
+		var li = this.parentNode.parentNode;
 		li.parentNode.insertBefore(protoLi.cloneNode(true), li);
-		let newLi = li.previousElementSibling;
+		var newLi = li.previousElementSibling;
 		newLi.getElementsByTagName('input')[0].addEventListener('blur', inputParentRemove);
 		newLi.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
 		newLi.getElementsByTagName('input')[0].focus();
@@ -44,18 +44,18 @@ bindListeners();
 newQSet.addEventListener('submit', function(e) {
 	e.preventDefault();
 	this.classList.add('validating');
-	let inv = this.querySelector(':invalid');
+	var inv = this.querySelector(':invalid');
 	if (inv) return inv.focus();
-	let questions = [];
+	var questions = [];
 	document.getElementById('questions').children.forEach(function(e) {
-		let ins = e.getElementsByTagName('input');
+		var ins = e.getElementsByTagName('input');
 		if (ins.length == 0) return;
-		let question = {
+		var question = {
 			text: ins[0].value,
 			answer: ins[1].value,
 			incorrectAnswers: []
 		};
-		for (let i = 2; i < ins.length; i++) if (ins[i].value) question.incorrectAnswers.push(ins[i].value);
+		for (var i = 2; i < ins.length; i++) if (ins[i].value) question.incorrectAnswers.push(ins[i].value);
 		questions.push(question);
 	});
 	requestPost('/api/new-qset', function(res) {
@@ -63,7 +63,7 @@ newQSet.addEventListener('submit', function(e) {
 		if (res.indexOf('Error') == 0) {
 			alert(res);
 		} else {
-			let details = document.createElement('details');
+			var details = document.createElement('details');
 			details.id = 'qset-' + res;
 			details.className = 'qset';
 			details.appendChild(document.createElement('summary'));
@@ -71,13 +71,13 @@ newQSet.addEventListener('submit', function(e) {
 			details.lastChild.lastChild.appendChild(document.createTextNode(document.getElementById('qset-title').value));
 			details.appendChild(document.createElement('ol'));
 			questions.forEach(function(question) {
-				let li = document.createElement('li');
+				var li = document.createElement('li');
 				li.appendChild(document.createElement('h3'));
 				li.lastChild.appendChild(document.createTextNode(question.text));
 				li.appendChild(document.createElement('div'));
 				li.lastChild.appendChild(document.createElement('p'));
 				li.lastChild.lastChild.appendChild(document.createTextNode('Correct: ' + question.answer));
-				let ul = document.createElement('ul');
+				var ul = document.createElement('ul');
 				question.incorrectAnswers.forEach(function(answer) {
 					ul.appendChild(document.createElement('li'));
 					ul.lastChild.appendChild(document.createTextNode(answer));
@@ -92,5 +92,5 @@ newQSet.addEventListener('submit', function(e) {
 		}
 	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)));
 });
-let target = document.querySelector('details:target');
+var target = document.querySelector('details:target');
 if (target) target.setAttribute('open', true);

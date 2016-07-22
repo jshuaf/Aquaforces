@@ -21,7 +21,7 @@ const http = require('http'),
 	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient;
-let statics = JSON.parse(fs.readFileSync('./statics.json'));
+var statics = JSON.parse(fs.readFileSync('./statics.json'));
 const apiServer = require('./api.js');
 global.errorForbidden = function(req, res, msg) {
 	respondPage('403', req, res, o(function*() {
@@ -42,7 +42,7 @@ global.errorNotFound = function(req, res) {
 global.respondPage = o(function*(title, req, res, callback, header, status) {
 	if (title) title = html(title);
 	if (!header) header = {};
-	let inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : ''),
+	var inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : ''),
 		noBG = header.noBG;
 	delete header.inhead;
 	delete header.description;
@@ -52,16 +52,16 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	if (typeof header['X-Frame-Options'] != 'string') header['X-Frame-Options'] = 'DENY';
 	if (typeof header['Vary'] != 'string') header['Vary'] = 'Cookie';
 	res.writeHead(status || 200, header);
-	let data = (yield fs.readFile('./html/a/head.html', yield)).toString();
+	var data = (yield fs.readFile('./html/a/head.html', yield)).toString();
 	res.write(yield addVersionNonces(data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"').replace('$title', (title ? title + ' · ' : '') + 'Aquaforces').replace('$inhead', inhead), req.url.pathname, yield));
 	callback();
 });
-let cache = {};
+var cache = {};
 const redirectURLs = ['/host', '/play', '/console'];
-let serverHandler = o(function*(req, res) {
+var serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	console.log(req.method, req.url.pathname);
-	let i;
+	var i;
 	if (i = statics[req.url.pathname]) {
 		yield respondPage(i.title, req, res, yield, {inhead: i.inhead});
 		res.write((yield addVersionNonces((yield fs.readFile(i.path, yield)).toString(), req.url.pathname, yield)));
@@ -70,7 +70,7 @@ let serverHandler = o(function*(req, res) {
 		req.url.pathname = req.url.pathname.substr(4);
 		if (req.method != 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
 		if (url.parse(req.headers.referer || '').host != req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
-		let post = '';
+		var post = '';
 		req.on('data', function(data) {
 			if (req.abort) return;
 			post += data;
@@ -86,14 +86,14 @@ let serverHandler = o(function*(req, res) {
 			apiServer(req, res, post);
 		});
 	} else if (req.url.pathname.includes('.')) {
-		let stats;
+		var stats;
 		try {
 			stats = yield fs.stat('./http/' + req.url.pathname, yield);
 		} catch (e) {
 			return errorNotFound(req, res);
 		}
 		if (!stats.isFile()) return errorNotFound(req, res);
-		let raw = !req.headers['accept-encoding'] || !req.headers['accept-encoding'].includes('gzip') || req.headers['accept-encoding'].includes('gzip;q=0');
+		var raw = !req.headers['accept-encoding'] || !req.headers['accept-encoding'].includes('gzip') || req.headers['accept-encoding'].includes('gzip;q=0');
 		if (cache[req.url.pathname]) {
 			res.writeHead(200, {
 				'Content-Encoding': raw ? 'identity' : 'gzip',
@@ -104,7 +104,7 @@ let serverHandler = o(function*(req, res) {
 			});
 			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
 			if (cache[req.url.pathname].updated < stats.mtime) {
-				let data;
+				var data;
 				try {
 					data = yield fs.readFile('http' + req.url.pathname, yield);
 				} catch (e) {
@@ -124,7 +124,7 @@ let serverHandler = o(function*(req, res) {
 				};
 			}
 		} else {
-			let data;
+			var data;
 			try {
 				data = yield fs.readFile('http' + req.url.pathname, yield);
 			} catch (e) {
@@ -156,10 +156,10 @@ let serverHandler = o(function*(req, res) {
 		}
 	} else if (req.url.pathname == '/host/') {
 		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
-		let qsetstr = '';
+		var qsetstr = '';
 		const requestCookies = req.headers.cookie;
 		const userID = cookie.parse(requestCookies).userID;
-		let qsetID = null;
+		var qsetID = null;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
@@ -171,7 +171,7 @@ let serverHandler = o(function*(req, res) {
 		}));
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
-		let qsetstr = '';
+		var qsetstr = '';
 		const requestCookies = req.headers.cookie;
 		const userID = cookie.parse(requestCookies).userID;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
@@ -199,14 +199,14 @@ let serverHandler = o(function*(req, res) {
 console.log('Connecting to mongodb…'.cyan);
 mongo.connect(config.mongoPath, function(err, db) {
 	if (err) throw err;
-	let i = usedDBCs.length;
+	var i = usedDBCs.length;
 	function handleCollection(err, collection) {
 		if (err) throw err;
 		dbcs[usedDBCs[i]] = collection;
 	}
 	while (i--) db.collection(usedDBCs[i], handleCollection);
 	console.log('Connected to mongodb.'.cyan);
-	let server = http.createServer(serverHandler).listen(config.port);
+	var server = http.createServer(serverHandler).listen(config.port);
 	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
 	require('./sockets.js')(server);
 	console.log(('Sockets running on port ' + config.port + ' over plain WS.').cyan);
@@ -221,8 +221,8 @@ mongo.connect(config.mongoPath, function(err, db) {
 			});
 			testRes.on('end', function() {
 				console.log('HTTP test passed, starting socket test.'.green);
-				let WS = require('ws');
-				let wsc = new WS('ws://localhost:' + config.port + '/test');
+				var WS = require('ws');
+				var wsc = new WS('ws://localhost:' + config.port + '/test');
 				wsc.on('open', function() {
 					console.log('Connected to socket.');
 				});
