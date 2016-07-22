@@ -42,7 +42,7 @@ function requestGet(uri, callback) {
 	i.send(null);
 }
 
-const gAuthClientID = '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com';
+var gAuthClientID = '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com';
 
 addEventListener('DOMContentLoaded', function() {
 	var logInButton = document.getElementById('log-in');
@@ -57,7 +57,7 @@ addEventListener('DOMContentLoaded', function() {
 		logInButton.addEventListener('click', function() {
 			var auth = gapi.auth2.getAuthInstance();
 			auth.signIn().then(function() {
-				const idToken = auth.currentUser.get().getAuthResponse().id_token;
+				var idToken = auth.currentUser.get().getAuthResponse().id_token;
 				requestGet('https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + idToken, function(res) {
 					try {
 						res = JSON.parse(res);

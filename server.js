@@ -1,6 +1,6 @@
 'use strict';
 /*eslint-disable no-process-env*/
-const config = {
+var config = {
 	port: process.env.PORT || (process.argv.includes('--production') ? 80 : 3000),
 	mongoPath: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/Aquaforces'
 };
@@ -8,9 +8,9 @@ const config = {
 require('./essentials.js');
 require('colors');
 global.dbcs = {};
-const usedDBCs = ['qsets', 'users'];
+var usedDBCs = ['qsets', 'users'];
 
-const http = require('http'),
+var http = require('http'),
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
 	zlib = require('zlib'),
@@ -22,7 +22,7 @@ const http = require('http'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient;
 var statics = JSON.parse(fs.readFileSync('./statics.json'));
-const apiServer = require('./api.js');
+var apiServer = require('./api.js');
 global.errorForbidden = function(req, res, msg) {
 	respondPage('403', req, res, o(function*() {
 		res.write('<h1>Error 403</h1>');
@@ -57,7 +57,7 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	callback();
 });
 var cache = {};
-const redirectURLs = ['/host', '/play', '/console'];
+var redirectURLs = ['/host', '/play', '/console'];
 var serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	console.log(req.method, req.url.pathname);
@@ -157,8 +157,8 @@ var serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/host/') {
 		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		const requestCookies = req.headers.cookie;
-		const userID = cookie.parse(requestCookies).userID;
+		var requestCookies = req.headers.cookie;
+		var userID = cookie.parse(requestCookies).userID;
 		var qsetID = null;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
@@ -172,8 +172,8 @@ var serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		const requestCookies = req.headers.cookie;
-		const userID = cookie.parse(requestCookies).userID;
+		var requestCookies = req.headers.cookie;
+		var userID = cookie.parse(requestCookies).userID;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {

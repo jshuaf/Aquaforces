@@ -6,7 +6,7 @@ function inputParentRemove() {
 	if (!this.value) this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 }
 
-const userID = Cookies.get('userID');
+var userID = Cookies.get('userID');
 if (!userID) {
 	document.getElementById('content').children.forEach((child) => {
 		child.hidden = (child.id !== 'log-in');

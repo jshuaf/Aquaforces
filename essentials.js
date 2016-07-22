@@ -1,5 +1,5 @@
 'use strict';
-const crypto = require('crypto'),
+var crypto = require('crypto'),
 	fs = require('fs'),
 	path = require('path');
 String.prototype.replaceAll = function(find, replace) {

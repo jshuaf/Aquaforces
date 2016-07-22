@@ -1,8 +1,8 @@
 'use strict';
-const ws = require('ws');
+var ws = require('ws');
 var games = {};
 
-const maxFuzzyTime = 10000;
+var maxFuzzyTime = 10000;
 
 module.exports = function(server) {
 	var wss = new ws.Server({server});

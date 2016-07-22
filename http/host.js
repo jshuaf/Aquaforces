@@ -22,7 +22,7 @@ function Boat() {
 	this.prevRank = 0;
 }
 
-const userID = Cookies.get('userID');
+var userID = Cookies.get('userID');
 if (!userID) {
 	document.getElementById('content').children.forEach((child) => {
 		child.hidden = (child.id !== 'log-in');
