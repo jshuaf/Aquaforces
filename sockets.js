@@ -96,7 +96,7 @@ module.exports = function(server) {
 						});
 						tquestion.owner.trysend(JSON.stringify({event: 'question', question: question.text}));
 						if (!tquestion.owner.questionIDsDone.includes(questionID)) tquestion.owner.questionIDsDone.push(questionID);
-						for (var i = 0; i < 2; i++) {
+						for (let i = 0; i < 2; i++) {
 							let ttws = tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)];
 							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						}
@@ -193,7 +193,7 @@ module.exports = function(server) {
 						tws.game = games[id];
 						id = '000000000' + id.toString();
 						tws.trysend(JSON.stringify({event: 'new-game', id: id.substr(-9, 3) + '\u2009' + id.substr(-6, 3) + '\u2009' + id.substr(-3)}));
-						var answers = [];
+						let answers = [];
 						for (let question of tws.game.questions) {
 							if (!answers.includes(question.answer)) answers.push(question.answer);
 							for (let answer of question.incorrectAnswers) {

@@ -1,6 +1,6 @@
 'use strict';
-var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
-var cont = document.getElementById('cont'),
+let socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/');
+let cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error'),
 	rockEl = document.getElementById('rock'),
 	gameHasEnded = false;
@@ -10,12 +10,12 @@ function setState(id) {
 		if (e.id != id) e.hidden = true;
 	});
 	document.getElementById(id).hidden = false;
-	var e = document.getElementById(id).getElementsByTagName('input');
+	let e = document.getElementById(id).getElementsByTagName('input');
 	if (e.length) e[e.length - 1].focus();
 	document.documentElement.classList.toggle('no-bg', id == 'game');
 }
 function flash(color) {
-	var colors = ['red', 'yellow', 'green', 'red-double', 'green-double'];
+	let colors = ['red', 'yellow', 'green', 'red-double', 'green-double'];
 	colors.forEach(function(cName) {
 		document.documentElement.classList.remove('flash-' + cName);
 	});
@@ -23,7 +23,7 @@ function flash(color) {
 		document.documentElement.classList.add('flash-' + color);
 	});
 }
-var rock = {},
+let rock = {},
 	answers = [],
 	correctAnswerQueue = [],
 	addAnswerInterval;
@@ -64,7 +64,7 @@ document.addEventListener('visibilitychange', function() {
 	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
 });
 function addSubmittedAnswer(text, correct) {
-	var span = document.createElement('span');
+	let span = document.createElement('span');
 	span.appendChild(document.createTextNode(text));
 	if (correct) span.className = 'correct';
 	document.getElementById('past-answers').insertBefore(span, document.getElementById('past-answers').firstChild);
@@ -111,12 +111,12 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 	document.getElementById('canoe').dataset.crewnum = document.getElementById('crewnum').value;
 	setState('wait');
 });
-var timeBar = document.getElementById('timebar'),
+let timeBar = document.getElementById('timebar'),
 	timeTotal = 25,
 	timeProportion = 1,
 	lastTime,
 	hp = 1;
-var answersEl = document.getElementById('answers');
+let answersEl = document.getElementById('answers');
 function answerClickListener() {
 	this.parentNode.removeChild(this);
 	socket.send(JSON.stringify({
@@ -125,14 +125,14 @@ function answerClickListener() {
 	}));
 }
 function addAnswer() {
-	var answerEl = document.createElement('div'),
+	let answerEl = document.createElement('div'),
 		answer,
 		correctAnswer = false;
 	if (correctAnswerQueue.length && Math.random() < 0.4) {
 		answer = correctAnswerQueue.shift();
 		correctAnswer = true;
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
-	var answerInner = document.createElement('div');
+	let answerInner = document.createElement('div');
 	answerInner.appendChild(document.createTextNode(answer));
 	if (Math.random() < 0.4) answerEl.classList.add('alt');
 	answerEl.appendChild(answerInner);
@@ -157,7 +157,7 @@ function failQuestion() {
 	timeProportion = 1;
 }
 function animationUpdate() {
-	var thisTime = new Date().getTime(),
+	let thisTime = new Date().getTime(),
 		dt = thisTime - lastTime;
 	timeBar.style.width = 100 * timeProportion + '%';
 	timeBar.style.background = 'hsl(' + 110 * timeProportion + ', 100%, 50%)';
@@ -171,7 +171,7 @@ function animationUpdate() {
 		}
 		answersEl.children.forEach(function(f) {
 			if (e == f) return;
-			var sd = (+e.dataset.vx - f.dataset.vx) * (+e.dataset.vx - f.dataset.vx) + (+e.dataset.vy - f.dataset.vy) * (+e.dataset.vy - f.dataset.vy);
+			let sd = (+e.dataset.vx - f.dataset.vx) * (+e.dataset.vx - f.dataset.vx) + (+e.dataset.vy - f.dataset.vy) * (+e.dataset.vy - f.dataset.vy);
 			e.dataset.vx = +e.dataset.vx - 1e-5 * (+e.dataset.vx - f.dataset.vx) / sd;
 			e.dataset.vx = +e.dataset.vx - 1e-5 * (+e.dataset.vy - f.dataset.vy) / sd;
 		});

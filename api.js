@@ -14,12 +14,12 @@ module.exports = function(req, res, post) {
 		}
 		if (!(uquestions instanceof Array)) return res.writeHead(400) || res.end('Questions must be an array.');
 		let questions = [];
-		for (var i = 0; i < uquestions.length; i++) {
-			var q = uquestions[i];
+		for (let i = 0; i < uquestions.length; i++) {
+			let q = uquestions[i];
 			if (!q.text || !q.answer || !q.incorrectAnswers) res.writeHead(400) || res.end('Question ' + i + ' is malformed.');
 			if (q.text.length > 144) res.writeHead(400) || res.end('Question ' + i + ' is too long.');
 			if (q.answer.length > 64) res.writeHead(400) || res.end('The correct answer of question ' + i + ' is too long.');
-			for (var j = 0; j < q.incorrectAnswers.length; j++) {
+			for (let j = 0; j < q.incorrectAnswers.length; j++) {
 				if (typeof q.incorrectAnswers[j] != 'string') res.writeHead(400) || res.end('Incorrect answer ' + j + ' of question ' + i + ' is malformed.');
 				if (q.incorrectAnswers[j].length > 64) res.writeHead(400) || res.end('Incorrect answer ' + j + ' of question ' + i + ' is too long.');
 			}
