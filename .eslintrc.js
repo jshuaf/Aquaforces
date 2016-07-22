@@ -111,7 +111,6 @@ module.exports = {
 		"constructor-super": ["error"],
 		"generator-star-spacing": ["error", {"before": false, "after": false}],
 		"no-class-assign": ["error"],
-		"no-var-assign": ["error"],
 		"no-dupe-class-members": ["error"],
 		"no-new-symbol": ["error"],
 		"no-this-before-super": ["error"],
