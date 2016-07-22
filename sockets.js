@@ -225,7 +225,12 @@ module.exports = function(server) {
 					if (tws.game.crews.length < 1) return tws.error('Need at least one crew to begin game.');
 					tws.game.hasStarted = true;
 					tws.game.users.forEach(function(ttws) {
-						ttws.trysend(JSON.stringify({event: 'start-game', state: 'game', answers: tws.game.answers}));
+						ttws.trysend(JSON.stringify({
+							event: 'start-game',
+							state: 'game',
+							answers: tws.game.answers,
+							sailorsInCrew: ttws.crew.members.length
+						}));
 					});
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(member) {
@@ -245,6 +250,10 @@ module.exports = function(server) {
 				} else if (m.event == 'update-rank') {
 					tws.game.crews[m.crewnum].members.forEach(function(ttws) {
 						ttws.trysend(JSON.stringify({event: 'update-rank', rank: m.rank}));
+					});
+				} else if (m.event == 'update-hp') {
+					tws.game.crews[m.crewnum].members.forEach(function(ttws) {
+						ttws.trysend(JSON.stringify({event: 'update-hp', hp: m.hp}));
 					});
 				} else if (m.event == 'end-game') {
 					if (!tws.game) return tws.error('Game not found.', 'dashboard');
