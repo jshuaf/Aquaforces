@@ -181,7 +181,10 @@ module.exports = function(server) {
 					dbcs.qsets.findOne({_id: m.qsetID}, function(err, qset) {
 						if (err) throw err;
 						if (!qset) return tws.error('Question set not found.', 'dashboard');
-						var id = Math.floor(Math.random() * 1e9);
+						var id = Math.floor(Math.random() * 1e6);
+						while (id in games) {
+							id = Math.floor(Math.random() * 1e6);
+						}
 						games[id] = {
 							host: tws,
 							crews: [],
@@ -191,8 +194,7 @@ module.exports = function(server) {
 							hasStarted: false
 						};
 						tws.game = games[id];
-						id = '000000000' + id.toString();
-						tws.trysend(JSON.stringify({event: 'new-game', id: id.substr(-9, 3) + '\u2009' + id.substr(-6, 3) + '\u2009' + id.substr(-3)}));
+						tws.trysend(JSON.stringify({event: 'new-game', id: id.toString()}));
 						var answers = [];
 						for (var question of tws.game.questions) {
 							if (!answers.includes(question.answer)) answers.push(question.answer);
@@ -260,7 +262,23 @@ module.exports = function(server) {
 					tws.game.users.forEach(function(ttws) {
 						ttws.trysend(JSON.stringify({event: 'end-game', state: 'game-ended'}));
 					});
+					for (var id in games) {
+						var game = games[id];
+						if (game.host == tws) {
+							delete games[id];
+							break;
+						}
+					}
 				} else tws.error('Unknown socket event ' + m.event + ' received.');
+			});
+			tws.on('close', function() {
+				for (var id in games) {
+					var game = games[id];
+					if (game.host == tws) {
+						delete games[id];
+						break;
+					}
+				}
 			});
 		} else {
 			tws.trysend(JSON.stringify({
