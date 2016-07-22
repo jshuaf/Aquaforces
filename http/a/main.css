@@ -191,30 +191,31 @@ a:active { color: #f44 }
 	display: block;
 }
 #canoe * { transition: opacity 0.2s }
-#canoe:not([data-hp='20']) .broken-canoe { opacity: 0 }
-#canoe[data-hp='20'] .good-canoe { opacity: 0 }
+#canoe-container:not([data-hp='20']) #canoe .broken-canoe { opacity: 0 }
+#canoe-container[data-hp='20'] #canoe .good-canoe { opacity: 0 }
 #canoe .canoe { fill: #666 }
 #canoe .canoe-inside { fill: #444 }
 #canoe .water { fill: #49b }
-#canoe[data-hp='60'] .water, #canoe[data-state='100'] .water { opacity: 0 }
+#canoe-container[data-hp='60'] #canoe .water, #canoe-container[data-state='100'] #canoe .water { opacity: 0 }
 #canoe .seat { fill: #999 }
 #canoe .skin { fill: #fc9 }
 #canoe .pants { fill: #333 }
 #canoe .oars { fill: #c96 }
-#canoe[data-crewnum='1'] .shirts { fill: #849 }
-#canoe[data-crewnum='2'] .shirts { fill: #349 }
-#canoe[data-crewnum='3'] .shirts { fill: #c9c }
-#canoe[data-crewnum='4'] .shirts { fill: #494 }
-#canoe[data-crewnum='5'] .shirts { fill: #bd6 }
-#canoe[data-crewnum='6'] .shirts { fill: #f84 }
-#canoe[data-crewnum='7'] .shirts { fill: #e33 }
-#canoe[data-crewnum='8'] .shirts { fill: #ed4 }
-#canoe[data-crewnum='9'] .shirts { fill: #7cc }
+#canoe-container[data-crewnum='1'] #canoe .shirts { fill: #849 }
+#canoe-container[data-crewnum='2'] #canoe .shirts { fill: #349 }
+#canoe-container[data-crewnum='3'] #canoe .shirts { fill: #c9c }
+#canoe-container[data-crewnum='4'] #canoe .shirts { fill: #494 }
+#canoe-container[data-crewnum='5'] #canoe .shirts { fill: #bd6 }
+#canoe-container[data-crewnum='6'] #canoe .shirts { fill: #f84 }
+#canoe-container[data-crewnum='7'] #canoe .shirts { fill: #e33 }
+#canoe-container[data-crewnum='8'] #canoe .shirts { fill: #ed4 }
+#canoe-container[data-crewnum='9'] #canoe .shirts { fill: #7cc }
 #canoe .hair { fill: #742 }
 #canoe .sweat { fill: #eee }
-#canoe[data-hp='100'] .water { opacity: 0 }
-#canoe[data-sailors='2'] .sailor:nth-of-type(4), #canoe[data-sailors='3'] .sailor:nth-of-type(4), #canoe[data-sailors='2'] .sailor:nth-of-type(2) { opacity: 0 }
+#canoe-container[data-hp='100'] #canoe .water { opacity: 0 }
+#canoe-container[data-sailors='2'] #canoe .sailor:nth-of-type(4), #canoe[data-sailors='3'] #canoe .sailor:nth-of-type(3), #canoe[data-sailors='4'] #canoe .sailor:nth-of-type(2) { opacity: 0 }
 #game input[type='text'] { width: 100% }
+#canoe-container { display: 'table' }
 #answers > div {
 	position: absolute;
 	top: 0; left: 0;
