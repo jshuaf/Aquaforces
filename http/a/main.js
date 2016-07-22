@@ -65,7 +65,8 @@ addEventListener('DOMContentLoaded', function() {
 						alert('Error: Invalid JSON response from Google.');
 					}
 					if (res.aud == gAuthClientID) {
-						requestPost('/api/login', function() {location.reload();}, 'id=' + encodeURIComponent(res.sub));
+						Cookies.set('userID', res.sub);
+						requestPost('/api/login', function() {window.location.href = '/console';}, null);
 					}
 					else alert('Error: Google ID Token integrity compromised.');
 				});
