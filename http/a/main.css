@@ -76,6 +76,7 @@ input {
 	border: 2px solid #aaa;
 }
 label input:not(#crewnum) { width: 100% }
+#crewnum { margin-bottom: 0.8em }
 #join {
 	width: 100%;
 	max-width: 26em;
