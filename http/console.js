@@ -6,6 +6,13 @@ function inputParentRemove() {
 	if (!this.value) this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
 }
 
+const userID = Cookies.get('userID');
+if (!userID) {
+	document.getElementById('content').children.forEach((child) => {
+		child.hidden = (child.id !== 'log-in');
+	});
+}
+
 let newQSet = document.getElementById('new-qset'),
 	protoLi = document.getElementById('questions').firstElementChild.cloneNode(true),
 	protoDetails = newQSet.firstElementChild.cloneNode(true);

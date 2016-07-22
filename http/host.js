@@ -21,6 +21,14 @@ function Boat() {
 	this.rank = 0;
 	this.prevRank = 0;
 }
+
+const userID = Cookies.get('userID');
+if (!userID) {
+	document.getElementById('content').children.forEach((child) => {
+		child.hidden = (child.id !== 'log-in');
+	});
+}
+
 function setState(id) {
 	errorEl.textContent = '';
 	cont.children.forEach(function(e) {
