@@ -44,7 +44,8 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		addAnswerInterval = setInterval(addAnswer, 2500);
+		addAnswerInterval = setInterval(addAnswer, 1800);
+		document.getElementById('canoe').dataset.sailors = m.sailorsInCrew;
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -55,11 +56,12 @@ socket.onmessage = function(m) {
 	if (m.event == 'collide-rock') collideRock();
 	if (m.event == 'end-rock') moveRock(7);
 	if (m.event == 'update-rank') document.getElementById('rank').firstChild.nodeValue = m.rank;
+	if (m.event == 'update-hp') document.getElementById('canoe').dataset.hp = m.hp <= 0.2 ? 20 : m.hp <= 0.4 ? 40 : m.hp <= 60 ? 60 : 100;
 	if (m.event == 'end-game') endGame();
 };
 document.addEventListener('visibilitychange', function() {
 	if (document.hidden) clearInterval(addAnswerInterval);
-	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 2500);
+	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
@@ -106,6 +108,7 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 		crewnum: parseInt(document.getElementById('crewnum').value)
 	}));
 	document.getElementById('crewnumdisplay').textContent = parseInt(document.getElementById('crewnum').value);
+	document.getElementById('canoe').dataset.crewnum = document.getElementById('crewnum').value;
 	setState('wait');
 });
 var timeBar = document.getElementById('timebar'),
