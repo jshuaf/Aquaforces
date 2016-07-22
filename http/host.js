@@ -3,11 +3,6 @@ var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') +
 var cont = document.getElementById('cont'),
 	errorEl = document.getElementById('error');
 
-const userID = Cookies.get('userID');
-if (!userID) {
-	errorEl.innerHTML = "<p>You're not logged in.</p><a onclick='authorizeUser()'>Login here.</a>";
-}
-
 var boats = {},
 	cameraP = 0,
 	cameraS = 1;
