@@ -1,11 +1,11 @@
 'use strict';
-const cookie = require('cookie');
+var cookie = require('cookie');
 module.exports = function(req, res, post) {
 	if (req.url.pathname == '/new-qset') {
 		if (!post.name) return res.writeHead(400) || res.end('Set name is required.');
 		if (typeof post.name != 'string') return res.writeHead(400) || res.end('Set name must be a string.');
 		if (post.name.length > 144) return res.writeHead(400) || res.end('Set name length must not be greater than 144 characters.');
-		let uquestions;
+		var uquestions;
 		try {
 			uquestions = JSON.parse(post.questions);
 		} catch (e) {
@@ -13,7 +13,7 @@ module.exports = function(req, res, post) {
 			res.end('Invalid JSON in questions.');
 		}
 		if (!(uquestions instanceof Array)) return res.writeHead(400) || res.end('Questions must be an array.');
-		let questions = [];
+		var questions = [];
 		for (var i = 0; i < uquestions.length; i++) {
 			var q = uquestions[i];
 			if (!q.text || !q.answer || !q.incorrectAnswers) res.writeHead(400) || res.end('Question ' + i + ' is malformed.');
@@ -29,8 +29,8 @@ module.exports = function(req, res, post) {
 				incorrectAnswers: q.incorrectAnswers
 			});
 		}
-		const qsetID = generateID();
-		const userID = cookie.parse(req.headers.cookie).userID;
+		var qsetID = generateID();
+		var userID = cookie.parse(req.headers.cookie).userID;
 		dbcs.qsets.insert({
 			_id: qsetID,
 			title: post.name,
@@ -44,8 +44,8 @@ module.exports = function(req, res, post) {
 		);
 		res.end(qsetID);
 	} else if (req.url.pathname == '/login') {
-		const userID = cookie.parse(req.headers.cookie).userID;
-		const existingUser = dbcs.users.find({userID});
+		var userID = cookie.parse(req.headers.cookie).userID;
+		var existingUser = dbcs.users.find({userID});
 		if (!existingUser) {
 			dbcs.users.insert({
 				_id: userID,

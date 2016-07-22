@@ -26,7 +26,8 @@ function requestPost(uri, callback, params) {
 	i.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	i.send(params);
 	i.onload = function() {
-		callback(this.status == 204 ? 'Success' : this.responseText);
+		if (this.status == 204) return callback('Success');
+		else return callback(this.responseText);
 	};
 	return i;
 }
@@ -35,7 +36,8 @@ function requestGet(uri, callback) {
 	var i = new XMLHttpRequest();
 	i.open('GET', uri, true);
 	i.onload = function() {
-		callback(this.status == 204 ? 'Success' : this.responseText);
+		if (this.status == 204) return callback('Success');
+		else return callback(this.responseText);
 	};
 	i.send(null);
 }
@@ -55,14 +57,17 @@ addEventListener('DOMContentLoaded', function() {
 		logInButton.addEventListener('click', function() {
 			var auth = gapi.auth2.getAuthInstance();
 			auth.signIn().then(function() {
-				console.log(auth.currentUser.get().getAuthResponse().id_token);
-				requestGet('https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + auth.currentUser.get().getAuthResponse().id_token, function(res) {
+				var idToken = auth.currentUser.get().getAuthResponse().id_token;
+				requestGet('https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' + idToken, function(res) {
 					try {
 						res = JSON.parse(res);
 					} catch (e) {
 						alert('Error: Invalid JSON response from Google.');
 					}
-					if (res.aud == gAuthClientID) requestPost('/api/login', location.reload, 'id=' + encodeURIComponent(res.sub));
+					if (res.aud == gAuthClientID) {
+						Cookies.set('userID', res.sub);
+						requestPost('/api/login', function() {window.location.href = '/console';}, null);
+					}
 					else alert('Error: Google ID Token integrity compromised.');
 				});
 			});
