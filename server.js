@@ -83,7 +83,7 @@ let serverHandler = o(function*(req, res) {
 		req.on('end', function() {
 			if (req.abort) return;
 			post = querystring.parse(post);
-			apiServer(req, res, post, cookie);
+			apiServer(req, res, post);
 		});
 	} else if (req.url.pathname.includes('.')) {
 		let stats;
