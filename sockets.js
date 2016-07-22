@@ -262,7 +262,23 @@ module.exports = function(server) {
 					tws.game.users.forEach(function(ttws) {
 						ttws.trysend(JSON.stringify({event: 'end-game', state: 'game-ended'}));
 					});
+					for (var id in games) {
+						var game = games[id];
+						if (game.host == tws) {
+							delete games[id];
+							break;
+						}
+					}
 				} else tws.error('Unknown socket event ' + m.event + ' received.');
+			});
+			tws.on('close', function() {
+				for (var id in games) {
+					var game = games[id];
+					if (game.host == tws) {
+						delete games[id];
+						break;
+					}
+				}
 			});
 		} else {
 			tws.trysend(JSON.stringify({
