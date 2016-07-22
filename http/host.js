@@ -130,7 +130,7 @@ document.getElementById('tgame').addEventListener('submit', function(e) {
 	playing = true;
 	document.documentElement.classList.add('hostgame');
 	document.getElementById('lonelyfolks').classList.add('hide');
-	document.getElementById('crew-header').hidden = document.getElementById('start-game-btn').hidden = true;
+	document.getElementById('crew-header').hidden = document.getElementById('start-game-btn').hidden = document.getElementById('crew-info-p').hidden = true;
 	crewsEl.classList.remove('studentselect');
 	crewsEl.classList.add('leaderboard');
 	crewsEl.children.forEach(function(e, i) {

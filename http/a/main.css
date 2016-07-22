@@ -9,7 +9,7 @@ html {
 	color: #223;
 }
 body { margin: 1em 1.3em }
-html:not(.hostgame):not(.no-bg) { background-color: #bee6f1 }
+html:not(.hostgame):not(.no-bg) { background-color: #bef }
 @media (min-height: 32em) {
 	html:not(.hostgame):not(.no-bg) {
 		background-image: url('/img/background.svg');

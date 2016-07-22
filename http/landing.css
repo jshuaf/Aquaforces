@@ -22,7 +22,7 @@ main > section:first-of-type p { display: none }
 	background: #256;
 	color: #eee;
 }
-#benefits { background: #eee }
+#benefits { background: #fff }
 section::after {
 	content: '';
 	display: table;
