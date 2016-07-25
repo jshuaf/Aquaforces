@@ -75,6 +75,10 @@ input {
 	padding: 0.25em 1em;
 	border: 2px solid #aaa;
 }
+input:focus {
+	outline: none;
+	border: 2px solid #28f;
+}
 label input:not(#crewnum) { width: 100% }
 #crewnum { margin-bottom: 0.8em }
 #join {
@@ -184,38 +188,42 @@ a:active { color: #f44 }
 	top: 0; right: 0; bottom: 0; left: 0;
 	overflow: hidden;
 }
-#canoe {
+#boat {
 	width: 24.52vmin;
 	height: 39.18vmin;
 	margin: 34.91vh auto 0;
 	display: block;
 }
-#canoe * { transition: opacity 0.2s }
-#canoe-container:not([data-hp='20']) #canoe .broken-canoe { opacity: 0 }
-#canoe-container[data-hp='20'] #canoe .good-canoe { opacity: 0 }
-#canoe .canoe { fill: #666 }
-#canoe .canoe-inside { fill: #444 }
-#canoe .water { fill: #49b }
-#canoe-container[data-hp='60'] #canoe .water, #canoe-container[data-state='100'] #canoe .water { opacity: 0 }
-#canoe .seat { fill: #999 }
-#canoe .skin { fill: #fc9 }
-#canoe .pants { fill: #333 }
-#canoe .oars { fill: #c96 }
-#canoe-container[data-crewnum='1'] #canoe .shirts { fill: #849 }
-#canoe-container[data-crewnum='2'] #canoe .shirts { fill: #349 }
-#canoe-container[data-crewnum='3'] #canoe .shirts { fill: #c9c }
-#canoe-container[data-crewnum='4'] #canoe .shirts { fill: #494 }
-#canoe-container[data-crewnum='5'] #canoe .shirts { fill: #bd6 }
-#canoe-container[data-crewnum='6'] #canoe .shirts { fill: #f84 }
-#canoe-container[data-crewnum='7'] #canoe .shirts { fill: #e33 }
-#canoe-container[data-crewnum='8'] #canoe .shirts { fill: #ed4 }
-#canoe-container[data-crewnum='9'] #canoe .shirts { fill: #7cc }
-#canoe .hair { fill: #742 }
-#canoe .sweat { fill: #eee }
-#canoe-container[data-hp='100'] #canoe .water { opacity: 0 }
-#canoe-container[data-sailors='2'] #canoe .sailor:nth-of-type(4), #canoe[data-sailors='3'] #canoe .sailor:nth-of-type(3), #canoe[data-sailors='4'] #canoe .sailor:nth-of-type(2) { opacity: 0 }
+#boat * { transition: opacity 0.2s }
+#boat:not([data-hp='20']) .broken-canoe { opacity: 0 }
+#boat[data-hp='0'] .good-canoe, #boat[data-hp='20'] .good-canoe { opacity: 0 }
+#boat:not([data-hp='0']) .raft, #boat[data-hp='0'] .seat { opacity: 0 }
+#boat .canoe { fill: #666 }
+#boat .canoe-inside { fill: #444 }
+#boat .raft-outer { fill: #fb5 }
+#boat .raft-line { fill: #fa4 }
+#boat .raft-middle { fill: #fe6 }
+#boat .raft-inner { fill: #f94 }
+#boat .water { fill: #49b }
+#boat[data-hp='60'] .water, #boat[data-state='100'] .water { opacity: 0 }
+#boat .seat { fill: #999 }
+#boat .skin { fill: #fc9 }
+#boat .pants { fill: #333 }
+#boat .oars { fill: #c96 }
+#boat[data-crewnum='1'] .shirts { fill: #849 }
+#boat[data-crewnum='2'] .shirts { fill: #349 }
+#boat[data-crewnum='3'] .shirts { fill: #c9c }
+#boat[data-crewnum='4'] .shirts { fill: #494 }
+#boat[data-crewnum='5'] .shirts { fill: #bd6 }
+#boat[data-crewnum='6'] .shirts { fill: #f84 }
+#boat[data-crewnum='7'] .shirts { fill: #e33 }
+#boat[data-crewnum='8'] .shirts { fill: #ed4 }
+#boat[data-crewnum='9'] .shirts { fill: #7cc }
+#boat .hair { fill: #742 }
+#boat .sweat { fill: #eee }
+#boat[data-hp='100'] .sweat { opacity: 0 }
+#boat[data-sailors='2'] .sailor:nth-of-type(4), #boat[data-sailors='3'] .sailor:nth-of-type(3), #boat[data-sailors='4'] .sailor:nth-of-type(2) { opacity: 0 }
 #game input[type='text'] { width: 100% }
-#canoe-container { display: 'table' }
 #answers > div {
 	position: absolute;
 	top: 0; left: 0;
