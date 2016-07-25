@@ -248,6 +248,7 @@ a:active { color: #f44 }
 	position: absolute;
 	top: 0;
 	width: calc(3em + 6vmax);
+	transition: opacity 1s;
 }
 .half-divider { display: flex }
 .half {

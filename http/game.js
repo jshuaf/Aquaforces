@@ -85,8 +85,19 @@ function initRock() {
 	rock.position = 0;
 }
 function moveRock(newPosition) {
-	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 100000;
+	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 50000;
 	rock.position = newPosition;
+	if (newPosition == 7) {
+		requestAnimationFrame(function() {
+			rockEl.style.opacity = 0;
+			setTimeout(function() {
+				rock.shown = false;
+				requestAnimationFrame(function() {
+					rockEl.opacity = 1;
+				});
+			});
+		});
+	}
 }
 socket.onclose = function() {
 	errorEl.textContent = 'Connection lost.';
