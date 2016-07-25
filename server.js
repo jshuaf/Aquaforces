@@ -168,7 +168,7 @@ let serverHandler = o(function*(req, res) {
 			}
 		}));
 	} else if (req.url.pathname == '/console/') {
-		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
+		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '';
 		const requestCookies = req.headers.cookie;
 		const userID = cookie.parse(requestCookies).userID;
