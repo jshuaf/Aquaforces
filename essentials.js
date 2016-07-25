@@ -1,10 +1,10 @@
 'use strict';
-var crypto = require('crypto'),
+const crypto = require('crypto'),
 	fs = require('fs'),
 	path = require('path');
 String.prototype.replaceAll = function(find, replace) {
 	if (typeof find == 'string') return this.split(find).join(replace);
-	var t = this, i, j;
+	let t = this, i, j;
 	while (typeof(i = find.shift()) == 'string' && typeof(j = replace.shift()) == 'string') t = t.replaceAll(i || '', j || '');
 	return t;
 };
@@ -35,10 +35,10 @@ global.getVersionNonce = o(function*(pn, file, cb) {
 	}
 });
 global.addVersionNonces = o(function*(str, pn, cb) {
-	for (var i = 0; i < str.length; i++) {
+	for (let i = 0; i < str.length; i++) {
 		if (str.substr(i).match(/^\.[A-z]{1,8}"/)) {
 			while (str[i] && str[i] != '"') i++;
-			var substr = str.substr(0, i).match(/"[^"]+?$/)[0].substr(1);
+			let substr = str.substr(0, i).match(/"[^"]+?$/)[0].substr(1);
 			if (substr.includes('googleusercontent') || substr.includes(':')) continue;
 			try {
 				str = str.substr(0, i) + '?v=' + (yield getVersionNonce(pn, substr, yield)) + str.substr(i);
