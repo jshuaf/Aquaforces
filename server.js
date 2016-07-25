@@ -1,6 +1,6 @@
 'use strict';
 /*eslint-disable no-process-env*/
-var config = {
+const config = {
 	port: process.env.PORT || (process.argv.includes('--production') ? 80 : 3000),
 	mongoPath: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/Aquaforces'
 };
@@ -8,9 +8,9 @@ var config = {
 require('./essentials.js');
 require('colors');
 global.dbcs = {};
-var usedDBCs = ['qsets', 'users'];
+const usedDBCs = ['qsets', 'users'];
 
-var http = require('http'),
+const http = require('http'),
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
 	zlib = require('zlib'),
@@ -21,8 +21,8 @@ var http = require('http'),
 	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient;
-var statics = JSON.parse(fs.readFileSync('./statics.json'));
-var apiServer = require('./api.js');
+let statics = JSON.parse(fs.readFileSync('./statics.json'));
+const apiServer = require('./api.js');
 global.errorForbidden = function(req, res, msg) {
 	respondPage('403', req, res, o(function*() {
 		res.write('<h1>Error 403</h1>');
@@ -42,7 +42,7 @@ global.errorNotFound = function(req, res) {
 global.respondPage = o(function*(title, req, res, callback, header, status) {
 	if (title) title = html(title);
 	if (!header) header = {};
-	var inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : ''),
+	let inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : ''),
 		noBG = header.noBG;
 	delete header.inhead;
 	delete header.description;
@@ -52,16 +52,16 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	if (typeof header['X-Frame-Options'] != 'string') header['X-Frame-Options'] = 'DENY';
 	if (typeof header['Vary'] != 'string') header['Vary'] = 'Cookie';
 	res.writeHead(status || 200, header);
-	var data = (yield fs.readFile('./html/a/head.html', yield)).toString();
+	let data = (yield fs.readFile('./html/a/head.html', yield)).toString();
 	res.write(yield addVersionNonces(data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"').replace('$title', (title ? title + ' · ' : '') + 'Aquaforces').replace('$inhead', inhead), req.url.pathname, yield));
 	callback();
 });
-var cache = {};
-var redirectURLs = ['/host', '/play', '/console'];
-var serverHandler = o(function*(req, res) {
+let cache = {};
+const redirectURLs = ['/host', '/play', '/console'];
+let serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	console.log(req.method, req.url.pathname);
-	var i;
+	let i;
 	if (i = statics[req.url.pathname]) {
 		yield respondPage(i.title, req, res, yield, {inhead: i.inhead});
 		res.write((yield addVersionNonces((yield fs.readFile(i.path, yield)).toString(), req.url.pathname, yield)));
@@ -70,7 +70,7 @@ var serverHandler = o(function*(req, res) {
 		req.url.pathname = req.url.pathname.substr(4);
 		if (req.method != 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
 		if (url.parse(req.headers.referer || '').host != req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
-		var post = '';
+		let post = '';
 		req.on('data', function(data) {
 			if (req.abort) return;
 			post += data;
@@ -86,14 +86,14 @@ var serverHandler = o(function*(req, res) {
 			apiServer(req, res, post);
 		});
 	} else if (req.url.pathname.includes('.')) {
-		var stats;
+		let stats;
 		try {
 			stats = yield fs.stat('./http/' + req.url.pathname, yield);
 		} catch (e) {
 			return errorNotFound(req, res);
 		}
 		if (!stats.isFile()) return errorNotFound(req, res);
-		var raw = !req.headers['accept-encoding'] || !req.headers['accept-encoding'].includes('gzip') || req.headers['accept-encoding'].includes('gzip;q=0');
+		let raw = !req.headers['accept-encoding'] || !req.headers['accept-encoding'].includes('gzip') || req.headers['accept-encoding'].includes('gzip;q=0');
 		if (cache[req.url.pathname]) {
 			res.writeHead(200, {
 				'Content-Encoding': raw ? 'identity' : 'gzip',
@@ -104,7 +104,7 @@ var serverHandler = o(function*(req, res) {
 			});
 			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
 			if (cache[req.url.pathname].updated < stats.mtime) {
-				var data;
+				let data;
 				try {
 					data = yield fs.readFile('http' + req.url.pathname, yield);
 				} catch (e) {
@@ -124,7 +124,7 @@ var serverHandler = o(function*(req, res) {
 				};
 			}
 		} else {
-			var data;
+			let data;
 			try {
 				data = yield fs.readFile('http' + req.url.pathname, yield);
 			} catch (e) {
@@ -157,9 +157,9 @@ var serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/host/') {
 		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		var requestCookies = req.headers.cookie;
-		var userID = cookie.parse(requestCookies).userID;
-		var qsetID = null;
+		const requestCookies = req.headers.cookie;
+		const userID = cookie.parse(requestCookies).userID;
+		let qsetID = null;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
@@ -172,8 +172,8 @@ var serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
 		var qsetstr = '';
-		var requestCookies = req.headers.cookie;
-		var userID = cookie.parse(requestCookies).userID;
+		const requestCookies = req.headers.cookie;
+		const userID = cookie.parse(requestCookies).userID;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
@@ -199,14 +199,14 @@ var serverHandler = o(function*(req, res) {
 console.log('Connecting to mongodb…'.cyan);
 mongo.connect(config.mongoPath, function(err, db) {
 	if (err) throw err;
-	var i = usedDBCs.length;
+	let i = usedDBCs.length;
 	function handleCollection(err, collection) {
 		if (err) throw err;
 		dbcs[usedDBCs[i]] = collection;
 	}
 	while (i--) db.collection(usedDBCs[i], handleCollection);
 	console.log('Connected to mongodb.'.cyan);
-	var server = http.createServer(serverHandler).listen(config.port);
+	let server = http.createServer(serverHandler).listen(config.port);
 	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
 	require('./sockets.js')(server);
 	console.log(('Sockets running on port ' + config.port + ' over plain WS.').cyan);
@@ -221,8 +221,8 @@ mongo.connect(config.mongoPath, function(err, db) {
 			});
 			testRes.on('end', function() {
 				console.log('HTTP test passed, starting socket test.'.green);
-				var WS = require('ws');
-				var wsc = new WS('ws://localhost:' + config.port + '/test');
+				let WS = require('ws');
+				let wsc = new WS('ws://localhost:' + config.port + '/test');
 				wsc.on('open', function() {
 					console.log('Connected to socket.');
 				});
