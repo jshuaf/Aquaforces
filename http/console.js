@@ -16,13 +16,24 @@ if (!userID) {
 var newQSet = document.getElementById('new-qset'),
 	protoLi = document.getElementById('questions').firstElementChild.cloneNode(true),
 	protoDetails = newQSet.firstElementChild.cloneNode(true);
-function moreWrong() {
-	var li = this.parentNode.parentNode.previousElementSibling;
+function setupMoreWrong(li) {
 	li.parentNode.insertBefore(li.cloneNode(true), li.nextElementSibling);
 	var input = li.nextElementSibling.firstChild;
 	input.value = '';
 	input.focus();
-	input.onblur = inputRemove;
+	input.addEventListener('blur', inputRemove);
+	input.addEventListener('keypress', wrongKeypress);
+}
+function moreWrong() {
+	setupMoreWrong(this.parentNode.parentNode.previousElementSibling);
+}
+function wrongKeypress(e) {
+	if (e.which == 13) {
+		e.preventDefault();
+		var li = this.parentNode;
+		if (li.nextElementSibling.nextElementSibling) li.nextElementSibling.firstChild.focus();
+		else setupMoreWrong(li);
+	}
 }
 function bindListeners() {
 	document.getElementById('new-qset-summary').addEventListener('click', function() {
@@ -31,12 +42,14 @@ function bindListeners() {
 		});
 	});
 	document.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
+	document.getElementById('questions').querySelector('ul input').addEventListener('keypress', wrongKeypress);
 	document.getElementById('more-questions').addEventListener('click', function() {
 		var li = this.parentNode.parentNode;
 		li.parentNode.insertBefore(protoLi.cloneNode(true), li);
 		var newLi = li.previousElementSibling;
 		newLi.getElementsByTagName('input')[0].addEventListener('blur', inputParentRemove);
 		newLi.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
+		newLi.querySelector('ul input').addEventListener('keypress', wrongKeypress);
 		newLi.getElementsByTagName('input')[0].focus();
 	});
 }
