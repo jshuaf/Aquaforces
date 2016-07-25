@@ -75,6 +75,10 @@ input {
 	padding: 0.25em 1em;
 	border: 2px solid #aaa;
 }
+input:focus {
+	outline: none;
+	border: 2px solid #28f;
+}
 label input:not(#crewnum) { width: 100% }
 #crewnum { margin-bottom: 0.8em }
 #join {
