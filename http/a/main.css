@@ -228,12 +228,12 @@ a:active { color: #f44 }
 	position: absolute;
 	top: 0; left: 0;
 	cursor: pointer;
-	padding: 0.7em 1.2em;
-	background: url('/img/leaf1.svg') no-repeat center;
+	padding: 0.5em 1em;
+	background: #6b0;
+	border-radius: 1em;
 }
-#answers > div.alt { background: url('/img/leaf2.svg') no-repeat center }
 @media (pointer: fine) {
-	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
+	#answers > div:hover { background-color: #7c0 }
 }
 #answers > div > div {
 	padding: 1em;
