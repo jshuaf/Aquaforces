@@ -205,7 +205,7 @@ a:active { color: #f44 }
 #boat .raft-middle { fill: #fe6 }
 #boat .raft-inner { fill: #f94 }
 #boat .water { fill: #49b }
-#boat[data-hp='60'] .water, #boat[data-hp='100'] .water { opacity: 0 }
+#boat[data-hp='0'] .water, #boat[data-hp='60'] .water, #boat[data-hp='100'] .water { opacity: 0 }
 #boat .seat { fill: #999 }
 #boat .skin { fill: #fc9 }
 #boat .pants { fill: #333 }
@@ -222,18 +222,18 @@ a:active { color: #f44 }
 #boat .hair { fill: #742 }
 #boat .sweat { fill: #eee }
 #boat[data-hp='100'] .sweat { opacity: 0 }
-#boat[data-sailors='2'] .sailor:nth-of-type(4), #boat[data-sailors='3'] .sailor:nth-of-type(3), #boat[data-sailors='4'] .sailor:nth-of-type(2) { opacity: 0 }
+#boat[data-sailors='2'] .sailor:nth-of-type(3), #boat[data-sailors='2'] .sailor:nth-of-type(5), #boat[data-sailors='3'] .sailor:nth-of-type(4) { opacity: 0 }
 #game input[type='text'] { width: 100% }
 #answers > div {
 	position: absolute;
 	top: 0; left: 0;
 	cursor: pointer;
-	padding: 0.7em 1.2em;
-	background: url('/img/leaf1.svg') no-repeat center;
+	padding: 0.5em 1em;
+	background: #6b0;
+	border-radius: 1em;
 }
-#answers > div.alt { background: url('/img/leaf2.svg') no-repeat center }
 @media (pointer: fine) {
-	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
+	#answers > div:hover { background-color: #7c0 }
 }
 #answers > div > div {
 	padding: 1em;
