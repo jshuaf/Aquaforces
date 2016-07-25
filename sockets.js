@@ -110,7 +110,7 @@ module.exports = function(server) {
 						tws.crew.members.forEach(function(ttws) {
 							ttws.trysend(JSON.stringify({event: 'rock-answer-status', correct: !!tquestion, streak: tws.crew.streak}));
 						});
-						if (tws.crew.streak >= 6) {
+						if (tws.crew.streak >= 4) {
 							clearTimeout(tws.crew.rockActive);
 							tws.crew.rock = tws.crew.rockActive = false;
 							tws.crew.members.forEach(function(ttws) {
