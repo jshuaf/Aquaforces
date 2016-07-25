@@ -96,7 +96,7 @@ module.exports = function(server) {
 						});
 						tquestion.owner.trysend(JSON.stringify({event: 'question', question: question.text}));
 						if (!tquestion.owner.questionIDsDone.includes(questionID)) tquestion.owner.questionIDsDone.push(questionID);
-						for (var i = 0; i < 2; i++) {
+						for (let i = 0; i < 2; i++) {
 							let ttws = tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)];
 							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
 						}
@@ -181,10 +181,8 @@ module.exports = function(server) {
 					dbcs.qsets.findOne({_id: m.qsetID}, function(err, qset) {
 						if (err) throw err;
 						if (!qset) return tws.error('Question set not found.', 'dashboard');
-						var id = Math.floor(Math.random() * 1e6);
-						while (id in games) {
-							id = Math.floor(Math.random() * 1e6);
-						}
+						let id = Math.floor(Math.random() * 1e6);
+						while (id in games) id = Math.floor(Math.random() * 1e6);
 						games[id] = {
 							host: tws,
 							crews: [],
@@ -193,9 +191,10 @@ module.exports = function(server) {
 							questions: qset.questions,
 							hasStarted: false
 						};
+						tws.gameID = id;
 						tws.game = games[id];
 						tws.trysend(JSON.stringify({event: 'new-game', id: id.toString()}));
-						var answers = [];
+						let answers = [];
 						for (let question of tws.game.questions) {
 							if (!answers.includes(question.answer)) answers.push(question.answer);
 							for (let answer of question.incorrectAnswers) {
@@ -262,23 +261,10 @@ module.exports = function(server) {
 					tws.game.users.forEach(function(ttws) {
 						ttws.trysend(JSON.stringify({event: 'end-game', state: 'game-ended'}));
 					});
-					for (var id in games) {
-						var game = games[id];
-						if (game.host == tws) {
-							delete games[id];
-							break;
-						}
-					}
 				} else tws.error('Unknown socket event ' + m.event + ' received.');
 			});
 			tws.on('close', function() {
-				for (var id in games) {
-					var game = games[id];
-					if (game.host == tws) {
-						delete games[id];
-						break;
-					}
-				}
+				delete games[tws.gameID];
 			});
 		} else {
 			tws.trysend(JSON.stringify({

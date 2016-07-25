@@ -156,22 +156,20 @@ let serverHandler = o(function*(req, res) {
 		}
 	} else if (req.url.pathname == '/host/') {
 		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
-		var qsetstr = '';
+		let qsetstr = '';
 		const requestCookies = req.headers.cookie;
 		const userID = cookie.parse(requestCookies).userID;
-		let qsetID = null;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
-			if (qset) {
-				qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
-			} else {
+			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
+			else {
 				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
-		var qsetstr = '';
+		let qsetstr = '';
 		const requestCookies = req.headers.cookie;
 		const userID = cookie.parse(requestCookies).userID;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
