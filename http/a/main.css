@@ -205,7 +205,7 @@ a:active { color: #f44 }
 #boat .raft-middle { fill: #fe6 }
 #boat .raft-inner { fill: #f94 }
 #boat .water { fill: #49b }
-#boat[data-hp='60'] .water, #boat[data-hp='100'] .water { opacity: 0 }
+#boat[data-hp='0'] .water, #boat[data-hp='60'] .water, #boat[data-hp='100'] .water { opacity: 0 }
 #boat .seat { fill: #999 }
 #boat .skin { fill: #fc9 }
 #boat .pants { fill: #333 }
