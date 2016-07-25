@@ -14,7 +14,7 @@ function Boat() {
 	this.hp = 1;
 	this.dhp = -0.05;
 	this.bdhp = -0.2;
-	this.c = -0.1;
+	this.c = 0;
 	this.cf = 0.0005;
 	this.vf = 0.00001;
 	this.raft = false;
@@ -100,7 +100,7 @@ socket.onmessage = function(m) {
 			e.parentNode.removeChild(e);
 		}
 		document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
-	} else if (m.event == 'answer') {
+	} else if (m.event == 'answer' || m.event == 'timeout-question') {
 		var b = boats[m.crewnum];
 		if (m.correct) b.v += b.dv;
 		else if (m.raft) b.dv *= 0.95;
