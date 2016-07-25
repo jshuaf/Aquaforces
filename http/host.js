@@ -223,6 +223,7 @@ function animationUpdate() {
 		var b = boats[id];
 		document.getElementById('boat' + id).style.transform = 'translateX(' + ((b.p - cameraP + 0.5) * 0.75 + 0.25) * innerWidth * cameraS + 'px)';
 	}
+	document.documentElement.style.backgroundPositionX = cameraP * 100 + '%';
 	lastTime = thisTime;
 	ms = timeTotal - new Date().getTime() + timeStart + 1000;
 	var t = '';
