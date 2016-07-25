@@ -60,8 +60,8 @@ socket.onmessage = function(m) {
 	if (m.event == 'end-game') endGame();
 };
 document.addEventListener('visibilitychange', function() {
-	if (document.hidden) clearInterval(addAnswerInterval);
-	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
+	clearInterval(addAnswerInterval);
+	if (!document.hidden && addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
