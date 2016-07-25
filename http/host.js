@@ -25,7 +25,7 @@ function Boat() {
 var userID = Cookies.get('userID');
 if (!userID) {
 	document.getElementById('content').children.forEach(function(child) {
-		child.hidden = (child.id !== 'log-in');
+		//child.hidden = (child.id !== 'log-in');
 	});
 }
 
@@ -121,6 +121,10 @@ socket.onmessage = function(m) {
 		if (m.raft) b.dv *= 0.8;
 		else {
 			b.hp += b.bdhp;
+			if (!b.raft && b.hp <= 0) {
+				b.raft = true;
+				document.getElementById('boat' + m.crewnum).classList.add('raft');
+			}
 			socket.send(JSON.stringify({
 				event: 'update-hp',
 				crewnum: m.crewnum,
