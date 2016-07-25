@@ -85,7 +85,7 @@ function initRock() {
 	rock.position = 0;
 }
 function moveRock(newPosition) {
-	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 50000;
+	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 20000;
 	rock.position = newPosition;
 	if (newPosition == 7) {
 		requestAnimationFrame(function() {
@@ -95,7 +95,7 @@ function moveRock(newPosition) {
 				requestAnimationFrame(function() {
 					rockEl.opacity = 1;
 				});
-			});
+			}, 1500);
 		});
 	}
 }
