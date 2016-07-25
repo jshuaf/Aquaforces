@@ -222,7 +222,7 @@ a:active { color: #f44 }
 #boat .hair { fill: #742 }
 #boat .sweat { fill: #eee }
 #boat[data-hp='100'] .sweat { opacity: 0 }
-#boat[data-sailors='2'] .sailor:nth-of-type(4), #boat[data-sailors='3'] .sailor:nth-of-type(3), #boat[data-sailors='4'] .sailor:nth-of-type(2) { opacity: 0 }
+#boat[data-sailors='2'] .sailor:nth-of-type(3), #boat[data-sailors='2'] .sailor:nth-of-type(5), #boat[data-sailors='3'] .sailor:nth-of-type(4) { opacity: 0 }
 #game input[type='text'] { width: 100% }
 #answers > div {
 	position: absolute;
