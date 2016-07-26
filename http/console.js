@@ -18,7 +18,8 @@ var newQSet = document.getElementById('new-qset'),
 	protoDetails = newQSet.firstElementChild.cloneNode(true);
 function setupMoreWrong(li) {
 	li.parentNode.insertBefore(li.cloneNode(true), li.nextElementSibling);
-	var input = li.nextElementSibling.firstChild;
+	li.nextElementSibling.firstChild.checked = false;
+	var input = li.nextElementSibling.lastChild;
 	input.value = '';
 	input.focus();
 	input.addEventListener('blur', inputRemove);
@@ -31,9 +32,66 @@ function wrongKeypress(e) {
 	if (e.which == 13) {
 		e.preventDefault();
 		var li = this.parentNode;
-		if (li.nextElementSibling.nextElementSibling) li.nextElementSibling.firstChild.focus();
+		if (li.nextElementSibling.nextElementSibling) li.nextElementSibling.lastChild.focus();
 		else setupMoreWrong(li);
 	}
+}
+function buildQuestion(question) {
+	var li = document.createElement('li');
+	li.appendChild(document.createElement('a'));
+	li.lastChild.className = 'edit';
+	li.lastChild.title = 'edit question';
+	li.lastChild.appendChild(document.createTextNode('✎'));
+	li.lastChild.addEventListener('click', startEdit);
+	li.appendChild(document.createElement('h3'));
+	li.lastChild.appendChild(document.createTextNode(question.text));
+	li.appendChild(document.createElement('div'));
+	var ulc = document.createElement('ul');
+	ulc.className = 'check-list';
+	question.answers.forEach(function(answer) {
+		ulc.appendChild(document.createElement('li'));
+		ulc.lastChild.appendChild(document.createTextNode(answer));
+	});
+	li.lastChild.appendChild(ulc);
+	var uli = document.createElement('ul');
+	uli.className = 'cross-list';
+	question.incorrectAnswers.forEach(function(answer) {
+		uli.appendChild(document.createElement('li'));
+		uli.lastChild.appendChild(document.createTextNode(answer));
+	});
+	li.lastChild.appendChild(uli);
+	return li;
+}
+function editQuestionSubmit(e) {
+	e.preventDefault();
+	this.classList.add('validating');
+	var inv = this.querySelector(':invalid');
+	if (inv) return inv.focus();
+	var ins = this.getElementsByTagName('input');
+	if (ins.length == 0) return;
+	var question = {
+		text: ins[0].value,
+		answers: [],
+		incorrectAnswers: []
+	};
+	for (var i = 1; i < ins.length; i += 2) if (ins[i + 1].value) question[ins[i].checked ? 'answers' : 'incorrectAnswers'].push(ins[i + 1].value);
+	var el = this.parentNode;
+	requestPost('/api/edit-question', function(res) {
+		el.lastChild.classList.remove('validating');
+		if (res.indexOf('Error') == 0) alert(res);
+		else {
+			el.hidden = true;
+			el.parentNode.removeChild(el.previousElementSibling);
+			el.parentNode.insertBefore(buildQuestion(question), el);
+		}
+	}, 'id=' + encodeURIComponent(el.parentNode.parentNode.id.substr(5)) + '&num=' + el.parentNode.children.indexOf(el.previousElementSibling) / 2 + '&question=' + encodeURIComponent(JSON.stringify(question)));
+}
+function bindQuestionListeners(li) {
+	li.getElementsByTagName('input')[1].addEventListener('blur', inputParentRemove);
+	li.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
+	li.querySelector('ul input').addEventListener('keypress', wrongKeypress);
+	li.getElementsByTagName('input')[1].focus();
+	li.lastChild.addEventListener('submit', editQuestionSubmit);
 }
 function bindListeners() {
 	document.getElementById('new-qset-summary').addEventListener('click', function() {
@@ -42,18 +100,32 @@ function bindListeners() {
 		});
 	});
 	document.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
-	document.getElementById('questions').querySelector('ul input').addEventListener('keypress', wrongKeypress);
+	document.getElementById('questions').querySelector('ul input:not([type=\'checkbox\'])').addEventListener('keypress', wrongKeypress);
 	document.getElementById('more-questions').addEventListener('click', function() {
 		var li = this.parentNode.parentNode;
 		li.parentNode.insertBefore(protoLi.cloneNode(true), li);
-		var newLi = li.previousElementSibling;
-		newLi.getElementsByTagName('input')[0].addEventListener('blur', inputParentRemove);
-		newLi.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
-		newLi.querySelector('ul input').addEventListener('keypress', wrongKeypress);
-		newLi.getElementsByTagName('input')[0].focus();
+		bindQuestionListeners(li.previousElementSibling);
 	});
 }
 bindListeners();
+document.getElementsByClassName('q-edit').forEach(bindQuestionListeners);
+function startEdit() {
+	this.parentNode.hidden = true;
+	this.parentNode.nextElementSibling.hidden = false;
+	this.parentNode.nextElementSibling.getElementsByTagName('input')[0].focus();
+}
+function discardEdit() {
+	this.parentNode.hidden = true;
+	this.parentNode.previousElementSibling.hidden = false;
+}
+function bindEditListener(editBtn) {
+	editBtn.addEventListener('click', startEdit);
+}
+function bindDiscardListener(discardBtn) {
+	discardBtn.addEventListener('click', discardEdit);
+}
+document.getElementsByClassName('edit').forEach(bindEditListener);
+document.getElementsByClassName('discard').forEach(bindDiscardListener);
 newQSet.addEventListener('submit', function(e) {
 	e.preventDefault();
 	this.classList.add('validating');
@@ -65,17 +137,16 @@ newQSet.addEventListener('submit', function(e) {
 		if (ins.length == 0) return;
 		var question = {
 			text: ins[0].value,
-			answer: ins[1].value,
+			answers: [],
 			incorrectAnswers: []
 		};
-		for (var i = 2; i < ins.length; i++) if (ins[i].value) question.incorrectAnswers.push(ins[i].value);
+		for (var i = 1; i < ins.length; i += 2) if (ins[i + 1].value) question[ins[i].checked ? 'answers' : 'incorrectAnswers'].push(ins[i + 1].value);
 		questions.push(question);
 	});
 	requestPost('/api/new-qset', function(res) {
 		newQSet.classList.remove('validating');
-		if (res.indexOf('Error') == 0) {
-			alert(res);
-		} else {
+		if (res.indexOf('Error') == 0) alert(res);
+		else {
 			var details = document.createElement('details');
 			details.id = 'qset-' + res;
 			details.className = 'qset';
@@ -84,19 +155,7 @@ newQSet.addEventListener('submit', function(e) {
 			details.lastChild.lastChild.appendChild(document.createTextNode(document.getElementById('qset-title').value));
 			details.appendChild(document.createElement('ol'));
 			questions.forEach(function(question) {
-				var li = document.createElement('li');
-				li.appendChild(document.createElement('h3'));
-				li.lastChild.appendChild(document.createTextNode(question.text));
-				li.appendChild(document.createElement('div'));
-				li.lastChild.appendChild(document.createElement('p'));
-				li.lastChild.lastChild.appendChild(document.createTextNode('Correct: ' + question.answer));
-				var ul = document.createElement('ul');
-				question.incorrectAnswers.forEach(function(answer) {
-					ul.appendChild(document.createElement('li'));
-					ul.lastChild.appendChild(document.createTextNode(answer));
-				});
-				li.lastChild.appendChild(ul);
-				details.lastChild.appendChild(li);
+				details.lastChild.appendChild(buildQuestion(question));
 			});
 			newQSet.parentNode.insertAfter(details, newQSet);
 			newQSet.removeChild(newQSet.firstElementChild);

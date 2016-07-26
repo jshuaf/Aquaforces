@@ -170,18 +170,29 @@ let serverHandler = o(function*(req, res) {
 	} else if (req.url.pathname == '/console/') {
 		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '';
-		const requestCookies = req.headers.cookie;
+		const requestCookies = req.headers.cookie || '';
 		const userID = cookie.parse(requestCookies).userID;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
 				qset.questions.forEach(function(question) {
-					qsetstr += '<li><h3>' + html(question.text) + '</h3><div><p>Correct: ' + html(question.answer) + '</p><ul>';
-					question.incorrectAnswers.forEach(function(answer) {
-						qsetstr += '<li>' + html(answer) + '</li>';
+					let listr = '<li><a class="edit" title="edit question">✎</a><h3>' + html(question.text) + '</h3><div><ul class="check-list">',
+						liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
+					liestr += '<label>Question <input placeholder="What\'s one plus one?" required="" maxlength="144" value="' + html(question.text) + '" /></label> ';
+					liestr += '<ul>';
+					question.answers.forEach(function(answer) {
+						listr += '<li>' + html(answer) + '</li>';
+						liestr += '<li><input type="checkbox" checked="" /> <input required="" maxlength="64" placeholder="Two" value="' + html(answer) + '" /></li>';
 					});
-					qsetstr += '</ul></div></li>';
+					listr += '</ul><ul class="cross-list">';
+					question.incorrectAnswers.forEach(function(answer) {
+						listr += '<li>' + html(answer) + '</li>';
+						liestr += '<li><input type="checkbox" /> <input required="" maxlength="64" placeholder="Two" value="' + html(answer) + '" /></li>';
+					});
+					listr += '</ul></div></li>';
+					liestr += '<li><small><a class="more-wrong">+ more</a></small></li></ul><button class="submit-q-edit">Submit Edit</button></form></li>';
+					qsetstr += listr + liestr;
 				});
 				qsetstr += '</ol></details>';
 			} else {
@@ -208,6 +219,17 @@ mongo.connect(config.mongoPath, function(err, db) {
 	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
 	require('./sockets.js')(server);
 	console.log(('Sockets running on port ' + config.port + ' over plain WS.').cyan);
+	dbcs.qsets.find().sort().each(function(err, qset) {
+		if (err) throw err;
+		if (qset && qset.questions[0].answer) {
+			console.log('qset ' + qset._id + ' edited');
+			for (let i = 0; i < qset.questions.length; i++) {
+				qset.questions[i].answers = [qset.questions[i].answer];
+				delete qset.questions[i].answer;
+			}
+			dbcs.qsets.update({_id: qset._id}, qset);
+		}
+	});
 	if (process.argv.includes('--test')) {
 		console.log('Running test, process will terminate when finished.'.yellow);
 		http.get({

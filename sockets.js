@@ -76,7 +76,7 @@ module.exports = function(server) {
 					});
 					let tquestion;
 					tws.crew.activeQuestions.forEach(function(question) {
-						if (question.answer == m.text) tquestion = question;
+						if (question.answers.includes(m.text)) tquestion = question;
 					});
 					tws.trysend(JSON.stringify({event: 'answer-status', correct: !!tquestion}));
 					tws.crew.members.forEach(function(ttws) {
@@ -91,14 +91,15 @@ module.exports = function(server) {
 						let question = tws.game.questions[questionID];
 						tws.crew.activeQuestions.push({
 							text: question.text,
-							answer: question.answer,
+							answers: question.answers,
 							owner: tquestion.owner
 						});
 						tquestion.owner.trysend(JSON.stringify({event: 'question', question: question.text}));
 						if (!tquestion.owner.questionIDsDone.includes(questionID)) tquestion.owner.questionIDsDone.push(questionID);
-						for (let i = 0; i < 2; i++) {
-							let ttws = tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)];
-							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+						for (let answer of question.answers) {
+							for (let i = 0; i < 2; i++) {
+								tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer}));
+							}
 						}
 						tws.crew.recentAnswers.push({
 							text: m.text,
@@ -150,17 +151,19 @@ module.exports = function(server) {
 					let question = tws.game.questions[questionID];
 					tws.crew.activeQuestions.push({
 						text: question.text,
-						answer: question.answer,
+						answers: question.answers,
 						owner: tws
 					});
 					tws.trysend(JSON.stringify({event: 'question', question: question.text}));
-					let ttws = tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)];
-					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+					for (let answer of question.answers) {
+						for (let i = 0; i < 2; i++) {
+							tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer}));
+						}
+					}
 				} else if (m.event == 'resend-answer') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (typeof m.text != 'string') return tws.error('No answer text sent.');
-					let ttws = tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)];
-					ttws.trysend(JSON.stringify({event: 'correct-answer', answer: m.text}));
+					tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer: m.text}));
 				} else tws.error('Unknown socket event ' + m.event + ' received.');
 			});
 			tws.on('close', function() {
@@ -196,10 +199,8 @@ module.exports = function(server) {
 						tws.trysend(JSON.stringify({event: 'new-game', id: id.toString()}));
 						let answers = [];
 						for (let question of tws.game.questions) {
-							if (!answers.includes(question.answer)) answers.push(question.answer);
-							for (let answer of question.incorrectAnswers) {
-								if (!answers.includes(answer)) answers.push(answer);
-							}
+							for (let answer of question.answers) if (!answers.includes(answer)) answers.push(answer);
+							for (let answer of question.incorrectAnswers) if (!answers.includes(answer)) answers.push(answer);
 						}
 						tws.game.answers = answers;
 					});
@@ -239,13 +240,16 @@ module.exports = function(server) {
 								question = tws.game.questions[questionID];
 							crew.activeQuestions.push({
 								text: question.text,
-								answer: question.answer,
+								answers: question.answers,
 								owner: member
 							});
 							member.trysend(JSON.stringify({event: 'question', question: question.text}));
 							member.questionIDsDone.push(questionID);
-							let ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-							ttws.trysend(JSON.stringify({event: 'correct-answer', answer: question.answer}));
+							for (let answer of question.answers) {
+								for (let i = 0; i < 2; i++) {
+									crew.members[Math.floor(Math.random() * crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer}));
+								}
+							}
 						});
 					});
 				} else if (m.event == 'update-rank') {
