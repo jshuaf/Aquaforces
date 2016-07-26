@@ -62,6 +62,56 @@ function buildQuestion(question) {
 	li.lastChild.appendChild(uli);
 	return li;
 }
+function buildQuestionEditor(question) {
+	var li = document.createElement('li');
+	li.className = 'q-edit';
+	li.hidden = true;
+	li.appendChild(document.createElement('a'));
+	li.lastChild.className = 'discard';
+	li.lastChild.title = 'discard edits';
+	li.lastChild.appendChild(document.createTextNode('✕'));
+	li.lastChild.addEventListener('click', discardEdit);
+	var form = document.createElement('form');
+	li.appendChild(form);
+	form.appendChild(document.createElement('label'));
+	form.lastChild.appendChild(document.createTextNode('Question '));
+	form.lastChild.appendChild(document.createElement('input'));
+	form.lastChild.lastChild.placeholder = 'What\'s one plus one?';
+	form.lastChild.lastChild.required = true;
+	form.lastChild.lastChild.maxLength = 144;
+	form.lastChild.lastChild.value = question.text;
+	form.appendChild(document.createElement('div'));
+	var ul = document.createElement('ul');
+	question.answers.forEach(function(answer) {
+		var li = document.createElement('li');
+		ul.appendChild(li);
+		li.appendChild(document.createElement('input'));
+		li.lastChild.type = 'checkbox';
+		li.lastChild.checked = true;
+		li.appendChild(document.createTextNode(' '));
+		li.appendChild(document.createElement('input'));
+		li.lastChild.required = true;
+		li.lastChild.maxLength = 64;
+		li.lastChild.placeholder = 'Two';
+		li.lastChild.value = answer;
+		li.lastChild.checked = true;
+	});
+	question.incorrectAnswers.forEach(function(answer) {
+		var li = document.createElement('li');
+		ul.appendChild(li);
+		li.appendChild(document.createElement('input'));
+		li.lastChild.type = 'checkbox';
+		li.appendChild(document.createTextNode(' '));
+		li.appendChild(document.createElement('input'));
+		li.lastChild.required = true;
+		li.lastChild.maxLength = 64;
+		li.lastChild.placeholder = 'Two';
+		li.lastChild.value = answer;
+		li.lastChild.checked = true;
+	});
+	form.lastChild.appendChild(ul);
+	return li;
+}
 function editQuestionSubmit(e) {
 	e.preventDefault();
 	this.classList.add('validating');
@@ -87,10 +137,10 @@ function editQuestionSubmit(e) {
 	}, 'id=' + encodeURIComponent(el.parentNode.parentNode.id.substr(5)) + '&num=' + el.parentNode.children.indexOf(el.previousElementSibling) / 2 + '&question=' + encodeURIComponent(JSON.stringify(question)));
 }
 function bindQuestionListeners(li) {
-	li.getElementsByTagName('input')[1].addEventListener('blur', inputParentRemove);
+	li.getElementsByTagName('input')[0].addEventListener('blur', inputParentRemove);
 	li.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
 	li.querySelector('ul input').addEventListener('keypress', wrongKeypress);
-	li.getElementsByTagName('input')[1].focus();
+	li.getElementsByTagName('input')[0].focus();
 	li.lastChild.addEventListener('submit', editQuestionSubmit);
 }
 function bindListeners() {
@@ -156,6 +206,7 @@ newQSet.addEventListener('submit', function(e) {
 			details.appendChild(document.createElement('ol'));
 			questions.forEach(function(question) {
 				details.lastChild.appendChild(buildQuestion(question));
+				details.lastChild.appendChild(buildQuestionEditor(question));
 			});
 			newQSet.parentNode.insertAfter(details, newQSet);
 			newQSet.removeChild(newQSet.firstElementChild);

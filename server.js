@@ -179,7 +179,7 @@ let serverHandler = o(function*(req, res) {
 				qset.questions.forEach(function(question) {
 					let listr = '<li><a class="edit" title="edit question">✎</a><h3>' + html(question.text) + '</h3><div><ul class="check-list">',
 						liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
-					liestr += '<label>Question <input placeholder="What\'s one plus one?" required="" maxlength="144" value="' + html(question.text) + '" /></label> ';
+					liestr += '<label>Question <input placeholder="What\'s one plus one?" required="" maxlength="144" value="' + html(question.text) + '" /></label>';
 					liestr += '<ul>';
 					question.answers.forEach(function(answer) {
 						listr += '<li>' + html(answer) + '</li>';
