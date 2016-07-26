@@ -1,6 +1,7 @@
 html { background: #def }
 html.hostgame {
-	background: #4af url('/img/beachscape.svg') repeat-x;
+	background: url('/img/scape/city.svg') repeat-x #4af;
+	background-size: cover;
 	color: #000;
 }
 #header {

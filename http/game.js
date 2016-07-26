@@ -60,8 +60,8 @@ socket.onmessage = function(m) {
 	if (m.event == 'end-game') endGame();
 };
 document.addEventListener('visibilitychange', function() {
-	if (document.hidden) clearInterval(addAnswerInterval);
-	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
+	clearInterval(addAnswerInterval);
+	if (!document.hidden && addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
@@ -132,7 +132,7 @@ function answerClickListener() {
 	this.parentNode.removeChild(this);
 	socket.send(JSON.stringify({
 		event: 'answer-chosen',
-		text: this.firstChild.firstChild.nodeValue
+		text: this.firstChild.nodeValue
 	}));
 }
 function addAnswer() {
@@ -143,10 +143,8 @@ function addAnswer() {
 		answer = correctAnswerQueue.shift();
 		correctAnswer = true;
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
-	var answerInner = document.createElement('div');
-	answerInner.appendChild(document.createTextNode(answer));
+	answerEl.appendChild(document.createTextNode(answer));
 	if (Math.random() < 0.4) answerEl.classList.add('alt');
-	answerEl.appendChild(answerInner);
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
 	answerEl.dataset.y = 0;
@@ -196,7 +194,7 @@ function animationUpdate() {
 			if (e.classList.contains('correct-answer')) {
 				socket.send(JSON.stringify({
 					event: 'resend-answer',
-					text: e.firstChild.firstChild.nodeValue
+					text: e.firstChild.nodeValue
 				}));
 			}
 			answersEl.removeChild(e);
