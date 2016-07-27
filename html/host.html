@@ -1,15 +1,31 @@
-<p id="log-in" hidden="true">Click here to login.</p>
-<div id="cont" class="host">
-	<form id="dashboard">
-		<h1>Host dashboard</h1>
-		<p><a href="/console/">Manage question sets</a></p>
-		<h2>Start a new game</h2>
-		<div id="new-game">
-			<label>Question set: <select id="qsets" required="">$qsets</select></label>
-			<button>New game</button>
-		</div>
-	</form>
-	<form id="tgame" hidden="">
+<div id="qset-cont">
+	<h1 id="qset-title">Question Sets</h1>
+	<section class="left-align">
+		<form id="new-qset">
+			<details>
+				<summary id="new-qset-summary"><h2>New Question Set</h2></summary>
+				<label>Title <input maxlength="144" class="fullwidth" id="qset-title" placeholder="My question set" required="" /></label>
+				<h3>Questions:</h3>
+				<p><i>Avoid synonyms among answers.</i></p>
+				<ol id="questions">
+					<li>
+						<label>Question <input required="" maxlength="144" placeholder="What's one plus one?" /></label>
+						<p>Answers:</p>
+						<ul>
+							<li><input type="checkbox" checked="" /> <input required="" maxlength="64" placeholder="Two" /></li>
+							<li><small><a class="more-wrong" title="↵">+ more</a></small></li>
+						</ul>
+					</li>
+					<li><small><a id="more-questions" title="⇧↵">+ more</a></small></li>
+				</ol>
+				<button>Add set</button>
+			</details>
+		</form>
+		$qsets
+	</section>
+</div>
+<div id="cont" class="host" hidden="">
+	<form id="tgame">
 		<h2 id="subheader">Join at aquaforces.io</h2>
 		<h1 id="header"><span>Game code: </span><button id="start-game-btn" disabled="">Start game</button></h1>
 		<div class="half-divider">
@@ -26,5 +42,4 @@
 	</form>
 </div>
 <section id="progress"></section>
-<script async="" src="/host.js"></script>
-<script defer="" src="https://apis.google.com/js/api:client.js"></script>
+<script src="/host.js" async=""></script>

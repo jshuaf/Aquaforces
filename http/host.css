@@ -1,4 +1,4 @@
-html { background: #def }
+html { background: #eee }
 html.hostgame {
 	background: url('/img/scape/city.svg') repeat-x #4af;
 	background-size: cover;
@@ -38,15 +38,16 @@ html.hostgame {
 }
 #progress > div.raft { background: url('/img/raftside.svg') no-repeat }
 .qset {
-	padding: 2em;
-	margin: 1em 0;
+	padding: 1em 2em;
+	margin: 0.5em 0;
+	background: #fff;
 }
 details p, details h3 { margin: 0.2em 0 }
 #new-qset {
 	display: block;
-	padding: 2em;
+	padding: 1em 2em;
+	background: #ffc;
 }
-#new-qset, .qset { background: #fff }
 #new-qset.hide {
 	opacity: 0;
 	pointer-events: none;
@@ -109,6 +110,12 @@ summary + ol > li > :not(a) { min-width: 5em }
 }
 .validating :invalid { border: 2px solid #f00 }
 summary { font-size: 1.5em }
+summary::after {
+	content: '';
+	display: table;
+	clear: both;
+}
+summary > small { float: right }
 summary h2 {
 	display: inline;
 	font-size: 1em;
@@ -125,12 +132,22 @@ h2 { margin-bottom: 0.3em }
 .qset > ol > li { position: relative }
 .q-edit { background: #cef }
 .q-add { background: #fec }
-.edit, .discard, .new-question { cursor: pointer }
+.edit, .discard, .new-question, .more-wrong, #more-questions, summary small a { cursor: pointer }
 .edit, .discard {
 	position: absolute;
 	top: 0.3em; right: 0.3em;
 }
 .edit { color: #00f }
-.discard { color: #f00 }
-.discard:hover { color: #f66 }
-.discard:active { color: #c00 }
+.discard, .delete { color: #f00 }
+.discard:hover, .delete:hover { color: #f66 }
+.discard:active, .delete:active { color: #c00 }
+.dup { color: #777 }
+.dup:hover { color: #888 }
+.dup:active { color: #555 }
+.play { color: #0c0 }
+.play:hover { color: #4cc }
+.play:active { color: #0a0 }
+summary small a {
+	padding: 0 0.3em;
+	text-decoration: none;
+}
