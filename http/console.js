@@ -241,9 +241,10 @@ newQSet.addEventListener('submit', function(e) {
 				details.lastChild.appendChild(buildQuestion(question));
 				details.lastChild.appendChild(buildQuestionEditor(question));
 			});
-			details.apendChild(document.createElement('a'));
+			details.appendChild(document.createElement('a'));
 			details.lastChild.className = 'new-question';
 			details.lastChild.appendChild(document.createTextNode('add question'));
+			bindNewQuestionListener(details.lastChild);
 			newQSet.parentNode.insertAfter(details, newQSet);
 			newQSet.removeChild(newQSet.firstElementChild);
 			newQSet.appendChild(protoDetails.cloneNode(true));
