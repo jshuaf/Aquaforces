@@ -109,6 +109,13 @@ function buildQuestionEditor(question) {
 		li.lastChild.value = answer;
 		li.lastChild.checked = true;
 	});
+	var more = document.createElement('li');
+	ul.appendChild(more);
+	more.appendChild(document.createElement('small'));
+	more.lastChild.appendChild(document.createElement('a'));
+	more.lastChild.lastChild.className = 'more-wrong';
+	more.lastChild.lastChild.appendChild(document.createTextNode('+ more'));
+	more.lastChild.lastChild.addEventListener('click', moreWrong);
 	form.lastChild.appendChild(ul);
 	return li;
 }
