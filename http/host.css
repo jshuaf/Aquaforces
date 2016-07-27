@@ -124,10 +124,11 @@ h2 { margin-bottom: 0.3em }
 #new-game button { margin-left: 1em }
 .qset > ol > li { position: relative }
 .q-edit { background: #cef }
+.q-add { background: #fec }
+.edit, .discard, .new-question { cursor: pointer }
 .edit, .discard {
 	position: absolute;
 	top: 0.3em; right: 0.3em;
-	cursor: pointer;
 }
 .edit { color: #00f }
 .discard { color: #f00 }
