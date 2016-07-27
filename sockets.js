@@ -183,7 +183,7 @@ module.exports = function(server) {
 				if (m.event == 'new-game') {
 					dbcs.qsets.findOne({_id: m.qsetID}, function(err, qset) {
 						if (err) throw err;
-						if (!qset) return tws.error('Question set not found.', 'dashboard');
+						if (!qset) return tws.error('Question set not found.');
 						let id = Math.floor(Math.random() * 1e6);
 						while (id in games) id = Math.floor(Math.random() * 1e6);
 						games[id] = {

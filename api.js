@@ -86,6 +86,7 @@ module.exports = function(req, res, post) {
 			if (post.num == 'new') qset.questions.push(question);
 			else qset.questions[parseInt(post.num)] = question;
 			dbcs.qsets.update({_id: post.id}, {$set: {questions: qset.questions}});
+			res.writeHead(204);
 			res.end();
 		});
 	} else if (req.url.pathname == '/login') {

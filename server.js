@@ -155,27 +155,14 @@ let serverHandler = o(function*(req, res) {
 			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
 		}
 	} else if (req.url.pathname == '/host/') {
-		yield respondPage('Host Dashboard', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
-		let qsetstr = '';
-		const requestCookies = req.headers.cookie;
-		const userID = cookie.parse(requestCookies).userID;
-		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
-			if (err) throw err;
-			if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
-			else {
-				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
-				res.end(yield fs.readFile('./html/a/foot.html', yield));
-			}
-		}));
-	} else if (req.url.pathname == '/console/') {
-		yield respondPage('Question Console', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
+		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '';
 		const requestCookies = req.headers.cookie || '';
 		const userID = cookie.parse(requestCookies).userID;
 		dbcs.qsets.find({author: userID}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
-				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <a href="#qset-' + qset._id + '" title="permalink">#</a></summary><ol>';
+				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete">✕</a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
 				qset.questions.forEach(function(question) {
 					let listr = '<li><a class="edit" title="edit question">✎</a><h3>' + html(question.text) + '</h3><div><ul class="check-list">',
 						liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
@@ -196,7 +183,7 @@ let serverHandler = o(function*(req, res) {
 				});
 				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
-				res.write((yield fs.readFile('./html/console.html', yield)).toString().replace('$qsets', qsetstr));
+				res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
