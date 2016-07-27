@@ -31,9 +31,15 @@ function moreWrong() {
 function wrongKeypress(e) {
 	if (e.which == 13) {
 		e.preventDefault();
-		var li = this.parentNode;
-		if (li.nextElementSibling.nextElementSibling) li.nextElementSibling.lastChild.focus();
-		else setupMoreWrong(li);
+		if (e.shiftKey) {
+			var li = this.parentNode.parentNode.parentNode.nextElementSibling;
+			li.parentNode.insertBefore(protoLi.cloneNode(true), li);
+			bindQuestionListeners(li.previousElementSibling, {isNewQSet: true});
+		} else {
+			var li = this.parentNode;
+			if (li.nextElementSibling.nextElementSibling) li.nextElementSibling.lastChild.focus();
+			else setupMoreWrong(li);
+		}
 	}
 }
 function buildQuestion(question) {
@@ -114,6 +120,7 @@ function buildQuestionEditor(question, isNewQ) {
 	more.appendChild(document.createElement('small'));
 	more.lastChild.appendChild(document.createElement('a'));
 	more.lastChild.lastChild.className = 'more-wrong';
+	more.lastChild.lastChild.title = '↵';
 	more.lastChild.lastChild.appendChild(document.createTextNode('+ more'));
 	form.appendChild(ul);
 	form.appendChild(document.createElement('button'));
