@@ -62,15 +62,14 @@ function buildQuestion(question) {
 	li.lastChild.appendChild(uli);
 	return li;
 }
-function buildQuestionEditor(question) {
+function buildQuestionEditor(question, isNewQ) {
 	var li = document.createElement('li');
-	li.className = 'q-edit';
-	li.hidden = true;
+	li.className = isNewQ ? 'q-edit q-add' : 'q-edit';
+	if (!isNewQ) li.hidden = true;
 	li.appendChild(document.createElement('a'));
 	li.lastChild.className = 'discard';
 	li.lastChild.title = 'discard edits';
 	li.lastChild.appendChild(document.createTextNode('✕'));
-	li.lastChild.addEventListener('click', discardEdit);
 	var form = document.createElement('form');
 	li.appendChild(form);
 	form.appendChild(document.createElement('label'));
@@ -80,7 +79,8 @@ function buildQuestionEditor(question) {
 	form.lastChild.lastChild.required = true;
 	form.lastChild.lastChild.maxLength = 144;
 	form.lastChild.lastChild.value = question.text;
-	form.appendChild(document.createElement('div'));
+	form.appendChild(document.createElement('p'));
+	form.lastChild.appendChild(document.createTextNode('Answers:'));
 	var ul = document.createElement('ul');
 	question.answers.forEach(function(answer) {
 		var li = document.createElement('li');
@@ -115,8 +115,12 @@ function buildQuestionEditor(question) {
 	more.lastChild.appendChild(document.createElement('a'));
 	more.lastChild.lastChild.className = 'more-wrong';
 	more.lastChild.lastChild.appendChild(document.createTextNode('+ more'));
-	more.lastChild.lastChild.addEventListener('click', moreWrong);
-	form.lastChild.appendChild(ul);
+	form.appendChild(ul);
+	form.appendChild(document.createElement('button'));
+	form.lastChild.className = 'submit-q-edit';
+	form.lastChild.appendChild(document.createTextNode(isNewQ ? 'Add Question' : 'Submit Edit'));
+	if (isNewQ) bindQuestionListeners(li, {isNewQ: true});
+	else bindQuestionListeners(li);
 	return li;
 }
 function editQuestionSubmit(e) {
@@ -124,7 +128,8 @@ function editQuestionSubmit(e) {
 	this.classList.add('validating');
 	var inv = this.querySelector(':invalid');
 	if (inv) return inv.focus();
-	var ins = this.getElementsByTagName('input');
+	var isNewQ = this.parentNode.classList.contains('q-add'),
+		ins = this.getElementsByTagName('input');
 	if (ins.length == 0) return;
 	var question = {
 		text: ins[0].value,
@@ -140,13 +145,23 @@ function editQuestionSubmit(e) {
 			el.hidden = true;
 			el.parentNode.removeChild(el.previousElementSibling);
 			el.parentNode.insertBefore(buildQuestion(question), el);
+			if (isNewQ) {
+				el.classList.remove('q-add');
+				el.lastChild.lastChild.firstChild.nodeValue = 'Submit Edit';
+			}
 		}
-	}, 'id=' + encodeURIComponent(el.parentNode.parentNode.id.substr(5)) + '&num=' + el.parentNode.children.indexOf(el.previousElementSibling) / 2 + '&question=' + encodeURIComponent(JSON.stringify(question)));
+	},
+		'id=' + encodeURIComponent(el.parentNode.parentNode.id.substr(5)) +
+		'&num=' + (isNewQ ? 'new' : el.parentNode.children.indexOf(el.previousElementSibling) / 2) +
+		'&question=' + encodeURIComponent(JSON.stringify(question))
+	);
 }
-function bindQuestionListeners(li) {
-	li.getElementsByTagName('input')[0].addEventListener('blur', inputParentRemove);
+function bindQuestionListeners(li, options) {
+	options = options || {};
+	if (!options.isNewQSet) bindDiscardListener(li.getElementsByClassName('discard')[0]);
+	if (options.isNewQSet) li.getElementsByTagName('input')[0].addEventListener('blur', inputParentRemove);
 	li.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
-	li.querySelector('ul input').addEventListener('keypress', wrongKeypress);
+	li.querySelector('ul input:not([type=\'checkbox\'])').addEventListener('keypress', wrongKeypress);
 	li.getElementsByTagName('input')[0].focus();
 	li.lastChild.addEventListener('submit', editQuestionSubmit);
 }
@@ -161,7 +176,7 @@ function bindListeners() {
 	document.getElementById('more-questions').addEventListener('click', function() {
 		var li = this.parentNode.parentNode;
 		li.parentNode.insertBefore(protoLi.cloneNode(true), li);
-		bindQuestionListeners(li.previousElementSibling);
+		bindQuestionListeners(li.previousElementSibling, {isNewQSet: true});
 	});
 }
 bindListeners();
@@ -173,7 +188,14 @@ function startEdit() {
 }
 function discardEdit() {
 	this.parentNode.hidden = true;
-	this.parentNode.previousElementSibling.hidden = false;
+	if (!this.parentNode.classList.contains('q-add')) this.parentNode.previousElementSibling.hidden = false;
+}
+function newQuestion() {
+	var newQ = buildQuestionEditor({text: '', answers: [''], incorrectAnswers: []}, {isNewQ: true});
+	newQ.hidden = false;
+	this.parentNode.children[1].appendChild(newQ);
+	newQ.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
+	newQ.getElementsByTagName('input')[0].focus();
 }
 function bindEditListener(editBtn) {
 	editBtn.addEventListener('click', startEdit);
@@ -181,8 +203,12 @@ function bindEditListener(editBtn) {
 function bindDiscardListener(discardBtn) {
 	discardBtn.addEventListener('click', discardEdit);
 }
+function bindNewQuestionListener(nqBtn) {
+	nqBtn.addEventListener('click', newQuestion);
+}
 document.getElementsByClassName('edit').forEach(bindEditListener);
 document.getElementsByClassName('discard').forEach(bindDiscardListener);
+document.getElementsByClassName('new-question').forEach(bindNewQuestionListener);
 newQSet.addEventListener('submit', function(e) {
 	e.preventDefault();
 	this.classList.add('validating');
@@ -215,6 +241,9 @@ newQSet.addEventListener('submit', function(e) {
 				details.lastChild.appendChild(buildQuestion(question));
 				details.lastChild.appendChild(buildQuestionEditor(question));
 			});
+			details.apendChild(document.createElement('a'));
+			details.lastChild.className = 'new-question';
+			details.lastChild.appendChild(document.createTextNode('add question'));
 			newQSet.parentNode.insertAfter(details, newQSet);
 			newQSet.removeChild(newQSet.firstElementChild);
 			newQSet.appendChild(protoDetails.cloneNode(true));

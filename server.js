@@ -180,7 +180,7 @@ let serverHandler = o(function*(req, res) {
 					let listr = '<li><a class="edit" title="edit question">✎</a><h3>' + html(question.text) + '</h3><div><ul class="check-list">',
 						liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
 					liestr += '<label>Question <input placeholder="What\'s one plus one?" required="" maxlength="144" value="' + html(question.text) + '" /></label>';
-					liestr += '<ul>';
+					liestr += '<p>Answers:</p><ul>';
 					question.answers.forEach(function(answer) {
 						listr += '<li>' + html(answer) + '</li>';
 						liestr += '<li><input type="checkbox" checked="" /> <input required="" maxlength="64" placeholder="Two" value="' + html(answer) + '" /></li>';
@@ -194,7 +194,7 @@ let serverHandler = o(function*(req, res) {
 					liestr += '<li><small><a class="more-wrong">+ more</a></small></li></ul><button class="submit-q-edit">Submit Edit</button></form></li>';
 					qsetstr += listr + liestr;
 				});
-				qsetstr += '</ol></details>';
+				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
 				res.write((yield fs.readFile('./html/console.html', yield)).toString().replace('$qsets', qsetstr));
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
