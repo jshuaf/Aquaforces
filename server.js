@@ -206,17 +206,6 @@ mongo.connect(config.mongoPath, function(err, db) {
 	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
 	require('./sockets.js')(server);
 	console.log(('Sockets running on port ' + config.port + ' over plain WS.').cyan);
-	dbcs.qsets.find().sort().each(function(err, qset) {
-		if (err) throw err;
-		if (qset && qset.questions[0].answer) {
-			console.log('qset ' + qset._id + ' edited');
-			for (let i = 0; i < qset.questions.length; i++) {
-				qset.questions[i].answers = [qset.questions[i].answer];
-				delete qset.questions[i].answer;
-			}
-			dbcs.qsets.update({_id: qset._id}, qset);
-		}
-	});
 	if (process.argv.includes('--test')) {
 		console.log('Running test, process will terminate when finished.'.yellow);
 		http.get({
