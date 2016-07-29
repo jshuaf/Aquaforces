@@ -234,6 +234,11 @@ module.exports = function(server) {
 							sailorsInCrew: ttws.crew.members.length
 						}));
 					});
+					dbcs.gameplays.insert({
+						_id: tws.gameplayID = generateID,
+						participants: tws.game.users.length + 1,
+						startTime: new Date().getTime()
+					});
 					tws.game.crews.forEach(function(crew) {
 						crew.members.forEach(function(member) {
 							let questionID = Math.floor(Math.random() * tws.game.questions.length),
@@ -262,6 +267,7 @@ module.exports = function(server) {
 					});
 				} else if (m.event == 'end-game') {
 					if (!tws.game) return tws.error('Game not found.', 'dashboard');
+					dbcs.gameplays.update({_id: tws.gameplayID}, {$set: {endTime: new Date().getTime()}});
 					tws.game.users.forEach(function(ttws) {
 						ttws.trysend(JSON.stringify({event: 'end-game', state: 'game-ended'}));
 					});
