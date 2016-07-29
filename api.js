@@ -1,6 +1,14 @@
 'use strict';
 const cookie = require('cookie');
-module.exports = function(req, res, post) {
+module.exports = o(function*(req, res, post) {
+	let user = yield dbcs.users.findOne({
+		cookie: {
+			$elemMatch: {
+				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+				created: {$gt: new Date() - 2592000000}
+			}
+		}
+	}, yield);
 	if (req.url.pathname == '/new-qset') {
 		if (!post.name) return res.writeHead(400) || res.end('Set name is required.');
 		if (typeof post.name != 'string') return res.writeHead(400) || res.end('Set name must be a string.');
@@ -38,25 +46,25 @@ module.exports = function(req, res, post) {
 					incorrectAnswers: q.incorrectAnswers
 				});
 			}
-			const qsetID = generateID();
-			const userID = cookie.parse(req.headers.cookie).userID;
-			dbcs.qsets.insert({
+			let question = {
 				_id: qsetID,
 				title: post.name,
 				questions,
 				timeAdded: new Date().getTime(),
-				author: userID
-			});
-			dbcs.users.update(
-				{_id: userID},
-				{$push: {qsets: qsetID}}
-			);
-			res.end(qsetID);
+				public: true
+			};
+			if (user) {
+				question.userID = user._id;
+				question.userName = user.name;
+			}
+			dbcs.qsets.insert(question);
+			res.end(question._id);
 		});
 	} else if (req.url.pathname == '/edit-question') {
 		dbcs.qsets.findOne({_id: post.id}, function(err, qset) {
 			if (err) throw err;
 			if (!qset) return res.writeHead(400) || res.end('Error: Question set not found.');
+			if (qset.userID != user._id) return res.writeHead(400) || res.end('Error: You may not edit question sets that aren\'t yours.');
 			if (post.num != 'new' && !qset.questions[parseInt(post.num)]) return res.writeHead(400) || res.end('Error: Invalid question number.');
 			let q;
 			try {
@@ -89,15 +97,5 @@ module.exports = function(req, res, post) {
 			res.writeHead(204);
 			res.end();
 		});
-	} else if (req.url.pathname == '/login') {
-		const userID = cookie.parse(req.headers.cookie).userID;
-		const existingUser = dbcs.users.find({userID});
-		if (!existingUser) {
-			dbcs.users.insert({
-				_id: userID,
-				qsets: []
-			});
-		}
-		res.end();
 	} else res.writeHead(404) || res.end('Error: The API feature requested has not been implemented.');
-};
+});

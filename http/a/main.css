@@ -116,7 +116,12 @@ nav, footer {
 	padding: 0.3em;
 	background: #ddd;
 }
-h1 button { float: right }
+h1 button, h1 small { float: right }
+h1::after {
+	content: '';
+	display: table;
+	clear: both;
+}
 h1 + * { clear: both }
 button, .button {
 	display: block;
@@ -139,6 +144,11 @@ button[disabled] {
 	background: #999;
 	color: #000;
 	cursor: not-allowed;
+}
+.error {
+	background: #f00;
+	color: #fff;
+	padding: 0.3em 0.5em;
 }
 #joinbtn { margin: 0.2em auto }
 #error {
