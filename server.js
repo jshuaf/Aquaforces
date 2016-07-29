@@ -171,7 +171,7 @@ let serverHandler = o(function*(req, res) {
 		}
 	} else if (req.url.pathname == '/') {
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
-		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replace('$googleClientID', config.googleAuth.client_id));
+		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replace('$host', encodeURIComponent('http://' + req.headers.host)).replace('$googleClientID', config.googleAuth.client_id));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (req.url.pathname == '/host/') {
 		let user = yield dbcs.users.findOne({
@@ -184,7 +184,6 @@ let serverHandler = o(function*(req, res) {
 		}, yield);
 		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '';
-		const requestCookies = req.headers.cookie || '';
 		dbcs.qsets.find({$or: [{userID: user._id}, {public: true}]}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
@@ -209,14 +208,14 @@ let serverHandler = o(function*(req, res) {
 				});
 				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
-				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr).replace('$googleClientID', config.googleAuth.client_id);
+				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr).replace('$host', encodeURIComponent('http://' + req.headers.host)).replace('$googleClientID', config.googleAuth.client_id);
 				if (user) data = data.replace(/<a.+?<\/a>/, 'Logged in as ' + user.name);
 				res.write(data);
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
 	} else if (req.url.pathname == '/login/google') {
-		let tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.client_id + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin%2Fgoogle">Try again.</a>';
+		let tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.client_id + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
 		if (req.url.query.error) {
 			yield respondPage('Login Error', req, res, yield, {}, 400);
 			res.write('<h1>Login Error</h1>');
