@@ -46,7 +46,7 @@ details p, details h3 { margin: 0.2em 0 }
 #new-qset {
 	display: block;
 	padding: 1em 2em;
-	background: #ffc;
+	background: #fff;
 }
 #new-qset.hide {
 	opacity: 0;

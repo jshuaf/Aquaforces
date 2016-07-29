@@ -1,8 +1,4 @@
 {
-	"/": {
-		"path": "./html/landing.html",
-		"inhead": "<link rel=\"stylesheet\" href=\"/landing.css\" />"
-	},
 	"/play/": {
 		"path": "./html/play.html"
 	}
