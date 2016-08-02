@@ -298,7 +298,7 @@ ol.studentselect > li > span, .leaderboard > li > span {
 }
 ol.studentselect > li > span { cursor: pointer }
 ol.studentselect > li > span::before {
-	content: '<';
+	content: '✕';
 	display: inline-block;
 	color: #666;
 	width: 0;

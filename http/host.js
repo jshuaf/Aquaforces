@@ -377,7 +377,7 @@ function startHost(id) {
 			span.onclick = uncrewUser;
 			crewsEl.children[m.crew - 1].appendChild(span);
 			crewsEl.children[m.crew - 1].dataset.n++;
-			document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
+			document.getElementById('game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 		} else if (m.event == 'remove-user') {
 			if (playing) return;
 			var e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
@@ -385,7 +385,7 @@ function startHost(id) {
 				if (e.parentNode.dataset.n) e.parentNode.dataset.n--;
 				e.parentNode.removeChild(e);
 			}
-			document.getElementById('start-game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
+			document.getElementById('game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
 		} else if (m.event == 'answer' || m.event == 'timeout-question') {
 			var b = boats[m.crewnum];
 			if (m.correct) b.v += b.dv;
@@ -426,11 +426,13 @@ function startHost(id) {
 		animateInterval;
 	document.getElementById('tgame').addEventListener('submit', function(e) {
 		e.preventDefault();
+		if (playing) return timeTotal = 0;
 		socket.send(JSON.stringify({event: 'start-game'}));
 		playing = true;
 		document.documentElement.classList.add('hostgame');
 		document.getElementById('lonelyfolks').classList.add('hide');
-		document.getElementById('crew-header').hidden = document.getElementById('start-game-btn').hidden = document.getElementById('crew-info-p').hidden = true;
+		document.getElementById('crew-header').hidden = document.getElementById('crew-info-p').hidden = true;
+		document.getElementById('game-btn').firstChild.nodeValue = 'End game';
 		crewsEl.classList.remove('studentselect');
 		crewsEl.classList.add('leaderboard');
 		crewsEl.children.forEach(function(e, i) {
@@ -445,7 +447,6 @@ function startHost(id) {
 		progress.childNodes.forEach(function(canoe, i) {
 			canoe.style.top = 'calc(' + (50 + 50 * (i + 0.5) / (n + 1)) + '% - ' + (1.6 * (2 * (i + 0.5) / (n + 1) - 0.5)) + 'em)';
 		});
-		header.removeChild(header.lastChild);
 		header.removeChild(header.firstChild);
 		document.getElementById('subheader').hidden = true;
 		lastTime = timeStart = new Date().getTime();
