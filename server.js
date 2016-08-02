@@ -14,7 +14,7 @@ const config = {
 require('./essentials.js');
 require('colors');
 global.dbcs = {};
-const usedDBCs = ['qsets', 'users'];
+const usedDBCs = ['qsets', 'users', 'gameplays'];
 
 const http = require('http'),
 	https = require('https'),
