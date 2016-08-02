@@ -304,6 +304,7 @@ function startHost(id) {
 	var cont = document.getElementById('cont'),
 		errorEl = document.getElementById('error');
 	cont.hidden = false;
+	document.getElementById('time-total').focus();
 	var boats = {},
 		cameraP = 0,
 		cameraS = 1;
@@ -427,6 +428,7 @@ function startHost(id) {
 	document.getElementById('tgame').addEventListener('submit', function(e) {
 		e.preventDefault();
 		if (playing) return timeTotal = 0;
+		timeTotal = document.getElementById('time-total').value * 60000;
 		socket.send(JSON.stringify({event: 'start-game'}));
 		playing = true;
 		document.documentElement.classList.add('hostgame');
@@ -459,8 +461,7 @@ function startHost(id) {
 			}
 		});
 	});
-	var timeStart, ms,
-		timeTotal = 300000;
+	var timeStart, ms, timeTotal;
 	function zeroPad(t) {
 		if (t < 10) return '0' + t;
 		return t;
@@ -507,7 +508,7 @@ function startHost(id) {
 		}
 		document.documentElement.style.backgroundPositionX = cameraP * 100 + '%';
 		lastTime = thisTime;
-		ms = timeTotal - new Date().getTime() + timeStart + 1000;
+		ms = timeTotal - new Date().getTime() + timeStart;
 		var t = '';
 		if (ms < 0) t = 'Time\'s up!';
 		else if (ms < 10000) t = Math.floor(ms / 60000) + ':0' + (ms / 1000).toFixed(2);
@@ -517,6 +518,7 @@ function startHost(id) {
 		else if (!animateInterval) requestAnimationFrame(animationUpdate);
 	}
 	function endGame() {
+		document.getElementById('game-btn').hidden = true;
 		crewsEl.children.forEach(function(e, i) {
 			if (boats[i + 1]) e.appendChild(document.createTextNode((boats[i + 1].p * 100).toFixed(0) + '\u2006m'));
 		});
