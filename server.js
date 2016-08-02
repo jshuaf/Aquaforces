@@ -27,7 +27,6 @@ const http = require('http'),
 	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient;
-let statics = JSON.parse(fs.readFileSync('./statics.json'));
 const apiServer = require('./api.js');
 global.errorForbidden = function(req, res, msg) {
 	respondPage('403', req, res, o(function*() {
@@ -77,11 +76,7 @@ let serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	console.log(req.method, req.url.pathname);
 	let i;
-	if (i = statics[req.url.pathname]) {
-		yield respondPage(i.title, req, res, yield, {inhead: i.inhead});
-		res.write((yield addVersionNonces((yield fs.readFile(i.path, yield)).toString(), req.url.pathname, yield)));
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (req.url.pathname.substr(0, 5) == '/api/') {
+	if (req.url.pathname.substr(0, 5) == '/api/') {
 		req.url.pathname = req.url.pathname.substr(4);
 		if (req.method != 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
 		if (url.parse(req.headers.referer || '').host != req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
@@ -169,6 +164,10 @@ let serverHandler = o(function*(req, res) {
 			});
 			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
 		}
+	} else if (req.url.pathname == '/play/' || (req.headers.host.includes('.io') && req.url.pathname == '/')) {
+		yield respondPage(null, req, res, yield);
+		res.write((yield addVersionNonces((yield fs.readFile('./html/play.html', yield)).toString(), req.url.pathname, yield)));
+		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (req.url.pathname == '/') {
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
 		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replace('$host', encodeURIComponent('http://' + req.headers.host)).replace('$googleClientID', config.googleAuth.client_id));
