@@ -1,5 +1,7 @@
+html { background: #eee }
 html.hostgame {
-	background: #4af url('/img/beachscape.svg') repeat-x;
+	background: url('/img/scape/city.svg') repeat-x #4af;
+	background-size: cover;
 	color: #000;
 }
 #header {
@@ -36,22 +38,50 @@ html.hostgame {
 }
 #progress > div.raft { background: url('/img/raftside.svg') no-repeat }
 .qset {
-	padding: 2em;
-	margin: 1em 0;
+	padding: 1em 2em;
+	margin: 0.5em 0;
+	background: #fff;
 }
 details p, details h3 { margin: 0.2em 0 }
 #new-qset {
 	display: block;
-	padding: 2em;
+	padding: 1em 2em;
+	background: #fff;
 }
-#new-qset, .qset { background: #fff }
 #new-qset.hide {
 	opacity: 0;
 	pointer-events: none;
 }
 #new-qset p { margin: 0.5em 0 0.3em }
 #new-qset li { width: 100% }
-#new-qset ul li input { width: calc(100% - 0.5ch) }
+#new-qset ul li, .q-edit ul li {
+	display: flex;
+	align-items: center;
+}
+#new-qset ul li input:not([type='checkbox']), .q-edit ul li input:not([type='checkbox']) {
+	flex-grow: 1;
+	margin-left: 0.5em;
+}
+#new-qset ul, .q-edit ul { padding-left: 1em }
+.q-edit form, .q-edit label, .q-edit li { width: 100% }
+input[type='checkbox'] {
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	width: 1.5em;
+	height: 1.5em;
+	padding: 0;
+	border-radius: 5px;
+	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2YwMCI+PHBhdGggZD0iTTIsMyAxMywxNCAxNCwxMyAzLDIiLz48cGF0aCBkPSJNMTQsMyAzLDE0IDIsMTMgMTMsMiIvPjwvc3ZnPg==') #fff;
+	background-size: contain;
+}
+input[type='checkbox']:checked {
+	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iIzAwMCI+PHBhdGggZD0iTTIuNSw4LjUgNSwxMSAxMy41LDIuNSAxNSw0IDUsMTQgMSwxMCIvPjwvc3ZnPg==') #0e0;
+	background-size: contain;
+	transition: background-color 0.1s;
+}
+.check-list { list-style: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iIzBiMCI+PHBhdGggZD0iTTIuNSw5LjUgNSwxMiAxMy41LDMuNSAxNSw1IDUsMTUgMSwxMSIgLz48L3N2Zz4=') }
+.cross-list { list-style: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2YwMCI+PHBhdGggZD0iTTIsNSAxMywxNiAxNCwxNSAzLDQiIC8+PHBhdGggZD0iTTE0LDUgMywxNiAyLDE1IDEzLDQiIC8+PC9zdmc+') }
 .left-align { margin: 0 -1.3em }
 summary + ol {
 	list-style-type: none;
@@ -69,7 +99,7 @@ summary + ol > li > div {
 	flex-grow: 1;
 	margin-left: 1em;
 }
-summary + ol > li > * { min-width: 5em }
+summary + ol > li > :not(a) { min-width: 5em }
 .hostgame #tgame {
 	position: absolute;
 	top: 0; bottom: 0; left: 0;
@@ -80,6 +110,12 @@ summary + ol > li > * { min-width: 5em }
 }
 .validating :invalid { border: 2px solid #f00 }
 summary { font-size: 1.5em }
+summary::after {
+	content: '';
+	display: table;
+	clear: both;
+}
+summary > small { float: right }
 summary h2 {
 	display: inline;
 	font-size: 1em;
@@ -93,3 +129,25 @@ h2 { margin-bottom: 0.3em }
 #new-game label { margin-top: 0 }
 #new-game select { display: block }
 #new-game button { margin-left: 1em }
+.qset > ol > li { position: relative }
+.q-edit { background: #cef }
+.q-add { background: #fec }
+.edit, .discard, .new-question, .more-wrong, #more-questions, summary small a { cursor: pointer }
+.edit, .discard {
+	position: absolute;
+	top: 0.3em; right: 0.3em;
+}
+.edit { color: #00f }
+.discard, .delete { color: #f00 }
+.discard:hover, .delete:hover { color: #f66 }
+.discard:active, .delete:active { color: #c00 }
+.dup { color: #777 }
+.dup:hover { color: #888 }
+.dup:active { color: #555 }
+.play { color: #0c0 }
+.play:hover { color: #4cc }
+.play:active { color: #0a0 }
+summary small a {
+	padding: 0 0.3em;
+	text-decoration: none;
+}

@@ -45,7 +45,7 @@ socket.onmessage = function(m) {
 		lastTime = new Date().getTime();
 		animationUpdate();
 		addAnswerInterval = setInterval(addAnswer, 1800);
-		document.getElementById('canoe').dataset.sailors = m.sailorsInCrew;
+		document.getElementById('boat').setAttribute('data-sailors', m.sailorsInCrew);
 	}
 	if (m.event == 'question') startQuestion(m.question);
 	if (m.event == 'correct-answer') correctAnswerQueue.push(m.answer);
@@ -54,14 +54,14 @@ socket.onmessage = function(m) {
 	if (m.event == 'rock') initRock();
 	if (m.event == 'rock-answer-status') moveRock(m.streak);
 	if (m.event == 'collide-rock') collideRock();
-	if (m.event == 'end-rock') moveRock(7);
+	if (m.event == 'end-rock') moveRock(5);
 	if (m.event == 'update-rank') document.getElementById('rank').firstChild.nodeValue = m.rank;
-	if (m.event == 'update-hp') document.getElementById('canoe').dataset.hp = m.hp <= 0.2 ? 20 : m.hp <= 0.4 ? 40 : m.hp <= 60 ? 60 : 100;
+	if (m.event == 'update-hp') document.getElementById('boat').setAttribute('data-hp', m.hp <= 0 ? 0 : m.hp <= 0.2 ? 20 : m.hp <= 0.4 ? 40 : m.hp <= 60 ? 60 : 100);
 	if (m.event == 'end-game') endGame();
 };
 document.addEventListener('visibilitychange', function() {
-	if (document.hidden) clearInterval(addAnswerInterval);
-	else if (addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
+	clearInterval(addAnswerInterval);
+	if (!document.hidden && addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
@@ -85,8 +85,19 @@ function initRock() {
 	rock.position = 0;
 }
 function moveRock(newPosition) {
-	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 100000;
+	rock.vx += rock.direction * (newPosition - rock.position) * innerWidth / 20000;
 	rock.position = newPosition;
+	if (newPosition == 5) {
+		requestAnimationFrame(function() {
+			rockEl.style.opacity = 0;
+			setTimeout(function() {
+				rock.shown = false;
+				requestAnimationFrame(function() {
+					rockEl.opacity = 1;
+				});
+			}, 1500);
+		});
+	}
 }
 socket.onclose = function() {
 	errorEl.textContent = 'Connection lost.';
@@ -108,7 +119,7 @@ document.getElementById('crew').addEventListener('submit', function(e) {
 		crewnum: parseInt(document.getElementById('crewnum').value)
 	}));
 	document.getElementById('crewnumdisplay').textContent = parseInt(document.getElementById('crewnum').value);
-	document.getElementById('canoe').dataset.crewnum = document.getElementById('crewnum').value;
+	document.getElementById('boat').setAttribute('data-crewnum', document.getElementById('crewnum').value);
 	setState('wait');
 });
 var timeBar = document.getElementById('timebar'),
@@ -121,7 +132,7 @@ function answerClickListener() {
 	this.parentNode.removeChild(this);
 	socket.send(JSON.stringify({
 		event: 'answer-chosen',
-		text: this.firstChild.firstChild.nodeValue
+		text: this.firstChild.nodeValue
 	}));
 }
 function addAnswer() {
@@ -132,10 +143,8 @@ function addAnswer() {
 		answer = correctAnswerQueue.shift();
 		correctAnswer = true;
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
-	var answerInner = document.createElement('div');
-	answerInner.appendChild(document.createTextNode(answer));
+	answerEl.appendChild(document.createTextNode(answer));
 	if (Math.random() < 0.4) answerEl.classList.add('alt');
-	answerEl.appendChild(answerInner);
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
 	answerEl.dataset.y = 0;
@@ -165,27 +174,27 @@ function animationUpdate() {
 	if (timeProportion < 0) failQuestion();
 	answersEl.children.forEach(function(e) {
 		if (+e.dataset.x + e.offsetWidth / 2 < innerWidth / 2) {
-			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x) / 30) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth * 0.42) / 30)) || 0);
+			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x) / 10) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth * 0.42) / 10)) || 0);
 		} else {
-			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x + innerWidth * 0.58) / 30) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth) / 30)) || 0);
+			e.dataset.vx = +e.dataset.vx + (dt * +e.dataset.y / innerHeight * ((Math.random() - 0.5) / 10000 + Math.min(0.001, Math.exp(-e.dataset.x + innerWidth * 0.58) / 10) - Math.min(0.001, Math.exp(+e.dataset.x + e.offsetWidth - innerWidth) / 10)) || 0);
 		}
 		answersEl.children.forEach(function(f) {
 			if (e == f) return;
-			var sd = (+e.dataset.vx - f.dataset.vx) * (+e.dataset.vx - f.dataset.vx) + (+e.dataset.vy - f.dataset.vy) * (+e.dataset.vy - f.dataset.vy);
-			e.dataset.vx = +e.dataset.vx - 1e-5 * (+e.dataset.vx - f.dataset.vx) / sd;
-			e.dataset.vx = +e.dataset.vx - 1e-5 * (+e.dataset.vy - f.dataset.vy) / sd;
+			var sd = (+e.dataset.x - f.dataset.x) * (+e.dataset.x - f.dataset.x) + (+e.dataset.y - f.dataset.y) * (+e.dataset.y - f.dataset.y);
+			e.dataset.vx -= -1e-3 * (+e.dataset.x - f.dataset.x) / sd;
+			e.dataset.vy -= -1e-4 * (+e.dataset.y - f.dataset.y) / sd;
 		});
-		e.dataset.vx /= 1.05;
-		e.dataset.vy = +e.dataset.vy + dt * ((Math.random() - 0.5) / 10000);
-		if (+e.dataset.vy < 0.01) e.dataset.vy = +e.dataset.vy + 0.005;
-		e.dataset.x = +e.dataset.x + +e.dataset.vx * dt;
-		e.dataset.y = +e.dataset.y + +e.dataset.vy * dt;
+		e.dataset.vx /= 1 + 0.001 * dt;
+		e.dataset.vy -= -dt * ((Math.random() - 0.5) / 10000);
+		if (+e.dataset.vy < 0.01) e.dataset.vy -= -0.005;
+		e.dataset.x -= -e.dataset.vx * dt;
+		e.dataset.y -= -e.dataset.vy * dt;
 		e.style.transform = 'translate(' + e.dataset.x + 'px, ' + e.dataset.y + 'px)';
 		if (+e.dataset.y > innerHeight) {
 			if (e.classList.contains('correct-answer')) {
 				socket.send(JSON.stringify({
 					event: 'resend-answer',
-					text: e.firstChild.firstChild.nodeValue
+					text: e.firstChild.nodeValue
 				}));
 			}
 			answersEl.removeChild(e);

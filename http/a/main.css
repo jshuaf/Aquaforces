@@ -75,6 +75,10 @@ input {
 	padding: 0.25em 1em;
 	border: 2px solid #aaa;
 }
+input:focus {
+	outline: none;
+	border: 2px solid #28f;
+}
 label input:not(#crewnum) { width: 100% }
 #crewnum { margin-bottom: 0.8em }
 #join {
@@ -112,7 +116,12 @@ nav, footer {
 	padding: 0.3em;
 	background: #ddd;
 }
-h1 button { float: right }
+h1 button, h1 small { float: right }
+h1::after {
+	content: '';
+	display: table;
+	clear: both;
+}
 h1 + * { clear: both }
 button, .button {
 	display: block;
@@ -135,6 +144,11 @@ button[disabled] {
 	background: #999;
 	color: #000;
 	cursor: not-allowed;
+}
+.error {
+	background: #f00;
+	color: #fff;
+	padding: 0.3em 0.5em;
 }
 #joinbtn { margin: 0.2em auto }
 #error {
@@ -184,47 +198,52 @@ a:active { color: #f44 }
 	top: 0; right: 0; bottom: 0; left: 0;
 	overflow: hidden;
 }
-#canoe {
+#boat {
 	width: 24.52vmin;
 	height: 39.18vmin;
 	margin: 34.91vh auto 0;
 	display: block;
 }
-#canoe * { transition: opacity 0.2s }
-#canoe:not([data-hp='20']) .broken-canoe { opacity: 0 }
-#canoe[data-hp='20'] .good-canoe { opacity: 0 }
-#canoe .canoe { fill: #666 }
-#canoe .canoe-inside { fill: #444 }
-#canoe .water { fill: #49b }
-#canoe[data-hp='60'] .water, #canoe[data-state='100'] .water { opacity: 0 }
-#canoe .seat { fill: #999 }
-#canoe .skin { fill: #fc9 }
-#canoe .pants { fill: #333 }
-#canoe .oars { fill: #c96 }
-#canoe[data-crewnum='1'] .shirts { fill: #849 }
-#canoe[data-crewnum='2'] .shirts { fill: #349 }
-#canoe[data-crewnum='3'] .shirts { fill: #c9c }
-#canoe[data-crewnum='4'] .shirts { fill: #494 }
-#canoe[data-crewnum='5'] .shirts { fill: #bd6 }
-#canoe[data-crewnum='6'] .shirts { fill: #f84 }
-#canoe[data-crewnum='7'] .shirts { fill: #e33 }
-#canoe[data-crewnum='8'] .shirts { fill: #ed4 }
-#canoe[data-crewnum='9'] .shirts { fill: #7cc }
-#canoe .hair { fill: #742 }
-#canoe .sweat { fill: #eee }
-#canoe[data-hp='100'] .water { opacity: 0 }
-#canoe[data-sailors='2'] .sailor:nth-of-type(4), #canoe[data-sailors='3'] .sailor:nth-of-type(4), #canoe[data-sailors='2'] .sailor:nth-of-type(2) { opacity: 0 }
+#boat * { transition: opacity 0.2s }
+#boat:not([data-hp='20']) .broken-canoe { opacity: 0 }
+#boat[data-hp='0'] .good-canoe, #boat[data-hp='20'] .good-canoe { opacity: 0 }
+#boat:not([data-hp='0']) .raft, #boat[data-hp='0'] .seat { opacity: 0 }
+#boat .canoe { fill: #666 }
+#boat .canoe-inside { fill: #444 }
+#boat .raft-outer { fill: #fb5 }
+#boat .raft-line { fill: #fa4 }
+#boat .raft-middle { fill: #fe6 }
+#boat .raft-inner { fill: #f94 }
+#boat .water { fill: #49b }
+#boat[data-hp='0'] .water, #boat[data-hp='60'] .water, #boat[data-hp='100'] .water { opacity: 0 }
+#boat .seat { fill: #999 }
+#boat .skin { fill: #fc9 }
+#boat .pants { fill: #333 }
+#boat .oars { fill: #c96 }
+#boat[data-crewnum='1'] .shirts { fill: #849 }
+#boat[data-crewnum='2'] .shirts { fill: #349 }
+#boat[data-crewnum='3'] .shirts { fill: #c9c }
+#boat[data-crewnum='4'] .shirts { fill: #494 }
+#boat[data-crewnum='5'] .shirts { fill: #bd6 }
+#boat[data-crewnum='6'] .shirts { fill: #f84 }
+#boat[data-crewnum='7'] .shirts { fill: #e33 }
+#boat[data-crewnum='8'] .shirts { fill: #ed4 }
+#boat[data-crewnum='9'] .shirts { fill: #7cc }
+#boat .hair { fill: #742 }
+#boat .sweat { fill: #eee }
+#boat[data-hp='100'] .sweat { opacity: 0 }
+#boat[data-sailors='2'] .sailor:nth-of-type(3), #boat[data-sailors='2'] .sailor:nth-of-type(5), #boat[data-sailors='3'] .sailor:nth-of-type(4) { opacity: 0 }
 #game input[type='text'] { width: 100% }
 #answers > div {
 	position: absolute;
 	top: 0; left: 0;
 	cursor: pointer;
-	padding: 0.7em 1.2em;
-	background: url('/img/leaf1.svg') no-repeat center;
+	padding: 0.5em 1em;
+	background: #6b0;
+	border-radius: 1em;
 }
-#answers > div.alt { background: url('/img/leaf2.svg') no-repeat center }
 @media (pointer: fine) {
-	#answers > div:hover { background-color: rgba(255, 255, 225, 0.2) }
+	#answers > div:hover { background-color: #7c0 }
 }
 #answers > div > div {
 	padding: 1em;
@@ -239,6 +258,7 @@ a:active { color: #f44 }
 	position: absolute;
 	top: 0;
 	width: calc(3em + 6vmax);
+	transition: opacity 1s;
 }
 .half-divider { display: flex }
 .half {
