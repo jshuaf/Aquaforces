@@ -44,7 +44,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		addAnswerInterval = setInterval(addAnswer, 1800);
+		addAnswerInterval = setInterval(addAnswer, 1200);
 		document.getElementById('boat').setAttribute('data-sailors', m.sailorsInCrew);
 	}
 	if (m.event == 'question') startQuestion(m.question);
@@ -61,7 +61,7 @@ socket.onmessage = function(m) {
 };
 document.addEventListener('visibilitychange', function() {
 	clearInterval(addAnswerInterval);
-	if (!document.hidden && addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
+	if (!document.hidden && addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1200);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');
@@ -139,12 +139,11 @@ function addAnswer() {
 	var answerEl = document.createElement('div'),
 		answer,
 		correctAnswer = false;
-	if (correctAnswerQueue.length && Math.random() < 0.4) {
+	if (correctAnswerQueue.length && Math.random() < 0.3 + correctAnswerQueue.length / 5) {
 		answer = correctAnswerQueue.shift();
 		correctAnswer = true;
 	} else answer = answers[Math.floor(Math.random() * answers.length)];
 	answerEl.appendChild(document.createTextNode(answer));
-	if (Math.random() < 0.4) answerEl.classList.add('alt');
 	answersEl.appendChild(answerEl);
 	answerEl.dataset.x = Math.random() * (innerWidth - answerEl.offsetWidth - 8) + 4;
 	answerEl.dataset.y = 0;
