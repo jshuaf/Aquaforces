@@ -184,7 +184,7 @@ let serverHandler = o(function*(req, res) {
 		}, yield);
 		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '';
-		dbcs.qsets.find({$or: [{userID: user._id}, {public: true}]}).sort({timeAdded: -1}).each(o(function*(err, qset) {
+		dbcs.qsets.find(user ? {$or: [{userID: user._id}, {public: true}]} : {public: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete">✕</a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
