@@ -74,6 +74,10 @@ global.errorsHTML = function(errs) {
 let cache = {};
 const redirectURLs = ['/host', '/play', '/console'];
 let serverHandler = o(function*(req, res) {
+	if (req.headers.host.includes('www')) {
+		res.writeHead(301, {Location: '//' + req.headers.host.replace('www.', '') + req.url});
+		res.end();
+	}
 	req.url = url.parse(req.url, true);
 	console.log(req.method, req.url.pathname);
 	let i;
