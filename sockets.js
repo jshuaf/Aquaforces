@@ -69,11 +69,11 @@ module.exports = function(server) {
 				} else if (m.event == 'answer-chosen') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
 					if (!m.text) return tws.error('No answer text sent.');
-					tws.crew.recentAnswers.forEach(function(pastAnswer) {
+					for (let pastAnswer of tws.crew.recentAnswers) {
 						if (pastAnswer.text == m.text && new Date().getTime() - pastAnswer.time < maxFuzzyTime) {
 							return tws.trysend(JSON.stringify({event: 'answer-status', correct: true}));
 						}
-					});
+					}
 					let tquestion;
 					tws.crew.activeQuestions.forEach(function(question) {
 						if (question.answers.includes(m.text)) tquestion = question;
