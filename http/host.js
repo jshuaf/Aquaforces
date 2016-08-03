@@ -6,6 +6,32 @@ if (location.hash) {
 		scrollTo(scrollX, prevScrollY);
 	}, 1000);
 }
+function searchInput() {
+	var mine, pub, fav;
+	search.value.split(/\s+/).forEach(function(token) {
+		if (token == 'is:mine') mine = 1;
+		if (token == 'is:public') pub = 1;
+		if (token == 'is:favorite') fav = 1;
+		if (token == '-is:mine') mine = -1;
+		if (token == '-is:public') pub = -1;
+		if (token == '-is:favorite') fav = -1;
+	});
+	document.getElementById('mine').classList.toggle('active', mine == 1);
+	document.getElementById('public').classList.toggle('active', pub == 1);
+	document.getElementById('favorite').classList.toggle('active', fav == 1);
+}
+var search = document.getElementById('search');
+search.addEventListener('input', searchInput);
+function toggleFilter() {
+	var r = new RegExp('(\\s+|^)is:' + this.id + '(\\s+|$)');
+	if (search.value.match(r)) search.value = search.value.replace(r, '$2').trim().replace(/\s+/g, ' ');
+	else search.value = 'is:' + this.id + ' ' + search.value;
+	search.focus();
+	searchInput();
+}
+document.getElementById('mine').addEventListener('click', toggleFilter);
+document.getElementById('public').addEventListener('click', toggleFilter);
+document.getElementById('favorite').addEventListener('click', toggleFilter);
 function inputRemove() {
 	if (!this.value) this.parentNode.parentNode.removeChild(this.parentNode);
 }

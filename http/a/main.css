@@ -63,7 +63,7 @@ h1 { margin: 0 0 0.4em }
 }
 [hidden] > * { display: none }
 #cont label { font-size: 1.3em }
-form:not(.left-align) { margin: 0 auto }
+form:not(.left-align):not(.search-form) { margin: 0 auto }
 .centerbox {
 	display: table;
 	margin: 1em auto;
@@ -79,7 +79,7 @@ input:focus {
 	outline: none;
 	border: 2px solid #28f;
 }
-label input:not(#crewnum) { width: 100% }
+label input:not(#crewnum):not([type='checkbox']) { width: 100% }
 #crewnum { margin-bottom: 0.8em }
 #join {
 	width: 100%;
@@ -96,20 +96,20 @@ label input:not(#crewnum) { width: 100% }
 	display: table;
 }
 @media (min-width: 500px) {
-	.pregamescreen form { padding: 0 10% }
+	.pregamescreen form:not(.search-form) { padding: 0 10% }
 }
-form:not([hidden]) {
+form:not([hidden]):not(.search-form) {
 	transition: opacity 0.5s;
 	display: table;
 }
-form[hidden] {
+form[hidden]:not(.search-form) {
 	opacity: 0;
 	height: 0;
 	display: block;
 	padding: 1px;
 	margin-bottom: -2px;
 }
-form:not([hidden]) + form[hidden] {
+form:not([hidden]) + form[hidden]:not(.search-form) {
 	display: table;
 }
 nav, footer {

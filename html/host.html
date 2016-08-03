@@ -1,5 +1,13 @@
 <div id="qset-cont">
-	<h1 id="qset-title">Question Sets <small><a class="button" href="https://accounts.google.com/o/oauth2/v2/auth?client_id=$googleClientID&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=$host%2Flogin%2Fgoogle">Log in with Google</a></small></h1>
+	<h1>Question Sets <small><a class="button" href="https://accounts.google.com/o/oauth2/v2/auth?client_id=$googleClientID&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=$host%2Flogin%2Fgoogle">Log in with Google</a></small></h1>
+	<form class="search-form">
+		<div class="half-divider"><input id="search" name="q" placeholder="Search question sets" autofocus="" /> <button>Search</button></div>
+		<p id="filter">
+			<a id="mine">Mine</a>
+			<a id="public">Public</a>
+			<a id="favorite">Favorite</a>
+		</p>
+	</form>
 	<section class="left-align">
 		<form id="new-qset">
 			<details>

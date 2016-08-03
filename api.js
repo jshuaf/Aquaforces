@@ -11,7 +11,6 @@ module.exports = o(function*(req, res, post) {
 	}, yield);
 	if (req.url.pathname == '/new-qset') {
 		if (!post.name) return res.writeHead(400) || res.end('Set name is required.');
-		if (typeof post.name != 'string') return res.writeHead(400) || res.end('Set name must be a string.');
 		if (post.name.length > 144) return res.writeHead(400) || res.end('Set name length must not be greater than 144 characters.');
 		dbcs.qsets.findOne({title: post.name}, function(err, existingQSet) {
 			if (err) throw err;
@@ -47,7 +46,7 @@ module.exports = o(function*(req, res, post) {
 				});
 			}
 			let question = {
-				_id: qsetID,
+				_id: generateID(),
 				title: post.name,
 				questions,
 				timeAdded: new Date().getTime(),

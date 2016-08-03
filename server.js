@@ -14,7 +14,7 @@ const config = {
 require('./essentials.js');
 require('colors');
 global.dbcs = {};
-const usedDBCs = ['qsets', 'users', 'gameplays'];
+const usedDBCs = ['users', 'gameplays'];
 
 const http = require('http'),
 	https = require('https'),
@@ -175,7 +175,7 @@ let serverHandler = o(function*(req, res) {
 		}
 	} else if (req.url.pathname == '/') {
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
-		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replace('$googleClientID', config.googleAuth.client_id));
+		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (req.url.pathname == '/host/') {
 		let user = yield dbcs.users.findOne({
@@ -187,8 +187,23 @@ let serverHandler = o(function*(req, res) {
 			}
 		}, yield);
 		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
-		let qsetstr = '';
-		dbcs.qsets.find(user ? {$or: [{userID: user._id}, {public: true}]} : {public: true}).sort({timeAdded: -1}).each(o(function*(err, qset) {
+		let qsetstr = '',
+			filter = user ? {$or: [{userID: user._id}, {public: true}]} : {public: true},
+			q = (req.url.query.q || '').trim(),
+			searchText = '';
+		q.split(/\s+/).forEach(function(token) {
+			if (token == 'is:mine') filter.userID = user._id;
+			if (token == 'is:public') filter.public = true;
+			if (token == 'is:favorite' && user) filter._id = {$in: user.favorites};
+			if (token == '-is:mine') filter.userID = {$not: user._id};
+			if (token == '-is:public') filter.public = false;
+			if (token == '-is:favorite' && user) filter._id = {$not: {$in: user.favorites}};
+			if (!token.includes(':')) searchText += token + ' ';
+		});
+		searchText = searchText.trim();
+		if (searchText) filter.$text = {$search: searchText};
+		console.log(filter);
+		dbcs.qsets.find(filter, searchText ? {score: {$meta: 'textScore'}} : undefined).sort(searchText ? {score: {$meta: 'textScore'}} : {timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete">✕</a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
@@ -212,8 +227,9 @@ let serverHandler = o(function*(req, res) {
 				});
 				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
-				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr).replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replace('$googleClientID', config.googleAuth.client_id);
+				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr).replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
 				if (user) data = data.replace(/<a.+?<\/a>/, 'Logged in as ' + user.name);
+				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
 				res.write(data);
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
@@ -345,6 +361,11 @@ let serverHandler = o(function*(req, res) {
 console.log('Connecting to mongodb…'.cyan);
 mongo.connect(config.mongoPath, function(err, db) {
 	if (err) throw err;
+	db.createCollection('qsets', function(err, collection) {
+		if (err) throw err;
+		db.createIndex('qsets', {title: 'text'}, {}, function() {});
+		dbcs.qsets = collection;
+	});
 	let i = usedDBCs.length;
 	function handleCollection(err, collection) {
 		if (err) throw err;
@@ -356,7 +377,6 @@ mongo.connect(config.mongoPath, function(err, db) {
 	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
 	require('./sockets.js')(server);
 	console.log(('Sockets running on port ' + config.port + ' over plain WS.').cyan);
-	dbcs.qsets.update({}, {$set: {public: true}}, {multi: true});
 	if (process.argv.includes('--test')) {
 		console.log('Running test, process will terminate when finished.'.yellow);
 		http.get({
