@@ -275,6 +275,7 @@ module.exports = function(server) {
 			});
 			tws.on('close', function() {
 				delete games[tws.gameID];
+				dbcs.gameplays.update({_id: tws.gameplayID}, {$set: {endTime: new Date().getTime()}});
 			});
 		} else {
 			tws.trysend(JSON.stringify({
