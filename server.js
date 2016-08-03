@@ -352,6 +352,24 @@ let serverHandler = o(function*(req, res) {
 			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
+	} else if (req.url.pathname == '/stats/') {
+		let user = yield dbcs.users.findOne({
+			cookie: {
+				$elemMatch: {
+					token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+					created: {$gt: new Date() - 2592000000}
+				}
+			}
+		}, yield);
+		if (!user.admin) return errorNotFound(req, res);
+		yield respondPage('Statistics', req, res, yield, {}, 400);
+		dbcs.gameplays.aggregate({$match: {}}, {$group: {_id: 'stats', num: {$sum: 1}, sum: {$sum: '$participants'}}}, o(function*(err, result) {
+			if (err) throw err;
+			res.write('<h1>Aquaforces play statistics</h1>');
+			res.write('<p>' + result[0].sum + ' users</p>');
+			res.write('<p>' + result[0].num + ' gameplays</p>');
+			res.end(yield fs.readFile('html/a/foot.html', yield));
+		}));
 	} else if (redirectURLs.includes(req.url.pathname)) {
 		res.writeHead(303, {'Location': req.url.pathname + '/'});
 		res.end();
