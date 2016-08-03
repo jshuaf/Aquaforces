@@ -64,7 +64,7 @@ details p, details h3 { margin: 0.2em 0 }
 }
 #new-qset ul, .q-edit ul { padding-left: 1em }
 .q-edit form, .q-edit label, .q-edit li { width: 100% }
-input[type='checkbox'] {
+.left-align input[type='checkbox'] {
 	appearance: none;
 	-moz-appearance: none;
 	-webkit-appearance: none;
@@ -75,7 +75,7 @@ input[type='checkbox'] {
 	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2YwMCI+PHBhdGggZD0iTTIsMyAxMywxNCAxNCwxMyAzLDIiLz48cGF0aCBkPSJNMTQsMyAzLDE0IDIsMTMgMTMsMiIvPjwvc3ZnPg==') #fff;
 	background-size: contain;
 }
-input[type='checkbox']:checked {
+.left-align input[type='checkbox']:checked {
 	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iIzAwMCI+PHBhdGggZD0iTTIuNSw4LjUgNSwxMSAxMy41LDIuNSAxNSw0IDUsMTQgMSwxMCIvPjwvc3ZnPg==') #0e0;
 	background-size: contain;
 	transition: background-color 0.1s;
@@ -83,6 +83,30 @@ input[type='checkbox']:checked {
 .check-list { list-style: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iIzBiMCI+PHBhdGggZD0iTTIuNSw5LjUgNSwxMiAxMy41LDMuNSAxNSw1IDUsMTUgMSwxMSIgLz48L3N2Zz4=') }
 .cross-list { list-style: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2YwMCI+PHBhdGggZD0iTTIsNSAxMywxNiAxNCwxNSAzLDQiIC8+PHBhdGggZD0iTTE0LDUgMywxNiAyLDE1IDEzLDQiIC8+PC9zdmc+') }
 .left-align { margin: 0 -1.3em }
+#filter { margin-top: 0.2em }
+#filter a {
+	background: #6df;
+	color: #000;
+	padding: 0.4em 1em;
+	margin: 0 0.2em;
+	border: 1px solid #888;
+	display: inline-block;
+	cursor: pointer;
+	transition: background 0.1s;
+}
+#filter a:hover {
+	background: #8ef;
+	transition: color 0.1s;
+}
+#filter a:active, #filter a.active {
+	background: #08f;
+	color: #fff;
+}
+#search { width: 100% }
+.search-form button {
+	margin-left: 0.5em;
+	font-size: 1.2rem;
+}
 summary + ol {
 	list-style-type: none;
 	padding: 0;
@@ -116,7 +140,7 @@ summary::after {
 	clear: both;
 }
 summary > small { float: right }
-summary h2 {
+summary h2, summary h3 {
 	display: inline;
 	font-size: 1em;
 }
