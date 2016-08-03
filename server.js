@@ -293,13 +293,13 @@ let serverHandler = o(function*(req, res) {
 				} catch (e) {
 					yield respondPage('Login Error', user, req, res, yield, {}, 500);
 					res.write('<h1>Login Error</h1>');
-					res.write('<p>An invalid response was recieved from the Google API. ' + tryagain + '</p>');
+					res.write('<p>An invalid response was received from the Google API. ' + tryagain + '</p>');
 					res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
 				if (apiData.error) {
 					yield respondPage('Login Error', user, req, res, yield, {}, 500);
 					res.write('<h1>Login Error</h1>');
-					res.write('<p>An error was recieved from the Google API. ' + tryagain + '</p>');
+					res.write('<p>An error was received from the Google API. ' + tryagain + '</p>');
 					res.write(errorsHTML([apiData.error + ': ' + apiData.error_description]));
 					return res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
