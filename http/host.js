@@ -198,10 +198,13 @@ function bindQuestionListeners(li, options) {
 	li.lastChild.addEventListener('submit', editQuestionSubmit);
 }
 function bindListeners() {
-	document.getElementById('new-qset-summary').addEventListener('click', function() {
-		if (!this.parentNode.open) requestAnimationFrame(function() {
-			document.getElementById('qset-title').focus();
-		});
+	document.getElementById('new-qset-btn').addEventListener('click', function() {
+		document.getElementById('new-qset').hidden = false;
+		document.getElementById('new-qset').scrollIntoView(true);
+		document.getElementById('qset-title').focus();
+	});
+	document.getElementById('close').addEventListener('click', function() {
+		document.getElementById('new-qset').hidden = true;
 	});
 	document.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
 	document.getElementById('questions').querySelector('ul input:not([type=\'checkbox\'])').addEventListener('keypress', wrongKeypress);

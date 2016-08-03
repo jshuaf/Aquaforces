@@ -48,10 +48,12 @@ details p, details h3 { margin: 0.2em 0 }
 	padding: 1em 2em;
 	background: #fff;
 }
+#new-qset[hidden] { display: none }
 #new-qset.hide {
 	opacity: 0;
 	pointer-events: none;
 }
+#new-qset h2 { margin-top: 0 }
 #new-qset p { margin: 0.5em 0 0.3em }
 #new-qset li { width: 100% }
 #new-qset ul li, .q-edit ul li {
@@ -64,6 +66,7 @@ details p, details h3 { margin: 0.2em 0 }
 }
 #new-qset ul, .q-edit ul { padding-left: 1em }
 .q-edit form, .q-edit label, .q-edit li { width: 100% }
+.left-align form[hidden] + details { margin-top: 0 }
 .left-align input[type='checkbox'] {
 	appearance: none;
 	-moz-appearance: none;
@@ -83,15 +86,15 @@ details p, details h3 { margin: 0.2em 0 }
 .check-list { list-style: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iIzBiMCI+PHBhdGggZD0iTTIuNSw5LjUgNSwxMiAxMy41LDMuNSAxNSw1IDUsMTUgMSwxMSIgLz48L3N2Zz4=') }
 .cross-list { list-style: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2YwMCI+PHBhdGggZD0iTTIsNSAxMywxNiAxNCwxNSAzLDQiIC8+PHBhdGggZD0iTTE0LDUgMywxNiAyLDE1IDEzLDQiIC8+PC9zdmc+') }
 .left-align { margin: 0 -1.3em }
-#filter { margin-top: 0.2em }
+#filter { margin: 0.5em 0 0 }
 #filter a {
 	background: #6df;
 	color: #000;
 	padding: 0.4em 1em;
 	margin: 0 0.2em;
 	border: 1px solid #888;
+	border-bottom: none;
 	display: inline-block;
-	cursor: pointer;
 	transition: background 0.1s;
 }
 #filter a:hover {
@@ -107,6 +110,7 @@ details p, details h3 { margin: 0.2em 0 }
 	margin-left: 0.5em;
 	font-size: 1.2rem;
 }
+.search-form .half-divider { margin-bottom: 0.5em }
 summary + ol {
 	list-style-type: none;
 	padding: 0;
@@ -156,15 +160,15 @@ h2 { margin-bottom: 0.3em }
 .qset > ol > li { position: relative }
 .q-edit { background: #cef }
 .q-add { background: #fec }
-.edit, .discard, .new-question, .more-wrong, #more-questions, summary small a { cursor: pointer }
 .edit, .discard {
 	position: absolute;
 	top: 0.3em; right: 0.3em;
 }
 .edit { color: #00f }
-.discard, .delete { color: #f00 }
-.discard:hover, .delete:hover { color: #f66 }
-.discard:active, .delete:active { color: #c00 }
+.discard, .delete, #close { color: #f00 }
+.discard:hover, .delete:hover, #close:hover { color: #f66 }
+.discard:active, .delete:active, #close:active { color: #c00 }
+#close { float: right }
 .dup { color: #777 }
 .dup:hover { color: #888 }
 .dup:active { color: #555 }

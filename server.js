@@ -201,7 +201,6 @@ let serverHandler = o(function*(req, res) {
 		});
 		searchText = searchText.trim();
 		if (searchText) filter.$text = {$search: searchText};
-		console.log(filter);
 		dbcs.qsets.find(filter, searchText ? {score: {$meta: 'textScore'}} : undefined).sort(searchText ? {score: {$meta: 'textScore'}} : {timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {

@@ -1,5 +1,6 @@
 <div id="qset-cont">
 	<h1>Question Sets <small><a class="button" href="https://accounts.google.com/o/oauth2/v2/auth?client_id=$googleClientID&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=$host%2Flogin%2Fgoogle">Log in with Google</a></small></h1>
+	<button id="new-qset-btn">New Question Set</button>
 	<form class="search-form">
 		<div class="half-divider"><input id="search" name="q" placeholder="Search question sets" autofocus="" /> <button>Search</button></div>
 		<p id="filter">
@@ -9,25 +10,23 @@
 		</p>
 	</form>
 	<section class="left-align">
-		<form id="new-qset">
-			<details>
-				<summary id="new-qset-summary"><h2>New Question Set</h2></summary>
-				<label>Title <input maxlength="144" class="fullwidth" id="qset-title" placeholder="My question set" required="" /></label>
-				<h3>Questions:</h3>
-				<p><i>Avoid synonyms among answers.</i></p>
-				<ol id="questions">
-					<li>
-						<label>Question <input required="" maxlength="144" placeholder="What's one plus one?" /></label>
-						<p>Answers:</p>
-						<ul>
-							<li><input type="checkbox" checked="" /> <input required="" maxlength="64" placeholder="Two" /></li>
-							<li><small><a class="more-wrong" title="↵">+ more</a></small></li>
-						</ul>
-					</li>
-					<li><small><a id="more-questions" title="⇧↵">+ more</a></small></li>
-				</ol>
-				<button>Add set</button>
-			</details>
+		<form id="new-qset" hidden="">
+			<h2>New Question Set <a id="close" title="close">✕</a></h2>
+			<label>Title <input maxlength="144" class="fullwidth" id="qset-title" placeholder="My question set" required="" /></label>
+			<h3>Questions:</h3>
+			<p><i>Avoid synonyms among answers.</i></p>
+			<ol id="questions">
+				<li>
+					<label>Question <input required="" maxlength="144" placeholder="What's one plus one?" /></label>
+					<p>Answers:</p>
+					<ul>
+						<li><input type="checkbox" checked="" /> <input required="" maxlength="64" placeholder="Two" /></li>
+						<li><small><a class="more-wrong" title="↵">+ more</a></small></li>
+					</ul>
+				</li>
+				<li><small><a id="more-questions" title="⇧↵">+ more</a></small></li>
+			</ol>
+			<button>Add set</button>
 		</form>
 		$qsets
 	</section>
