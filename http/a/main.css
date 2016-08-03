@@ -74,6 +74,7 @@ input {
 	border-radius: 1em;
 	padding: 0.25em 1em;
 	border: 2px solid #aaa;
+	font-family: 'Source Sans Pro', 'Helvetica', sans-serif;
 }
 input:focus {
 	outline: none;
