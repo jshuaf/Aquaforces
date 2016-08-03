@@ -175,7 +175,7 @@ let serverHandler = o(function*(req, res) {
 		}
 	} else if (req.url.pathname == '/') {
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
-		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replace('$host', encodeURIComponent('http://' + req.headers.host)).replace('$googleClientID', config.googleAuth.client_id));
+		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replace('$googleClientID', config.googleAuth.client_id));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (req.url.pathname == '/host/') {
 		let user = yield dbcs.users.findOne({
@@ -212,7 +212,7 @@ let serverHandler = o(function*(req, res) {
 				});
 				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
-				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr).replace('$host', encodeURIComponent('http://' + req.headers.host)).replace('$googleClientID', config.googleAuth.client_id);
+				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr).replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replace('$googleClientID', config.googleAuth.client_id);
 				if (user) data = data.replace(/<a.+?<\/a>/, 'Logged in as ' + user.name);
 				res.write(data);
 				res.end(yield fs.readFile('./html/a/foot.html', yield));

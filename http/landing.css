@@ -16,7 +16,7 @@ main > section:first-of-type {
 	transform: translateY(-16%);
 	text-align: center;
 }
-main > section:first-of-type p { display: none }
+#spice { display: none }
 #summary { margin-top: 100vh }
 #summary, #call-to-action {
 	background: #256;
@@ -55,7 +55,7 @@ section div svg {
 	}
 }
 @media (min-height: 600px) and (min-width: 600px) {
-	main > section:first-of-type p {
+	#spice {
 		display: block;
 		margin-top: 10vh;
 		font-size: calc(1.2rem + 1vmin);
@@ -75,6 +75,13 @@ header {
 	max-width: 100%;
 }
 #log-in { display: none }
+#guest-play { margin-top: 0.5em }
+#guest-play a {
+	color: #444;
+	text-decoration: none;
+}
+#guest-play a:hover { color: #44f }
+#guest-play a:active { color: #000 }
 @media (min-width: 27em) {
 	#log-in {
 		display: block;
