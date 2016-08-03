@@ -544,9 +544,11 @@ function startHost(id) {
 		else if (!animateInterval) requestAnimationFrame(animationUpdate);
 	}
 	function endGame() {
-		var k = document.createElement('button');
-		k.appendChild(document.createTextNode('Play again'));
-		header.appendChild(k);
+		var again = document.createElement('a');
+		again.appendChild(document.createTextNode('Play again'));
+		again.href = '';
+		again.className = 'button';
+		header.appendChild(again);
 		document.getElementById('game-btn').hidden = true;
 		crewsEl.children.forEach(function(e, i) {
 			if (boats[i + 1]) e.appendChild(document.createTextNode((boats[i + 1].p * 100).toFixed(0) + '\u2006m'));
