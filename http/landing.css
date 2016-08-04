@@ -21,9 +21,9 @@ main > section:first-of-type {
 	transform: translateY(-16%);
 	text-align: center;
 }
-#spice { display: none }
-#summary { margin-top: 100vh; text-align: center;}
 #summary {
+	margin-top: 100vh;
+	text-align: center;
 	background: #256;
 	color: #eee;
 }
@@ -63,7 +63,7 @@ section div {
 	padding: 0 1em;
 }
 @media (min-width: 600px) {
-	section div { width: 33.33333333% }
+	section div { width: 33.333% }
 }
 section div h2 { text-align: center; font-weight: normal; }
 section div h2, section div p { margin: 0.3em 0 }
@@ -117,7 +117,9 @@ h1 {
 	font-weight: normal;
 }
 #spice {
-	margin-left: auto; margin-right: auto;
+	margin-left: auto;
+	margin-right: auto;
+	display: none;
 }
 section > h2 {
 	text-align: center;
