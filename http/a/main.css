@@ -70,6 +70,12 @@ form:not(.left-align):not(.search-form) { margin: 0 auto }
 	margin: 1em auto;
 	max-width: 28em;
 }
+code {
+	display: block;
+	white-space: pre;
+	background: #fff;
+	padding: 0.5em;
+}
 input {
 	font-size: 1.1em;
 	border-radius: 1em;

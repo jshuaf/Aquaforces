@@ -18,6 +18,7 @@ const usedDBCs = ['users', 'gameplays'];
 
 const http = require('http'),
 	https = require('https'),
+	spawn = require('child_process').spawn,
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
 	zlib = require('zlib'),
@@ -363,6 +364,23 @@ let serverHandler = o(function*(req, res) {
 			res.write('<p>' + result[0].num + ' gameplays</p>');
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
+	} else if (req.url.pathname == '/status/') {
+		yield respondPage('Status', req, res, yield);
+		res.write('<h1>Aquaforces Status</h1>');
+		let child = spawn('git', ['rev-parse', '--short', 'HEAD']);
+		res.write('<p class="green"><strong>Running</strong>, commit #');
+		child.stdout.on('data', function(data) {
+			res.write(data);
+		});
+		child.stdout.on('end', o(function*() {
+			res.write('</p>');
+			if (user.name) res.write('<p>You are logged in as <strong>' + user.name + '</strong></p>');
+			else res.write('<p>You are not logged in</p>');
+			res.write('<p>Current host header is <strong>' + req.headers.host + '</strong></p>');
+			res.write('<code class="blk" id="socket-test">Connecting to socket…</code>');
+			res.write(yield addVersionNonces('<script src="/a/sockettest.js"></script>', req.url.pathname, yield));
+			res.end(yield fs.readFile('html/a/foot.html', yield));
+		}));
 	} else if (redirectURLs.includes(req.url.pathname)) {
 		res.writeHead(303, {'Location': req.url.pathname + '/'});
 		res.end();
@@ -382,7 +400,6 @@ mongo.connect(config.mongoPath, function(err, db) {
 		dbcs[usedDBCs[i]] = collection;
 	}
 	while (i--) db.collection(usedDBCs[i], handleCollection);
-	dbcs.users.update({favorites: {$exists: false}}, {$set: {favorites: []}});
 	console.log('Connected to mongodb.'.cyan);
 	let server = http.createServer(serverHandler).listen(config.port);
 	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
