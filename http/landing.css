@@ -8,7 +8,15 @@ body {
 	margin: 0;
 	line-height: 1.35;
 }
-section { padding: calc(2em + 2vh) calc(0.8em + 3.5%) }
+section { padding: calc(2em + 2vh) calc(7.5em + 3.5%) }
+@media (max-width: 600px) {
+	section {
+		padding: calc(2em + 2vh) calc(0.5em + 3.5%);
+	}
+	#spice {
+		display: none;
+	}
+}
 main > section:first-of-type {
 	position: absolute;
 	top: 0; left: 0; right: 0;
@@ -16,30 +24,20 @@ main > section:first-of-type {
 	transform: translateY(-16%);
 	text-align: center;
 }
-#spice { display: none }
-#summary { margin-top: 100vh }
-#summary, #call-to-action {
+#summary {
+	margin-top: 100vh;
+	text-align: center;
 	background: #256;
 	color: #eee;
 }
 #benefits { background: #fff }
-.iframe {
-	float: left;
-	position: relative;
-	width: 100%; height: 0;
-	padding-bottom: 56.25%;
-}
 iframe {
-	position: absolute;
-	left: 0; top: 0;
-	width: 100%; height: 100%;
+	width: 512px;
+	height: 288px;
 }
-@media (min-width: 850px) {
-	.iframe {
-		max-width: 512px;
-		padding-bottom: 288px;
-		margin-right: 3.5%;
-		float: left;
+@media (max-width: 800px) {
+	iframe {
+		width: 100%;
 	}
 }
 section::after {
@@ -51,15 +49,10 @@ section div {
 	float: left;
 	padding: 0 1em;
 }
-@media (min-width: 600px) and (max-width: 1200px) {
-	section div { width: 50% }
-	section div:nth-child(3) { clear: both }
-	section div:nth-child(3), section div:nth-child(4) { margin-top: 2em }
+@media (min-width: 600px) {
+	section div { width: 33.333% }
 }
-@media (min-width: 1201px) {
-	section div { width: 25% }
-}
-section div h2 { text-align: center }
+section div h2 { text-align: center; font-weight: normal; }
 section div h2, section div p { margin: 0.3em 0 }
 section div p { text-align: center }
 section div svg {
@@ -76,12 +69,11 @@ section div svg {
 @media (min-height: 600px) and (min-width: 600px) {
 	#spice {
 		display: block;
-		margin-top: 10vh;
-		font-size: calc(1.2rem + 1vmin);
+		font-size: 1.25em;
 	}
 }
 header {
-	padding: 0.3em;
+	padding: 1em;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -90,17 +82,10 @@ header {
 #logo {
 	margin: 1em auto;
 	display: block;
-	width: calc(12em + 10%);
+	height: 2.2em;
 	max-width: 100%;
 }
 #log-in { display: none }
-#guest-play { margin-top: 0.5em }
-#guest-play a {
-	color: #444;
-	text-decoration: none;
-}
-#guest-play a:hover { color: #44f }
-#guest-play a:active { color: #000 }
 @media (min-width: 27em) {
 	#log-in {
 		display: block;
@@ -109,30 +94,34 @@ header {
 		right: 0;
 		transform: translateY(-50%);
 		margin: 0 calc(0.5rem + 2%) 0 0;
-		font-size: 1.5rem;
 	}
 	#logo { margin: 0.5em 0 0 calc(0.5rem + 2%) }
 }
 h1 {
 	font-size: calc(2rem + 1.5vw);
-	margin: 0.4em 0;
+	line-height: 1.25;
+	margin: 0;
+	font-weight: normal;
 }
-button {
-	margin-left: auto; margin-right: auto;
-	font-size: 1.8em;
+#spice {
+	margin-left: auto;
+	margin-right: auto;
 }
 section > h2 {
 	text-align: center;
 	margin: 0 0 0.5em;
 	font-size: 2.5em;
+	font-weight: normal;
 }
 .buttons { text-align: center }
 .button { margin: 0 0.5em }
 section > p {
 	display: table;
 	margin: 0 auto;
-	font-size: calc(1em + 0.3vw);
 	line-height: 1.5;
+}
+#play-a-game {
+	margin-top: 2vh;
 }
 #bottom-bg {
 	position: absolute;
@@ -143,7 +132,7 @@ section > p {
 	position: relative;
 	overflow: hidden;
 	color: #eee;
-	padding-bottom: 15%;
+	padding-bottom: 0%;
 }
 #about section {
 	z-index: 1;
