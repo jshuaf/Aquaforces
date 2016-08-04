@@ -268,7 +268,6 @@ a:active { color: #f44 }
 	flex-grow: 1;
 }
 .half:first-of-type { margin-right: 0.5em }
-#lonelyfolks { transition: flex-grow 0.3s }
 #lonelyfolks.hide {
 	flex-grow: 0;
 	overflow: hidden;
