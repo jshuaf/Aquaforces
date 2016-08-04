@@ -157,6 +157,14 @@ button[disabled] {
 	color: #000;
 	cursor: not-allowed;
 }
+.signin {
+	background: #e44;
+	fill: #fff;
+	transition: background 0.1s;
+	border-radius: 0.2em;
+}
+.signin:hover { background: #f22 }
+.signin:active { background: #f66 }
 .empty-search {
 	margin: 1em 1.3em;
 	color: #f00;
