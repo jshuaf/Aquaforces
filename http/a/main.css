@@ -140,7 +140,7 @@ button, .button {
 	margin: 0.2em 0;
 	padding: 0.2em 1em;
 	background: #6b0;
-	font: 1.6rem 'Source Sans Pro', 'Helvetica', sans-serif;
+	font: 1.5rem 'Source Sans Pro', 'Helvetica', sans-serif;
 	transition: background-color 0.1s;
 	border: none;
 	border-radius: 1em;

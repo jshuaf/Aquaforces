@@ -28,6 +28,7 @@ main > section:first-of-type {
 	position: relative;
 	width: 100%; height: 0;
 	padding-bottom: 56.25%;
+	margin-bottom: 1em;
 }
 iframe {
 	position: absolute;
@@ -41,6 +42,10 @@ iframe {
 		margin-right: 3.5%;
 		float: left;
 	}
+	#summary p { font-size: 2vw }
+}
+@media (min-width: 62em) {
+	#summary p { font-size: 1.25em }
 }
 section::after {
 	content: '';
@@ -76,8 +81,8 @@ section div svg {
 @media (min-height: 600px) and (min-width: 600px) {
 	#spice {
 		display: block;
-		margin-top: 10vh;
-		font-size: calc(1.2rem + 1vmin);
+		font-size: calc(1rem + 0.8vmin);
+		margin-bottom: 1em;
 	}
 }
 header {
@@ -90,7 +95,7 @@ header {
 #logo {
 	margin: 1em auto;
 	display: block;
-	width: calc(12em + 10%);
+	width: calc(8em + 6%);
 	max-width: 100%;
 }
 #log-in { display: none }
@@ -115,7 +120,7 @@ header {
 }
 h1 {
 	font-size: calc(2rem + 1.5vw);
-	margin: 0.4em 0;
+	margin: 0.4em 0 0;
 }
 button {
 	margin-left: auto; margin-right: auto;
@@ -149,4 +154,4 @@ section > p {
 	z-index: 1;
 	position: relative;
 }
-#about section:first-child { margin-bottom: 8em }
+#about section:first-child { margin-bottom: 3em }
