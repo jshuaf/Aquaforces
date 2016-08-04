@@ -2,7 +2,6 @@
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-overflow-scrolling: touch;
-	-webkit-font-smoothing: antialiased;
 }
 html {
 	font: 100% 'Source Sans Pro', 'Helvetica', sans-serif;
@@ -141,13 +140,14 @@ button, .button {
 	margin: 0.2em 0;
 	padding: 0.2em 1em;
 	background: #6b0;
+	font: 1.5rem 'Source Sans Pro', 'Helvetica', sans-serif;
 	transition: background-color 0.1s;
 	border: none;
 	border-radius: 1em;
 	color: #fff;
-	cursor: pointer;
-	font: 1.25em 'Source Sans Pro', 'Helvetica', sans-serif;
 	text-decoration: none;
+	font-weight: bold;
+	white-space: pre;
 }
 .button { display: inline-table }
 button:hover, .button:hover { background: #6a4 }
