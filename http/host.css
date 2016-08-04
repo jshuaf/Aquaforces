@@ -79,7 +79,7 @@ details p, details h3 { margin: 0.2em 0 }
 	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2YwMCI+PHBhdGggZD0iTTIsMyAxMywxNCAxNCwxMyAzLDIiLz48cGF0aCBkPSJNMTQsMyAzLDE0IDIsMTMgMTMsMiIvPjwvc3ZnPg==') #fff;
 	background-size: contain;
 }
-.left-align input[type='checkbox']:checked, .qset input[type='checkbox']:checked {
+#questions input[type='checkbox']:checked, .qset input[type='checkbox']:checked {
 	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTIuNSw4LjUgNSwxMSAxMy41LDIuNSAxNSw0IDUsMTQgMSwxMCIvPjwvc3ZnPg==') #0c0;
 	background-size: contain;
 	transition: background-color 0.1s;
