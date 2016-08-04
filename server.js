@@ -80,6 +80,14 @@ let serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	console.log(req.method, req.url.pathname);
 	let i;
+	const user = yield dbcs.users.findOne({
+		cookie: {
+			$elemMatch: {
+				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+				created: {$gt: new Date() - 2592000000}
+			}
+		}
+	}, yield);
 	if (req.url.pathname.substr(0, 5) == '/api/') {
 		req.url.pathname = req.url.pathname.substr(4);
 		if (req.method != 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
@@ -97,7 +105,7 @@ let serverHandler = o(function*(req, res) {
 		req.on('end', function() {
 			if (req.abort) return;
 			post = querystring.parse(post);
-			apiServer(req, res, post);
+			apiServer(req, res, post, user);
 		});
 	} else if (req.url.pathname.includes('.')) {
 		let stats;
@@ -173,18 +181,11 @@ let serverHandler = o(function*(req, res) {
 		res.write((yield addVersionNonces((yield fs.readFile('./html/play.html', yield)).toString(), req.url.pathname, yield)));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (req.url.pathname == '/') {
+		if (user) return res.writeHead(303, {Location: '/host/'}) || res.end();
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
 		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (req.url.pathname == '/host/') {
-		let user = yield dbcs.users.findOne({
-			cookie: {
-				$elemMatch: {
-					token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
-					created: {$gt: new Date() - 2592000000}
-				}
-			}
-		}, yield);
 		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '',
 			filter = user ? {$or: [{userID: user._id}, {public: true}]} : {public: true},
@@ -352,14 +353,6 @@ let serverHandler = o(function*(req, res) {
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
 	} else if (req.url.pathname == '/stats/') {
-		let user = yield dbcs.users.findOne({
-			cookie: {
-				$elemMatch: {
-					token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
-					created: {$gt: new Date() - 2592000000}
-				}
-			}
-		}, yield);
 		if (!user.admin) return errorNotFound(req, res);
 		yield respondPage('Statistics', req, res, yield, {}, 400);
 		dbcs.gameplays.aggregate({$match: {}}, {$group: {_id: 'stats', num: {$sum: 1}, sum: {$sum: '$participants'}}}, o(function*(err, result) {

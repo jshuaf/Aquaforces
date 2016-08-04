@@ -1,14 +1,6 @@
 'use strict';
 const cookie = require('cookie');
-module.exports = o(function*(req, res, post) {
-	let user = yield dbcs.users.findOne({
-		cookie: {
-			$elemMatch: {
-				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
-				created: {$gt: new Date() - 2592000000}
-			}
-		}
-	}, yield);
+module.exports = function(req, res, post, user) {
 	if (req.url.pathname == '/new-qset') {
 		if (!post.name) return res.writeHead(400) || res.end('Set name is required.');
 		if (post.name.length > 144) return res.writeHead(400) || res.end('Set name length must not be greater than 144 characters.');
@@ -97,4 +89,4 @@ module.exports = o(function*(req, res, post) {
 			res.end();
 		});
 	} else res.writeHead(404) || res.end('Error: The API feature requested has not been implemented.');
-});
+};
