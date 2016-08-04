@@ -252,7 +252,7 @@ a:active { color: #f44 }
 	#answers > div:hover { background-color: #7c0 }
 }
 #answers > div > div {
-	padding: 1em;
+	padding: 1.5em;
 	color: #000;
 	max-width: 12em;
 	text-align: center;
