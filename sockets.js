@@ -19,7 +19,10 @@ module.exports = function(server) {
 		tws.on('close', function() {
 			clearInterval(tws.interval);
 		});
-		if (tws.upgradeReq.url == '/') {
+		if (tws.upgradeReq.url == '/test') {
+			tws.trysend('Socket connection successful.');
+			tws.close();
+		} else if (tws.upgradeReq.url == '/') {
 			tws.on('message', function(m, raw) {
 				console.log(m);
 				try {
