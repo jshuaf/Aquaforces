@@ -76,7 +76,7 @@ details p, details h3 { margin: 0.2em 0 }
 	background-size: contain;
 }
 .left-align input[type='checkbox']:checked {
-	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iIzAwMCI+PHBhdGggZD0iTTIuNSw4LjUgNSwxMSAxMy41LDIuNSAxNSw0IDUsMTQgMSwxMCIvPjwvc3ZnPg==') #0e0;
+	background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iIzAwMCI+PHBhdGggZD0iTTIuNSw4LjUgNSwxMSAxMy41LDIuNSAxNSw0IDUsMTQgMSwxMCIvPjwvc3ZnPg==') #6b0;
 	background-size: contain;
 	transition: background-color 0.1s;
 }
