@@ -23,7 +23,7 @@ main > section:first-of-type {
 }
 #spice { display: none }
 #summary { margin-top: 100vh; text-align: center;}
-#summary, #call-to-action {
+#summary {
 	background: #256;
 	color: #eee;
 }
@@ -123,7 +123,7 @@ section > p {
 	position: relative;
 	overflow: hidden;
 	color: #eee;
-	padding-bottom: 15%;
+	padding-bottom: 0%;
 }
 #about section {
 	z-index: 1;
