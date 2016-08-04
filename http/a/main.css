@@ -117,7 +117,10 @@ nav, footer {
 	padding: 0.3em;
 	background: #ddd;
 }
-h1 button, h1 small, #subheader small { float: right }
+h1 button, h1 small, #subheader small {
+	float: right;
+	margin-left: 0.5em;
+}
 h1::after, #subheader::after {
 	content: '';
 	display: table;
@@ -125,6 +128,7 @@ h1::after, #subheader::after {
 }
 #subheader small { font-size: 1rem }
 h1 + * { clear: both }
+button, a { cursor: pointer }
 button, .button {
 	display: block;
 	margin: 0.2em 0;
@@ -135,9 +139,9 @@ button, .button {
 	border: none;
 	border-radius: 1em;
 	color: #fff;
-	cursor: pointer;
 	text-decoration: none;
 	font-weight: bold;
+	white-space: pre;
 }
 .button { display: inline-table }
 button:hover, .button:hover { background: #6a4 }
@@ -146,6 +150,10 @@ button[disabled] {
 	background: #999;
 	color: #000;
 	cursor: not-allowed;
+}
+.empty-search {
+	margin: 1em 1.3em;
+	color: #f00;
 }
 .error {
 	background: #f00;
@@ -248,7 +256,7 @@ a:active { color: #f44 }
 	#answers > div:hover { background-color: #7c0 }
 }
 #answers > div > div {
-	padding: 1em;
+	padding: 1.5em;
 	color: #000;
 	max-width: 12em;
 	text-align: center;
@@ -263,12 +271,14 @@ a:active { color: #f44 }
 	transition: opacity 1s;
 }
 .half-divider { display: flex }
+@media (min-width: 600px) {
+	.resp-flex { display: flex }
+}
 .half {
 	width: 0;
 	flex-grow: 1;
 }
 .half:first-of-type { margin-right: 0.5em }
-#lonelyfolks { transition: flex-grow 0.3s }
 #lonelyfolks.hide {
 	flex-grow: 0;
 	overflow: hidden;

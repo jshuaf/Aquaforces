@@ -80,6 +80,14 @@ let serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	console.log(req.method, req.url.pathname);
 	let i;
+	const user = yield dbcs.users.findOne({
+		cookie: {
+			$elemMatch: {
+				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+				created: {$gt: new Date() - 2592000000}
+			}
+		}
+	}, yield);
 	if (req.url.pathname.substr(0, 5) == '/api/') {
 		req.url.pathname = req.url.pathname.substr(4);
 		if (req.method != 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
@@ -97,7 +105,7 @@ let serverHandler = o(function*(req, res) {
 		req.on('end', function() {
 			if (req.abort) return;
 			post = querystring.parse(post);
-			apiServer(req, res, post);
+			apiServer(req, res, post, user);
 		});
 	} else if (req.url.pathname.includes('.')) {
 		let stats;
@@ -173,35 +181,27 @@ let serverHandler = o(function*(req, res) {
 		res.write((yield addVersionNonces((yield fs.readFile('./html/play.html', yield)).toString(), req.url.pathname, yield)));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (req.url.pathname == '/') {
+		if (user) return res.writeHead(303, {Location: '/host/'}) || res.end();
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
 		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (req.url.pathname == '/host/') {
-		let user = yield dbcs.users.findOne({
-			cookie: {
-				$elemMatch: {
-					token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
-					created: {$gt: new Date() - 2592000000}
-				}
-			}
-		}, yield);
 		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '',
 			filter = user ? {$or: [{userID: user._id}, {public: true}]} : {public: true},
 			q = (req.url.query.q || '').trim(),
 			searchText = '';
 		q.split(/\s+/).forEach(function(token) {
-			if (token == 'is:mine') filter.userID = user._id;
+			if (token == 'is:mine' && user) filter.userID = user._id;
 			if (token == 'is:public') filter.public = true;
 			if (token == 'is:favorite' && user) filter._id = {$in: user.favorites};
-			if (token == '-is:mine') filter.userID = {$not: user._id};
+			if (token == '-is:mine' && user) filter.userID = {$not: user._id};
 			if (token == '-is:public') filter.public = false;
 			if (token == '-is:favorite' && user) filter._id = {$not: {$in: user.favorites}};
 			if (!token.includes(':')) searchText += token + ' ';
 		});
 		searchText = searchText.trim();
 		if (searchText) filter.$text = {$search: searchText};
-		console.log(filter);
 		dbcs.qsets.find(filter, searchText ? {score: {$meta: 'textScore'}} : undefined).sort(searchText ? {score: {$meta: 'textScore'}} : {timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
@@ -226,8 +226,9 @@ let serverHandler = o(function*(req, res) {
 				});
 				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
-				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr).replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
+				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>').replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
 				if (user) data = data.replace(/<a.+?<\/a>/, 'Logged in as ' + user.name);
+				else data = data.replace('id="filter"', 'id="filter" hidden=""');
 				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
 				res.write(data);
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
@@ -293,13 +294,13 @@ let serverHandler = o(function*(req, res) {
 				} catch (e) {
 					yield respondPage('Login Error', user, req, res, yield, {}, 500);
 					res.write('<h1>Login Error</h1>');
-					res.write('<p>An invalid response was recieved from the Google API. ' + tryagain + '</p>');
+					res.write('<p>An invalid response was received from the Google API. ' + tryagain + '</p>');
 					res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
 				if (apiData.error) {
 					yield respondPage('Login Error', user, req, res, yield, {}, 500);
 					res.write('<h1>Login Error</h1>');
-					res.write('<p>An error was recieved from the Google API. ' + tryagain + '</p>');
+					res.write('<p>An error was received from the Google API. ' + tryagain + '</p>');
 					res.write(errorsHTML([apiData.error + ': ' + apiData.error_description]));
 					return res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
@@ -352,6 +353,16 @@ let serverHandler = o(function*(req, res) {
 			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
+	} else if (req.url.pathname == '/stats/') {
+		if (!user.admin) return errorNotFound(req, res);
+		yield respondPage('Statistics', req, res, yield, {}, 400);
+		dbcs.gameplays.aggregate({$match: {}}, {$group: {_id: 'stats', num: {$sum: 1}, sum: {$sum: '$participants'}}}, o(function*(err, result) {
+			if (err) throw err;
+			res.write('<h1>Aquaforces play statistics</h1>');
+			res.write('<p>' + result[0].sum + ' users</p>');
+			res.write('<p>' + result[0].num + ' gameplays</p>');
+			res.end(yield fs.readFile('html/a/foot.html', yield));
+		}));
 	} else if (redirectURLs.includes(req.url.pathname)) {
 		res.writeHead(303, {'Location': req.url.pathname + '/'});
 		res.end();
@@ -371,6 +382,7 @@ mongo.connect(config.mongoPath, function(err, db) {
 		dbcs[usedDBCs[i]] = collection;
 	}
 	while (i--) db.collection(usedDBCs[i], handleCollection);
+	dbcs.users.update({favorites: {$exists: false}}, {$set: {favorites: []}});
 	console.log('Connected to mongodb.'.cyan);
 	let server = http.createServer(serverHandler).listen(config.port);
 	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
