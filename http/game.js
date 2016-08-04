@@ -180,8 +180,8 @@ function animationUpdate() {
 		answersEl.children.forEach(function(f) {
 			if (e == f) return;
 			var sd = (+e.dataset.x - f.dataset.x) * (+e.dataset.x - f.dataset.x) + (+e.dataset.y - f.dataset.y) * (+e.dataset.y - f.dataset.y);
-			e.dataset.vx -= -1e-3 * (+e.dataset.x - f.dataset.x) / sd;
-			e.dataset.vy -= -1e-4 * (+e.dataset.y - f.dataset.y) / sd;
+			e.dataset.vx -= -1e-2 * (+e.dataset.x - f.dataset.x) / sd;
+			e.dataset.vy -= -1e-2 * (+e.dataset.y - f.dataset.y) / sd;
 		});
 		e.dataset.vx /= 1 + 0.001 * dt;
 		e.dataset.vy -= -dt * ((Math.random() - 0.5) / 10000);

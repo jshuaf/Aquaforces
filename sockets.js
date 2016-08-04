@@ -16,9 +16,6 @@ module.exports = function(server) {
 		tws.error = function(body, state) {
 			return tws.trysend(JSON.stringify({event: 'error', body, state}));
 		};
-		tws.interval = setInterval(function() {
-			tws.send('{}');
-		}, 25000);
 		tws.on('close', function() {
 			clearInterval(tws.interval);
 		});
@@ -275,6 +272,7 @@ module.exports = function(server) {
 			});
 			tws.on('close', function() {
 				delete games[tws.gameID];
+				dbcs.gameplays.update({_id: tws.gameplayID}, {$set: {endTime: new Date().getTime()}});
 			});
 		} else {
 			tws.trysend(JSON.stringify({

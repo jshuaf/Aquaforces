@@ -40,7 +40,7 @@ function inputParentRemove() {
 }
 var newQSet = document.getElementById('new-qset'),
 	protoLi = document.getElementById('questions').firstElementChild.cloneNode(true),
-	protoDetails = newQSet.firstElementChild.cloneNode(true);
+	protoQSet = newQSet.cloneNode(true);
 function setupMoreWrong(li) {
 	li.parentNode.insertBefore(li.cloneNode(true), li.nextElementSibling);
 	li.nextElementSibling.firstChild.checked = false;
@@ -198,10 +198,13 @@ function bindQuestionListeners(li, options) {
 	li.lastChild.addEventListener('submit', editQuestionSubmit);
 }
 function bindListeners() {
-	document.getElementById('new-qset-summary').addEventListener('click', function() {
-		if (!this.parentNode.open) requestAnimationFrame(function() {
-			document.getElementById('qset-title').focus();
-		});
+	document.getElementById('new-qset-btn').addEventListener('click', function() {
+		document.getElementById('new-qset').hidden = false;
+		document.getElementById('new-qset').scrollIntoView(true);
+		document.getElementById('qset-title').focus();
+	});
+	document.getElementById('close').addEventListener('click', function() {
+		document.getElementById('new-qset').hidden = true;
 	});
 	document.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
 	document.getElementById('questions').querySelector('ul input:not([type=\'checkbox\'])').addEventListener('keypress', wrongKeypress);
@@ -298,10 +301,13 @@ newQSet.addEventListener('submit', function(e) {
 			bindNewQuestionListener(details.lastChild);
 			newQSet.parentNode.insertAfter(details, newQSet);
 			newQSet.removeChild(newQSet.firstElementChild);
-			newQSet.appendChild(protoDetails.cloneNode(true));
+			var cont = newQSet.parentNode;
+			cont.removeChild(newQSet);
+			cont.insertBefore(protoQSet.cloneNode(true), cont.firstChild);
+			newQSet = cont.firstChild;
 			bindListeners();
 		}
-	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)));
+	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)) + '&public=' + (document.getElementById('private-set').checked ? 0 : 1));
 });
 var target = document.querySelector('details:target');
 if (target) target.setAttribute('open', true);
@@ -324,11 +330,14 @@ document.getElementsByClassName('play').forEach(function(el) {
 	});
 });
 
-var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/');
+var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/'),
+	errorEl = document.getElementById('error');
+socket.onclose = function() {
+	errorEl.textContent = 'Connection lost.';
+};
 function startHost(id) {
 	socket.send(JSON.stringify({event: 'new-game', qsetID: id}));
-	var cont = document.getElementById('cont'),
-		errorEl = document.getElementById('error');
+	var cont = document.getElementById('cont');
 	cont.hidden = false;
 	document.getElementById('time-total').focus();
 	var boats = {},
@@ -355,6 +364,7 @@ function startHost(id) {
 			user: this.dataset.username
 		}));
 		this.parentNode.removeChild(this);
+		document.getElementById('game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']') || !document.querySelector('#crews li:not(:empty)');
 	}
 	var playing = false;
 	function uncrewUser() {
@@ -370,6 +380,7 @@ function startHost(id) {
 		document.getElementById('loneusers').appendChild(li);
 		this.parentNode.dataset.n--;
 		this.parentNode.removeChild(this);
+		document.getElementById('game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']') || !document.querySelector('#crews li:not(:empty)');
 	}
 	var crewsEl = document.getElementById('crews'),
 		header = document.getElementById('header');
@@ -382,12 +393,9 @@ function startHost(id) {
 			return alert('Socket error.');
 		}
 		if (m.event == 'notice' || m.event == 'error') alert(m.body);
-		else if (m.event == 'error') {
-			if (m.state) setState(m.state);
-			errorEl.textContent = m.body;
-		} else if (m.event == 'new-game') {
-			header.insertBefore(document.createTextNode(m.id), header.lastChild);
-		} else if (m.event == 'add-loneuser') {
+		else if (m.event == 'error') errorEl.textContent = m.body;
+		else if (m.event == 'new-game') header.appendChild(document.createTextNode(m.id));
+		else if (m.event == 'add-loneuser') {
 			var li = document.createElement('li');
 			li.dataset.username = m.user;
 			li.appendChild(document.createTextNode(m.user));
@@ -404,7 +412,7 @@ function startHost(id) {
 			span.onclick = uncrewUser;
 			crewsEl.children[m.crew - 1].appendChild(span);
 			crewsEl.children[m.crew - 1].dataset.n++;
-			document.getElementById('game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
+			document.getElementById('game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']') || !document.querySelector('#crews li:not(:empty)');
 		} else if (m.event == 'remove-user') {
 			if (playing) return;
 			var e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
@@ -412,7 +420,7 @@ function startHost(id) {
 				if (e.parentNode.dataset.n) e.parentNode.dataset.n--;
 				e.parentNode.removeChild(e);
 			}
-			document.getElementById('game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']');
+			document.getElementById('game-btn').disabled = document.getElementById('loneusers').childNodes.length != 0 || document.querySelector('li[data-n=\'1\']') || !document.querySelector('#crews li:not(:empty)');
 		} else if (m.event == 'answer' || m.event == 'timeout-question') {
 			var b = boats[m.crewnum];
 			if (m.correct) b.v += b.dv;
@@ -446,9 +454,6 @@ function startHost(id) {
 			}
 		}
 	};
-	socket.onclose = function() {
-		errorEl.textContent = 'Connection lost.';
-	};
 	var progress = document.getElementById('progress'), lastTime,
 		animateInterval;
 	document.getElementById('tgame').addEventListener('submit', function(e) {
@@ -476,7 +481,7 @@ function startHost(id) {
 			canoe.style.top = 'calc(' + (50 + 50 * (i + 0.5) / (n + 1)) + '% - ' + (1.6 * (2 * (i + 0.5) / (n + 1) - 0.5)) + 'em)';
 		});
 		header.removeChild(header.firstChild);
-		document.getElementById('subheader').hidden = true;
+		document.getElementById('subheader').hidden = document.getElementById('time-total-cont').hidden = true;
 		lastTime = timeStart = new Date().getTime();
 		animationUpdate();
 		document.addEventListener('visibilitychange', function() {
