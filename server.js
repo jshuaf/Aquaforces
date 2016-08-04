@@ -382,7 +382,6 @@ mongo.connect(config.mongoPath, function(err, db) {
 		dbcs[usedDBCs[i]] = collection;
 	}
 	while (i--) db.collection(usedDBCs[i], handleCollection);
-	dbcs.users.update({favorites: {$exists: false}}, {$set: {favorites: []}});
 	console.log('Connected to mongodb.'.cyan);
 	let server = http.createServer(serverHandler).listen(config.port);
 	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
