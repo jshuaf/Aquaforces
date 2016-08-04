@@ -13,6 +13,9 @@ section { padding: calc(2em + 2vh) calc(7.5em + 3.5%) }
 	section {
 		padding: calc(2em + 2vh) calc(0.5em + 3.5%);
 	}
+	#spice {
+		display: none;
+	}
 }
 main > section:first-of-type {
 	position: absolute;
@@ -27,30 +30,14 @@ main > section:first-of-type {
 	background: #256;
 	color: #eee;
 }
-@media (max-width: 600px) {
-	#summary > iframe {
-		max-width: 100%;
-	}
-}
 #benefits { background: #fff }
-.iframe {
-	float: left;
-	position: relative;
-	width: 100%; height: 0;
-	padding-bottom: 56.25%;
-}
 iframe {
-	position: absolute;
-	left: 0; top: 0;
-	width: 100%; height: 100%;
+	width: 512px;
+	height: 288px;
 }
-@media (min-width: 850px) {
-	.iframe {
-		max-width: 512px;
-		padding-bottom: 288px;
-		margin-right: 3.5%;
-		float: left;
-		margin-left: 50%;
+@media (max-width: 800px) {
+	iframe {
+		width: 100%;
 	}
 }
 section::after {
@@ -119,7 +106,6 @@ h1 {
 #spice {
 	margin-left: auto;
 	margin-right: auto;
-	display: none;
 }
 section > h2 {
 	text-align: center;
