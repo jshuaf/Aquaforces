@@ -151,6 +151,10 @@ button[disabled] {
 	color: #000;
 	cursor: not-allowed;
 }
+.empty-search {
+	margin: 1em 1.3em;
+	color: #f00;
+}
 .error {
 	background: #f00;
 	color: #fff;

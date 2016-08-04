@@ -40,7 +40,7 @@ function inputParentRemove() {
 }
 var newQSet = document.getElementById('new-qset'),
 	protoLi = document.getElementById('questions').firstElementChild.cloneNode(true),
-	protoDetails = newQSet.firstElementChild.cloneNode(true);
+	protoQSet = newQSet.cloneNode(true);
 function setupMoreWrong(li) {
 	li.parentNode.insertBefore(li.cloneNode(true), li.nextElementSibling);
 	li.nextElementSibling.firstChild.checked = false;
@@ -301,10 +301,13 @@ newQSet.addEventListener('submit', function(e) {
 			bindNewQuestionListener(details.lastChild);
 			newQSet.parentNode.insertAfter(details, newQSet);
 			newQSet.removeChild(newQSet.firstElementChild);
-			newQSet.appendChild(protoDetails.cloneNode(true));
+			var cont = newQSet.parentNode;
+			cont.removeChild(newQSet);
+			cont.insertBefore(protoQSet.cloneNode(true), cont.firstChild);
+			newQSet = cont.firstChild;
 			bindListeners();
 		}
-	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)));
+	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)) + '&public=' + (document.getElementById('private-set').checked ? 0 : 1));
 });
 var target = document.querySelector('details:target');
 if (target) target.setAttribute('open', true);

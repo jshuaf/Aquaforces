@@ -192,10 +192,10 @@ let serverHandler = o(function*(req, res) {
 			q = (req.url.query.q || '').trim(),
 			searchText = '';
 		q.split(/\s+/).forEach(function(token) {
-			if (token == 'is:mine') filter.userID = user._id;
+			if (token == 'is:mine' && user) filter.userID = user._id;
 			if (token == 'is:public') filter.public = true;
 			if (token == 'is:favorite' && user) filter._id = {$in: user.favorites};
-			if (token == '-is:mine') filter.userID = {$not: user._id};
+			if (token == '-is:mine' && user) filter.userID = {$not: user._id};
 			if (token == '-is:public') filter.public = false;
 			if (token == '-is:favorite' && user) filter._id = {$not: {$in: user.favorites}};
 			if (!token.includes(':')) searchText += token + ' ';
@@ -226,8 +226,9 @@ let serverHandler = o(function*(req, res) {
 				});
 				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
-				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr).replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
+				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>').replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
 				if (user) data = data.replace(/<a.+?<\/a>/, 'Logged in as ' + user.name);
+				else data = data.replace('id="filter"', 'id="filter" hidden=""');
 				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
 				res.write(data);
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
@@ -381,6 +382,7 @@ mongo.connect(config.mongoPath, function(err, db) {
 		dbcs[usedDBCs[i]] = collection;
 	}
 	while (i--) db.collection(usedDBCs[i], handleCollection);
+	dbcs.users.update({favorites: {$exists: false}}, {$set: {favorites: []}});
 	console.log('Connected to mongodb.'.cyan);
 	let server = http.createServer(serverHandler).listen(config.port);
 	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
