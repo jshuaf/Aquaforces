@@ -4,6 +4,7 @@ html.hostgame {
 	background-size: cover;
 	color: #000;
 }
+#host-headers { flex-grow: 1 }
 #header {
 	font-size: calc(1em + 4vmin);
 	margin: 0 1.5rem;

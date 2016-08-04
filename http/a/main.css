@@ -117,7 +117,10 @@ nav, footer {
 	padding: 0.3em;
 	background: #ddd;
 }
-h1 button, h1 small, #subheader small { float: right }
+h1 button, h1 small, #subheader small {
+	float: right;
+	margin-left: 0.5em;
+}
 h1::after, #subheader::after {
 	content: '';
 	display: table;
@@ -138,6 +141,7 @@ button, .button {
 	color: #fff;
 	text-decoration: none;
 	font-weight: bold;
+	white-space: pre;
 }
 .button { display: inline-table }
 button:hover, .button:hover { background: #6a4 }
@@ -263,6 +267,9 @@ a:active { color: #f44 }
 	transition: opacity 1s;
 }
 .half-divider { display: flex }
+@media (min-width: 600px) {
+	.resp-flex { display: flex }
+}
 .half {
 	width: 0;
 	flex-grow: 1;

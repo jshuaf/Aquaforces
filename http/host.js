@@ -389,7 +389,7 @@ function startHost(id) {
 			if (m.state) setState(m.state);
 			errorEl.textContent = m.body;
 		} else if (m.event == 'new-game') {
-			header.insertBefore(document.createTextNode(m.id), header.lastChild);
+			header.appendChild(document.createTextNode(m.id));
 		} else if (m.event == 'add-loneuser') {
 			var li = document.createElement('li');
 			li.dataset.username = m.user;
@@ -479,7 +479,7 @@ function startHost(id) {
 			canoe.style.top = 'calc(' + (50 + 50 * (i + 0.5) / (n + 1)) + '% - ' + (1.6 * (2 * (i + 0.5) / (n + 1) - 0.5)) + 'em)';
 		});
 		header.removeChild(header.firstChild);
-		document.getElementById('subheader').hidden = true;
+		document.getElementById('subheader').hidden = document.getElementById('game-btn').hidden = true;
 		lastTime = timeStart = new Date().getTime();
 		animationUpdate();
 		document.addEventListener('visibilitychange', function() {
