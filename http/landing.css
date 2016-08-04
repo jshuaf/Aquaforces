@@ -23,6 +23,25 @@ main > section:first-of-type {
 	color: #eee;
 }
 #benefits { background: #fff }
+.iframe {
+	float: left;
+	position: relative;
+	width: 100%; height: 0;
+	padding-bottom: 56.25%;
+}
+iframe {
+	position: absolute;
+	left: 0; top: 0;
+	width: 100%; height: 100%;
+}
+@media (min-width: 850px) {
+	.iframe {
+		max-width: 512px;
+		padding-bottom: 288px;
+		margin-right: 3.5%;
+		float: left;
+	}
+}
 section::after {
 	content: '';
 	display: table;
