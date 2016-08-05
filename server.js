@@ -93,7 +93,7 @@ let serverHandler = o(function*(req, res) {
 			}
 		}
 	}, yield);
-	if (req.url.pathname.substr(0, 5) == '/api/') {
+	if (req.url.pathname.substr(0, 5) == '/api/' && !req.headers.host.includes('.io')) {
 		req.url.pathname = req.url.pathname.substr(4);
 		if (req.method != 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
 		if (url.parse(req.headers.referer || '').host != req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
@@ -190,7 +190,7 @@ let serverHandler = o(function*(req, res) {
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
 		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (req.url.pathname == '/host/') {
+	} else if (req.url.pathname == '/host/' && !req.headers.host.includes('.io')) {
 		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '',
 			filter = user ? {$or: [{userID: user._id}, {public: true}]} : {public: true},
@@ -239,7 +239,7 @@ let serverHandler = o(function*(req, res) {
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
-	} else if (req.url.pathname == '/login/google') {
+	} else if (req.url.pathname == '/login/google' && !req.headers.host.includes('.io')) {
 		let tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.client_id + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
 		if (req.url.query.error) {
 			yield respondPage('Login Error', req, res, yield, {}, 400);
@@ -358,7 +358,7 @@ let serverHandler = o(function*(req, res) {
 			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
-	} else if (req.url.pathname == '/stats/') {
+	} else if (req.url.pathname == '/stats/' && !req.headers.host.includes('.io')) {
 		if (!user.admin) return errorNotFound(req, res);
 		yield respondPage('Statistics', req, res, yield, {}, 400);
 		dbcs.gameplays.aggregate({$match: {}}, {$group: {_id: 'stats', num: {$sum: 1}, sum: {$sum: '$participants'}}}, o(function*(err, result) {
@@ -385,7 +385,7 @@ let serverHandler = o(function*(req, res) {
 			res.write(yield addVersionNonces('<script src="/a/sockettest.js"></script>', req.url.pathname, yield));
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
-	} else if (redirectURLs.includes(req.url.pathname)) {
+	} else if (redirectURLs.includes(req.url.pathname) && !req.headers.host.includes('.io')) {
 		res.writeHead(303, {'Location': req.url.pathname + '/'});
 		res.end();
 	} else return errorNotFound(req, res);
