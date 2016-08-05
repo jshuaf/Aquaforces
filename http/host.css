@@ -10,6 +10,24 @@ html.hostgame {
 	margin: 0 1.5rem;
 }
 #header span, #subheader { font-weight: normal }
+nav {
+	position: relative;
+	float: right;
+	font-size: 1.1em;
+	padding: 0.2em 0.5em;
+}
+nav.loggedin { background: #fff }
+#navmenu {
+	position: absolute;
+	background: #fff;
+	margin: 0;
+	z-index: 1;
+	right: 0;
+}
+#navmenu li {
+	white-space: pre;
+	padding: 0.5em 1em 0.5em 0;
+}
 #tgame #subheader {
 	font-size: calc(1em + 2.5vmin);
 	text-align: left;

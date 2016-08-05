@@ -119,10 +119,6 @@ form[hidden]:not(.search-form) {
 form:not([hidden]) + form[hidden]:not(.search-form) {
 	display: table;
 }
-nav, footer {
-	padding: 0.3em;
-	background: #ddd;
-}
 h1 button, h1 small, #subheader small {
 	float: right;
 	margin-left: 0.5em;
@@ -141,7 +137,7 @@ button, .button {
 	margin: 0.2em 0;
 	padding: 0.2em 1em;
 	background: #6b0;
-	font: 1.6rem 'Source Sans Pro', 'Helvetica', sans-serif;
+	font: 1.5rem 'Source Sans Pro', 'Helvetica', sans-serif;
 	transition: background-color 0.1s;
 	border: none;
 	border-radius: 1em;
@@ -157,6 +153,15 @@ button[disabled] {
 	color: #000;
 	cursor: not-allowed;
 }
+.signin-link { text-decoration: none }
+.signin {
+	background: #e44;
+	fill: #fff;
+	transition: background 0.1s;
+	border-radius: 0.2em;
+}
+.signin:hover { background: #f22 }
+.signin:active { background: #f66 }
 .empty-search {
 	margin: 1em 1.3em;
 	color: #f00;
