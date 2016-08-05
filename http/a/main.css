@@ -157,6 +157,7 @@ button[disabled] {
 	color: #000;
 	cursor: not-allowed;
 }
+.signin-link { text-decoration: none }
 .signin {
 	background: #e44;
 	fill: #fff;

@@ -228,7 +228,7 @@ let serverHandler = o(function*(req, res) {
 				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
 				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>').replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
-				if (user) data = data.replace(/<a.+?<\/a>/, 'Logged in as ' + user.name);
+				if (user) data = data.replace(/<a class="signin-link"[\s\S]+?<\/a>/, 'Logged in as ' + user.name);
 				else data = data.replace('id="filter"', 'id="filter" hidden=""');
 				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
 				res.write(data);
