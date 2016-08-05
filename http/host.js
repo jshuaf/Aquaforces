@@ -43,7 +43,7 @@ document.getElementById('mine').addEventListener('click', toggleFilter);
 document.getElementById('public').addEventListener('click', toggleFilter);
 document.getElementById('favorite').addEventListener('click', toggleFilter);
 function inputRemove() {
-	if (!this.value) this.parentNode.parentNode.removeChild(this.parentNode);
+	if (!this.value && !(this.parentNode.parentNode.firstElementChild == this.parentNode && this.parentNode.nextElementSibling.firstChild.tagName == 'small')) this.parentNode.parentNode.removeChild(this.parentNode);
 }
 function inputParentRemove() {
 	if (!this.value) this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
@@ -79,11 +79,18 @@ function wrongKeypress(e) {
 }
 function buildQuestion(question) {
 	var li = document.createElement('li');
-	li.appendChild(document.createElement('a'));
-	li.lastChild.className = 'edit';
-	li.lastChild.title = 'edit question';
-	li.lastChild.appendChild(document.createTextNode('✎'));
-	li.lastChild.addEventListener('click', startEdit);
+	li.appendChild(document.createElement('span'));
+	li.lastChild.className = 'q-ctrls';
+	li.lastChild.appendChild(document.createElement('a'));
+	li.lastChild.lastChild.className = 'remove-q';
+	li.lastChild.lastChild.title = 'delete question';
+	li.lastChild.lastChild.addEventListener('click', removeQuestion);
+	li.lastChild.appendChild(document.createTextNode(' '));
+	li.lastChild.appendChild(document.createElement('a'));
+	li.lastChild.lastChild.className = 'edit';
+	li.lastChild.lastChild.title = 'edit question';
+	li.lastChild.lastChild.appendChild(document.createTextNode('✎'));
+	li.lastChild.lastChild.addEventListener('click', startEdit);
 	li.appendChild(document.createElement('h3'));
 	li.lastChild.appendChild(document.createTextNode(question.text));
 	li.appendChild(document.createElement('div'));
@@ -205,6 +212,9 @@ function bindQuestionListeners(li, options) {
 	li.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
 	li.querySelector('ul input:not([type=\'checkbox\'])').addEventListener('keypress', wrongKeypress);
 	li.getElementsByTagName('input')[0].focus();
+	li.getElementsByTagName('input').forEach(function(input, i) {
+		if (i >= 1) input.addEventListener('blur', inputRemove);
+	});
 	li.lastChild.addEventListener('submit', editQuestionSubmit);
 }
 function bindListeners() {
@@ -223,13 +233,25 @@ function bindListeners() {
 		li.parentNode.insertBefore(protoLi.cloneNode(true), li);
 		bindQuestionListeners(li.previousElementSibling, {isNewQSet: true});
 	});
+	newQSet.addEventListener('submit', submitNewQSet);
 }
 bindListeners();
 document.getElementsByClassName('q-edit').forEach(bindQuestionListeners);
 function startEdit() {
-	this.parentNode.hidden = true;
-	this.parentNode.nextElementSibling.hidden = false;
-	this.parentNode.nextElementSibling.getElementsByTagName('input')[0].focus();
+	this.parentNode.parentNode.hidden = true;
+	this.parentNode.parentNode.nextElementSibling.hidden = false;
+	this.parentNode.parentNode.nextElementSibling.getElementsByTagName('input')[0].focus();
+}
+function removeQuestion() {
+	var el = this.parentNode.parentNode;
+	requestPost('/api/remove-question', function(res) {
+		if (res.indexOf('Error') == 0) return alert(res);
+		el.parentNode.removeChild(el.nextElementSibling);
+		el.parentNode.removeChild(el);
+	},
+		'id=' + encodeURIComponent(el.parentNode.parentNode.id.substr(5)) +
+		'&num=' + el.parentNode.children.indexOf(el) / 2
+	);
 }
 function discardEdit() {
 	this.parentNode.hidden = true;
@@ -245,6 +267,9 @@ function newQuestion() {
 function bindEditListener(editBtn) {
 	editBtn.addEventListener('click', startEdit);
 }
+function bindRemoveListener(deleteBtn) {
+	deleteBtn.addEventListener('click', removeQuestion);
+}
 function bindDiscardListener(discardBtn) {
 	discardBtn.addEventListener('click', discardEdit);
 }
@@ -252,9 +277,10 @@ function bindNewQuestionListener(nqBtn) {
 	nqBtn.addEventListener('click', newQuestion);
 }
 document.getElementsByClassName('edit').forEach(bindEditListener);
+document.getElementsByClassName('remove-q').forEach(bindRemoveListener);
 document.getElementsByClassName('discard').forEach(bindDiscardListener);
 document.getElementsByClassName('new-question').forEach(bindNewQuestionListener);
-newQSet.addEventListener('submit', function(e) {
+function submitNewQSet(e) {
 	e.preventDefault();
 	this.classList.add('validating');
 	var inv = this.querySelector(':invalid');
@@ -287,14 +313,16 @@ newQSet.addEventListener('submit', function(e) {
 			small.appendChild(document.createElement('a'));
 			small.lastChild.className = 'play';
 			small.lastChild.appendChild(document.createTextNode('▶Play'));
+			small.lastChild.addEventListener('click', playQSetListener);
 			small.appendChild(document.createTextNode(' '));
 			small.appendChild(document.createElement('a'));
 			small.lastChild.className = 'dup';
 			small.lastChild.appendChild(document.createTextNode('Duplicate'));
+			small.lastChild.addEventListener('click', dupQSetListener);
 			small.appendChild(document.createTextNode(' '));
 			small.appendChild(document.createElement('a'));
 			small.lastChild.className = small.lastChild.title = 'delete';
-			small.lastChild.appendChild(document.createTextNode('✕'));
+			small.lastChild.addEventListener('click', deleteQSetListener);
 			small.appendChild(document.createTextNode(' '));
 			small.appendChild(document.createElement('a'));
 			small.lastChild.title = 'permalink';
@@ -318,26 +346,37 @@ newQSet.addEventListener('submit', function(e) {
 			bindListeners();
 		}
 	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)) + '&public=' + (document.getElementById('private-set').checked ? 0 : 1));
-});
+}
 var target = document.querySelector('details:target');
 if (target) target.setAttribute('open', true);
+function dupQSetListener(e) {
+	e.preventDefault();
+}
+function deleteQSetListener(e) {
+	e.preventDefault();
+	var details = this.parentNode.parentNode.parentNode;
+	if (confirm('Are you sure you want to delete the set?')) {
+		requestPost('/api/delete-qset', function(res) {
+			if (res.indexOf('Error') == 0) return alert(res);
+			console.log(details);
+			details.parentNode.removeChild(details);
+		}, 'id=' + encodeURIComponent(details.id.substr(5)));
+	}
+}
+function playQSetListener(e) {
+	e.preventDefault();
+	document.getElementById('qset-cont').hidden = true;
+	document.documentElement.classList.remove('no-bg');
+	startHost(this.parentNode.parentNode.parentNode.id.substr(5));
+}
+document.getElementsByClassName('play').forEach(function(el) {
+	el.addEventListener('click', playQSetListener);
+});
 document.getElementsByClassName('dup').forEach(function(el) {
-	el.addEventListener('click', function(e) {
-		e.preventDefault();
-	});
+	el.addEventListener('click', dupQSetListener);
 });
 document.getElementsByClassName('delete').forEach(function(el) {
-	el.addEventListener('click', function(e) {
-		e.preventDefault();
-	});
-});
-document.getElementsByClassName('play').forEach(function(el) {
-	el.addEventListener('click', function(e) {
-		e.preventDefault();
-		document.getElementById('qset-cont').hidden = true;
-		document.documentElement.classList.remove('no-bg');
-		startHost(this.parentNode.parentNode.parentNode.id.substr(5));
-	});
+	el.addEventListener('click', deleteQSetListener);
 });
 
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/'),
