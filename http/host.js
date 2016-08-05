@@ -43,7 +43,7 @@ document.getElementById('mine').addEventListener('click', toggleFilter);
 document.getElementById('public').addEventListener('click', toggleFilter);
 document.getElementById('favorite').addEventListener('click', toggleFilter);
 function inputRemove() {
-	if (!this.value) this.parentNode.parentNode.removeChild(this.parentNode);
+	if (!this.value && !(this.parentNode.parentNode.firstElementChild == this.parentNode && this.parentNode.nextElementSibling.firstChild.tagName == 'small')) this.parentNode.parentNode.removeChild(this.parentNode);
 }
 function inputParentRemove() {
 	if (!this.value) this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
@@ -205,6 +205,9 @@ function bindQuestionListeners(li, options) {
 	li.getElementsByClassName('more-wrong')[0].addEventListener('click', moreWrong);
 	li.querySelector('ul input:not([type=\'checkbox\'])').addEventListener('keypress', wrongKeypress);
 	li.getElementsByTagName('input')[0].focus();
+	li.getElementsByTagName('input').forEach(function(input, i) {
+		if (i >= 1) input.addEventListener('blur', inputRemove);
+	});
 	li.lastChild.addEventListener('submit', editQuestionSubmit);
 }
 function bindListeners() {
