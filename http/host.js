@@ -6,6 +6,15 @@ if (location.hash) {
 		scrollTo(scrollX, prevScrollY);
 	}, 1000);
 }
+var menuStub = document.getElementById('menu-stub');
+if (menuStub) menuStub.addEventListener('click', function() {
+	this.nextElementSibling.hidden ^= 1;
+});
+document.getElementById('logout').addEventListener('click', function() {
+	requestPost('/api/logout', function() {
+		location.reload();
+	});
+});
 function searchInput() {
 	var mine, pub, fav;
 	search.value.split(/\s+/).forEach(function(token) {

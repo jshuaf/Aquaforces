@@ -119,10 +119,6 @@ form[hidden]:not(.search-form) {
 form:not([hidden]) + form[hidden]:not(.search-form) {
 	display: table;
 }
-nav, footer {
-	padding: 0.3em;
-	background: #ddd;
-}
 h1 button, h1 small, #subheader small {
 	float: right;
 	margin-left: 0.5em;
@@ -157,6 +153,7 @@ button[disabled] {
 	color: #000;
 	cursor: not-allowed;
 }
+.signin-link { text-decoration: none }
 .signin {
 	background: #e44;
 	fill: #fff;
