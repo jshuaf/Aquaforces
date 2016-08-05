@@ -1,4 +1,4 @@
-html { background: #eee }
+html { background: #bef }
 html.hostgame {
 	background: url('/img/scape/city.svg') repeat-x #4af;
 	background-size: cover;
@@ -85,6 +85,7 @@ details p, details h3 { margin: 0.2em 0 }
 }
 #new-qset ul, .q-edit ul { padding-left: 1em }
 .q-edit form, .q-edit label, .q-edit li { width: 100% }
+section.left-align { background: #eee }
 .left-align form[hidden] + details { margin-top: 0 }
 #questions input[type='checkbox'], .qset input[type='checkbox'] {
 	appearance: none;
@@ -125,11 +126,11 @@ details p, details h3 { margin: 0.2em 0 }
 	color: #fff;
 }
 #search { width: 100% }
-.search-form button {
+#search-form button {
 	margin-left: 0.5em;
 	font-size: 1.2rem;
 }
-.search-form .half-divider { margin-bottom: 0.5em }
+#search-form .half-divider { margin-bottom: 0.5em }
 summary + ol {
 	list-style-type: none;
 	padding: 0;

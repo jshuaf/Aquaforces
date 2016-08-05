@@ -44,7 +44,7 @@ socket.onmessage = function(m) {
 		answers = m.answers;
 		lastTime = new Date().getTime();
 		animationUpdate();
-		addAnswerInterval = setInterval(addAnswer, 1200);
+		addAnswerInterval = setInterval(addAnswer, 1800);
 		document.getElementById('boat').setAttribute('data-sailors', m.sailorsInCrew);
 	}
 	if (m.event == 'question') startQuestion(m.question);
@@ -61,7 +61,7 @@ socket.onmessage = function(m) {
 };
 document.addEventListener('visibilitychange', function() {
 	clearInterval(addAnswerInterval);
-	if (!document.hidden && addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1200);
+	if (!document.hidden && addAnswerInterval) addAnswerInterval = setInterval(addAnswer, 1800);
 });
 function addSubmittedAnswer(text, correct) {
 	var span = document.createElement('span');

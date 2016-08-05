@@ -97,9 +97,7 @@ module.exports = function(server) {
 						tquestion.owner.trysend(JSON.stringify({event: 'question', question: question.text}));
 						if (!tquestion.owner.questionIDsDone.includes(questionID)) tquestion.owner.questionIDsDone.push(questionID);
 						for (let answer of question.answers) {
-							for (let i = 0; i < 2; i++) {
-								tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer}));
-							}
+							tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer}));
 						}
 						tws.crew.recentAnswers.push({
 							text: m.text,
@@ -156,9 +154,7 @@ module.exports = function(server) {
 					});
 					tws.trysend(JSON.stringify({event: 'question', question: question.text}));
 					for (let answer of question.answers) {
-						for (let i = 0; i < 2; i++) {
-							tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer}));
-						}
+						tws.crew.members[Math.floor(Math.random() * tws.crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer}));
 					}
 				} else if (m.event == 'resend-answer') {
 					if (!tws.game) return tws.error('Game not found.', 'join');
@@ -251,9 +247,7 @@ module.exports = function(server) {
 							member.trysend(JSON.stringify({event: 'question', question: question.text}));
 							member.questionIDsDone.push(questionID);
 							for (let answer of question.answers) {
-								for (let i = 0; i < 2; i++) {
-									crew.members[Math.floor(Math.random() * crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer}));
-								}
+								crew.members[Math.floor(Math.random() * crew.members.length)].trysend(JSON.stringify({event: 'correct-answer', answer}));
 							}
 						});
 					});
