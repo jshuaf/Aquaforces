@@ -1,4 +1,4 @@
-html { background: #eee }
+html { background: #bef }
 html.hostgame {
 	background: url('/img/scape/city.svg') repeat-x #4af;
 	background-size: cover;
@@ -67,6 +67,7 @@ details p, details h3 { margin: 0.2em 0 }
 }
 #new-qset ul, .q-edit ul { padding-left: 1em }
 .q-edit form, .q-edit label, .q-edit li { width: 100% }
+section.left-align { background: #eee }
 .left-align form[hidden] + details { margin-top: 0 }
 #questions input[type='checkbox'], .qset input[type='checkbox'] {
 	appearance: none;

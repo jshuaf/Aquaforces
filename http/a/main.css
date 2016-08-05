@@ -135,6 +135,7 @@ h1::after, #subheader::after {
 #subheader small { font-size: 1rem }
 h1 + * { clear: both }
 button, a { cursor: pointer }
+button, .button, h1, h2, h3, h4, h5, h6 { font-weight: 600 }
 button, .button {
 	display: block;
 	margin: 0.2em 0;
@@ -146,7 +147,6 @@ button, .button {
 	border-radius: 1em;
 	color: #fff;
 	text-decoration: none;
-	font-weight: bold;
 	white-space: pre;
 }
 .button { display: inline-table }
