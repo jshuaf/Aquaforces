@@ -602,7 +602,11 @@ function startHost(id) {
 		again.appendChild(document.createTextNode('Play again'));
 		again.href = '';
 		again.className = 'button';
+		var form = document.createElement('a');
+		form.appendChild(document.createTextNode('Would you mind giving us some feedback?'));
+		form.href = '//http://alexander95015.typeform.com/to/XFGQmW';
 		header.appendChild(again);
+		header.appendChild(form);
 		document.getElementById('game-btn').hidden = true;
 		crewsEl.children.forEach(function(e, i) {
 			if (boats[i + 1]) e.appendChild(document.createTextNode((boats[i + 1].p * 100).toFixed(0) + '\u2006m'));
