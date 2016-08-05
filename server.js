@@ -45,7 +45,7 @@ global.errorNotFound = function(req, res) {
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	}), {}, 404);
 };
-global.respondPage = o(function*(title, req, res, callback, header, status) {
+global.respondPage = o(function*(title, req, res, cb, header, status) {
 	if (title) title = html(title);
 	if (!header) header = {};
 	let inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : ''),
@@ -59,8 +59,12 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 	if (typeof header['Vary'] != 'string') header['Vary'] = 'Cookie';
 	res.writeHead(status || 200, header);
 	let data = (yield fs.readFile('./html/a/head.html', yield)).toString();
-	res.write(yield addVersionNonces(data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"').replace('$title', (title ? title + ' · ' : '') + 'Aquaforces').replace('$inhead', inhead), req.url.pathname, yield));
-	callback();
+	try {
+		res.write(yield addVersionNonces(data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"').replace('$title', (title ? title + ' · ' : '') + 'Aquaforces').replace('$inhead', inhead), req.url.pathname, yield));
+		return cb();
+	} catch (e) {
+		console.log(e);
+	}
 });
 global.errorsHTML = function(errs) {
 	return errs.length ?
