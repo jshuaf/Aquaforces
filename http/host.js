@@ -223,6 +223,7 @@ function bindListeners() {
 		li.parentNode.insertBefore(protoLi.cloneNode(true), li);
 		bindQuestionListeners(li.previousElementSibling, {isNewQSet: true});
 	});
+	newQSet.addEventListener('submit', submitNewQSet);
 }
 bindListeners();
 document.getElementsByClassName('q-edit').forEach(bindQuestionListeners);
@@ -254,7 +255,7 @@ function bindNewQuestionListener(nqBtn) {
 document.getElementsByClassName('edit').forEach(bindEditListener);
 document.getElementsByClassName('discard').forEach(bindDiscardListener);
 document.getElementsByClassName('new-question').forEach(bindNewQuestionListener);
-newQSet.addEventListener('submit', function(e) {
+function submitNewQSet(e) {
 	e.preventDefault();
 	this.classList.add('validating');
 	var inv = this.querySelector(':invalid');
@@ -287,14 +288,16 @@ newQSet.addEventListener('submit', function(e) {
 			small.appendChild(document.createElement('a'));
 			small.lastChild.className = 'play';
 			small.lastChild.appendChild(document.createTextNode('▶Play'));
+			small.lastChild.addEventListener('click', playQSetListener);
 			small.appendChild(document.createTextNode(' '));
 			small.appendChild(document.createElement('a'));
 			small.lastChild.className = 'dup';
 			small.lastChild.appendChild(document.createTextNode('Duplicate'));
+			small.lastChild.addEventListener('click', dupQSetListener);
 			small.appendChild(document.createTextNode(' '));
 			small.appendChild(document.createElement('a'));
 			small.lastChild.className = small.lastChild.title = 'delete';
-			small.lastChild.appendChild(document.createTextNode('✕'));
+			small.lastChild.addEventListener('click', deleteQSetListener);
 			small.appendChild(document.createTextNode(' '));
 			small.appendChild(document.createElement('a'));
 			small.lastChild.title = 'permalink';
@@ -318,26 +321,37 @@ newQSet.addEventListener('submit', function(e) {
 			bindListeners();
 		}
 	}, 'name=' + encodeURIComponent(document.getElementById('qset-title').value) + '&questions=' + encodeURIComponent(JSON.stringify(questions)) + '&public=' + (document.getElementById('private-set').checked ? 0 : 1));
-});
+}
 var target = document.querySelector('details:target');
 if (target) target.setAttribute('open', true);
+function dupQSetListener(e) {
+	e.preventDefault();
+}
+function deleteQSetListener(e) {
+	e.preventDefault();
+	var details = this.parentNode.parentNode.parentNode;
+	if (confirm('Are you sure you want to delete the set?')) {
+		requestPost('/api/delete-qset', function(res) {
+			if (res.indexOf('Error') == 0) return alert(res);
+			console.log(details);
+			details.parentNode.removeChild(details);
+		}, 'id=' + encodeURIComponent(details.id.substr(5)));
+	}
+}
+function playQSetListener(e) {
+	e.preventDefault();
+	document.getElementById('qset-cont').hidden = true;
+	document.documentElement.classList.remove('no-bg');
+	startHost(this.parentNode.parentNode.parentNode.id.substr(5));
+}
+document.getElementsByClassName('play').forEach(function(el) {
+	el.addEventListener('click', playQSetListener);
+});
 document.getElementsByClassName('dup').forEach(function(el) {
-	el.addEventListener('click', function(e) {
-		e.preventDefault();
-	});
+	el.addEventListener('click', dupQSetListener);
 });
 document.getElementsByClassName('delete').forEach(function(el) {
-	el.addEventListener('click', function(e) {
-		e.preventDefault();
-	});
-});
-document.getElementsByClassName('play').forEach(function(el) {
-	el.addEventListener('click', function(e) {
-		e.preventDefault();
-		document.getElementById('qset-cont').hidden = true;
-		document.documentElement.classList.remove('no-bg');
-		startHost(this.parentNode.parentNode.parentNode.id.substr(5));
-	});
+	el.addEventListener('click', deleteQSetListener);
 });
 
 var socket = new WebSocket((location.protocol == 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/'),

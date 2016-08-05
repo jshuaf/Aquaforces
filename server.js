@@ -210,7 +210,7 @@ let serverHandler = o(function*(req, res) {
 		dbcs.qsets.find(filter, searchText ? {score: {$meta: 'textScore'}} : undefined).sort(searchText ? {score: {$meta: 'textScore'}} : {timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
 			if (qset) {
-				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete">✕</a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
+				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete"></a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
 				qset.questions.forEach(function(question) {
 					let listr = '<li><a class="edit" title="edit question">✎</a><h3>' + html(question.text) + '</h3><div><ul class="check-list">',
 						liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';

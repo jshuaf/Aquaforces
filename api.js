@@ -63,11 +63,20 @@ module.exports = function(req, res, post, user) {
 			dbcs.qsets.insert(question);
 			res.end(question._id);
 		});
+	} else if (req.url.pathname == '/delete-qset') {
+		dbcs.qsets.findOne({_id: post.id}, function(err, qset) {
+			if (err) throw err;
+			if (!qset) return res.writeHead(400) || res.end('Error: Question set not found.');
+			if (!user.admin && qset.userID != user._id) return res.writeHead(400) || res.end('Error: You may not delete question sets that aren\'t yours.');
+			dbcs.qsets.remove({_id: post.id});
+			res.writeHead(204);
+			res.end();
+		});
 	} else if (req.url.pathname == '/edit-question') {
 		dbcs.qsets.findOne({_id: post.id}, function(err, qset) {
 			if (err) throw err;
 			if (!qset) return res.writeHead(400) || res.end('Error: Question set not found.');
-			if (qset.userID != user._id) return res.writeHead(400) || res.end('Error: You may not edit question sets that aren\'t yours.');
+			if (!user.admin && qset.userID != user._id) return res.writeHead(400) || res.end('Error: You may not edit question sets that aren\'t yours.');
 			if (post.num != 'new' && !qset.questions[parseInt(post.num)]) return res.writeHead(400) || res.end('Error: Invalid question number.');
 			let q;
 			try {

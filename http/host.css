@@ -188,6 +188,13 @@ h2 { margin-bottom: 0.3em }
 .discard, .delete, #close { color: #f00 }
 .discard:hover, .delete:hover, #close:hover { color: #f66 }
 .discard:active, .delete:active, #close:active { color: #c00 }
+.delete {
+	background: url('/img/trash.svg');
+	width: 0.9em;
+	height: 1.1em;
+	vertical-align: top;
+	display: inline-block;
+}
 #close { float: right }
 .dup { color: #777 }
 .dup:hover { color: #888 }
