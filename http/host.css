@@ -62,8 +62,8 @@ nav.loggedin { background: #fff }
 	background: #fff;
 }
 details p, details h3 { margin: 0.2em 0 }
+#new-qset, #search-form { display: block }
 #new-qset {
-	display: block;
 	padding: 1em 2em;
 	background: #fff;
 }
