@@ -109,5 +109,18 @@ module.exports = function(req, res, post, user) {
 			res.writeHead(204);
 			res.end();
 		});
+	} else if (req.url.pathname == '/remove-question') {
+		dbcs.qsets.findOne({_id: post.id}, function(err, qset) {
+			if (err) throw err;
+			if (!qset) return res.writeHead(400) || res.end('Error: Question set not found.');
+			if (!user.admin && qset.userID != user._id) return res.writeHead(400) || res.end('Error: You may not edit question sets that aren\'t yours.');
+			if (!qset.questions[parseInt(post.num)]) return res.writeHead(400) || res.end('Error: Invalid question number.');
+			console.log(qset.questions.length);
+			if (!qset.questions.length == 1) return res.writeHead(400) || res.end('Error: You may not remove the only question in a set.');
+			qset.questions.splice(parseInt(post.num), 1);
+			dbcs.qsets.update({_id: post.id}, {$set: {questions: qset.questions}});
+			res.writeHead(204);
+			res.end();
+		});
 	} else res.writeHead(404) || res.end('Error: The API feature requested has not been implemented.');
 };

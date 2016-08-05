@@ -79,11 +79,18 @@ function wrongKeypress(e) {
 }
 function buildQuestion(question) {
 	var li = document.createElement('li');
-	li.appendChild(document.createElement('a'));
-	li.lastChild.className = 'edit';
-	li.lastChild.title = 'edit question';
-	li.lastChild.appendChild(document.createTextNode('✎'));
-	li.lastChild.addEventListener('click', startEdit);
+	li.appendChild(document.createElement('span'));
+	li.lastChild.className = 'q-ctrls';
+	li.lastChild.appendChild(document.createElement('a'));
+	li.lastChild.lastChild.className = 'remove-q';
+	li.lastChild.lastChild.title = 'delete question';
+	li.lastChild.lastChild.addEventListener('click', removeQuestion);
+	li.lastChild.appendChild(document.createTextNode(' '));
+	li.lastChild.appendChild(document.createElement('a'));
+	li.lastChild.lastChild.className = 'edit';
+	li.lastChild.lastChild.title = 'edit question';
+	li.lastChild.lastChild.appendChild(document.createTextNode('✎'));
+	li.lastChild.lastChild.addEventListener('click', startEdit);
 	li.appendChild(document.createElement('h3'));
 	li.lastChild.appendChild(document.createTextNode(question.text));
 	li.appendChild(document.createElement('div'));
@@ -231,9 +238,20 @@ function bindListeners() {
 bindListeners();
 document.getElementsByClassName('q-edit').forEach(bindQuestionListeners);
 function startEdit() {
-	this.parentNode.hidden = true;
-	this.parentNode.nextElementSibling.hidden = false;
-	this.parentNode.nextElementSibling.getElementsByTagName('input')[0].focus();
+	this.parentNode.parentNode.hidden = true;
+	this.parentNode.parentNode.nextElementSibling.hidden = false;
+	this.parentNode.parentNode.nextElementSibling.getElementsByTagName('input')[0].focus();
+}
+function removeQuestion() {
+	var el = this.parentNode.parentNode;
+	requestPost('/api/remove-question', function(res) {
+		if (res.indexOf('Error') == 0) return alert(res);
+		el.parentNode.removeChild(el.nextElementSibling);
+		el.parentNode.removeChild(el);
+	},
+		'id=' + encodeURIComponent(el.parentNode.parentNode.id.substr(5)) +
+		'&num=' + el.parentNode.children.indexOf(el) / 2
+	);
 }
 function discardEdit() {
 	this.parentNode.hidden = true;
@@ -249,6 +267,9 @@ function newQuestion() {
 function bindEditListener(editBtn) {
 	editBtn.addEventListener('click', startEdit);
 }
+function bindRemoveListener(deleteBtn) {
+	deleteBtn.addEventListener('click', removeQuestion);
+}
 function bindDiscardListener(discardBtn) {
 	discardBtn.addEventListener('click', discardEdit);
 }
@@ -256,6 +277,7 @@ function bindNewQuestionListener(nqBtn) {
 	nqBtn.addEventListener('click', newQuestion);
 }
 document.getElementsByClassName('edit').forEach(bindEditListener);
+document.getElementsByClassName('remove-q').forEach(bindRemoveListener);
 document.getElementsByClassName('discard').forEach(bindDiscardListener);
 document.getElementsByClassName('new-question').forEach(bindNewQuestionListener);
 function submitNewQSet(e) {

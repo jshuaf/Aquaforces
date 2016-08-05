@@ -141,13 +141,13 @@ summary + ol > li {
 	display: flex;
 	flex-grow: 1;
 	border: 0.5px solid #aaa;
-	padding: 1em;
+	padding: 1.5em 0.5em 0.5em;
 }
 summary + ol > li > div {
 	flex-grow: 1;
 	margin-left: 1em;
 }
-summary + ol > li > :not(a) { min-width: 5em }
+summary + ol > li > :not(a):not(.q-ctrls) { min-width: 5em }
 .hostgame #tgame {
 	position: absolute;
 	top: 0; bottom: 0; left: 0;
@@ -180,7 +180,7 @@ h2 { margin-bottom: 0.3em }
 .qset > ol > li { position: relative }
 .q-edit { background: #cef }
 .q-add { background: #fec }
-.edit, .discard {
+.q-ctrls, .discard {
 	position: absolute;
 	top: 0.3em; right: 0.3em;
 }
@@ -188,7 +188,7 @@ h2 { margin-bottom: 0.3em }
 .discard, .delete, #close { color: #f00 }
 .discard:hover, .delete:hover, #close:hover { color: #f66 }
 .discard:active, .delete:active, #close:active { color: #c00 }
-.delete {
+.delete, .remove-q {
 	background: url('/img/trash.svg');
 	width: 0.9em;
 	height: 1.1em;
