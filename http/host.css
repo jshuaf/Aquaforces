@@ -126,11 +126,11 @@ section.left-align { background: #eee }
 	color: #fff;
 }
 #search { width: 100% }
-.search-form button {
+#search-form button {
 	margin-left: 0.5em;
 	font-size: 1.2rem;
 }
-.search-form .half-divider { margin-bottom: 0.5em }
+#search-form .half-divider { margin-bottom: 0.5em }
 summary + ol {
 	list-style-type: none;
 	padding: 0;

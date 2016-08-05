@@ -37,6 +37,7 @@ function toggleFilter() {
 	else search.value = 'is:' + this.id + ' ' + search.value;
 	search.focus();
 	searchInput();
+	document.getElementById('search-form').submit();
 }
 document.getElementById('mine').addEventListener('click', toggleFilter);
 document.getElementById('public').addEventListener('click', toggleFilter);
