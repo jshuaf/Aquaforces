@@ -1,7 +1,18 @@
 'use strict';
 const cookie = require('cookie');
 module.exports = function(req, res, post, user) {
-	if (req.url.pathname == '/new-qset') {
+	if (req.url.pathname == '/logout') {
+		res.writeHead(303, {
+			'Set-Cookie': cookie.serialize('id', '', {
+				path: '/',
+				expires: new Date(new Date().setDate(new Date().getDate() - 30)),
+				httpOnly: true,
+				secure: config.secureCookies
+			})
+		});
+		if (user) dbcs.users.update({_id: user._id}, {$set: {cookie: []}});
+		res.end();
+	} else if (req.url.pathname == '/new-qset') {
 		if (!post.name) return res.writeHead(400) || res.end('Error: Set name is required.');
 		if (post.name.length > 144) return res.writeHead(400) || res.end('Error: Set name length must not be greater than 144 characters.');
 		if (!user && post.public != 1) return res.writeHead(400) || res.end('Error: Sets made by users who are not logged in must be public.');
