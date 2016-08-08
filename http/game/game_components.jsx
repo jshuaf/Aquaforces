@@ -132,7 +132,7 @@ const Game = React.createClass({
 		let whirlpoolValue;
 		this.state.whirlpoolTimebar = <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool} />;
 		if (this.state.whirlpool) {
-			if (this.state.whirlpoolType == "Free") {
+			if (this.state.whirlpoolType === "Free") {
 				whirlpoolValue = (
 					<div className="modal-background">
 						<div className="row">
@@ -641,7 +641,7 @@ const River = React.createClass({
 		this.setState((previousState, previousProps) => {
 			const currentGroups = previousState.riverReflectionGroups.slice();
 			for (let currentGroup of currentGroups) {
-				if (currentGroup.x == xPosition) {
+				if (currentGroup.x === xPosition) {
 					currentGroups.splice(currentGroups.indexOf(currentGroup), 1);
 				}
 			}
@@ -653,8 +653,8 @@ const River = React.createClass({
 		function ascending(a, b) {return a - b;}
 
 		const currentGroups = this.state.riverReflectionGroups.slice();
-		if (side == 'bottom') currentGroups.sort((a, b) => b.y - a.y);
-		else if (side == 'top') currentGroups.sort((a, b) => a.y - b.y);
+		if (side === 'bottom') currentGroups.sort((a, b) => b.y - a.y);
+		else if (side === 'top') currentGroups.sort((a, b) => a.y - b.y);
 
 		const riverBounds = this.riverBounds();
 		const riverHeight = riverBounds.bottom - riverBounds.top;
@@ -665,8 +665,8 @@ const River = React.createClass({
 
 		const newXPosition = this.findMaximumGap(currentXPositions);
 		let newYPosition;
-		if (side == 'bottom') newYPosition = currentGroups[0].y + riverHeight / (1.5 + Math.random());
-		else if (side == 'top') newYPosition = currentGroups[0].y - 2 * riverHeight / (2.5 + Math.random());
+		if (side === 'bottom') newYPosition = currentGroups[0].y + riverHeight / (1.5 + Math.random());
+		else if (side === 'top') newYPosition = currentGroups[0].y - 2 * riverHeight / (2.5 + Math.random());
 
 		this.setState((previousState, previousProps) => {
 			const riverReflectionGroups = previousState.riverReflectionGroups;
@@ -921,7 +921,7 @@ const WhirlpoolFree = React.createClass({
 	},
 	processTap() {
 		this.setState({tapStreak: this.state.tapStreak + 1});
-		if (this.state.tapStreak == 5) {
+		if (this.state.tapStreak === 5) {
 			console.log("YOU GO!");
 			this.props.socket.send(JSON.stringify({
 				event: 'whirlpoolFiveTapsDetected'

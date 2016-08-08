@@ -1,6 +1,6 @@
 import GameHost from './GameHost.jsx';
 
-const socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/host/');
+const socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port !== 80 ? ':' + location.port : '') + '/host/');
 const cont = document.getElementById('cont');
 
 const crews = {};
@@ -12,7 +12,7 @@ let gameHasStarted = false;
 function setState(id) {
 	// hide and show different elements
 	cont.children.forEach(function(e) {
-		if (e.id != id) e.hidden = true;
+		if (e.id !== id) e.hidden = true;
 	});
 	document.getElementById(id).hidden = false;
 }
@@ -21,13 +21,13 @@ function removeUserFromGame() {
 	const userToRemove = this.dataset.username;
 	socket.send(JSON.stringify({
 		event: 'removeUser',
-		user: userToRemove
+		user: userToRemove,
 	}));
 	this.parentNode.removeChild(this);
 
 	for (let i = 0; i < usersWithoutCrews.length; i++) {
 		const username = usersWithoutCrews[i];
-		if (userToRemove == username) {
+		if (userToRemove === username) {
 			usersWithoutCrews.splice(usersWithoutCrews.indexOf(username), 1);
 			break;
 		}
@@ -40,9 +40,9 @@ function removeUserFromCrew() {
 	}
 	socket.send(JSON.stringify({
 		event: 'removeUserFromCrew',
-		user: this.dataset.username
+		user: this.dataset.username,
 	}));
-	let li = document.createElement('li');
+	const li = document.createElement('li');
 	li.dataset.username = this.dataset.username;
 	li.appendChild(document.createTextNode(this.dataset.username));
 	li.onclick = removeUserFromGame;
@@ -50,10 +50,10 @@ function removeUserFromCrew() {
 	this.parentNode.dataset.n--;
 	this.parentNode.removeChild(this);
 
-	for (let crewNumber in crews) {
-		let crewmembers = crews[crewNumber].users;
-		for (let crewmember of crewmembers) {
-			if (crewmember == this.dataset.username) {
+	for (const crewNumber in crews) {
+		const crewmembers = crews[crewNumber].users;
+		for (const crewmember of crewmembers) {
+			if (crewmember === this.dataset.username) {
 				crewmembers.splice(crewmembers.indexOf(crewmember), 1);
 				return;
 			}
@@ -62,7 +62,7 @@ function removeUserFromCrew() {
 }
 
 function confirmMessageRecieved() {
-	socket.send(JSON.stringify({event: 'messageRecieved'}));
+	socket.send(JSON.stringify({ event: 'messageRecieved' }));
 }
 
 socket.onmessage = function(m) {
@@ -79,14 +79,14 @@ socket.onmessage = function(m) {
 	case 'ping':
 		break;
 	case 'error':
-		sweetAlert(m.title, m.text, "error");
+		sweetAlert(m.title, m.text, 'error');
 		break;
 	case 'newGame':
 		document.getElementById('game-code-cont').appendChild(document.createTextNode(m.id));
 		setState('tgame');
 		break;
 	case 'addNewUser':
-		let li = document.createElement('li');
+		const li = document.createElement('li');
 		li.dataset.username = m.user;
 		li.appendChild(document.createTextNode(m.user));
 		li.onclick = removeUserFromGame;
@@ -95,9 +95,9 @@ socket.onmessage = function(m) {
 		break;
 	case 'addUserToCrew':
 		document.getElementById('loneusers').childNodes.forEach(function(e) {
-			if (e.firstChild.nodeValue == m.user) e.parentNode.removeChild(e);
+			if (e.firstChild.nodeValue === m.user) e.parentNode.removeChild(e);
 		});
-		let span = document.createElement('span');
+		const span = document.createElement('span');
 		span.dataset.username = m.user;
 		span.className = 'clickable pill';
 		span.onclick = removeUserFromCrew;
@@ -112,7 +112,7 @@ socket.onmessage = function(m) {
 				users: [m.user],
 				position: 0,
 				status: 'rowing',
-				boat: 'canoe'
+				boat: 'canoe',
 			};
 		}
 		break;
@@ -130,7 +130,7 @@ socket.onmessage = function(m) {
 		gameHost.whirlpoolStatusChanged(m.status, m.crewNumber);
 		break;
 	case 'removeUser':
-		let e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
+		const e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
 		if (e) {
 			e.parentNode.removeChild(e);
 			// if (e.parentNode.dataset.n) e.parentNode.dataset.n--;
@@ -140,24 +140,24 @@ socket.onmessage = function(m) {
 };
 
 socket.onclose = () => {
-	sweetAlert("Server connection died.", "We're sorry about that.", "error");
+	sweetAlert('Server connection died.', "We're sorry about that.", 'error');
 };
 document.getElementById('dashboard').addEventListener('submit', function(e) {
 	document.getElementById('newGameButton').disabled = true;
 	e.preventDefault();
-	socket.send(JSON.stringify({event: 'newGame'}));
+	socket.send(JSON.stringify({ event: 'newGame' }));
 });
 
 document.getElementById('startGameButton').addEventListener('click', function(e) {
 	document.getElementById('startGameButton').disabled = true;
 	e.preventDefault();
 	socket.send(JSON.stringify({
-		event: 'startGame'
+		event: 'startGame',
 	}));
 	// MARK: figure out our html
 });
 function endGame() {
-    socket.send(JSON.stringify({
-        event: 'endGame'
+    										socket.send(JSON.stringify({
+        										event: 'endGame',
     }));
 }

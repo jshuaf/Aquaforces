@@ -1,4 +1,4 @@
-let socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port != 80 ? ':' + location.port : '') + '/play/');
+let socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port !== 80 ? ':' + location.port : '') + '/play/');
 const cont = document.getElementById('cont');
 let gameHasEnded = false;
 let answers = [];
@@ -9,7 +9,7 @@ let crewNumber;
 
 function setState(id) {
 	cont.children.forEach((e) => {
-		if (e.id !== id) {
+		if (e.id !=== id) {
 			e.hidden = true;
 		}
 	});
