@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2324.97 1136">
+	<linearGradient id="water" y1="1" x2="0" y2="0">
+		<stop offset="0" stop-color="#e48085" />
+		<stop offset="0.62" stop-color="#f3b3a7" />
+		<stop offset="1" stop-color="#fdd4bd" />
+	</linearGradient>
+	<linearGradient id="sky" y1="1" x2="0" y2="0">
+		<stop offset="0" stop-color="#fcc08b" />
+		<stop offset="0.85" stop-color="#fedac1" />
+	</linearGradient>
+	<linearGradient id="sung" y1="1" x2="0" y2="0">
+		<stop offset="0" stop-color="#e9c2b0" stop-opacity="0" />
+		<stop offset="0.11" stop-color="#edcbb4" stop-opacity="0.18" />
+		<stop offset="0.29" stop-color="#f3dabb" stop-opacity="0.47" />
+		<stop offset="0.45" stop-color="#f8e6c0" stop-opacity="0.7" />
+		<stop offset="0.59" stop-color="#fceec4" stop-opacity="0.86" />
+		<stop offset="0.7" stop-color="#fef3c6" stop-opacity="0.96" />
+		<stop offset="0.76" stop-color="#fff5c7" />
+	</linearGradient>
+	<rect y="464.26" width="2324.97" height="671.74" fill="url(#water)" />
+	<rect width="2324.97" height="464.26" fill="url(#sky)" />
+	<path d="M1371.9,327.91a136.45,136.45,0,0,0-136.44,135.56h272.88A136.45,136.45,0,0,0,1371.9,327.91Z" fill="#ffc" />
+	<polygon points="1737.98 436.08 1727.34 460.29 1748.54 460.32 1748.59 460.32 1748.59 411.93 1737.98 436.08" fill="#ffd" />
+	<polygon points="520.67 431.89 502.97 390.75 502.93 390.86 502.93 472.98 538.38 473.04 520.67 431.89" fill="#ffe" />
+	<polygon points="500.22 390.76 467.25 431.79 434.29 472.82 499.94 473.04 500.33 390.89 500.22 390.76" fill="#ffe" />
+	<polygon points="1789.17 460.27 1769.55 435.74 1749.98 411.3 1749.98 460.32 1749.99 460.32 1789.17 460.27" fill="#ffd" />
+	<path d="M448.24,481.64H534.6A30.1,30.1,0,0,1,528.43,498H461.81A49,49,0,0,1,448.24,481.64Z" fill="#865" />
+	<path d="M1777.85,464.07h-45.23a15.77,15.77,0,0,0,3.23,8.56h34.89A25.65,25.65,0,0,0,1777.85,464.07Z" fill="#887" />
+	<path d="M1235.46,463.25c0,0.3,0,.59,0,0.89a136.45,136.45,0,1,0,272.91,0c0-.3,0-0.59,0-0.89H1235.46Z" opacity="0.4" fill="url(#sung)" />
+</svg>

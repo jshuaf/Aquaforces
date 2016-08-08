@@ -1,3 +1,4 @@
+'use strict';
 const crypto = require('crypto'),
 	fs = require('fs'),
 	path = require('path');
@@ -28,7 +29,7 @@ global.html = function(input) {
 };
 global.getVersionNonce = o(function*(pn, file, cb) {
 	try {
-		return cb(null, crypto.createHash('md5').update(yield fs.readFile('http' + path.resolve(pn, pn[pn.length - 1] == '/' ? '' : '..', file.replaceAll('.js', '.jsx')), yield)).digest('hex'));
+		return cb(null, crypto.createHash('md5').update(yield fs.readFile('http' + path.resolve(pn, pn[pn.length - 1] == '/' ? '' : '..', file), yield)).digest('hex'));
 	} catch (e) {
 		return cb(e);
 	}
@@ -38,7 +39,7 @@ global.addVersionNonces = o(function*(str, pn, cb) {
 		if (str.substr(i).match(/^\.[A-z]{1,8}"/)) {
 			while (str[i] && str[i] != '"') i++;
 			let substr = str.substr(0, i).match(/"[^"]+?$/)[0].substr(1);
-			if (substr.includes(':')) throw new Error('Invalid version nonce URI.');
+			if (substr.includes('.com') || substr.includes(':')) continue;
 			try {
 				str = str.substr(0, i) + '?v=' + (yield getVersionNonce(pn, substr, yield)) + str.substr(i);
 			} catch (e) {
@@ -48,3 +49,6 @@ global.addVersionNonces = o(function*(str, pn, cb) {
 	}
 	cb(null, str);
 });
+global.generateID = function() {
+	return crypto.randomBytes(21).toString('base64').replaceAll(['+', '/'], ['!', '_']);
+};

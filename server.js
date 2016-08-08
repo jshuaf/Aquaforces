@@ -1,45 +1,34 @@
 'use strict';
-let config = {
-	port: 3000
-};
+const fs = require('fs');
+/*eslint-disable no-process-env*/
 global.config = {
 	port: process.env.PORT || (process.argv.includes('--production') ? 80 : 3000),
 	mongoPath: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/Aquaforces',
-	secureCookies: false/* ,
+	secureCookies: false,
 	googleAuth: {
 		'client_id': process.argv.includes('--test') ? '' : process.env.GITHUB_CLIENT_ID || fs.readFileSync('./github.pem').toString().split('\n')[0],
 		'client_secret': process.argv.includes('--test') ? '' : process.env.GITHUB_CLIENT_SECRET || fs.readFileSync('./github.pem').toString().split('\n')[1]
-	}*/
+	}
 };
-
+/*eslint-enable no-process-env*/
 require('./essentials.js');
 require('colors');
-
-// Database Storage
 global.dbcs = {};
-const usedDBCs = [
-	'questions'
-];
+const usedDBCs = ['users', 'gameplays'];
 
-// Dependencies
 const http = require('http'),
 	https = require('https'),
+	spawn = require('child_process').spawn,
 	uglifyJS = require('uglify-js'),
 	CleanCSS = require('clean-css'),
-	babel = require('babel-core'),
 	zlib = require('zlib'),
-	fs = require('fs'),
 	path = require('path'),
 	url = require('url'),
 	querystring = require('querystring'),
 	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient;
-
 const apiServer = require('./api.js');
-
-// Response Pages
-
 global.errorForbidden = function(req, res, msg) {
 	respondPage('403', req, res, o(function*() {
 		res.write('<h1>Error 403</h1>');
@@ -48,52 +37,63 @@ global.errorForbidden = function(req, res, msg) {
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	}), {}, 403);
 };
-
 global.errorNotFound = function(req, res) {
 	respondPage('404', req, res, o(function*() {
-		res.write('<h1>Error 404</h1>');
+		res.write('<h1>Error 404 :(</h1>');
 		res.write('<p>The requested file could not be found.</p>');
 		res.write('<p><a href="javascript:history.go(-1)">Go back</a>.</p>');
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	}), {}, 404);
 };
-
-global.respondPage = o(function*(title, req, res, callback, header, status) {
-	// Parse the header
+global.respondPage = o(function*(title, req, res, cb, header, status) {
 	if (title) title = html(title);
 	if (!header) header = {};
-	let inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : '');
-	let noBG = header.noBG;
+	let inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : ''),
+		noBG = header.noBG;
 	delete header.inhead;
 	delete header.description;
+	delete header.noBG;
 	if (typeof header['Content-Type'] != 'string') header['Content-Type'] = 'application/xhtml+xml; charset=utf-8';
 	if (typeof header['Cache-Control'] != 'string') header['Cache-Control'] = 'no-cache';
 	if (typeof header['X-Frame-Options'] != 'string') header['X-Frame-Options'] = 'DENY';
 	if (typeof header['Vary'] != 'string') header['Vary'] = 'Cookie';
 	res.writeHead(status || 200, header);
-
-	// All pages have headers, no navigation
 	let data = (yield fs.readFile('./html/a/head.html', yield)).toString();
-
 	try {
-		res.write(yield addVersionNonces(
-			data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"')
-			.replace('$title', (title ? title + ' · ' : '') + 'Aquaforces')
-			.replace('$inhead', inhead), req.url.pathname, yield));
-		return callback();
+		res.write(yield addVersionNonces(data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"').replace('$title', (title ? title + ' · ' : '') + 'Aquaforces').replace('$inhead', inhead), req.url.pathname, yield));
+		return cb();
 	} catch (e) {
 		console.log(e);
 	}
 });
+global.errorsHTML = function(errs) {
+	return errs.length ?
+		(
+			errs.length == 1 ?
+				'<div class="error">' + errs[0] + '</div>'
+				: '<div class="error">\t<ul>\t\t<li>' + errs.join('</li>\t\t<li>') + '</li>\t</ul></div>'
+		)
+		: '';
+};
 let cache = {};
+const redirectURLs = ['/host', '/play', '/console'];
 let serverHandler = o(function*(req, res) {
+	if (req.headers.host.includes('www')) {
+		res.writeHead(301, {Location: '//' + req.headers.host.replace('www.', '') + req.url});
+		res.end();
+	}
 	req.url = url.parse(req.url, true);
+	console.log(req.method, req.url.pathname);
 	let i;
-	if (i = statics[req.url.pathname]) {
-		yield respondPage(i.title, req, res, yield, {inhead: i.inhead});
-		res.write((yield addVersionNonces((yield fs.readFile(i.path, yield)).toString(), req.url.pathname, yield)));
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (req.url.pathname.substr(0, 5) == '/api/') {
+	const user = yield dbcs.users.findOne({
+		cookie: {
+			$elemMatch: {
+				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+				created: {$gt: new Date() - 2592000000}
+			}
+		}
+	}, yield);
+	if (req.url.pathname.substr(0, 5) == '/api/' && !req.headers.host.includes('.io')) {
 		req.url.pathname = req.url.pathname.substr(4);
 		if (req.method != 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
 		if (url.parse(req.headers.referer || '').host != req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
@@ -110,12 +110,12 @@ let serverHandler = o(function*(req, res) {
 		req.on('end', function() {
 			if (req.abort) return;
 			post = querystring.parse(post);
-			apiServer(req, res, post);
+			apiServer(req, res, post, user);
 		});
 	} else if (req.url.pathname.includes('.')) {
 		let stats;
 		try {
-			stats = yield fs.stat('./http/' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+			stats = yield fs.stat('./http/' + req.url.pathname, yield);
 		} catch (e) {
 			return errorNotFound(req, res);
 		}
@@ -133,12 +133,12 @@ let serverHandler = o(function*(req, res) {
 			if (cache[req.url.pathname].updated < stats.mtime) {
 				let data;
 				try {
-					data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+					data = yield fs.readFile('http' + req.url.pathname, yield);
 				} catch (e) {
 					return;
 				}
 				switch (path.extname(req.url.pathname)) {
-					case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
+					case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
 					break;
 					case '.css': data = new CleanCSS().minify(data).styles;
 					break;
@@ -150,29 +150,22 @@ let serverHandler = o(function*(req, res) {
 					updated: stats.mtime
 				};
 			}
-		} else if (req.url.pathname == '/host/') {
-			yield respondPage('Host', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
-			var qsetstr = '';
-			dbcs.qsets.find({}, {title: true}).each(o(function*(err, qset) {
-				if (err) throw err;
-				if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
-				else {
-					res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
-					res.end(yield fs.readFile('./html/a/foot.html', yield));
-				}
-			}));
 		} else {
 			let data;
 			try {
-				data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+				data = yield fs.readFile('http' + req.url.pathname, yield);
 			} catch (e) {
 				return errorNotFound(req, res);
 			}
-			switch (path.extname(req.url.pathname)) {
-				case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
-				break;
-				case '.css': data = new CleanCSS().minify(data).styles;
-				break;
+			try {
+				switch (path.extname(req.url.pathname)) {
+					case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
+					break;
+					case '.css': data = new CleanCSS().minify(data).styles;
+					break;
+				}
+			} catch (e) {
+				console.error(e);
 			}
 			cache[req.url.pathname] = {
 				raw: data,
@@ -188,31 +181,235 @@ let serverHandler = o(function*(req, res) {
 			});
 			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
 		}
+	} else if (req.url.pathname == '/play/' || (req.headers.host.includes('.io') && req.url.pathname == '/')) {
+		yield respondPage(null, req, res, yield);
+		res.write((yield addVersionNonces((yield fs.readFile('./html/play.html', yield)).toString(), req.url.pathname, yield)));
+		res.end(yield fs.readFile('./html/a/foot.html', yield));
+	} else if (req.url.pathname == '/') {
+		if (user) return res.writeHead(303, {Location: '/host/'}) || res.end();
+		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
+		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id));
+		res.end(yield fs.readFile('./html/a/foot.html', yield));
+	} else if (req.url.pathname == '/host/' && !req.headers.host.includes('.io')) {
+		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
+		let qsetstr = '',
+			filter = user ? {$or: [{userID: user._id}, {public: true}]} : {public: true},
+			q = (req.url.query.q || '').trim(),
+			searchText = '';
+		q.split(/\s+/).forEach(function(token) {
+			if (token == 'is:mine' && user) filter.userID = user._id;
+			if (token == 'is:public') filter.public = true;
+			if (token == 'is:favorite' && user) filter._id = {$in: user.favorites};
+			if (token == '-is:mine' && user) filter.userID = {$not: user._id};
+			if (token == '-is:public') filter.public = false;
+			if (token == '-is:favorite' && user) filter._id = {$not: {$in: user.favorites}};
+			if (!token.includes(':')) searchText += token + ' ';
+		});
+		searchText = searchText.trim();
+		if (searchText) filter.$text = {$search: searchText};
+		dbcs.qsets.find(filter, searchText ? {score: {$meta: 'textScore'}} : undefined).sort(searchText ? {score: {$meta: 'textScore'}} : {timeAdded: -1}).each(o(function*(err, qset) {
+			if (err) throw err;
+			if (qset) {
+				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete"></a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
+				qset.questions.forEach(function(question) {
+					let listr = '<li><span class="q-ctrls"><a class="remove-q" title="delete question"></a> <a class="edit" title="edit question">✎</a></span><h3>' + html(question.text) + '</h3><div><ul class="check-list">',
+						liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
+					liestr += '<label>Question <input placeholder="What\'s one plus one?" required="" maxlength="144" value="' + html(question.text) + '" /></label>';
+					liestr += '<p>Answers:</p><ul>';
+					question.answers.forEach(function(answer) {
+						listr += '<li>' + html(answer) + '</li>';
+						liestr += '<li><input type="checkbox" checked="" /> <input required="" maxlength="64" placeholder="Two" value="' + html(answer) + '" /></li>';
+					});
+					listr += '</ul><ul class="cross-list">';
+					question.incorrectAnswers.forEach(function(answer) {
+						listr += '<li>' + html(answer) + '</li>';
+						liestr += '<li><input type="checkbox" /> <input required="" maxlength="64" placeholder="Two" value="' + html(answer) + '" /></li>';
+					});
+					listr += '</ul></div></li>';
+					liestr += '<li><small><a class="more-wrong">+ more</a></small></li></ul><button class="submit-q-edit">Submit Edit</button></form></li>';
+					qsetstr += listr + liestr;
+				});
+				qsetstr += '</ol><a class="new-question">add question</a></details>';
+			} else {
+				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>').replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
+				if (user) data = data.replace(/<a class="signin-link"[\s\S]+?<\/a>/, '<a id="menu-stub">' + html(user.name) + '</a>').replace('<nav>', '<nav class="loggedin">');
+				else data = data.replace('id="filter"', 'id="filter" hidden=""');
+				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
+				res.write(data);
+				res.end(yield fs.readFile('./html/a/foot.html', yield));
+			}
+		}));
+	} else if (req.url.pathname == '/login/google' && !req.headers.host.includes('.io')) {
+		let tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.client_id + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
+		if (req.url.query.error) {
+			yield respondPage('Login Error', req, res, yield, {}, 400);
+			res.write('<h1>Login Error</h1>');
+			res.write('<p>An error was received from Google. ' + tryagain + '</p>');
+			res.write(errorsHTML(['Error: ' + req.url.query.error]));
+			return res.end(yield fs.readFile('html/a/foot.html', yield));
+		}
+		if (!req.url.query.code) {
+			yield respondPage('Login Error', req, res, yield, {}, 400);
+			res.write('<h1>Login Error</h1>');
+			res.write('<p>No authentication code was received. ' + tryagain + '</p>');
+			return res.end(yield fs.readFile('html/a/foot.html', yield));
+		}
+		let googReq = https.request({
+			hostname: 'accounts.google.com',
+			path: '/o/oauth2/token',
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		}, o(function*(googRes) {
+			let data = '';
+			googRes.on('data', function(d) {
+				data += d;
+			});
+			yield googRes.on('end', yield);
+			console.log(data);
+			try {
+				data = JSON.parse(data);
+			} catch (e) {
+				yield respondPage('Login Error', req, res, yield, {}, 500);
+				res.write('<h1>Login Error</h1>');
+				res.write('<p>An invalid response was received from Google. ' + tryagain + '</p>');
+				res.end(yield fs.readFile('html/a/foot.html', yield));
+			}
+			if (data.error) {
+				yield respondPage('Login Error', req, res, yield, {}, 500);
+				res.write('<h1>Login Error</h1>');
+				res.write('<p>An error was received from Google. ' + tryagain + '</p>');
+				res.write(errorsHTML([data.error + ': ' + data.error_description]));
+				return res.end(yield fs.readFile('html/a/foot.html', yield));
+			}
+			console.log('/plus/v1/people/me?key=' + encodeURIComponent(data.access_token));
+			let apiReq = https.get({
+				hostname: 'www.googleapis.com',
+				path: '/plus/v1/people/me?access_token=' + encodeURIComponent(data.access_token)
+			}, o(function*(apiRes) {
+				let apiData = '';
+				apiRes.on('data', function(d) {
+					apiData += d;
+				});
+				yield apiRes.on('end', yield);
+				try {
+					apiData = JSON.parse(apiData);
+				} catch (e) {
+					yield respondPage('Login Error', user, req, res, yield, {}, 500);
+					res.write('<h1>Login Error</h1>');
+					res.write('<p>An invalid response was received from the Google API. ' + tryagain + '</p>');
+					res.end(yield fs.readFile('html/a/foot.html', yield));
+				}
+				if (apiData.error) {
+					yield respondPage('Login Error', user, req, res, yield, {}, 500);
+					res.write('<h1>Login Error</h1>');
+					res.write('<p>An error was received from the Google API. ' + tryagain + '</p>');
+					res.write(errorsHTML([apiData.error + ': ' + apiData.error_description]));
+					return res.end(yield fs.readFile('html/a/foot.html', yield));
+				}
+				console.log(apiData);
+				let matchUser = yield dbcs.users.findOne({googleID: apiData.id}, yield),
+					idToken = crypto.randomBytes(128).toString('base64');
+				if (matchUser) {
+					dbcs.users.update({googleID: apiData.id}, {
+						$push: {
+							cookie: {
+								token: idToken,
+								created: new Date().getTime()
+							}
+						},
+						$set: {googleName: apiData.login}
+					});
+				} else {
+					dbcs.users.insert({
+						_id: generateID(),
+						cookie: [{
+							token: idToken,
+							created: new Date().getTime()
+						}],
+						googleID: apiData.id,
+						name: apiData.displayName
+					});
+				}
+				res.writeHead(303, {
+					Location: '/host/',
+					'Set-Cookie': cookie.serialize('id', idToken, {
+						path: '/',
+						expires: new Date(new Date().setDate(new Date().getDate() + 30)),
+						httpOnly: true,
+						secure: config.secureCookies
+					})
+				});
+				res.end();
+			}));
+			apiReq.on('error', o(function*(e) {
+				yield respondPage('Login Error', user, req, res, yield, {}, 500);
+				res.write('<h1>Login Error</h1>');
+				res.write('<p>HTTP error when connecting to the Google API: ' + e + ' ' + tryagain + '</p>');
+				res.end(yield fs.readFile('html/a/foot.html', yield));
+			}));
+		}));
+		googReq.end('client_id=' + config.googleAuth.client_id + '&client_secret=' + config.googleAuth.client_secret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
+		googReq.on('error', o(function*(e) {
+			yield respondPage('Login Error', req, res, yield, {}, 500);
+			res.write('<h1>Login Error</h1>');
+			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
+			res.end(yield fs.readFile('html/a/foot.html', yield));
+		}));
+	} else if (req.url.pathname == '/stats/' && !req.headers.host.includes('.io')) {
+		if (!user.admin) return errorNotFound(req, res);
+		yield respondPage('Statistics', req, res, yield, {}, 400);
+		dbcs.gameplays.aggregate({$match: {}}, {$group: {_id: 'stats', num: {$sum: 1}, sum: {$sum: '$participants'}}}, o(function*(err, result) {
+			if (err) throw err;
+			res.write('<h1>Aquaforces play statistics</h1>');
+			res.write('<p>' + result[0].sum + ' users</p>');
+			res.write('<p>' + result[0].num + ' gameplays</p>');
+			res.end(yield fs.readFile('html/a/foot.html', yield));
+		}));
+	} else if (req.url.pathname == '/status/') {
+		yield respondPage('Status', req, res, yield);
+		res.write('<h1>Aquaforces Status</h1>');
+		let child = spawn('git', ['rev-parse', '--short', 'HEAD']);
+		res.write('<p class="green"><strong>Running</strong>, commit #');
+		child.stdout.on('data', function(data) {
+			res.write(data);
+		});
+		child.stdout.on('end', o(function*() {
+			res.write('</p>');
+			if (user.name) res.write('<p>You are logged in as <strong>' + user.name + '</strong></p>');
+			else res.write('<p>You are not logged in</p>');
+			res.write('<p>Current host header is <strong>' + req.headers.host + '</strong></p>');
+			res.write('<code class="blk" id="socket-test">Connecting to socket…</code>');
+			res.write(yield addVersionNonces('<script src="/a/sockettest.js"></script>', req.url.pathname, yield));
+			res.end(yield fs.readFile('html/a/foot.html', yield));
+		}));
+	} else if (redirectURLs.includes(req.url.pathname) && !req.headers.host.includes('.io')) {
+		res.writeHead(303, {'Location': req.url.pathname + '/'});
+		res.end();
 	} else return errorNotFound(req, res);
 });
-
-// MARK: actually start the server
 console.log('Connecting to mongodb…'.cyan);
-if (!process.env.MONGOLAB_URI)
-	process.env.MONGOLAB_URI = 'mongodb://localhost:27017';
-mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
+mongo.connect(config.mongoPath, function(err, db) {
 	if (err) throw err;
+	db.createCollection('qsets', function(err, collection) {
+		if (err) throw err;
+		db.createIndex('qsets', {title: 'text'}, {}, function() {});
+		dbcs.qsets = collection;
+	});
+	let i = usedDBCs.length;
 	function handleCollection(err, collection) {
 		if (err) throw err;
 		dbcs[usedDBCs[i]] = collection;
 	}
-
-	// Go through the mongodb data and store it server-side
-	let i = usedDBCs.length;
 	while (i--) db.collection(usedDBCs[i], handleCollection);
 	console.log('Connected to mongodb.'.cyan);
 	let server = http.createServer(serverHandler).listen(config.port);
-	console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
+	console.log(('Aquaforces running on port ' + config.port + ' over plain HTTP.').cyan);
 	require('./sockets.js')(server);
-	console.log('Sockets running on port 3000 over plain WS.'.cyan);
-
-	// Rudimentary tests
-	if (process.argv.indexOf('--test') >= 0) {
+	console.log(('Sockets running on port ' + config.port + ' over plain WS.').cyan);
+	if (process.argv.includes('--test')) {
 		console.log('Running test, process will terminate when finished.'.yellow);
 		http.get({
 			port: config.port,
@@ -224,7 +421,6 @@ mongo.connect(process.env.MONGOLAB_URI, function(err, db) {
 			testRes.on('end', function() {
 				console.log('HTTP test passed, starting socket test.'.green);
 				let WS = require('ws');
-				console.log(config.port);
 				let wsc = new WS('ws://localhost:' + config.port + '/test');
 				wsc.on('open', function() {
 					console.log('Connected to socket.');
