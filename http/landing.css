@@ -2,7 +2,7 @@ html:not(.hostgame):not(.no-bg) {
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: 50% 70%;
-	background-image: url('/img/landing-background.svg');
+	background-image: url('/img/backgrounds/landing.svg');
 }
 body {
 	margin: 0;
