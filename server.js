@@ -77,7 +77,7 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 		res.write(yield addVersionNonces(
 			data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"')
 			.replace('$title', (title ? title + ' · ' : '') + 'Aquaforces')
-			.replace('$inhead', inhead), req.url.pathname, yield));
+			.replace('$inhead', inhead), reqPath, yield));
 		return callback();
 	} catch (e) {
 		console.log(e);
@@ -98,6 +98,7 @@ let cache = {};
 const redirectURLs = ['/host', '/play', '/console'];
 
 let serverHandler = o(function*(req, res) {
+	// Redirect from www.aquaforces.com to aquaforces.com
 	if (req.headers.host.includes('www')) {
 		res.writeHead(301, {Location: '//' + req.headers.host.replace('www.', '') + req.url});
 		res.end();
@@ -106,7 +107,7 @@ let serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	let i;
 
-	// Find a user
+	// Find the logged-in user
 	const user = yield dbcs.users.findOne({
 		cookie: {
 			$elemMatch: {
@@ -116,10 +117,15 @@ let serverHandler = o(function*(req, res) {
 		}
 	}, yield);
 
+	// Set constants based on request
+	const ioDomain = ioDomain;
+	let reqPath = req.url.pathname;
+
 	// MARK: respond based on request URL
-	if (req.url.pathname.substr(0, 5) == '/api/' && !req.headers.host.includes('io')) {
+	if (reqPath.substr(0, 5) == '/api/' && !ioDomain) {
 		// API Request
-		req.url.pathname = req.url.pathname.substr(4);
+		// Slice off the /api
+		reqPath = reqPath.substr(4);
 		if (req.method != 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
 		if (url.parse(req.headers.referer || '').host != req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
 
@@ -138,11 +144,11 @@ let serverHandler = o(function*(req, res) {
 			post = querystring.parse(post);
 			apiServer(req, res, post);
 		});
-	} else if (req.url.pathname.includes('.')) {
+	} else if (reqPath.includes('.')) {
 		// Static file serving
 		let stats;
 		try {
-			stats = yield fs.stat('./http/' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+			stats = yield fs.stat('./http/' + reqPath.replaceAll('.js', '.jsx'), yield);
 		} catch (e) {
 			return errorNotFound(req, res);
 		}
@@ -150,82 +156,71 @@ let serverHandler = o(function*(req, res) {
 		let raw = !req.headers['accept-encoding'] || !req.headers['accept-encoding'].includes('gzip') || req.headers['accept-encoding'].includes('gzip;q=0');
 
 		// Serve from cache
-		if (cache[req.url.pathname]) {
+		if (cache[reqPath]) {
 			res.writeHead(200, {
 				'Content-Encoding': raw ? 'identity' : 'gzip',
-				'Content-Type': (mime[path.extname(req.url.pathname)] || 'text/plain') + '; charset=utf-8',
+				'Content-Type': (mime[path.extname(reqPath)] || 'text/plain') + '; charset=utf-8',
 				'Cache-Control': 'max-age=6012800',
 				'Vary': 'Accept-Encoding',
-				'ETag': cache[req.url.pathname].hash
+				'ETag': cache[reqPath].hash
 			});
-			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
-			if (cache[req.url.pathname].updated < stats.mtime) {
+			res.end(cache[reqPath][raw ? 'raw' : 'gzip']);
+			if (cache[reqPath].updated < stats.mtime) {
 				let data;
 				try {
-					data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+					data = yield fs.readFile('http' + reqPath.replaceAll('.js', '.jsx'), yield);
 				} catch (e) {
 					return;
 				}
 
 				// Handle file types when serving updated file from cache
-				switch (path.extname(req.url.pathname)) {
+				switch (path.extname(reqPath)) {
 					case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
 					break;
 					case '.css': data = new CleanCSS().minify(data).styles;
 					break;
 				}
-				cache[req.url.pathname] = {
+				cache[reqPath] = {
 					raw: data,
-					gzip: data == cache[req.url.pathname].raw ? cache[req.url.pathname].gzip : yield zlib.gzip(data, yield),
-					hash: yield getVersionNonce('/', req.url.pathname, yield),
+					gzip: data == cache[reqPath].raw ? cache[reqPath].gzip : yield zlib.gzip(data, yield),
+					hash: yield getVersionNonce('/', reqPath, yield),
 					updated: stats.mtime
 				};
 			}
-		/* } else if (req.url.pathname == '/host/') {
-			yield respondPage('Host', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />'});
-			var qsetstr = '';
-			dbcs.qsets.find({}, {title: true}).each(o(function*(err, qset) {
-				if (err) throw err;
-				if (qset) qsetstr += '<option value="' + qset._id + '">' + html(qset.title) + '</option>';
-				else {
-					res.write((yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr));
-					res.end(yield fs.readFile('./html/a/foot.html', yield));
-				}
-			}));*/
 		} else {
 			// Serve uncached data
 			let data;
 			try {
-				data = yield fs.readFile('http' + req.url.pathname.replaceAll('.js', '.jsx'), yield);
+				data = yield fs.readFile('http' + reqPath.replaceAll('.js', '.jsx'), yield);
 			} catch (e) {
 				return errorNotFound(req, res);
 			}
-			switch (path.extname(req.url.pathname)) {
+			switch (path.extname(reqPath)) {
 				case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
 				break;
 				case '.css': data = new CleanCSS().minify(data).styles;
 				break;
 			}
-			cache[req.url.pathname] = {
+			cache[reqPath] = {
 				raw: data,
 				gzip: yield zlib.gzip(data, yield),
-				hash: yield getVersionNonce('/', req.url.pathname, yield),
+				hash: yield getVersionNonce('/', reqPath, yield),
 				updated: stats.mtime
 			};
 			res.writeHead(200, {
 				'Content-Encoding': raw ? 'identity' : 'gzip',
-				'Content-Type': (mime[path.extname(req.url.pathname)] || 'text/plain') + '; charset=utf-8',
+				'Content-Type': (mime[path.extname(reqPath)] || 'text/plain') + '; charset=utf-8',
 				'Cache-Control': 'max-age=6012800',
 				'Vary': 'Accept-Encoding'
 			});
-			res.end(cache[req.url.pathname][raw ? 'raw' : 'gzip']);
+			res.end(cache[reqPath][raw ? 'raw' : 'gzip']);
 		}
-	} else if (req.url.pathname == '/play/' || (req.headers.host.includes('.io') && req.url.pathname == '/')) {
+	} else if (reqPath == '/play/' || (ioDomain && reqPath == '/')) {
 		// Gameplay screen
 		yield respondPage(null, req, res, yield);
-		res.write((yield addVersionNonces((yield fs.readFile('./html/play.html', yield)).toString(), req.url.pathname, yield)));
+		res.write((yield addVersionNonces((yield fs.readFile('./html/play.html', yield)).toString(), reqPath, yield)));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (req.url.pathname == '/') {
+	} else if (reqPath == '/') {
 		// Landing page
 		if (user) {
 			// Redirect user if they're logged in
@@ -234,7 +229,7 @@ let serverHandler = o(function*(req, res) {
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
 		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (req.url.pathname == '/host/' && !req.headers.host.includes('.io')) {
+	} else if (reqPath == '/host/' && !ioDomain) {
 		// Host console
 		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '',
@@ -286,6 +281,155 @@ let serverHandler = o(function*(req, res) {
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
+	} else if (reqPath == '/login/google' && !ioDomain) {
+		let tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.client_id + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
+		if (req.url.query.error) {
+			yield respondPage('Login Error', req, res, yield, {}, 400);
+			res.write('<h1>Login Error</h1>');
+			res.write('<p>An error was received from Google. ' + tryagain + '</p>');
+			res.write(errorsHTML(['Error: ' + req.url.query.error]));
+			return res.end(yield fs.readFile('html/a/foot.html', yield));
+		}
+		if (!req.url.query.code) {
+			yield respondPage('Login Error', req, res, yield, {}, 400);
+			res.write('<h1>Login Error</h1>');
+			res.write('<p>No authentication code was received. ' + tryagain + '</p>');
+			return res.end(yield fs.readFile('html/a/foot.html', yield));
+		}
+		let googReq = https.request({
+			hostname: 'accounts.google.com',
+			path: '/o/oauth2/token',
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		}, o(function*(googRes) {
+			let data = '';
+			googRes.on('data', function(d) {
+				data += d;
+			});
+			yield googRes.on('end', yield);
+			console.log(data);
+			try {
+				data = JSON.parse(data);
+			} catch (e) {
+				yield respondPage('Login Error', req, res, yield, {}, 500);
+				res.write('<h1>Login Error</h1>');
+				res.write('<p>An invalid response was received from Google. ' + tryagain + '</p>');
+				res.end(yield fs.readFile('html/a/foot.html', yield));
+			}
+			if (data.error) {
+				yield respondPage('Login Error', req, res, yield, {}, 500);
+				res.write('<h1>Login Error</h1>');
+				res.write('<p>An error was received from Google. ' + tryagain + '</p>');
+				res.write(errorsHTML([data.error + ': ' + data.error_description]));
+				return res.end(yield fs.readFile('html/a/foot.html', yield));
+			}
+			console.log('/plus/v1/people/me?key=' + encodeURIComponent(data.access_token));
+			let apiReq = https.get({
+				hostname: 'www.googleapis.com',
+				path: '/plus/v1/people/me?access_token=' + encodeURIComponent(data.access_token)
+			}, o(function*(apiRes) {
+				let apiData = '';
+				apiRes.on('data', function(d) {
+					apiData += d;
+				});
+				yield apiRes.on('end', yield);
+				try {
+					apiData = JSON.parse(apiData);
+				} catch (e) {
+					yield respondPage('Login Error', user, req, res, yield, {}, 500);
+					res.write('<h1>Login Error</h1>');
+					res.write('<p>An invalid response was received from the Google API. ' + tryagain + '</p>');
+					res.end(yield fs.readFile('html/a/foot.html', yield));
+				}
+				if (apiData.error) {
+					yield respondPage('Login Error', user, req, res, yield, {}, 500);
+					res.write('<h1>Login Error</h1>');
+					res.write('<p>An error was received from the Google API. ' + tryagain + '</p>');
+					res.write(errorsHTML([apiData.error + ': ' + apiData.error_description]));
+					return res.end(yield fs.readFile('html/a/foot.html', yield));
+				}
+				console.log(apiData);
+				let matchUser = yield dbcs.users.findOne({googleID: apiData.id}, yield),
+					idToken = crypto.randomBytes(128).toString('base64');
+				if (matchUser) {
+					dbcs.users.update({googleID: apiData.id}, {
+						$push: {
+							cookie: {
+								token: idToken,
+								created: new Date().getTime()
+							}
+						},
+						$set: {googleName: apiData.login}
+					});
+				} else {
+					dbcs.users.insert({
+						_id: generateID(),
+						cookie: [{
+							token: idToken,
+							created: new Date().getTime()
+						}],
+						googleID: apiData.id,
+						name: apiData.displayName
+					});
+				}
+				res.writeHead(303, {
+					Location: '/host/',
+					'Set-Cookie': cookie.serialize('id', idToken, {
+						path: '/',
+						expires: new Date(new Date().setDate(new Date().getDate() + 30)),
+						httpOnly: true,
+						secure: config.secureCookies
+					})
+				});
+				res.end();
+			}));
+			apiReq.on('error', o(function*(e) {
+				yield respondPage('Login Error', user, req, res, yield, {}, 500);
+				res.write('<h1>Login Error</h1>');
+				res.write('<p>HTTP error when connecting to the Google API: ' + e + ' ' + tryagain + '</p>');
+				res.end(yield fs.readFile('html/a/foot.html', yield));
+			}));
+		}));
+		googReq.end('client_id=' + config.googleAuth.client_id + '&client_secret=' + config.googleAuth.client_secret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
+		googReq.on('error', o(function*(e) {
+			yield respondPage('Login Error', req, res, yield, {}, 500);
+			res.write('<h1>Login Error</h1>');
+			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
+			res.end(yield fs.readFile('html/a/foot.html', yield));
+		}));
+	} else if (reqPath == '/stats/' && !ioDomain) {
+		if (!user.admin) return errorNotFound(req, res);
+		yield respondPage('Statistics', req, res, yield, {}, 400);
+		dbcs.gameplays.aggregate({$match: {}}, {$group: {_id: 'stats', num: {$sum: 1}, sum: {$sum: '$participants'}}}, o(function*(err, result) {
+			if (err) throw err;
+			res.write('<h1>Aquaforces play statistics</h1>');
+			res.write('<p>' + result[0].sum + ' users</p>');
+			res.write('<p>' + result[0].num + ' gameplays</p>');
+			res.end(yield fs.readFile('html/a/foot.html', yield));
+		}));
+	} else if (reqPath == '/status/') {
+		yield respondPage('Status', req, res, yield);
+		res.write('<h1>Aquaforces Status</h1>');
+		let child = spawn('git', ['rev-parse', '--short', 'HEAD']);
+		res.write('<p class="green"><strong>Running</strong>, commit #');
+		child.stdout.on('data', function(data) {
+			res.write(data);
+		});
+		child.stdout.on('end', o(function*() {
+			res.write('</p>');
+			if (user.name) res.write('<p>You are logged in as <strong>' + user.name + '</strong></p>');
+			else res.write('<p>You are not logged in</p>');
+			res.write('<p>Current host header is <strong>' + req.headers.host + '</strong></p>');
+			res.write('<code class="blk" id="socket-test">Connecting to socket…</code>');
+			res.write(yield addVersionNonces('<script src="/a/sockettest.js"></script>', reqPath, yield));
+			res.end(yield fs.readFile('html/a/foot.html', yield));
+		}));
+	} else if (redirectURLs.includes(reqPath) && !ioDomain) {
+		res.writeHead(303, {'Location': reqPath + '/'});
+		res.end();
 	} else return errorNotFound(req, res);
 });
 
