@@ -6,8 +6,8 @@ global.config = {
 	mongoPath: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/Aquaforces',
 	secureCookies: false,
 	googleAuth: {
-		client_id: process.argv.includes('--test') ? '' : '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com',
-		client_secret: process.argv.includes('--test') ? '' : 'sW_Qt7Lj63m5Bshun_kdnJvt'
+		clientID: process.argv.includes('--test') ? '' : '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com',
+		clientSecret: process.argv.includes('--test') ? '' : 'sW_Qt7Lj63m5Bshun_kdnJvt'
 	}
 };
 /* eslint-enable no-process-env */
@@ -227,7 +227,7 @@ let serverHandler = o(function*(req, res) {
 			return res.writeHead(303, {Location: '/host/'}) || res.end();
 		}
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
-		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id));
+		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.clientID));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath == '/host/' && !usesIODomain) {
 		// Host console
@@ -279,7 +279,7 @@ let serverHandler = o(function*(req, res) {
 			} else {
 				let data = (yield fs.readFile('./html/host.html', yield)).toString()
 					.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
-					.replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
+					.replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.clientID);
 				if (user) data = data.replace(/<a class="signin-link"[\s\S]+?<\/a>/, '<a id="menu-stub">' + html(user.name) + '</a>').replace('<nav>', '<nav class="loggedin">');
 				else data = data.replace('id="filter"', 'id="filter" hidden=""');
 				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
@@ -289,7 +289,7 @@ let serverHandler = o(function*(req, res) {
 		}));
 	} else if (reqPath == '/login/google' && !usesIODomain) {
 		// Redirect URI after attempted Google login
-		let tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.client_id + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
+		let tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?clientID=' + config.googleAuth.clientID + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
 		if (req.url.query.error) {
 			yield respondPage('Login Error', req, res, yield, {}, 400);
 			res.write('<h1>Login Error</h1>');
@@ -403,7 +403,7 @@ let serverHandler = o(function*(req, res) {
 				res.end(yield fs.readFile('html/a/foot.html', yield));
 			}));
 		}));
-		googReq.end('client_id=' + config.googleAuth.client_id + '&client_secret=' + config.googleAuth.client_secret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
+		googReq.end('clientID=' + config.googleAuth.clientID + '&clientSecret=' + config.googleAuth.clientSecret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
 		googReq.on('error', o(function*(e) {
 			yield respondPage('Login Error', req, res, yield, {}, 500);
 			res.write('<h1>Login Error</h1>');
@@ -479,7 +479,7 @@ mongo.connect(config.mongoPath, function(err, db) {
 			headers: {host: 'localhost'}
 		}, function(testRes) {
 			testRes.on('data', function(d) {
-				console.log('Data received (' + d.length + ' char' + (d.length == 1 ? '' : 's') + '):' + ('\n> ' + d.toString().replaceAll('\n', '\n> ')).grey);
+				console.log('Data received'.grey);
 			});
 			testRes.on('end', function() {
 				console.log('HTTP test passed, starting socket test.'.green);
@@ -490,7 +490,7 @@ mongo.connect(config.mongoPath, function(err, db) {
 					console.log('Connected to socket.');
 				});
 				wsc.on('data', function(d) {
-					console.log('Data received (' + d.length + ' char' + (d.length == 1 ? '' : 's') + '):' + ('\n> ' + d.toString().replaceAll('\n', '\n> ')).grey);
+					console.log('Data received'.grey);
 				});
 				wsc.on('close', function() {
 					console.log('Things seem to work!'.green);

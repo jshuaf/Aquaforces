@@ -1,3 +1,4 @@
+'use strict';
 module.exports = function(req, res, post) {
 	if (req.url.pathname == '/new-qset') {
 		if (!post.name) return res.writeHead(400) || res.end('Set name is required.');
