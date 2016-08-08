@@ -1,3 +1,5 @@
+const React = require('react');
+
 function getValuesOfObject(object) {
 	let values = [];
 	for (let key in object) {

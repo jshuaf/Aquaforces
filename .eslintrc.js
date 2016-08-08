@@ -123,5 +123,6 @@ module.exports = {
 		"require-yield": ["error"],
 		"template-curly-spacing": ["error", "never"],
 		"yield-star-spacing": ["error", {"before": false, "after": true}]
-	}
+	},
+	"parser": "babel-eslint"
 };
