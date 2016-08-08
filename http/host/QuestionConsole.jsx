@@ -1,3 +1,5 @@
+import React from 'react';
+
 /*
 Question console layout:
 newsetform
@@ -10,18 +12,30 @@ newsetform
 */
 
 const QuestionConsole = React.createClass({
-
+  render() {
+    return (
+      <NewSetForm />
+    );
+  },
 });
 
 const NewSetForm = React.createClass({
+  addQuestionInput() {
+
+  },
   render() {
     return (
       <div id="new_set">
         <h2>New Question Set</h2>
-        <TextInput label = "Title" placeholder = "My Question Set" />
+        <TextInput label="Title" placeholder="My Question Set" />
         <QuestionInput />
-        <AddButton text="Add an answer" onclick = {this.addQuestionInput}/>
+        <AddButton text="Add an answer" onclick={this.addQuestionInput} />
+        <Checkbox text="Private set" />
       </div>
     );
-  }
+  },
+});
+
+const TextInput = React.createClass({
+
 });

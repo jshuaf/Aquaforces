@@ -124,5 +124,6 @@ module.exports = {
 		"template-curly-spacing": ["error", "never"],
 		"yield-star-spacing": ["error", {"before": false, "after": true}]
 	},
-	"parser": "babel-eslint"
+	"parser": "babel-eslint",
+	"extends": "airbnb"
 };
