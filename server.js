@@ -148,7 +148,7 @@ let serverHandler = o(function*(req, res) {
 		// Static file serving
 		let stats;
 		try {
-			stats = yield fs.stat('./http/' + reqPath.replaceAll('.js', '.jsx'), yield);
+			stats = yield fs.stat('./http/' + reqPath, yield);
 		} catch (e) {
 			return errorNotFound(req, res);
 		}
@@ -168,15 +168,13 @@ let serverHandler = o(function*(req, res) {
 			if (cache[reqPath].updated < stats.mtime) {
 				let data;
 				try {
-					data = yield fs.readFile('http' + reqPath.replaceAll('.js', '.jsx'), yield);
+					data = yield fs.readFile('http' + reqPath, yield);
 				} catch (e) {
 					return;
 				}
 
 				// Handle file types when serving updated file from cache
 				switch (path.extname(reqPath)) {
-					case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
-					break;
 					case '.css': data = new CleanCSS().minify(data).styles;
 					break;
 				}
@@ -191,12 +189,12 @@ let serverHandler = o(function*(req, res) {
 			// Serve uncached data
 			let data;
 			try {
-				data = yield fs.readFile('http' + reqPath.replaceAll('.js', '.jsx'), yield);
+				data = yield fs.readFile('http' + reqPath, yield);
 			} catch (e) {
 				return errorNotFound(req, res);
 			}
 			switch (path.extname(reqPath)) {
-				case '.js': data = uglifyJS.minify(babel.transform(data.toString(), {presets: ['react', 'es2015']}).code, {fromString: true}).code;
+				case '.js': data = uglifyJS.minify(data.toString(), {fromString: true}).code;
 				break;
 				case '.css': data = new CleanCSS().minify(data).styles;
 				break;
