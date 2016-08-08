@@ -118,11 +118,11 @@ let serverHandler = o(function*(req, res) {
 	}, yield);
 
 	// Set constants based on request
-	const ioDomain = ioDomain;
+	const usesIODomain = usesIODomain;
 	let reqPath = req.url.pathname;
 
 	// MARK: respond based on request URL
-	if (reqPath.substr(0, 5) == '/api/' && !ioDomain) {
+	if (reqPath.substr(0, 5) == '/api/' && !usesIODomain) {
 		// API Request
 		// Slice off the /api
 		reqPath = reqPath.substr(4);
@@ -215,7 +215,7 @@ let serverHandler = o(function*(req, res) {
 			});
 			res.end(cache[reqPath][raw ? 'raw' : 'gzip']);
 		}
-	} else if (reqPath == '/play/' || (ioDomain && reqPath == '/')) {
+	} else if (reqPath == '/play/' || (usesIODomain && reqPath == '/')) {
 		// Gameplay screen
 		yield respondPage(null, req, res, yield);
 		res.write((yield addVersionNonces((yield fs.readFile('./html/play.html', yield)).toString(), reqPath, yield)));
@@ -229,7 +229,7 @@ let serverHandler = o(function*(req, res) {
 		yield respondPage(null, req, res, yield, {inhead: '<link rel="stylesheet" href="/landing.css" />'});
 		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (reqPath == '/host/' && !ioDomain) {
+	} else if (reqPath == '/host/' && !usesIODomain) {
 		// Host console
 		yield respondPage('Question Sets', req, res, yield, {inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true});
 		let qsetstr = '',
@@ -247,10 +247,14 @@ let serverHandler = o(function*(req, res) {
 			if (token == '-is:favorite' && user) filter._id = {$not: {$in: user.favorites}};
 			if (!token.includes(':')) searchText += token + ' ';
 		});
+
+		// Perform the search in the database
 		searchText = searchText.trim();
 		if (searchText) filter.$text = {$search: searchText};
 		dbcs.qsets.find(filter, searchText ? {score: {$meta: 'textScore'}} : undefined).sort(searchText ? {score: {$meta: 'textScore'}} : {timeAdded: -1}).each(o(function*(err, qset) {
 			if (err) throw err;
+
+			// MARK: ugly html insertion, will later be replaced by React
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete"></a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
 				qset.questions.forEach(function(question) {
@@ -273,7 +277,9 @@ let serverHandler = o(function*(req, res) {
 				});
 				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
-				let data = (yield fs.readFile('./html/host.html', yield)).toString().replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>').replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
+				let data = (yield fs.readFile('./html/host.html', yield)).toString()
+					.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
+					.replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.client_id);
 				if (user) data = data.replace(/<a class="signin-link"[\s\S]+?<\/a>/, '<a id="menu-stub">' + html(user.name) + '</a>').replace('<nav>', '<nav class="loggedin">');
 				else data = data.replace('id="filter"', 'id="filter" hidden=""');
 				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
@@ -281,7 +287,8 @@ let serverHandler = o(function*(req, res) {
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
-	} else if (reqPath == '/login/google' && !ioDomain) {
+	} else if (reqPath == '/login/google' && !usesIODomain) {
+		// Redirect URI after attempted Google login
 		let tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.client_id + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
 		if (req.url.query.error) {
 			yield respondPage('Login Error', req, res, yield, {}, 400);
@@ -310,7 +317,6 @@ let serverHandler = o(function*(req, res) {
 				data += d;
 			});
 			yield googRes.on('end', yield);
-			console.log(data);
 			try {
 				data = JSON.parse(data);
 			} catch (e) {
@@ -352,6 +358,8 @@ let serverHandler = o(function*(req, res) {
 					return res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
 				console.log(apiData);
+
+				// Store the user in the database and create a unique token
 				let matchUser = yield dbcs.users.findOne({googleID: apiData.id}, yield),
 					idToken = crypto.randomBytes(128).toString('base64');
 				if (matchUser) {
@@ -375,6 +383,8 @@ let serverHandler = o(function*(req, res) {
 						name: apiData.displayName
 					});
 				}
+
+				// Finally, redirect to the host screen if login succeeds
 				res.writeHead(303, {
 					Location: '/host/',
 					'Set-Cookie': cookie.serialize('id', idToken, {
@@ -400,7 +410,8 @@ let serverHandler = o(function*(req, res) {
 			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
-	} else if (reqPath == '/stats/' && !ioDomain) {
+	} else if (reqPath == '/stats/' && !usesIODomain) {
+		// Rudimentary statistics
 		if (!user.admin) return errorNotFound(req, res);
 		yield respondPage('Statistics', req, res, yield, {}, 400);
 		dbcs.gameplays.aggregate({$match: {}}, {$group: {_id: 'stats', num: {$sum: 1}, sum: {$sum: '$participants'}}}, o(function*(err, result) {
@@ -411,6 +422,7 @@ let serverHandler = o(function*(req, res) {
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
 	} else if (reqPath == '/status/') {
+		// A status page to make sure Aquaforces is running
 		yield respondPage('Status', req, res, yield);
 		res.write('<h1>Aquaforces Status</h1>');
 		let child = spawn('git', ['rev-parse', '--short', 'HEAD']);
@@ -427,7 +439,8 @@ let serverHandler = o(function*(req, res) {
 			res.write(yield addVersionNonces('<script src="/a/sockettest.js"></script>', reqPath, yield));
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
-	} else if (redirectURLs.includes(reqPath) && !ioDomain) {
+	} else if (redirectURLs.includes(reqPath) && !usesIODomain) {
+		// Redirect URLs without a trailing slash
 		res.writeHead(303, {'Location': reqPath + '/'});
 		res.end();
 	} else return errorNotFound(req, res);
