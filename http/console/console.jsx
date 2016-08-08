@@ -1,3 +1,4 @@
+'use strict';
 function inputRemove() {
 	if (!this.value) this.parentNode.parentNode.removeChild(this.parentNode);
 }
@@ -49,6 +50,7 @@ newQSet.addEventListener('submit', function(e) {
 		for (var i = 2; i < ins.length; i++) question.incorrectAnswers.push(ins[i].value);
 		questions.push(question);
 	});
+	console.log('API New Qset Request Initiating');
 	request('/api/new-qset', function(res) {
 		newQSet.classList.remove('validating');
 		if (res.indexOf('Error') == 0) {

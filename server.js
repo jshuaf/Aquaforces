@@ -4,11 +4,11 @@
 global.config = {
 	port: process.env.PORT || (process.argv.includes('--production') ? 80 : 3000),
 	mongoPath: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/Aquaforces',
-	secureCookies: false/* ,
+	secureCookies: false,
 	googleAuth: {
-		'client_id': process.argv.includes('--test') ? '' : process.env.GITHUB_CLIENT_ID || fs.readFileSync('./github.pem').toString().split('\n')[0],
-		'client_secret': process.argv.includes('--test') ? '' : process.env.GITHUB_CLIENT_SECRET || fs.readFileSync('./github.pem').toString().split('\n')[1]
-	}*/
+		client_id: process.argv.includes('--test') ? '' : '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com',
+		client_secret: process.argv.includes('--test') ? '' : 'sW_Qt7Lj63m5Bshun_kdnJvt'
+	}
 };
 /* eslint-enable no-process-env */
 
@@ -77,7 +77,7 @@ global.respondPage = o(function*(title, req, res, callback, header, status) {
 		res.write(yield addVersionNonces(
 			data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"')
 			.replace('$title', (title ? title + ' · ' : '') + 'Aquaforces')
-			.replace('$inhead', inhead), reqPath, yield));
+			.replace('$inhead', inhead), req.url.pathname, yield));
 		return callback();
 	} catch (e) {
 		console.log(e);
@@ -95,7 +95,7 @@ global.errorsHTML = function(errs) {
 };
 
 let cache = {};
-const redirectURLs = ['/host', '/play', '/console'];
+const redirectURLs = ['/host', '/play', '/console', ''];
 
 let serverHandler = o(function*(req, res) {
 	// Redirect from www.aquaforces.com to aquaforces.com
@@ -107,6 +107,10 @@ let serverHandler = o(function*(req, res) {
 	req.url = url.parse(req.url, true);
 	let i;
 
+	// Set constants based on request
+	let reqPath = req.url.pathname;
+	const usesIODomain = reqPath.includes('.io');
+
 	// Find the logged-in user
 	const user = yield dbcs.users.findOne({
 		cookie: {
@@ -116,10 +120,6 @@ let serverHandler = o(function*(req, res) {
 			}
 		}
 	}, yield);
-
-	// Set constants based on request
-	const usesIODomain = usesIODomain;
-	let reqPath = req.url.pathname;
 
 	// MARK: respond based on request URL
 	if (reqPath.substr(0, 5) == '/api/' && !usesIODomain) {
