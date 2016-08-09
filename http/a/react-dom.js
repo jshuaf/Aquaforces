@@ -10,32 +10,32 @@
  *
  */
 // Based off https://github.com/ForbesLindesay/umd/blob/master/template.js
-(function(f) {
+(function (f) {
   // CommonJS
-  if (typeof exports === 'object' && typeof module !== 'undefined') {
-    module.exports = f(require('react'));
+  										if (typeof exports === 'object' && typeof module !== 'undefined') {
+    										module.exports = f(require('react'));
 
   // RequireJS
   } else if (typeof define === 'function' && define.amd) {
-    define(['react'], f);
+    										define(['react'], f);
 
   // <script>
   } else {
-    let g;
-    if (typeof window !== 'undefined') {
-      g = window;
+    										let g;
+    										if (typeof window !== 'undefined') {
+      										g = window;
     } else if (typeof global !== 'undefined') {
-      g = global;
+      										g = global;
     } else if (typeof self !== 'undefined') {
-      g = self;
+      										g = self;
     } else {
       // works providing we're not in "use strict";
       // needed for Java 8 Nashorn
       // see https://github.com/facebook/react/issues/3037
-      g = this;
+      										g = this;
     }
-    g.ReactDOM = f(g.React);
+    										g.ReactDOM = f(g.React);
   }
-})(function(React) {
-  return React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+})(function (React) {
+  										return React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 });

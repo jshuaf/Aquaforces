@@ -256,8 +256,8 @@ const serverHandler = o(function* (req, res) {
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete"></a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
 				qset.questions.forEach(function (question) {
-					let listr = '<li><span class="q-ctrls"><a class="remove-q" title="delete question"></a> <a class="edit" title="edit question">✎</a></span><h3>' + html(question.text) + '</h3><div><ul class="check-list">',
-						liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
+					let listr = '<li><span class="q-ctrls"><a class="remove-q" title="delete question"></a> <a class="edit" title="edit question">✎</a></span><h3>' + html(question.text) + '</h3><div><ul class="check-list">';
+					let liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
 					liestr += '<label>Question <input placeholder="What\'s one plus one?" required="" maxlength="144" value="' + html(question.text) + '" /></label>';
 					liestr += '<p>Answers:</p><ul>';
 					question.answers.forEach(function (answer) {
@@ -277,7 +277,8 @@ const serverHandler = o(function* (req, res) {
 			} else {
 				let data = (yield fs.readFile('./html/host.html', yield)).toString()
 					.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
-					.replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.clientID);
+					.replaceAll('$host', encodeURIComponent('http://' + req.headers.host))
+					.replaceAll('$googleClientID', config.googleAuth.clientID);
 				if (user) data = data.replace(/<a class="signin-link"[\s\S]+?<\/a>/, '<a id="menu-stub">' + html(user.name) + '</a>').replace('<nav>', '<nav class="loggedin">');
 				else data = data.replace('id="filter"', 'id="filter" hidden=""');
 				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
