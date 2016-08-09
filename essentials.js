@@ -5,24 +5,24 @@ const path = require('path');
 
 // Helper functions
 /* eslint-disable no-extend-native */
-String.prototype.replaceAll = function(find, replace) {
+String.prototype.replaceAll = function (find, replace) {
 	// Replace all occurences of {find} with {replace}
 	if (typeof find === 'string') return this.split(find).join(replace);
 	let t = this;
 	let i = find.shift();
 	let j = replace.shift();
-	while (typeof(i) === 'string' && typeof(j) === 'string') {
+	while (typeof (i) === 'string' && typeof (j) === 'string') {
 		i = find.shift();
 		j = replace.shift();
 		t = t.replaceAll(i || '', j || '');
 	}
 	return t;
 };
-String.prototype.repeat = function(num) {
+String.prototype.repeat = function (num) {
 	// Repeat a string {num} times
 	return new Array(++num).join(this);
 };
-Number.prototype.bound = function(l, h) {
+Number.prototype.bound = function (l, h) {
 	return isNaN(h) ? Math.min(this, l) : Math.max(Math.min(this, h), l);
 };
 /* eslint-enable no-extend-native */
@@ -40,7 +40,7 @@ global.mime = {
 	'.ico': 'image/x-icon',
 };
 
-global.html = function(input) {
+global.html = function (input) {
 	// Parse and convert an HTML string
 	return input.toString().replaceAll(
 		['&', '<', '>', '"', '\t', '\n', '\b'],
@@ -48,7 +48,7 @@ global.html = function(input) {
 	);
 };
 
-global.getVersionNonce = o(function*(pathname, file, callback) {
+global.getVersionNonce = o(function* (pathname, file, callback) {
 	// Get a unique cache version number given a file path
 	try {
 		return callback(null, crypto.createHash('md5')
@@ -60,7 +60,7 @@ global.getVersionNonce = o(function*(pathname, file, callback) {
 	}
 });
 
-global.addVersionNonces = o(function*(str, pathname, callback) {
+global.addVersionNonces = o(function* (str, pathname, callback) {
 	// Add version nonce to a given file path
 	for (let i = 0; i < str.length; i++) {
 		if (str.substr(i).match(/^\.[A-z]{1,8}"/)) {
@@ -76,3 +76,7 @@ global.addVersionNonces = o(function*(str, pathname, callback) {
 	}
 	callback(null, str);
 });
+
+global.generateID = function () {
+	return crypto.randomBytes(21).toString('base64').replaceAll(['+', '/'], ['!', '_']);
+};
