@@ -5,17 +5,27 @@ module.exports = {
 		"es6": true
 	},
 	"rules": {
-		"no-console": ["off"],
-		"import/newline-after-import": ["off"],
-		"no-param-reassign": ["off"],
 		"consistent-return": ["off"],
+		"import/newline-after-import": ["off"],
+		"indent": ["error", "tab"],
+		"max-len": ["error", 120],
+		"no-console": ["off"],
+		"no-mixed-operators": ["error",
+			{
+				"groups": [
+					["&", "|", "^", "~", "<<", ">>", ">>>"],
+					["==", "!=", "===", "!==", ">", ">=", "<", "<="],
+					["&&", "||"],
+					["in", "instanceof"]
+				]
+			}],
+		"no-param-reassign": ["off"],
 		"no-shadow": ["off"],
 		"no-undef": ["warn"],
-		"indent": ["error", "tab"],
+		"no-underscore-dangle": ["off"],
+		"no-unused-vars": ["warn"],
 		"prefer-arrow-callback": ["warn"],
 		"prefer-template": ["warn"],
-		"max-len": ["error", 120],
-		"no-underscore-dangle": ["off"]
 	},
 	"parser": "babel-eslint",
 	"extends": "airbnb"
