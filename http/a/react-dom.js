@@ -12,7 +12,7 @@
 // Based off https://github.com/ForbesLindesay/umd/blob/master/template.js
 (function(f) {
   // CommonJS
-  if (typeof exports === 'object' && typeof module !=== 'undefined') {
+  if (typeof exports === 'object' && typeof module !== 'undefined') {
     module.exports = f(require('react'));
 
   // RequireJS
@@ -22,11 +22,11 @@
   // <script>
   } else {
     let g;
-    if (typeof window !=== 'undefined') {
+    if (typeof window !== 'undefined') {
       g = window;
-    } else if (typeof global !=== 'undefined') {
+    } else if (typeof global !== 'undefined') {
       g = global;
-    } else if (typeof self !=== 'undefined') {
+    } else if (typeof self !== 'undefined') {
       g = self;
     } else {
       // works providing we're not in "use strict";

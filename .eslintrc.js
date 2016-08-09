@@ -11,6 +11,7 @@ module.exports = {
 		"no-dupe-keys": ["error"],
 		"no-duplicate-case": ["error"],
 		"no-empty-character-class": ["error"],
+		"no-param-reassign": [0],
 		"no-ex-assign": ["error"],
 		"no-extra-boolean-cast": ["error"],
 		"no-extra-semi": ["error"],

@@ -32,7 +32,7 @@ function request(uri, callback, params) {
 
 function shuffle(array) {
   let currentIndex = array.length, temporaryValue, randomIndex;
-  while (currentIndex !=== 0) {
+  while (currentIndex !== 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
     temporaryValue = array[currentIndex];

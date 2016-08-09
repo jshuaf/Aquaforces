@@ -9,7 +9,7 @@ let crewNumber;
 
 function setState(id) {
 	cont.children.forEach((e) => {
-		if (e.id !=== id) {
+		if (e.id !== id) {
 			e.hidden = true;
 		}
 	});
