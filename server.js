@@ -6,8 +6,9 @@ global.config = {
 	mongoPath: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/Aquaforces',
 	secureCookies: false,
 	googleAuth: {
-		'client_id': process.argv.includes('--test') ? '' : process.env.GITHUB_CLIENT_ID || fs.readFileSync('./github.pem').toString().split('\n')[0],
-		'client_secret': process.argv.includes('--test') ? '' : process.env.GITHUB_CLIENT_SECRET || fs.readFileSync('./github.pem').toString().split('\n')[1]
+		clientID: process.argv.includes('--test') ?
+			'' : '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com',
+		clientSecret: process.argv.includes('--test') ? '' : 'sW_Qt7Lj63m5Bshun_kdnJvt'
 	}
 };
 /*eslint-enable no-process-env*/
