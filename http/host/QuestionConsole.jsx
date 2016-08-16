@@ -37,12 +37,22 @@ const NewSetForm = React.createClass({
 });
 
 const TextInput = ({ placeholder, label }) => {
-	const style = {
-		borderWidth: 1,
-		borderColor: 'gray',
-		borderStyle: 'solid',
+	const containerStyle = {
+		display: 'flex',
+		flexDirection: 'column',
+		height: '10%',
+		width: '40%',
 	};
-	return <input placeholder={placeholder} text={label} style={style} />;
+	const labelStyle = {
+		marginBottom: '2%',
+		marginLeft: '1%',
+	};
+	return (
+		<div className="textInput" style={containerStyle}>
+			<span style={labelStyle}>{label}</span>
+			<input placeholder={placeholder} />
+		</div>
+	);
 };
 
 TextInput.propTypes = {
