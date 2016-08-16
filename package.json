@@ -10,7 +10,8 @@
   "scripts": {
     "start": "sudo node server",
     "test": "node server --test",
-    "dev": "./node_modules/.bin/webpack -d --watch --optimize-minimize --display-error-details"
+    "dev": "./node_modules/.bin/webpack -d --watch --display-error-details",
+    "production": "./node_modules/.bin/webpack -d --optimize-minize"
   },
   "author": "BoniO Interns",
   "repository": {
