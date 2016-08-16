@@ -16,21 +16,21 @@ function setState(id) {
 	document.getElementById(id).hidden = false;
 	// if filling out form, automatically focus
 	// to the next input field
-	var e = document.getElementById(id).getElementsByTagName('input');
+	const e = document.getElementById(id).getElementsByTagName('input');
 	if (e.length) e[0].focus();
 }
 
 function setupGameEnvironment() {
 	document.getElementById('content').hidden = true;
 	document.body.style.cssText =
-		`background: #32c0cf repeat-x center top; background-size: cover;`;
+		'background: #32c0cf repeat-x center top; background-size: cover;';
 }
 
 function confirmMessageRecieved() {
-	socket.send(JSON.stringify({event: 'messageRecieved'}));
+	socket.send(JSON.stringify({ event: 'messageRecieved' }));
 }
 
-socket.onmessage = function(m) {
+socket.onmessage = function (m) {
 	try {
 		m = JSON.parse(m.data);
 	} catch (e) {
@@ -50,7 +50,7 @@ socket.onmessage = function(m) {
 	case 'error':
 		document.getElementById('joinCrewButton').disabled = false;
 		document.getElementById('joinGameButton').disabled = false;
-		sweetAlert(m.title, m.text, "error");
+		sweetAlert(m.title, m.text, 'error');
 		break;
 	case 'addUser':
 		setState('crew');
@@ -74,7 +74,7 @@ socket.onmessage = function(m) {
 		game = ReactDOM.render(<Game
   socket={socket} username={username}
   crewNumber={crewNumber} answerData={m.answers}
-	crewSize={m.crewSize}
+  crewSize={m.crewSize}
   />,
 			document.getElementById('mountNode'));
 		break;
@@ -102,10 +102,10 @@ socket.onmessage = function(m) {
 		break;
 	case 'whirlpoolBonusReceived':
 		console.log('Bonus received');
-		game.setState({whirlpoolBonus: m.amount});
+		game.setState({ whirlpoolBonus: m.amount });
 		break;
 	case 'whirlpoolConclusion':
-		game.setState({whirlpool: false});
+		game.setState({ whirlpool: false });
 		game.state.whirlpoolTimebar.reset();
 		break;
 	case 'correctAnswer':
@@ -124,7 +124,7 @@ socket.onmessage = function(m) {
 };
 
 socket.onclose = () => {
-	sweetAlert("Server connection died.", "We're sorry about that.", "error");
+	sweetAlert('Server connection died.', "We're sorry about that.", 'error');
 };
 document.getElementById('join').addEventListener('submit', (e) => {
 	e.preventDefault();
@@ -132,7 +132,7 @@ document.getElementById('join').addEventListener('submit', (e) => {
 	socket.send(JSON.stringify({
 		event: 'addUser',
 		code: parseInt(document.getElementById('game-code').value, 10),
-		name: document.getElementById('crewmember-name').value
+		name: document.getElementById('crewmember-name').value,
 	}));
 	username = document.getElementById('crewmember-name').value;
 });
@@ -142,6 +142,6 @@ document.getElementById('crew').addEventListener('submit', (e) => {
 	e.preventDefault();
 	socket.send(JSON.stringify({
 		event: 'addUserToCrew',
-		crewNumber: parseInt(document.getElementById('crewno').value, 10)
+		crewNumber: parseInt(document.getElementById('crewno').value, 10),
 	}));
 });

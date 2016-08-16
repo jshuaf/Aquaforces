@@ -22,7 +22,7 @@ const Game = React.createClass({
 			canoeHeight: null,
 			// River Reflections
 			reflectionGroupUpdate: null,
-			update: null
+			update: null,
 		};
 	},
 
@@ -31,28 +31,28 @@ const Game = React.createClass({
 			event: 'answerSelected',
 			answer: answerText,
 			username: this.props.username,
-			crewNumber: this.props.crewNumber
+			crewNumber: this.props.crewNumber,
 		}));
 	},
 
 	showUpdate(title, text) {
-		this.setState({update: <Update title = {title} text = {text} animationText = 'bounceindown animated'></Update>});
-		let rock = this;
-		setTimeout(function() {
-			this.setState({update: <Update title = {title} text = {text} animationText = 'bounceoutup animated'></Update>});
+		this.setState({ update: <Update title={title} text={text} animationText="bounceindown animated"></Update> });
+		const rock = this;
+		setTimeout(function () {
+			this.setState({ update: <Update title={title} text={text} animationText="bounceoutup animated"></Update> });
 		}.bind(rock), 2500);
 	},
 
 	gameTimerOver() {
 		this.setState({
-			gameFinished: true
+			gameFinished: true,
 		});
 	},
 
 	addWhirlpoolTap() {
 		this.setState({
 			whirlpool: true,
-			whirlpoolType: 'Free'
+			whirlpoolType: 'Free',
 		});
 	},
 
@@ -60,7 +60,7 @@ const Game = React.createClass({
 		this.setState({
 			whirlpool: true,
 			whirlpoolType: 'Question',
-			whirlpoolQuestion: question
+			whirlpoolQuestion: question,
 		});
 	},
 
@@ -68,19 +68,19 @@ const Game = React.createClass({
 		this.props.socket.send(JSON.stringify({
 			event: 'answerPassedThreshold',
 			answer: answerText,
-			crewNumber: this.props.crewNumber
+			crewNumber: this.props.crewNumber,
 		}));
 	},
 
 	newQuestion(question) {
 		this.setState({
-			questionText: question
+			questionText: question,
 		});
 		this.refs.questionTimebar.reset();
 	},
 
 	correctAnswer(answer) {
-		this.setState({reflectionGroupUpdate: Date.now()});
+		this.setState({ reflectionGroupUpdate: Date.now() });
 		this.refs.river.wasCorrectAnswer(answer);
 	},
 
@@ -96,7 +96,7 @@ const Game = React.createClass({
 	whirlpoolQuestionTimeout() {
 		this.props.socket.send(JSON.stringify({
 			event: 'whirlpoolQuestionTimeout',
-			crewNumber: this.props.crewNumber
+			crewNumber: this.props.crewNumber,
 		}));
 	},
 
@@ -104,12 +104,12 @@ const Game = React.createClass({
 		this.props.socket.send(JSON.stringify({
 			event: 'questionTimeout',
 			crewNumber: this.props.crewNumber,
-			question: this.state.questionText
+			question: this.state.questionText,
 		}));
 	},
 
 	updateHP(canoeHP) {
-		this.setState({canoeHP});
+		this.setState({ canoeHP });
 	},
 
 	addRock(rockStartTime) {
@@ -124,7 +124,7 @@ const Game = React.createClass({
 	},
 
 	rockHit() {
-		this.props.socket.send(JSON.stringify({event: 'rockHit'}));
+		this.props.socket.send(JSON.stringify({ event: 'rockHit' }));
 	},
 
 	render() {
@@ -132,13 +132,13 @@ const Game = React.createClass({
 		let whirlpoolValue;
 		this.state.whirlpoolTimebar = <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool} />;
 		if (this.state.whirlpool) {
-			if (this.state.whirlpoolType === "Free") {
+			if (this.state.whirlpoolType === 'Free') {
 				whirlpoolValue = (
 					<div className="modal-background">
 						<div className="row">
 							<div className="three columns"><p></p></div>
 							<div className="six columns">
-								<WhirlpoolFree socket = {this.props.socket} />
+								<WhirlpoolFree socket={this.props.socket} />
 							</div>
 						</div>
 					</div>
@@ -150,7 +150,7 @@ const Game = React.createClass({
 						<div className="row">
 							<div className="three columns"><p></p></div>
 							<div className="six columns">
-								<WhirlpoolQuestion question = {this.state.whirlpoolQuestion} timebar = {this.state.whirlpoolTimebar} socket = {this.props.socket} />
+								<WhirlpoolQuestion question={this.state.whirlpoolQuestion} timebar={this.state.whirlpoolTimebar} socket={this.props.socket} />
 							</div>
 						</div>
 					</div>
@@ -172,42 +172,42 @@ const Game = React.createClass({
 							<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={timePerQuestion} ref="questionTimebar" keepRunning={!this.state.whirlpool}></QuestionTimebar>
 						</div>
 					</div>
-					<River ref = "river"
-						answerData = {this.props.answerData}
-						answerSelected = {this.answerSelected}
-						answerPassedThreshold = {this.answerPassedThreshold}
-						canoeHP = {this.state.canoeHP}
-						crewSize = {this.props.crewSize}
-						reflectionGroupUpdate = {this.state.reflectionGroupUpdate}
-						updateHP = {this.updateHP}
-						rockHit = {this.rockHit}
+					<River ref="river"
+  answerData={this.props.answerData}
+  answerSelected={this.answerSelected}
+  answerPassedThreshold={this.answerPassedThreshold}
+  canoeHP={this.state.canoeHP}
+  crewSize={this.props.crewSize}
+  reflectionGroupUpdate={this.state.reflectionGroupUpdate}
+  updateHP={this.updateHP}
+  rockHit={this.rockHit}
 					/>
 				</div>
       </div>
     );
-	}
+	},
 });
 
 const Answer = React.createClass({
 	getInitialState() {
-		let initialY = Math.random() * 100 - 100;
-		let vx = (Math.random() - 0.5) / 300;
-		let vy = (Math.random() - 0.5) / 150 + innerHeight / 15000;
+		const initialY = Math.random() * 100 - 100;
+		const vx = (Math.random() - 0.5) / 300;
+		const vy = (Math.random() - 0.5) / 150 + innerHeight / 15000;
 		return {
 			position: {
 				x: null,
-				y: initialY
+				y: initialY,
 			},
 			velocity: {
 				vx,
-				vy
+				vy,
 			},
 			disappeared: false,
 			passedThreshold: false,
 			shake: {
 				angle: 0,
-				time: null
-			}
+				time: null,
+			},
 		};
 	},
 
@@ -217,15 +217,15 @@ const Answer = React.createClass({
 
 		let positionX = this.state.position.x;
 		let positionY = this.state.position.y;
-		let velocityX = this.state.velocity.vx;
+		const velocityX = this.state.velocity.vx;
 		let velocityY = this.state.velocity.vy;
-		let offsetWidth = this.state.offsetWidth;
+		const offsetWidth = this.state.offsetWidth;
 
 		velocityY += dt * ((Math.random() - 0.5) / 10000);
 		if ((velocityY) < 0.03) velocityY = +velocityY + 0.03;
 
 		// check if it's already passed the threshold
-		if (positionY > this.props.riverBounds.bottom) {return;}
+		if (positionY > this.props.riverBounds.bottom) { return; }
 
 		// increment
 		positionX += (velocityX) * dt;
@@ -234,14 +234,14 @@ const Answer = React.createClass({
 		// check if it's passing the threshold for the first time
 		if (positionY > this.props.riverBounds.bottom - this.props.riverBounds.top) {
 			this.setState({
-				passedThreshold: true
+				passedThreshold: true,
 			});
 		}
 
 		this.setState({
-			position: {x: positionX, y: positionY},
-			velocity: {vx: velocityX, vy: velocityY},
-			lastAnimationTime: timeAtAnimation
+			position: { x: positionX, y: positionY },
+			velocity: { vx: velocityX, vy: velocityY },
+			lastAnimationTime: timeAtAnimation,
 		});
 	},
 
@@ -252,15 +252,15 @@ const Answer = React.createClass({
 		if (shakeTime && timeDifference > 0 && timeDifference <= 0.6) {
 			const scaledTime = timeDifference / (0.6 / 8);
 			const shakeAngle = 30 * Math.sin(Math.PI * scaledTime / 2);
-			this.setState({shake: {
+			this.setState({ shake: {
 				angle: shakeAngle,
-				time: shakeTime
-			}});
+				time: shakeTime,
+			} });
 		} else {
-			this.setState({shake: {
+			this.setState({ shake: {
 				angle: 0,
-				time: null
-			}});
+				time: null,
+			} });
 		}
 	},
 
@@ -271,25 +271,25 @@ const Answer = React.createClass({
 			{
 				startTime: currentTime,
 				lastAnimationTime: currentTime,
-				position: {x: initialX, y: previousState.position.y},
-				offsetWidth: this.refs.answer.offsetWidth
+				position: { x: initialX, y: previousState.position.y },
+				offsetWidth: this.refs.answer.offsetWidth,
 			}), () => {
 			const positionAnimation = this.animate(new Date());
-			this.setState({positionAnimation});
+			this.setState({ positionAnimation });
 		});
 	},
 
 	disappear() {
 		this.setState({
-			disappeared: true
+			disappeared: true,
 		});
 	},
 
 	shake() {
-		this.setState({shake: {
+		this.setState({ shake: {
 			time: Date.now(),
-			angle: 0
-		}});
+			angle: 0,
+		} });
 	},
 
 	animate(timestamp) {
@@ -309,22 +309,23 @@ const Answer = React.createClass({
 	render() {
 		const x = this.state.position.x; const y = this.state.position.y;
 		const style = {
-			transform: `translate(${x}px, ${y}px) rotate(${this.state.shake.angle}deg)`
+			transform: `translate(${x}px, ${y}px) rotate(${this.state.shake.angle}deg)`,
 		};
 		if (!this.state.disappeared)
-			return <span style={style} onClick={this.handleClick}
-				ref = "answer" className = "pill">{this.props.text}</span>;
+			return (<span style={style} onClick={this.handleClick}
+  ref="answer" className="pill"
+   >{this.props.text}</span>);
 		else {
 			return null;
 		}
-	}
+	},
 });
 
 const Canoe = React.createClass({
 	getInitialState() {
 		return {
 			height: null,
-			topPosition: null
+			topPosition: null,
 		};
 	},
 
@@ -333,7 +334,7 @@ const Canoe = React.createClass({
 			height: this.refs.canoe.offsetHeight,
 			width: this.refs.canoe.offsetWidth,
 			parentWidth: this.refs.canoe.parentElement.clientWidth,
-			topPosition: this.refs.canoe.getBoundingClientRect().top
+			topPosition: this.refs.canoe.getBoundingClientRect().top,
 		});
 	},
 
@@ -344,39 +345,39 @@ const Canoe = React.createClass({
 	render() {
 		// shake 0.82s cubic-bezier(.36,.07,.19,.97) both
 		const hp = this.props.hp;
-		let image = "../img/boats-top";
+		let image = '../img/boats-top';
 
 		if (hp > 50) {
-			image += "/canoe-100";
+			image += '/canoe-100';
 		} else if (hp > 25) {
-			image += "/canoe-50";
+			image += '/canoe-50';
 		} else if (hp > 10) {
-			image += "/canoe-25";
+			image += '/canoe-25';
 		} else if (hp > 0) {
-			image += "/canoe-10";
+			image += '/canoe-10';
 		} else if (hp <= 0) {
-			image += "/rafts";
+			image += '/rafts';
 		}
 
 		image += `/${this.props.crewSize}-members.svg`;
 
 		const canoeStyle = {
-			height: '100%'
+			height: '100%',
 		};
 		const containerStyle = {
-			textAlign: "center",
+			textAlign: 'center',
 			height: '50%',
-			margin: "0 auto",
+			margin: '0 auto',
 			transform: `translate(0px, ${window.innerHeight / 3.5}px)`,
-			display: 'table'
+			display: 'table',
 		};
 
 		return (
-			<div style = {containerStyle}>
-				<img id = "canoe" src = {image} style = {canoeStyle} ref = "canoe"></img>
+			<div style={containerStyle}>
+				<img id="canoe" src={image} style={canoeStyle} ref="canoe"></img>
 			</div>
 		);
-	}
+	},
 });
 
 const River = React.createClass({
@@ -393,11 +394,11 @@ const River = React.createClass({
 			// River
 			riverWidth: null,
 			riverHeight: null,
-			flashClass: "",
+			flashClass: '',
 			// Rock
 			rockStartTime: false,
 			rockAnimation: null,
-			rockYPosition: -window.innerHeight * 0.1
+			rockYPosition: -window.innerHeight * 0.1,
 		};
 	},
 
@@ -409,7 +410,7 @@ const River = React.createClass({
 		const canoeRect = canoe.getBoundingClientRect();
 		const rockHeight = ReactDOM.findDOMNode(this.refs.rock).offsetHeight;
 		// River Reflections
-		this.setState({riverWidth: river.offsetWidth});
+		this.setState({ riverWidth: river.offsetWidth });
 		this.startRiverReflections();
 		// Answers
 		this.updateAnswers();
@@ -418,12 +419,12 @@ const River = React.createClass({
 
 	answerPassedThreshold(answerText) {
 		this.props.answerPassedThreshold(answerText);
-		let answersToRemove = this.state.answersToRemove;
+		const answersToRemove = this.state.answersToRemove;
 		const removalIndex = answersToRemove.indexOf(answerText);
 		if (removalIndex <= -1) {
 			answersToRemove.push(answerText);
 		}
-		this.setState({answersToRemove});
+		this.setState({ answersToRemove });
 	},
 
 	updateAnswers() {
@@ -433,7 +434,7 @@ const River = React.createClass({
 
 		let newAnswer = answersToAdd.shift();
 		if (newAnswer && currentAnswers.indexOf(newAnswer) < 0) {
-			this.setState({answersToAdd});
+			this.setState({ answersToAdd });
 		} else {
 			if (newAnswer) answersToAdd.unshift(newAnswer);
 			let randomData = this.props.answerData[Math.floor(
@@ -450,11 +451,11 @@ const River = React.createClass({
 		if (answersToRemove.length > 0) {
 			const removalIndex = currentAnswers.indexOf(answersToRemove.shift());
 			currentAnswers.splice(removalIndex, 1);
-			this.setState({answersToRemove});
+			this.setState({ answersToRemove });
 		}
 
 		this.setState({
-			answers: currentAnswers
+			answers: currentAnswers,
 		});
 	},
 
@@ -483,7 +484,7 @@ const River = React.createClass({
 		});
 		*/
 		const rockAnimation = requestAnimationFrame(this.animateRock);
-		this.setState({rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime});
+		this.setState({ rockStartTime, rockAnimation, rockLastAnimationTime: rockStartTime });
 	},
 
 	animateRock(timestamp) {
@@ -503,21 +504,21 @@ const River = React.createClass({
 				cancelAnimationFrame(this.state.rockAnimation);
 				this.rockHit();
 			} else {
-				this.setState({rockYPosition, rockLastAnimationTime: currentTime});
+				this.setState({ rockYPosition, rockLastAnimationTime: currentTime });
 			}
 		} else if (timeFromStart > timeUntilImpact) {
 			cancelAnimationFrame(this.state.rockAnimation);
-			this.setState({rockYPosition: impactDistance});
+			this.setState({ rockYPosition: impactDistance });
 			this.rockHit();
 		}
-		this.setState({rockAnimation: requestAnimationFrame(this.animateRock)});
+		this.setState({ rockAnimation: requestAnimationFrame(this.animateRock) });
 	},
 
 	rockHit() {
 		this.setState({
 			rockStartTime: null,
 			rockAnimation: null,
-			rockYPosition: -innerHeight * 0.1
+			rockYPosition: -innerHeight * 0.1,
 		});
 		this.flashRedTwice();
 		this.props.updateHP(this.props.canoeHP - 30);
@@ -528,22 +529,22 @@ const River = React.createClass({
 		this.setState({
 			rockStartTime: null,
 			rockAnimation: null,
-			rockYPosition: -innerHeight * 0.1
+			rockYPosition: -innerHeight * 0.1,
 		});
-		this.showUpdate("Congratulations!", "You were saved from the rock.");
+		this.showUpdate('Congratulations!', 'You were saved from the rock.');
 	},
 
 	clearFlash() {
 		setTimeout(() => {
 			this.setState({
-				flashClass: ""
+				flashClass: '',
 			});
 		}, 1000);
 	},
 
 	flashRedTwice() {
 		this.setState({
-			flashClass: " flash-red-twice"
+			flashClass: ' flash-red-twice',
 		}, this.clearFlash);
 	},
 
@@ -572,9 +573,9 @@ const River = React.createClass({
 		const initialYPositions = [-riverHeight, riverHeight * 2];
 		const initialReflectionCount = Math.floor(4 + Math.random() * 2);
 		const riverReflectionGroups = [];
-		function ascending(a, b) {return a - b;}
+		function ascending(a, b) { return a - b; }
 
-		for (let i of Array(initialReflectionCount).keys()) {
+		for (const i of Array(initialReflectionCount).keys()) {
 			const newXPosition = this.findMaximumGap(initialXPositions);
 			const newYPosition = this.findMaximumGap(initialYPositions);
 			initialXPositions.push(newXPosition);
@@ -582,10 +583,10 @@ const River = React.createClass({
 			initialYPositions.push(newYPosition);
 			initialYPositions.sort(ascending);
 			riverReflectionGroups.push({
-				x: newXPosition, y: newYPosition, key: newXPosition});
+				x: newXPosition, y: newYPosition, key: newXPosition });
 		}
 
-		this.setState({riverReflectionGroups, lastAnimationTime: Date.now()}, () => {
+		this.setState({ riverReflectionGroups, lastAnimationTime: Date.now() }, () => {
 			requestAnimationFrame(this.updateRiverReflections);
 		});
 	},
@@ -630,7 +631,7 @@ const River = React.createClass({
 			}
 			return {
 				riverReflectionGroups: currentGroups,
-				lastAnimationTime: currentTime
+				lastAnimationTime: currentTime,
 			};
 		}, () => {
 			requestAnimationFrame(this.updateRiverReflections);
@@ -640,17 +641,17 @@ const River = React.createClass({
 	removeReflectionGroup(xPosition) {
 		this.setState((previousState, previousProps) => {
 			const currentGroups = previousState.riverReflectionGroups.slice();
-			for (let currentGroup of currentGroups) {
+			for (const currentGroup of currentGroups) {
 				if (currentGroup.x === xPosition) {
 					currentGroups.splice(currentGroups.indexOf(currentGroup), 1);
 				}
 			}
-			return {riverReflectionGroups: currentGroups};
+			return { riverReflectionGroups: currentGroups };
 		});
 	},
 
 	addReflectionGroup(side) {
-		function ascending(a, b) {return a - b;}
+		function ascending(a, b) { return a - b; }
 
 		const currentGroups = this.state.riverReflectionGroups.slice();
 		if (side === 'bottom') currentGroups.sort((a, b) => b.y - a.y);
@@ -660,7 +661,7 @@ const River = React.createClass({
 		const riverHeight = riverBounds.bottom - riverBounds.top;
 		let currentXPositions = [0];
 
-		currentXPositions = currentXPositions.concat(currentGroups.slice(0, 3).map(({x}) => x).sort(ascending));
+		currentXPositions = currentXPositions.concat(currentGroups.slice(0, 3).map(({ x }) => x).sort(ascending));
 		currentXPositions.push(riverBounds.right - riverBounds.left - this.refs.river.offsetWidth * 0.15);
 
 		const newXPosition = this.findMaximumGap(currentXPositions);
@@ -670,8 +671,8 @@ const River = React.createClass({
 
 		this.setState((previousState, previousProps) => {
 			const riverReflectionGroups = previousState.riverReflectionGroups;
-			riverReflectionGroups.push({x: newXPosition, y: newYPosition, key: newXPosition});
-			return {riverReflectionGroups};
+			riverReflectionGroups.push({ x: newXPosition, y: newYPosition, key: newXPosition });
+			return { riverReflectionGroups };
 		});
 	},
 
@@ -685,15 +686,15 @@ const River = React.createClass({
 		const canoeRight = canoeBounds.right - riverBounds.left;
 		const screenRight = riverBounds.right - riverBounds.left - answerWidth;
 
-		function ascending(a, b) {return a - b;}
+		function ascending(a, b) { return a - b; }
 
-		let topmostXPositions = this.state.initialAnswerXPositions.slice().reverse().slice(0, 2).sort(ascending);
-		let currentPositions = {
+		const topmostXPositions = this.state.initialAnswerXPositions.slice().reverse().slice(0, 2).sort(ascending);
+		const currentPositions = {
 			left: [screenLeft],
-			right: [canoeRight]
+			right: [canoeRight],
 		};
 
-		for (let topmostXPosition of topmostXPositions) {
+		for (const topmostXPosition of topmostXPositions) {
 			if (topmostXPosition > screenLeft && topmostXPosition < canoeLeft) {
 				currentPositions.left.push(topmostXPosition);
 			} else if (topmostXPosition > canoeRight && topmostXPosition < screenRight) {
@@ -718,13 +719,13 @@ const River = React.createClass({
 					newRightBound = currentSidePositions[i];
 				}
 			}
-    });
+    																				});
 
 		newLeftBound += currentMaximumGap * 0.25;
 		newRightBound -= currentMaximumGap * 0.25;
 		const newPosition = newLeftBound + Math.random() * (newRightBound - newLeftBound);
 		this.setState((previousState, previousProps) => (
-			{initialAnswerXPositions: previousState.initialAnswerXPositions.concat([newPosition])}
+			{ initialAnswerXPositions: previousState.initialAnswerXPositions.concat([newPosition]) }
 		));
 		return newPosition;
 	},
@@ -745,7 +746,7 @@ const River = React.createClass({
 		currentAnswersToAdd.push(answer);
 
 		this.setState({
-			answersToAdd: currentAnswersToAdd
+			answersToAdd: currentAnswersToAdd,
 		});
 	},
 
@@ -759,36 +760,36 @@ const River = React.createClass({
 
 		for (let i = 0; i < this.state.answers.length; i++) {
 			answers.push(<Answer
-				text={this.state.answers[i]}
-				key={this.props.answerData.indexOf(this.state.answers[i])}
-				onClick={this.props.answerSelected}
-				answerPassedThreshold={this.answerPassedThreshold}
-				generateAnswerPosition={this.generateAnswerPosition}
-				riverBounds={this.riverBounds()}
-				keepRunning={!this.props.whirlpool}
-				ref={`${this.props.answerData.indexOf(this.state.answers[i])}`}
+  text={this.state.answers[i]}
+  key={this.props.answerData.indexOf(this.state.answers[i])}
+  onClick={this.props.answerSelected}
+  answerPassedThreshold={this.answerPassedThreshold}
+  generateAnswerPosition={this.generateAnswerPosition}
+  riverBounds={this.riverBounds()}
+  keepRunning={!this.props.whirlpool}
+  ref={`${this.props.answerData.indexOf(this.state.answers[i])}`}
 			/>);
 		}
 		return (
-			<div className={"river" + this.state.flashClass} ref = "river">
+			<div className={'river' + this.state.flashClass} ref="river">
 				<div className="answers">
 					{answers}
 					{this.state.riverReflectionGroups.map((riverReflectionGroup) =>
 						<RiverReflectionGroup
-							x = {riverReflectionGroup.x}
-							y = {riverReflectionGroup.y}
-							riverWidth = {this.state.riverWidth}
-							key = {riverReflectionGroup.key}
+  x={riverReflectionGroup.x}
+  y={riverReflectionGroup.y}
+  riverWidth={this.state.riverWidth}
+  key={riverReflectionGroup.key}
 						/>
 					)}
-					<Rock y = {this.state.rockYPosition} present = {this.props.rockPresent} ref = "rock"/>
-					<Canoe initialImage = {this.props.initialImage}
-						ref = "canoe" hp = {this.props.canoeHP} crewSize = {this.props.crewSize}
+					<Rock y={this.state.rockYPosition} present={this.props.rockPresent} ref="rock" />
+					<Canoe initialImage={this.props.initialImage}
+  ref="canoe" hp={this.props.canoeHP} crewSize={this.props.crewSize}
 					/>
 				</div>
 			</div>
 		);
-	}
+	},
 });
 
 const Question = React.createClass({
@@ -796,14 +797,14 @@ const Question = React.createClass({
 		return (
 			<h2 id="question">{this.props.text}</h2>
 		);
-	}
+	},
 });
 
 const QuestionTimebar = React.createClass({
 	getInitialState() {
 		return {
 			timeLeft: this.props.timePerQuestion,
-			timeStart: Date.now()
+			timeStart: Date.now(),
 		};
 	},
 
@@ -820,7 +821,7 @@ const QuestionTimebar = React.createClass({
 			if (timeLeft < 0) {
 				this.props.onTimeout();
 			} else {
-			this.setState({timeLeft});
+				this.setState({ timeLeft });
 			}
 		}
 	},
@@ -828,7 +829,7 @@ const QuestionTimebar = React.createClass({
 	reset() {
 		this.setState({
 			timeLeft: this.props.timePerQuestion,
-			timeStart: Date.now()
+			timeStart: Date.now(),
 		});
 	},
 
@@ -836,21 +837,21 @@ const QuestionTimebar = React.createClass({
 		const style = {
 			width: (this.state.timeLeft / this.props.timePerQuestion * 100).toString() + '%',
 			backgroundColor: '#26A65B',
-			height: '100%'
+			height: '100%',
 		};
 		return <div style={style} className="questionTime"></div>;
-	}
+	},
 });
 
 const GameTimer = React.createClass({
 	propTypes: {
-		onFinish: React.PropTypes.func
+		onFinish: React.PropTypes.func,
 	},
 	getInitialState() {
 		return {
 			time: '',
 			finished: false,
-			timeStart: Date.now()
+			timeStart: Date.now(),
 		};
 	},
 	zeroPad(t) {
@@ -865,7 +866,7 @@ const GameTimer = React.createClass({
 		if (ms < 0) {
 			this.props.onFinish();
 			this.setState({
-				finished: true
+				finished: true,
 			});
 		} else if (ms < 10000) {
 			t = Math.floor(ms / 60000) + ':0' + (ms / 1000).toFixed(2);
@@ -873,7 +874,7 @@ const GameTimer = React.createClass({
 			t = Math.floor(ms / 60000) + ':' + this.zeroPad(Math.floor(ms / 1000 % 60));
 		}
 		this.setState({
-			time: t
+			time: t,
 		});
 	},
 
@@ -887,46 +888,46 @@ const GameTimer = React.createClass({
 
 	render() {
 		return <p hidden={this.state.finished}>Time remaining: {this.state.time}</p>;
-	}
+	},
 });
 
 const Rock = React.createClass({
 	render() {
 		const rockStyle = {
-			height: "100%"
+			height: '100%',
 		};
 		let containerStyle = {
-			textAlign: "center",
-			height: "12%",
-			margin: "0 auto",
+			textAlign: 'center',
+			height: '12%',
+			margin: '0 auto',
 			transform: `translate(0px, ${this.props.y}px)`,
-			display: 'table'
+			display: 'table',
 		};
 		if (!this.props.present)
-			containerStyle.display = "none";
+			containerStyle.display = 'none';
 		return (
 			<div style={containerStyle}>
-				<img src = "../img/obstacles/rock.svg" style = {rockStyle}></img>
+				<img src="../img/obstacles/rock.svg" style={rockStyle}></img>
 			</div>
 		);
-	}
+	},
 	// rock slowly approaches
 });
 
 const WhirlpoolFree = React.createClass({
 	getInitialState() {
 		return {
-			tapStreak: 0
+			tapStreak: 0,
 		};
 	},
 	processTap() {
-		this.setState({tapStreak: this.state.tapStreak + 1});
+		this.setState({ tapStreak: this.state.tapStreak + 1 });
 		if (this.state.tapStreak === 5) {
-			console.log("YOU GO!");
+			console.log('YOU GO!');
 			this.props.socket.send(JSON.stringify({
-				event: 'whirlpoolFiveTapsDetected'
+				event: 'whirlpoolFiveTapsDetected',
 			}));
-			this.setState({tapStreak: 0});
+			this.setState({ tapStreak: 0 });
 		}
 	},
 	render() {
@@ -936,18 +937,18 @@ const WhirlpoolFree = React.createClass({
 					<div className="twelve columns panel">
 						<h1><strong>Tap!</strong></h1>
 						<p>For every tap, you give your friend a bit more time to answer the challenge question.</p>
-						<button className="tap-button" onClick = {this.processTap}>GO</button>
+						<button className="tap-button" onClick={this.processTap}>GO</button>
 					</div>
 				</div>
 			</div>
 		);
-	}
+	},
 });
 
 const WhirlpoolQuestion = React.createClass({
 	getInitialState() {
 		return {
-			answers: null
+			answers: null,
 		};
 	},
 	componentWillMount() {
@@ -956,19 +957,19 @@ const WhirlpoolQuestion = React.createClass({
 	processAnswer(answer) {
 		this.props.socket.send({
 			event: 'whirlpoolAnswerSelected',
-			answer
+			answer,
 		});
 	},
 	preprocessAnswers() {
 		let answers = [this.props.question.answer];
-		this.props.question.incorrectAnswers.forEach(function(thing) {
+		this.props.question.incorrectAnswers.forEach(function (thing) {
 			answers.push(thing);
 		});
 		answers = shuffle(answers);
-		this.setState({answers});
+		this.setState({ answers });
 	},
 	render() {
-		let answers = this.state.answers;
+		const answers = this.state.answers;
 		return (
 			<div className="modal-active whirlpool panel-group">
 				<div className="panel-top">
@@ -977,19 +978,19 @@ const WhirlpoolQuestion = React.createClass({
 				</div>
 				{this.props.timebar}
 				{
-					answers.map(function(answer) {
+					answers.map(function (answer) {
 						return <button className="whirlpool-button u-full-width" onClick={this.processAnswer.bind(this, answer)}>{answer}</button>;
 					})
 				}
 			</div>
 		);
-	}
+	},
 });
 
-	const Update = React.createClass({
-		render() {
-			return (
-			<div className = {this.props.animationText} id="notification">
+const Update = React.createClass({
+	render() {
+		return (
+			<div className={this.props.animationText} id="notification">
 				<div className="container">
 					<div className="row">
 						<div className="twelve columns">
@@ -1000,8 +1001,8 @@ const WhirlpoolQuestion = React.createClass({
 				</div>
 			</div>
 		);
-		}
-	});
+	},
+});
 
 	// popup - everything stops
 	// one person gets a challenge question - multiple choice
@@ -1020,7 +1021,7 @@ const RiverReflectionGroup = React.createClass({
 		return {
 			numberOfReflections: Math.floor(2 + 2 * Math.random()),
 			backgroundColor: Math.random() < 0.5 ? lighterColor : darkerColor,
-			height: 25 + Math.random() * 10
+			height: 25 + Math.random() * 10,
 		};
 	},
 
@@ -1028,12 +1029,12 @@ const RiverReflectionGroup = React.createClass({
 		const riverReflections = [];
 		for (let i = 0; i < this.state.numberOfReflections; i++) {
 			riverReflections.push(<RiverReflection
-				backgroundColor = {this.state.backgroundColor}
-				riverWidth = {this.props.riverWidth}
-				height = {this.state.height}
-				width = {100 / this.state.numberOfReflections}
-				xOffset = {-i}
-				key = {i}
+  backgroundColor={this.state.backgroundColor}
+  riverWidth={this.props.riverWidth}
+  height={this.state.height}
+  width={100 / this.state.numberOfReflections}
+  xOffset={-i}
+  key={i}
 			/>);
 		}
 
@@ -1043,21 +1044,21 @@ const RiverReflectionGroup = React.createClass({
 			width: `${this.state.numberOfReflections * 4}%`,
 			maxWidth: `${this.state.numberOfReflections * 20}px`,
 			zIndex: '-10',
-			position: 'absolute'
+			position: 'absolute',
 		};
 		return (
-			<div style = {style}>
+			<div style={style}>
 				{riverReflections}
 			</div>
 		);
-	}
+	},
 });
 
 const RiverReflection = React.createClass({
 	getInitialState() {
 		return {
 			height: 80 + Math.random() * 20,
-			yOffset: (2 + Math.random() * 3) * this.props.riverWidth / 100
+			yOffset: (2 + Math.random() * 3) * this.props.riverWidth / 100,
 		};
 	},
 
@@ -1066,13 +1067,13 @@ const RiverReflection = React.createClass({
 			backgroundColor: this.props.backgroundColor,
 			display: 'block',
 			float: 'left',
-			borderRadius: "10000000px",
+			borderRadius: '10000000px',
 			height: `${this.state.height}%`,
 			transform: `translate(${this.props.xOffset}px, ${this.state.yOffset}px)`,
-			width: `${this.props.width}%`
+			width: `${this.props.width}%`,
 		};
 		return <div style={style}></div>;
-	}
+	},
 
 	// 2 - 4 groups on screen at a time
 	// 2  - 3 in teach groups
