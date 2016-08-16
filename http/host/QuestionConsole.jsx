@@ -36,7 +36,7 @@ const NewSetForm = React.createClass({
 	},
 });
 
-const TextInput = ({ placeholder, label }) => {
+function TextInput({ placeholder, label }) {
 	const containerStyle = {
 		display: 'flex',
 		flexDirection: 'column',
@@ -53,7 +53,7 @@ const TextInput = ({ placeholder, label }) => {
 			<input placeholder={placeholder} />
 		</div>
 	);
-};
+}
 
 TextInput.propTypes = {
 	placeholder: PropTypes.string,
@@ -63,7 +63,7 @@ TextInput.propTypes = {
 const QuestionInputGroup = React.createClass({
 	render() {
 		return (
-			<div id="question_input">
+			<div id="question_input_group">
 				<h3>Questions</h3>
 				<span style={{ fontStyle: 'italic' }}>Avoid synonyms among answers.</span>
 				<br />
@@ -74,13 +74,35 @@ const QuestionInputGroup = React.createClass({
 	},
 });
 
-const QuestionInput = React.createClass({
-	render() {
-		return <div>QInput</div>;
-	},
-});
+class QuestionInput extends React.Component {
+	getInitialState() {
+		return {
+			numberOfAnswers: 1,
+		};
+	}
 
-const ExpandButton = ({ onclick, children }) => {
+	addAnswerInput() {
+		this.setState((previousState, previousProps) => ({
+			numberOfAnswers: previousState.numberOfAnswers + 1,
+		}));
+	}
+
+	render() {
+		const answerInputs = [];
+		for (let i = 0; i < this.state.numberOfAnswers; i++) {
+			answerInputs.push(<TextInput placeholder="Twenty one." label="Answer" key={i} />);
+		}
+		return (<div className="question_input">
+			<TextInput placeholder="What's nine plus ten?" label="Question" />
+			<div className="answers_input">
+				<TextInput placeholder="Twenty one." label="Answer" />
+			</div>
+			<ExpandButton onclick={this.addAnswerInput} />
+		</div>);
+	}
+}
+
+function ExpandButton({ onclick, children }) {
 	const style = {
 
 	};
@@ -89,14 +111,14 @@ const ExpandButton = ({ onclick, children }) => {
 			{children || 'More'}
 		</button>
 	);
-};
+}
 
 ExpandButton.propTypes = {
 	onclick: PropTypes.func.isRequired,
 	children: PropTypes.string,
 };
 
-const Checkbox = ({ label }) => {
+function Checkbox({ label }) {
 	const containerStyle = {
 		display: 'flex',
 		width: '16%',
@@ -109,7 +131,7 @@ const Checkbox = ({ label }) => {
 			<span>{label}</span>
 		</div>
 	);
-};
+}
 
 Checkbox.propTypes = {
 	label: PropTypes.string.isRequired,
