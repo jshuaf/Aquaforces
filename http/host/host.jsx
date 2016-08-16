@@ -1,9 +1,13 @@
+import ReactDOM from 'react-dom';
+import React from 'react';
 import GameHost from './GameHost.jsx';
+import QuestionConsole from './QuestionConsole.jsx';
 
+/*
 const socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port !== 80 ? ':' + location.port : '') + '/host/');
 const cont = document.getElementById('cont');
 
-const crews = {};
+const crews = {};w
 const usersWithoutCrews = [];
 
 let gameHost;
@@ -11,7 +15,7 @@ let gameHasStarted = false;
 
 function setState(id) {
 	// hide and show different elements
-	cont.children.forEach(function(e) {
+	cont.children.forEach(function (e) {
 		if (e.id !== id) e.hidden = true;
 	});
 	document.getElementById(id).hidden = false;
@@ -65,7 +69,7 @@ function confirmMessageRecieved() {
 	socket.send(JSON.stringify({ event: 'messageRecieved' }));
 }
 
-socket.onmessage = function(m) {
+socket.onmessage = function (m) {
 	try {
 		m = JSON.parse(m.data);
 	} catch (e) {
@@ -94,7 +98,7 @@ socket.onmessage = function(m) {
 		usersWithoutCrews.push(m.user);
 		break;
 	case 'addUserToCrew':
-		document.getElementById('loneusers').childNodes.forEach(function(e) {
+		document.getElementById('loneusers').childNodes.forEach(function (e) {
 			if (e.firstChild.nodeValue === m.user) e.parentNode.removeChild(e);
 		});
 		const span = document.createElement('span');
@@ -142,13 +146,13 @@ socket.onmessage = function(m) {
 socket.onclose = () => {
 	sweetAlert('Server connection died.', "We're sorry about that.", 'error');
 };
-document.getElementById('dashboard').addEventListener('submit', function(e) {
+document.getElementById('dashboard').addEventListener('submit', function (e) {
 	document.getElementById('newGameButton').disabled = true;
 	e.preventDefault();
 	socket.send(JSON.stringify({ event: 'newGame' }));
 });
 
-document.getElementById('startGameButton').addEventListener('click', function(e) {
+document.getElementById('startGameButton').addEventListener('click', function (e) {
 	document.getElementById('startGameButton').disabled = true;
 	e.preventDefault();
 	socket.send(JSON.stringify({
@@ -157,7 +161,9 @@ document.getElementById('startGameButton').addEventListener('click', function(e)
 	// MARK: figure out our html
 });
 function endGame() {
-    										socket.send(JSON.stringify({
-        										event: 'endGame',
-    }));
-}
+	socket.send(JSON.stringify({
+		event: 'endGame',
+	}));
+}*/
+
+ReactDOM.render(<QuestionConsole />, document.getElementById('mountNode'));

@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 
 function getValuesOfObject(object) {
-	let values = [];
-	for (let key in object) {
+	const values = [];
+	for (const key in object) {
 		values.push(object[key]);
 	}
 	return values;
@@ -14,7 +14,7 @@ const GameHost = React.createClass({
 		return {
 			gameStatus: 'hasNotStarted',
 			startTime: new Date(),
-			crews: this.props.initialCrews
+			crews: this.props.initialCrews,
 		};
 	},
 
@@ -27,21 +27,21 @@ const GameHost = React.createClass({
 
 	updateCrewPosition(crewNumber, increment) {
 		// MARK: move the camera around
-		let oldCrews = this.state.crews;
+		const oldCrews = this.state.crews;
 		oldCrews[crewNumber].position += increment;
 		this.setState({
-			crews: oldCrews
+			crews: oldCrews,
 		});
 	},
 
 	updateCrewStatus(crewNumber, newStatus) {
-		let oldCrews = this.state;
+		const oldCrews = this.state;
 		oldCrews.crews[crewNumber].props.status = newStatus;
 		this.setState(oldCrews);
 	},
 
 	updateCrewBoat(crewNumber, newBoat) {
-		let oldCrews = this.state;
+		const oldCrews = this.state;
 		oldCrews.crews[crewNumber].props.boat = newBoat;
 		this.setState(oldCrews);
 	},
@@ -64,9 +64,9 @@ const GameHost = React.createClass({
 							<div className="panel">
 								<h4><strong>Live stream</strong></h4>
 								{
-									Object.keys(this.state.crews).map(function(crewNumber, i) {
+									Object.keys(this.state.crews).map(function (crewNumber, i) {
 										const crew = this.state.crews[crewNumber];
-										return <Crew position={crew.position} status={crew.status} boat={crew.boat} size={crew.users.length} crewNumber={crewNumber} key={i} ref={crewNumber.toString()}/>;
+										return <Crew position={crew.position} status={crew.status} boat={crew.boat} size={crew.users.length} crewNumber={crewNumber} key={i} ref={crewNumber.toString()} />;
 									}.bind(this))
 								}
 							</div>
@@ -74,7 +74,7 @@ const GameHost = React.createClass({
 				</div>
 			</div>
 		);
-	}
+	},
 });
 
 const Crew = React.createClass({
@@ -86,7 +86,7 @@ const Crew = React.createClass({
 			hp: 1,
 			current: -0.1,
 			isRaft: false,
-			isWhirlpool: false
+			isWhirlpool: false,
 		};
 	},
 
@@ -94,42 +94,42 @@ const Crew = React.createClass({
 		return {
 			currentConstant: 0.003,
 			velocityConstant: 0.00001,
-			deltaHPConstant: -0.1
+			deltaHPConstant: -0.1,
 		};
 	},
 
 	processWhirlpool(status) {
 		switch (status) {
-			case 'new':
-				this.setState({isWhirlpool: true});
-				break;
-			case 'timeout':
-				this.setState({hp: this.state.hp - 0.25, isWhirlpool: false});
-				break;
-			case 'wrongAnswer':
-				this.setState({hp: this.state.hp - 0.25, isWhirlpool: false});
-				break;
-			case 'correctAnswer':
-				this.setState({position: this.state.position + 0.3, isWhirlpool: false});
-				break;
-			default:
-				break;
-			}
+		case 'new':
+			this.setState({ isWhirlpool: true });
+			break;
+		case 'timeout':
+			this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
+			break;
+		case 'wrongAnswer':
+			this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
+			break;
+		case 'correctAnswer':
+			this.setState({ position: this.state.position + 0.3, isWhirlpool: false });
+			break;
+		default:
+			break;
+		}
 	},
 
 	processAnswer(wasCorrectAnswer) {
 		if (wasCorrectAnswer) {
 			this.setState({
-				velocity: this.state.velocity + this.state.deltaVelocity
+				velocity: this.state.velocity + this.state.deltaVelocity,
 			});
 		} else if (this.state.isRaft) {
-			this.setState({deltaVelocity: this.state.deltaVelocity * 0.25});
+			this.setState({ deltaVelocity: this.state.deltaVelocity * 0.25 });
 		} else {
 			this.setState({
-				hp: this.state.hp + this.props.deltaHPConstant
+				hp: this.state.hp + this.props.deltaHPConstant,
 			});
 			if (!this.state.isRaft && this.state.hp <= 0) {
-					this.setState({isRaft: true});
+				this.setState({ isRaft: true });
 			}
 		}
 	},
@@ -140,11 +140,11 @@ const Crew = React.createClass({
 			marginLeft: (this.props.position * 100) + 'px',
 			borderRadius: '5px',
 			border: 'none',
-			background: 'url(/img/boats-side/' + (this.state.isRaft ? 'rafts' : 'canoes') + '/' + this.props.size + '-members.svg) no-repeat center top'
+			background: 'url(/img/boats-side/' + (this.state.isRaft ? 'rafts' : 'canoes') + '/' + this.props.size + '-members.svg) no-repeat center top',
 		};
 		const className = this.state.isRaft ? 'raft' : 'racetrack-boat';
 		return <div className={className} style={style}><p>Crew {this.props.crewNumber}</p></div>;
-	}
+	},
 });
 
 const Leaderboard = React.createClass({
@@ -153,30 +153,30 @@ const Leaderboard = React.createClass({
 		const style = {
 			borderStyle: 'dotted',
 			borderColor: 'green',
-			borderWidth: 1.0
+			borderWidth: 1.0,
 		};
 		return (
 			<div>
 			<h4><strong>Leaderboard</strong></h4>
 			{
-				Object.keys(this.props.crews).map(function(crewNumber, i) {
+				Object.keys(this.props.crews).map(function (crewNumber, i) {
 					const crew = this.props.crews[crewNumber];
 					return <LeaderboardEntry crewNumber={crewNumber} crewPosition={crew.position} key={i} />;
 				}.bind(this))
 			}
 			</div>
 		);
-	}
+	},
 });
 
 const LeaderboardEntry = React.createClass({
 	render() {
 		let style = {
 			fontSize: (this.props.crewPosition + 1) * 15 + 'px',
-			padding: 5 + this.props.crewPosition + 'px'
+			padding: 5 + this.props.crewPosition + 'px',
 		};
 		return (<div className="leaderboardEntry">
-		<h5>Crew {this.props.crewNumber}: <span style={style} className = "pill">{Math.round(this.props.crewPosition * 10) / 10}</span></h5>
+		<h5>Crew {this.props.crewNumber}: <span style={style} className="pill">{Math.round(this.props.crewPosition * 10) / 10}</span></h5>
 		</div>);
-	}
+	},
 });

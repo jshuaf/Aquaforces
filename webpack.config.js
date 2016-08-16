@@ -2,8 +2,8 @@ const path = require('path');
 
 module.exports = {
 	entry: {
-		game: path.resolve('http/game/game.jsx'),
-		host: path.resolve('http/host/GameHost.jsx'),
+		host: './http/host/host.jsx',
+		game: './http/game/game.jsx',
 	},
 	output: {
 		path: path.join(__dirname, '/http'),

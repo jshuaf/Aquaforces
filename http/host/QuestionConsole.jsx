@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 /*
 Question console layout:
@@ -21,7 +21,7 @@ const QuestionConsole = React.createClass({
 
 const NewSetForm = React.createClass({
 	addQuestionInput() {
-
+		return;
 	},
 	render() {
 		return (
@@ -29,13 +29,43 @@ const NewSetForm = React.createClass({
 				<h2>New Question Set</h2>
 				<TextInput label="Title" placeholder="My Question Set" />
 				<QuestionInput />
-				<AddButton text="Add an answer" onclick={this.addQuestionInput} />
+				<ExpandButton text="Add an answer" onclick={this.addQuestionInput} />
 				<Checkbox text="Private set" />
 			</div>
 		);
 	},
 });
 
-const TextInput = React.createClass({
+const TextInput = ({ placeholder, label }) => {
+	const style = {
+		borderWidth: 1,
+		borderColor: 'gray',
+		borderStyle: 'solid',
+	};
+	return <input placeholder={placeholder} text={label} style={style} />;
+};
 
+TextInput.propTypes = {
+	placeholder: PropTypes.string,
+	label: PropTypes.string.isRequired,
+};
+
+const QuestionInput = React.createClass({
+	render() {
+		return <div>Questions</div>;
+	},
 });
+
+const ExpandButton = React.createClass({
+	render() {
+		return <button>More</button>;
+	},
+});
+
+const Checkbox = React.createClass({
+	render() {
+		return <div>Check me</div>;
+	},
+});
+
+export default QuestionConsole;

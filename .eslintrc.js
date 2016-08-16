@@ -10,6 +10,7 @@ module.exports = {
 		"indent": ["error", "tab"],
 		"max-len": ["error", 120],
 		"no-console": ["off"],
+		"react/jsx-indent": ["off"],
 		"no-mixed-operators": ["error",
 			{
 				"groups": [
