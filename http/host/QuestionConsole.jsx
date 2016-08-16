@@ -70,14 +70,14 @@ class QuestionInput extends React.Component {
 			numberOfAnswers: 1,
 			answers: [<TextInput
 				placeholder="Twenty one." label="Answer"
-				key={0} onchange={this.updateAnswerData} index={0}
+				key={0} onchange={this.updateAnswerData} id={0}
 			/>],
 			answerData: [null],
 			question: null,
 		};
 	}
 
-	updateAnswerData(text, index) {
+	updateAnswerData(text, id) {
 		const answerData = this.state.answerData.slice();
 		answerData[index] = text;
 		this.setState({ answerData });
@@ -92,7 +92,7 @@ class QuestionInput extends React.Component {
 			numberOfAnswers: previousState.numberOfAnswers + 1,
 			answers: previousState.answers.concat(
 				<TextInput
-					placeholder="Twenty one." label="Answer" index={previousState.numberOfAnswers}
+					placeholder="Twenty one." label="Answer" id={previousState.numberOfAnswers}
 					key={previousState.numberOfAnswers} onchange={this.updateAnswerData}
 				/>
 			),

@@ -22559,7 +22559,7 @@
 				numberOfAnswers: 1,
 				answers: [_react2.default.createElement(_Input.TextInput, {
 					placeholder: 'Twenty one.', label: 'Answer',
-					key: 0, onchange: _this5.updateAnswerData, index: 0
+					key: 0, onchange: _this5.updateAnswerData, id: 0
 				})],
 				answerData: [null],
 				question: null
@@ -22569,7 +22569,7 @@
 	
 		_createClass(QuestionInput, [{
 			key: 'updateAnswerData',
-			value: function updateAnswerData(text, index) {
+			value: function updateAnswerData(text, id) {
 				var answerData = this.state.answerData.slice();
 				answerData[index] = text;
 				this.setState({ answerData: answerData });
@@ -22588,7 +22588,7 @@
 					return {
 						numberOfAnswers: previousState.numberOfAnswers + 1,
 						answers: previousState.answers.concat(_react2.default.createElement(_Input.TextInput, {
-							placeholder: 'Twenty one.', label: 'Answer', index: previousState.numberOfAnswers,
+							placeholder: 'Twenty one.', label: 'Answer', id: previousState.numberOfAnswers,
 							key: previousState.numberOfAnswers, onchange: _this6.updateAnswerData
 						})),
 						answerData: previousState.answerData.concat(null)
@@ -22685,7 +22685,7 @@
 							_this2.input = i;
 						}, placeholder: this.props.placeholder,
 						onChange: function onChange() {
-							if (_this2.props.onchange) _this2.props.onchange(_this2.input.value, _this2.props.index);
+							if (_this2.props.onchange) _this2.props.onchange(_this2.input.value, _this2.props.id);
 						}
 					})
 				);
@@ -22699,7 +22699,7 @@
 		placeholder: _react.PropTypes.string,
 		label: _react.PropTypes.string.isRequired,
 		onchange: _react.PropTypes.func,
-		index: _react.PropTypes.number.isRequired
+		id: _react.PropTypes.number.isRequired
 	};
 	
 	TextInput.defaultProps = {

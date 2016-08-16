@@ -18,7 +18,7 @@ export class TextInput extends React.Component {
 				<input
 					ref={(i) => { this.input = i; }} placeholder={this.props.placeholder}
 					onChange={() => {
-						if (this.props.onchange) this.props.onchange(this.input.value, this.props.index);
+						if (this.props.onchange) this.props.onchange(this.input.value, this.props.id);
 					}}
 				/>
 			</div>
@@ -30,7 +30,7 @@ TextInput.propTypes = {
 	placeholder: PropTypes.string,
 	label: PropTypes.string.isRequired,
 	onchange: PropTypes.func,
-	index: PropTypes.number.isRequired,
+	id: PropTypes.number.isRequired,
 };
 
 TextInput.defaultProps = {
