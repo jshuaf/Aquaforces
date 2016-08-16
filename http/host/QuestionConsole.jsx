@@ -1,26 +1,34 @@
 import React, { PropTypes } from 'react';
 import { TextInput, Checkbox, ExpandButton } from '../shared/Input.jsx';
 
-const QuestionConsole = React.createClass({
+class QuestionConsole extends React.Component {
 	render() {
 		return (
 			<NewSetForm />
 		);
-	},
-});
+	}
+}
 
-const NewSetForm = React.createClass({
+class NewSetForm extends React.Component {
+	constructor(props) {
+		super(props);
+		this.submitQuestionSet = this.submitQuestionSet.bind(this);
+	}
+	submitQuestionSet() {
+		// TODO: add question set submission functionality
+	}
 	render() {
 		return (
 			<div id="new_set">
 				<h2>New Question Set</h2>
-				<TextInput label="Title" placeholder="My Question Set" />
+				<TextInput label="Title" placeholder="My Question Set" ref={(t) => { this.title = t; }} />
 				<QuestionInputGroup />
 				<Checkbox label="Private set" />
+				<button onClick={this.submitQuestionSet}>Submit</button>
 			</div>
 		);
-	},
-});
+	}
+}
 
 class QuestionInputGroup extends React.Component {
 	constructor(props) {
@@ -57,6 +65,7 @@ class QuestionInput extends React.Component {
 		super(props);
 		this.state = {
 			numberOfAnswers: 1,
+			answers: [<TextInput placeholder="Twenty one." label="Answer" key={0} />],
 		};
 		this.addAnswerInput = this.addAnswerInput.bind(this);
 	}
@@ -64,18 +73,17 @@ class QuestionInput extends React.Component {
 	addAnswerInput() {
 		this.setState((previousState, previousProps) => ({
 			numberOfAnswers: previousState.numberOfAnswers + 1,
+			answers: previousState.answers.concat(
+				<TextInput placeholder="Twenty one." label="Answer" key={previousState.numberOfAnswers} />
+			),
 		}));
 	}
 
 	render() {
-		const answerInputs = [];
-		for (let i = 0; i < this.state.numberOfAnswers; i++) {
-			answerInputs.push(<TextInput placeholder="Twenty one." label="Answer" key={i} />);
-		}
 		return (<div className="question_input">
 			<TextInput placeholder="What's nine plus ten?" label="Question" />
 			<div className="answers_input">
-				{answerInputs}
+				{this.state.answers}
 			</div>
 			<ExpandButton onClick={this.addAnswerInput} />
 		</div>);

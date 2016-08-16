@@ -22424,44 +22424,85 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var QuestionConsole = _react2.default.createClass({
-		displayName: 'QuestionConsole',
-		render: function render() {
-			return _react2.default.createElement(NewSetForm, null);
-		}
-	});
+	var QuestionConsole = function (_React$Component) {
+		_inherits(QuestionConsole, _React$Component);
 	
-	var NewSetForm = _react2.default.createClass({
-		displayName: 'NewSetForm',
-		render: function render() {
-			return _react2.default.createElement(
-				'div',
-				{ id: 'new_set' },
-				_react2.default.createElement(
-					'h2',
-					null,
-					'New Question Set'
-				),
-				_react2.default.createElement(_Input.TextInput, { label: 'Title', placeholder: 'My Question Set' }),
-				_react2.default.createElement(QuestionInputGroup, null),
-				_react2.default.createElement(_Input.Checkbox, { label: 'Private set' })
-			);
-		}
-	});
+		function QuestionConsole() {
+			_classCallCheck(this, QuestionConsole);
 	
-	var QuestionInputGroup = function (_React$Component) {
-		_inherits(QuestionInputGroup, _React$Component);
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionConsole).apply(this, arguments));
+		}
+	
+		_createClass(QuestionConsole, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(NewSetForm, null);
+			}
+		}]);
+	
+		return QuestionConsole;
+	}(_react2.default.Component);
+	
+	var NewSetForm = function (_React$Component2) {
+		_inherits(NewSetForm, _React$Component2);
+	
+		function NewSetForm(props) {
+			_classCallCheck(this, NewSetForm);
+	
+			var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(NewSetForm).call(this, props));
+	
+			_this2.submitQuestionSet = _this2.submitQuestionSet.bind(_this2);
+			return _this2;
+		}
+	
+		_createClass(NewSetForm, [{
+			key: 'submitQuestionSet',
+			value: function submitQuestionSet() {
+				// TODO: add question set submission functionality
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this3 = this;
+	
+				return _react2.default.createElement(
+					'div',
+					{ id: 'new_set' },
+					_react2.default.createElement(
+						'h2',
+						null,
+						'New Question Set'
+					),
+					_react2.default.createElement(_Input.TextInput, { label: 'Title', placeholder: 'My Question Set', ref: function ref(t) {
+							_this3.title = t;
+						} }),
+					_react2.default.createElement(QuestionInputGroup, null),
+					_react2.default.createElement(_Input.Checkbox, { label: 'Private set' }),
+					_react2.default.createElement(
+						'button',
+						{ onClick: this.submitQuestionSet },
+						'Submit'
+					)
+				);
+			}
+		}]);
+	
+		return NewSetForm;
+	}(_react2.default.Component);
+	
+	var QuestionInputGroup = function (_React$Component3) {
+		_inherits(QuestionInputGroup, _React$Component3);
 	
 		function QuestionInputGroup(props) {
 			_classCallCheck(this, QuestionInputGroup);
 	
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionInputGroup).call(this, props));
+			var _this4 = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionInputGroup).call(this, props));
 	
-			_this.state = {
+			_this4.state = {
 				numberOfQuestions: 1
 			};
-			_this.addQuestionInput = _this.addQuestionInput.bind(_this);
-			return _this;
+			_this4.addQuestionInput = _this4.addQuestionInput.bind(_this4);
+			return _this4;
 		}
 	
 		_createClass(QuestionInputGroup, [{
@@ -22503,19 +22544,20 @@
 		return QuestionInputGroup;
 	}(_react2.default.Component);
 	
-	var QuestionInput = function (_React$Component2) {
-		_inherits(QuestionInput, _React$Component2);
+	var QuestionInput = function (_React$Component4) {
+		_inherits(QuestionInput, _React$Component4);
 	
 		function QuestionInput(props) {
 			_classCallCheck(this, QuestionInput);
 	
-			var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionInput).call(this, props));
+			var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionInput).call(this, props));
 	
-			_this2.state = {
-				numberOfAnswers: 1
+			_this5.state = {
+				numberOfAnswers: 1,
+				answers: [_react2.default.createElement(_Input.TextInput, { placeholder: 'Twenty one.', label: 'Answer', key: 0 })]
 			};
-			_this2.addAnswerInput = _this2.addAnswerInput.bind(_this2);
-			return _this2;
+			_this5.addAnswerInput = _this5.addAnswerInput.bind(_this5);
+			return _this5;
 		}
 	
 		_createClass(QuestionInput, [{
@@ -22523,17 +22565,14 @@
 			value: function addAnswerInput() {
 				this.setState(function (previousState, previousProps) {
 					return {
-						numberOfAnswers: previousState.numberOfAnswers + 1
+						numberOfAnswers: previousState.numberOfAnswers + 1,
+						answers: previousState.answers.concat(_react2.default.createElement(_Input.TextInput, { placeholder: 'Twenty one.', label: 'Answer', key: previousState.numberOfAnswers }))
 					};
 				});
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var answerInputs = [];
-				for (var i = 0; i < this.state.numberOfAnswers; i++) {
-					answerInputs.push(_react2.default.createElement(_Input.TextInput, { placeholder: 'Twenty one.', label: 'Answer', key: i }));
-				}
 				return _react2.default.createElement(
 					'div',
 					{ className: 'question_input' },
@@ -22541,7 +22580,7 @@
 					_react2.default.createElement(
 						'div',
 						{ className: 'answers_input' },
-						answerInputs
+						this.state.answers
 					),
 					_react2.default.createElement(_Input.ExpandButton, { onClick: this.addAnswerInput })
 				);
@@ -22565,7 +22604,10 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.TextInput = TextInput;
+	exports.TextInput = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	exports.Checkbox = Checkbox;
 	exports.ExpandButton = ExpandButton;
 	
@@ -22575,39 +22617,57 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function TextInput(_ref) {
-		var placeholder = _ref.placeholder;
-		var label = _ref.label;
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-		var containerStyle = {
-			display: 'flex',
-			flexDirection: 'column',
-			height: '10%',
-			width: '40%'
-		};
-		var labelStyle = {
-			marginBottom: '2%',
-			marginLeft: '1%'
-		};
-		return _react2.default.createElement(
-			'div',
-			{ className: 'textInput', style: containerStyle },
-			_react2.default.createElement(
-				'span',
-				{ style: labelStyle },
-				label
-			),
-			_react2.default.createElement('input', { placeholder: placeholder })
-		);
-	}
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TextInput = exports.TextInput = function (_React$Component) {
+		_inherits(TextInput, _React$Component);
+	
+		function TextInput() {
+			_classCallCheck(this, TextInput);
+	
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(TextInput).apply(this, arguments));
+		}
+	
+		_createClass(TextInput, [{
+			key: 'render',
+			value: function render() {
+				var containerStyle = {
+					display: 'flex',
+					flexDirection: 'column',
+					height: '10%',
+					width: '40%'
+				};
+				var labelStyle = {
+					marginBottom: '2%',
+					marginLeft: '1%'
+				};
+				return _react2.default.createElement(
+					'div',
+					{ className: 'textInput', style: containerStyle },
+					_react2.default.createElement(
+						'span',
+						{ style: labelStyle },
+						this.props.label
+					),
+					_react2.default.createElement('input', { placeholder: this.props.placeholder })
+				);
+			}
+		}]);
+	
+		return TextInput;
+	}(_react2.default.Component);
 	
 	TextInput.propTypes = {
 		placeholder: _react.PropTypes.string,
 		label: _react.PropTypes.string.isRequired
 	};
 	
-	function Checkbox(_ref2) {
-		var label = _ref2.label;
+	function Checkbox(_ref) {
+		var label = _ref.label;
 	
 		var containerStyle = {
 			display: 'flex',
@@ -22631,9 +22691,9 @@
 		label: _react.PropTypes.string.isRequired
 	};
 	
-	function ExpandButton(_ref3) {
-		var onClick = _ref3.onClick;
-		var children = _ref3.children;
+	function ExpandButton(_ref2) {
+		var onClick = _ref2.onClick;
+		var children = _ref2.children;
 	
 		var style = {
 			textDecoration: 'underline'

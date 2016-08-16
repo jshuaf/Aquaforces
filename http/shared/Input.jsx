@@ -1,22 +1,24 @@
 import React, { PropTypes } from 'react';
 
-export function TextInput({ placeholder, label }) {
-	const containerStyle = {
-		display: 'flex',
-		flexDirection: 'column',
-		height: '10%',
-		width: '40%',
-	};
-	const labelStyle = {
-		marginBottom: '2%',
-		marginLeft: '1%',
-	};
-	return (
-		<div className="textInput" style={containerStyle}>
-			<span style={labelStyle}>{label}</span>
-			<input placeholder={placeholder} />
-		</div>
-	);
+export class TextInput extends React.Component {
+	render() {
+		const containerStyle = {
+			display: 'flex',
+			flexDirection: 'column',
+			height: '10%',
+			width: '40%',
+		};
+		const labelStyle = {
+			marginBottom: '2%',
+			marginLeft: '1%',
+		};
+		return (
+			<div className="textInput" style={containerStyle}>
+				<span style={labelStyle}>{this.props.label}</span>
+				<input placeholder={this.props.placeholder} />
+			</div>
+		);
+	}
 }
 
 TextInput.propTypes = {
