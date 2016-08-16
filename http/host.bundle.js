@@ -22402,7 +22402,7 @@
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -22414,6 +22414,8 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _Input = __webpack_require__(/*! ../shared/Input.jsx */ 177);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22422,72 +22424,30 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	/*
-	Question console layout:
-	newsetform
-		textinput (title)
-		questioninput (multiple)
-			textinput (question)
-			answerinput (answer)
-		checkbox (private)
-	
-	*/
-	
 	var QuestionConsole = _react2.default.createClass({
-		displayName: "QuestionConsole",
+		displayName: 'QuestionConsole',
 		render: function render() {
 			return _react2.default.createElement(NewSetForm, null);
 		}
 	});
 	
 	var NewSetForm = _react2.default.createClass({
-		displayName: "NewSetForm",
+		displayName: 'NewSetForm',
 		render: function render() {
 			return _react2.default.createElement(
-				"div",
-				{ id: "new_set" },
+				'div',
+				{ id: 'new_set' },
 				_react2.default.createElement(
-					"h2",
+					'h2',
 					null,
-					"New Question Set"
+					'New Question Set'
 				),
-				_react2.default.createElement(TextInput, { label: "Title", placeholder: "My Question Set" }),
+				_react2.default.createElement(_Input.TextInput, { label: 'Title', placeholder: 'My Question Set' }),
 				_react2.default.createElement(QuestionInputGroup, null),
-				_react2.default.createElement(Checkbox, { label: "Private set" })
+				_react2.default.createElement(_Input.Checkbox, { label: 'Private set' })
 			);
 		}
 	});
-	
-	function TextInput(_ref) {
-		var placeholder = _ref.placeholder;
-		var label = _ref.label;
-	
-		var containerStyle = {
-			display: 'flex',
-			flexDirection: 'column',
-			height: '10%',
-			width: '40%'
-		};
-		var labelStyle = {
-			marginBottom: '2%',
-			marginLeft: '1%'
-		};
-		return _react2.default.createElement(
-			"div",
-			{ className: "textInput", style: containerStyle },
-			_react2.default.createElement(
-				"span",
-				{ style: labelStyle },
-				label
-			),
-			_react2.default.createElement("input", { placeholder: placeholder })
-		);
-	}
-	
-	TextInput.propTypes = {
-		placeholder: _react.PropTypes.string,
-		label: _react.PropTypes.string.isRequired
-	};
 	
 	var QuestionInputGroup = function (_React$Component) {
 		_inherits(QuestionInputGroup, _React$Component);
@@ -22505,7 +22465,7 @@
 		}
 	
 		_createClass(QuestionInputGroup, [{
-			key: "addQuestionInput",
+			key: 'addQuestionInput',
 			value: function addQuestionInput() {
 				this.setState(function (previousState, previousProps) {
 					return {
@@ -22514,28 +22474,28 @@
 				});
 			}
 		}, {
-			key: "render",
+			key: 'render',
 			value: function render() {
 				var questionInputs = [];
 				for (var i = 0; i < this.state.numberOfQuestions; i++) {
 					questionInputs.push(_react2.default.createElement(QuestionInput, { key: i }));
 				}
 				return _react2.default.createElement(
-					"div",
-					{ id: "question_input_group" },
+					'div',
+					{ id: 'question_input_group' },
 					_react2.default.createElement(
-						"h3",
+						'h3',
 						null,
-						"Questions"
+						'Questions'
 					),
 					_react2.default.createElement(
-						"span",
+						'span',
 						{ style: { fontStyle: 'italic' } },
-						"Avoid synonyms among answers."
+						'Avoid synonyms among answers.'
 					),
-					_react2.default.createElement("br", null),
+					_react2.default.createElement('br', null),
 					questionInputs,
-					_react2.default.createElement(ExpandButton, { onClick: this.addQuestionInput })
+					_react2.default.createElement(_Input.ExpandButton, { onClick: this.addQuestionInput })
 				);
 			}
 		}]);
@@ -22559,7 +22519,7 @@
 		}
 	
 		_createClass(QuestionInput, [{
-			key: "addAnswerInput",
+			key: 'addAnswerInput',
 			value: function addAnswerInput() {
 				this.setState(function (previousState, previousProps) {
 					return {
@@ -22568,22 +22528,22 @@
 				});
 			}
 		}, {
-			key: "render",
+			key: 'render',
 			value: function render() {
 				var answerInputs = [];
 				for (var i = 0; i < this.state.numberOfAnswers; i++) {
-					answerInputs.push(_react2.default.createElement(TextInput, { placeholder: "Twenty one.", label: "Answer", key: i }));
+					answerInputs.push(_react2.default.createElement(_Input.TextInput, { placeholder: 'Twenty one.', label: 'Answer', key: i }));
 				}
 				return _react2.default.createElement(
-					"div",
-					{ className: "question_input" },
-					_react2.default.createElement(TextInput, { placeholder: "What's nine plus ten?", label: "Question" }),
+					'div',
+					{ className: 'question_input' },
+					_react2.default.createElement(_Input.TextInput, { placeholder: 'What\'s nine plus ten?', label: 'Question' }),
 					_react2.default.createElement(
-						"div",
-						{ className: "answers_input" },
+						'div',
+						{ className: 'answers_input' },
 						answerInputs
 					),
-					_react2.default.createElement(ExpandButton, { onClick: this.addAnswerInput })
+					_react2.default.createElement(_Input.ExpandButton, { onClick: this.addAnswerInput })
 				);
 			}
 		}]);
@@ -22591,27 +22551,60 @@
 		return QuestionInput;
 	}(_react2.default.Component);
 	
-	function ExpandButton(_ref2) {
-		var onClick = _ref2.onClick;
-		var children = _ref2.children;
+	exports.default = QuestionConsole;
+
+/***/ },
+/* 177 */
+/*!*******************************!*\
+  !*** ./http/shared/Input.jsx ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 	
-		var style = {
-			textDecoration: 'underline'
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 168);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function TextInput(_ref) {
+		var placeholder = _ref.placeholder;
+		var label = _ref.label;
+	
+		var containerStyle = {
+			display: 'flex',
+			flexDirection: 'column',
+			height: '10%',
+			width: '40%'
+		};
+		var labelStyle = {
+			marginBottom: '2%',
+			marginLeft: '1%'
 		};
 		return _react2.default.createElement(
-			"a",
-			{ onClick: onClick, style: style },
-			children || '+More'
+			'div',
+			{ className: 'textInput', style: containerStyle },
+			_react2.default.createElement(
+				'span',
+				{ style: labelStyle },
+				label
+			),
+			_react2.default.createElement('input', { placeholder: placeholder })
 		);
 	}
 	
-	ExpandButton.propTypes = {
-		onClick: _react.PropTypes.func.isRequired,
-		children: _react.PropTypes.string
+	TextInput.propTypes = {
+		placeholder: _react.PropTypes.string,
+		label: _react.PropTypes.string.isRequired
 	};
 	
-	function Checkbox(_ref3) {
-		var label = _ref3.label;
+	function Checkbox(_ref2) {
+		var label = _ref2.label;
 	
 		var containerStyle = {
 			display: 'flex',
@@ -22620,11 +22613,11 @@
 		};
 	
 		return _react2.default.createElement(
-			"div",
-			{ className: "checkbox", style: containerStyle },
-			_react2.default.createElement("input", { type: "checkbox" }),
+			'div',
+			{ className: 'checkbox', style: containerStyle },
+			_react2.default.createElement('input', { type: 'checkbox' }),
 			_react2.default.createElement(
-				"span",
+				'span',
 				null,
 				label
 			)
@@ -22635,7 +22628,26 @@
 		label: _react.PropTypes.string.isRequired
 	};
 	
-	exports.default = QuestionConsole;
+	function ExpandButton(_ref3) {
+		var onClick = _ref3.onClick;
+		var children = _ref3.children;
+	
+		var style = {
+			textDecoration: 'underline'
+		};
+		return _react2.default.createElement(
+			'a',
+			{ onClick: onClick, style: style },
+			children || '+More'
+		);
+	}
+	
+	ExpandButton.propTypes = {
+		onClick: _react.PropTypes.func.isRequired,
+		children: _react.PropTypes.string
+	};
+	
+	exports.default = { TextInput: TextInput, Checkbox: Checkbox, ExpandButton: ExpandButton };
 
 /***/ }
 /******/ ]);
