@@ -12,6 +12,7 @@ module.exports = {
 		"no-console": ["off"],
 		"react/jsx-indent": ["off"],
 		"react/no-multi-comp": ["off"],
+		"react/jsx-indent-props": ["off"],
 		"no-mixed-operators": ["error",
 			{
 				"groups": [

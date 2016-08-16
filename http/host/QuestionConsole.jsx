@@ -63,19 +63,34 @@ class QuestionInputGroup extends React.Component {
 class QuestionInput extends React.Component {
 	constructor(props) {
 		super(props);
+		this.addAnswerInput = this.addAnswerInput.bind(this);
+		this.updateAnswerData = this.updateAnswerData.bind(this);
 		this.state = {
 			numberOfAnswers: 1,
-			answers: [<TextInput placeholder="Twenty one." label="Answer" key={0} />],
+			answers: [<TextInput
+				placeholder="Twenty one." label="Answer"
+				key={0} onchange={this.updateAnswerData} index={0}
+			/>],
+			answerData: [null],
 		};
-		this.addAnswerInput = this.addAnswerInput.bind(this);
+	}
+
+	updateAnswerData(text, index) {
+		const answerData = this.state.answerData.slice();
+		answerData[index] = text;
+		this.setState({ answerData });
 	}
 
 	addAnswerInput() {
 		this.setState((previousState, previousProps) => ({
 			numberOfAnswers: previousState.numberOfAnswers + 1,
 			answers: previousState.answers.concat(
-				<TextInput placeholder="Twenty one." label="Answer" key={previousState.numberOfAnswers} />
+				<TextInput
+					placeholder="Twenty one." label="Answer" index={previousState.numberOfAnswers}
+					key={previousState.numberOfAnswers} onchange={this.updateAnswerData}
+				/>
 			),
+			answerData: previousState.answerData.concat(null),
 		}));
 	}
 

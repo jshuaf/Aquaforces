@@ -22552,21 +22552,39 @@
 	
 			var _this5 = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionInput).call(this, props));
 	
+			_this5.addAnswerInput = _this5.addAnswerInput.bind(_this5);
+			_this5.updateAnswerData = _this5.updateAnswerData.bind(_this5);
 			_this5.state = {
 				numberOfAnswers: 1,
-				answers: [_react2.default.createElement(_Input.TextInput, { placeholder: 'Twenty one.', label: 'Answer', key: 0 })]
+				answers: [_react2.default.createElement(_Input.TextInput, {
+					placeholder: 'Twenty one.', label: 'Answer',
+					key: 0, onchange: _this5.updateAnswerData, index: 0
+				})],
+				answerData: [null]
 			};
-			_this5.addAnswerInput = _this5.addAnswerInput.bind(_this5);
 			return _this5;
 		}
 	
 		_createClass(QuestionInput, [{
+			key: 'updateAnswerData',
+			value: function updateAnswerData(text, index) {
+				var answerData = this.state.answerData.slice();
+				answerData[index] = text;
+				this.setState({ answerData: answerData });
+			}
+		}, {
 			key: 'addAnswerInput',
 			value: function addAnswerInput() {
+				var _this6 = this;
+	
 				this.setState(function (previousState, previousProps) {
 					return {
 						numberOfAnswers: previousState.numberOfAnswers + 1,
-						answers: previousState.answers.concat(_react2.default.createElement(_Input.TextInput, { placeholder: 'Twenty one.', label: 'Answer', key: previousState.numberOfAnswers }))
+						answers: previousState.answers.concat(_react2.default.createElement(_Input.TextInput, {
+							placeholder: 'Twenty one.', label: 'Answer', index: previousState.numberOfAnswers,
+							key: previousState.numberOfAnswers, onchange: _this6.updateAnswerData
+						})),
+						answerData: previousState.answerData.concat(null)
 					};
 				});
 			}
@@ -22635,6 +22653,8 @@
 		_createClass(TextInput, [{
 			key: 'render',
 			value: function render() {
+				var _this2 = this;
+	
 				var containerStyle = {
 					display: 'flex',
 					flexDirection: 'column',
@@ -22653,7 +22673,14 @@
 						{ style: labelStyle },
 						this.props.label
 					),
-					_react2.default.createElement('input', { placeholder: this.props.placeholder })
+					_react2.default.createElement('input', {
+						ref: function ref(i) {
+							_this2.input = i;
+						}, placeholder: this.props.placeholder,
+						onChange: function onChange() {
+							if (_this2.props.onchange) _this2.props.onchange(_this2.input.value, _this2.props.index);
+						}
+					})
 				);
 			}
 		}]);
@@ -22663,7 +22690,13 @@
 	
 	TextInput.propTypes = {
 		placeholder: _react.PropTypes.string,
-		label: _react.PropTypes.string.isRequired
+		label: _react.PropTypes.string.isRequired,
+		onchange: _react.PropTypes.func,
+		index: _react.PropTypes.number.isRequired
+	};
+	
+	TextInput.defaultProps = {
+		index: 0
 	};
 	
 	function Checkbox(_ref) {

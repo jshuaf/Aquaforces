@@ -15,7 +15,12 @@ export class TextInput extends React.Component {
 		return (
 			<div className="textInput" style={containerStyle}>
 				<span style={labelStyle}>{this.props.label}</span>
-				<input placeholder={this.props.placeholder} />
+				<input
+					ref={(i) => { this.input = i; }} placeholder={this.props.placeholder}
+					onChange={() => {
+						if (this.props.onchange) this.props.onchange(this.input.value, this.props.index);
+					}}
+				/>
 			</div>
 		);
 	}
@@ -24,6 +29,12 @@ export class TextInput extends React.Component {
 TextInput.propTypes = {
 	placeholder: PropTypes.string,
 	label: PropTypes.string.isRequired,
+	onchange: PropTypes.func,
+	index: PropTypes.number.isRequired,
+};
+
+TextInput.defaultProps = {
+	index: 0,
 };
 
 export function Checkbox({ label }) {
