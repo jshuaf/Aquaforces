@@ -11,6 +11,7 @@ module.exports = {
 		"max-len": ["error", 120],
 		"no-console": ["off"],
 		"react/jsx-indent": ["off"],
+		"react/no-multi-comp": ["off"],
 		"no-mixed-operators": ["error",
 			{
 				"groups": [

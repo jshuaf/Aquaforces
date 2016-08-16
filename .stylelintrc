@@ -87,5 +87,6 @@
 		"no-duplicate-selectors": true,
 		"no-eol-whitespace": true,
 		"no-invalid-double-slash-comments": true
-	}
+	},
+	ignoreFiles: ["normalize.css", "skeleton.css", "sweetalert.css"]
 }
