@@ -22595,11 +22595,13 @@
 		var onClick = _ref2.onClick;
 		var children = _ref2.children;
 	
-		var style = {};
+		var style = {
+			textDecoration: 'underline'
+		};
 		return _react2.default.createElement(
-			"button",
+			"a",
 			{ onClick: onClick, style: style },
-			children || 'More'
+			children || '+More'
 		);
 	}
 	

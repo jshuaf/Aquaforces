@@ -118,12 +118,12 @@ class QuestionInput extends React.Component {
 
 function ExpandButton({ onClick, children }) {
 	const style = {
-
+		textDecoration: 'underline',
 	};
 	return (
-		<button onClick={onClick} style={style}>
-			{children || 'More'}
-		</button>
+		<a onClick={onClick} style={style}>
+			{children || '+More'}
+		</a>
 	);
 }
 
