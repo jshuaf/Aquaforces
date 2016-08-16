@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-function TextInput({ placeholder, label }) {
+export function TextInput({ placeholder, label }) {
 	const containerStyle = {
 		display: 'flex',
 		flexDirection: 'column',
@@ -24,7 +24,7 @@ TextInput.propTypes = {
 	label: PropTypes.string.isRequired,
 };
 
-function Checkbox({ label }) {
+export function Checkbox({ label }) {
 	const containerStyle = {
 		display: 'flex',
 		width: '16%',
@@ -43,7 +43,7 @@ Checkbox.propTypes = {
 	label: PropTypes.string.isRequired,
 };
 
-function ExpandButton({ onClick, children }) {
+export function ExpandButton({ onClick, children }) {
 	const style = {
 		textDecoration: 'underline',
 	};
@@ -58,5 +58,3 @@ ExpandButton.propTypes = {
 	onClick: PropTypes.func.isRequired,
 	children: PropTypes.string,
 };
-
-export default { TextInput, Checkbox, ExpandButton };

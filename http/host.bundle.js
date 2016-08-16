@@ -22565,6 +22565,9 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	exports.TextInput = TextInput;
+	exports.Checkbox = Checkbox;
+	exports.ExpandButton = ExpandButton;
 	
 	var _react = __webpack_require__(/*! react */ 168);
 	
@@ -22646,8 +22649,6 @@
 		onClick: _react.PropTypes.func.isRequired,
 		children: _react.PropTypes.string
 	};
-	
-	exports.default = { TextInput: TextInput, Checkbox: Checkbox, ExpandButton: ExpandButton };
 
 /***/ }
 /******/ ]);
