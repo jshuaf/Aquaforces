@@ -28,7 +28,7 @@ const NewSetForm = React.createClass({
 			<div id="new_set">
 				<h2>New Question Set</h2>
 				<TextInput label="Title" placeholder="My Question Set" />
-				<QuestionInput />
+				<QuestionInputGroup />
 				<ExpandButton text="Add an answer" onclick={this.addQuestionInput} />
 				<Checkbox text="Private set" />
 			</div>
@@ -60,22 +60,59 @@ TextInput.propTypes = {
 	label: PropTypes.string.isRequired,
 };
 
+const QuestionInputGroup = React.createClass({
+	render() {
+		return (
+			<div id="question_input">
+				<h3>Questions</h3>
+				<span style={{ fontStyle: 'italic' }}>Avoid synonyms among answers.</span>
+				<br />
+				<QuestionInput />
+				<ExpandButton />
+			</div>
+		);
+	},
+});
+
 const QuestionInput = React.createClass({
 	render() {
-		return <div>Questions</div>;
+		return <div>QInput</div>;
 	},
 });
 
-const ExpandButton = React.createClass({
-	render() {
-		return <button>More</button>;
-	},
-});
+const ExpandButton = ({ onclick, children }) => {
+	const style = {
 
-const Checkbox = React.createClass({
-	render() {
-		return <div>Check me</div>;
-	},
-});
+	};
+	return (
+		<button onClick={onclick} style={style}>
+			{children || 'More'}
+		</button>
+	);
+};
+
+ExpandButton.propTypes = {
+	onclick: PropTypes.func.isRequired,
+	children: PropTypes.string,
+};
+
+const Checkbox = ({ label }) => {
+	const containerStyle = {
+		display: 'flex',
+		width: '16%',
+		height: '8%',
+	};
+
+	return (
+		<div className="checkbox" style={containerStyle}>
+			<input type="checkbox" />
+			<span>{label}</span>
+		</div>
+	);
+};
+
+Checkbox.propTypes = {
+	label: PropTypes.string.isRequired,
+};
 
 export default QuestionConsole;
