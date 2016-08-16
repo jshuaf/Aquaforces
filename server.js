@@ -78,7 +78,7 @@ global.respondPage = o(function* (title, req, res, callback, header, status) {
 	try {
 		res.write(yield addVersionNonces(
 			data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"')
-			.replace('$title', (title ? title + ' · ' : '') + 'Aquaforces')
+			.replace('$title', `${title ? `${title} · ` : ''}Aquaforces`)
 			.replace('$inhead', inhead), req.url.pathname, yield));
 		return callback();
 	} catch (e) {
@@ -229,7 +229,7 @@ const serverHandler = o(function* (req, res) {
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath === '/host/' && !usesIODomain) {
 		// Host console
-		yield respondPage('Question Sets', req, res, yield, { inhead: '<link rel="stylesheet" href="/host.css" />', noBG: true });
+		yield respondPage('Question Sets', req, res, yield, { inhead: '<link rel="stylesheet" href="/a/host.css" />', noBG: true });
 		const filter = user ? { $or: [{ userID: user._id }, { public: true }] } : { public: true };
 		const q = (req.url.query.q || '').trim();
 		let qsetstr = '';
@@ -255,7 +255,7 @@ const serverHandler = o(function* (req, res) {
 			// MARK: ugly html insertion, will later be replaced by React
 			if (qset) {
 				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete"></a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
-				qset.questions.forEach(function (question) {
+				qset.questions.forEach((question) => {
 					let listr = '<li><span class="q-ctrls"><a class="remove-q" title="delete question"></a> <a class="edit" title="edit question">✎</a></span><h3>' + html(question.text) + '</h3><div><ul class="check-list">';
 					let liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
 					liestr += '<label>Question <input placeholder="What\'s one plus one?" required="" maxlength="144" value="' + html(question.text) + '" /></label>';
@@ -277,7 +277,7 @@ const serverHandler = o(function* (req, res) {
 			} else {
 				let data = (yield fs.readFile('./html/host.html', yield)).toString()
 					.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
-					.replaceAll('$host', encodeURIComponent('http://' + req.headers.host))
+					.replaceAll('$host', encodeURIComponent(`http://${req.headers.host}`))
 					.replaceAll('$googleClientID', config.googleAuth.clientID);
 				if (user) data = data.replace(/<a class="signin-link"[\s\S]+?<\/a>/, '<a id="menu-stub">' + html(user.name) + '</a>').replace('<nav>', '<nav class="loggedin">');
 				else data = data.replace('id="filter"', 'id="filter" hidden=""');
