@@ -65,6 +65,7 @@ class QuestionInput extends React.Component {
 		super(props);
 		this.addAnswerInput = this.addAnswerInput.bind(this);
 		this.updateAnswerData = this.updateAnswerData.bind(this);
+		this.updateQuestion = this.updateQuestion.bind(this);
 		this.state = {
 			numberOfAnswers: 1,
 			answers: [<TextInput
@@ -72,6 +73,7 @@ class QuestionInput extends React.Component {
 				key={0} onchange={this.updateAnswerData} index={0}
 			/>],
 			answerData: [null],
+			question: null,
 		};
 	}
 
@@ -79,6 +81,10 @@ class QuestionInput extends React.Component {
 		const answerData = this.state.answerData.slice();
 		answerData[index] = text;
 		this.setState({ answerData });
+	}
+
+	updateQuestion(question) {
+		this.setState({ question });
 	}
 
 	addAnswerInput() {
@@ -96,7 +102,7 @@ class QuestionInput extends React.Component {
 
 	render() {
 		return (<div className="question_input">
-			<TextInput placeholder="What's nine plus ten?" label="Question" />
+			<TextInput placeholder="What's nine plus ten?" label="Question" onchange={this.updateQuestion} />
 			<div className="answers_input">
 				{this.state.answers}
 			</div>

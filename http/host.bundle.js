@@ -22554,13 +22554,15 @@
 	
 			_this5.addAnswerInput = _this5.addAnswerInput.bind(_this5);
 			_this5.updateAnswerData = _this5.updateAnswerData.bind(_this5);
+			_this5.updateQuestion = _this5.updateQuestion.bind(_this5);
 			_this5.state = {
 				numberOfAnswers: 1,
 				answers: [_react2.default.createElement(_Input.TextInput, {
 					placeholder: 'Twenty one.', label: 'Answer',
 					key: 0, onchange: _this5.updateAnswerData, index: 0
 				})],
-				answerData: [null]
+				answerData: [null],
+				question: null
 			};
 			return _this5;
 		}
@@ -22571,6 +22573,11 @@
 				var answerData = this.state.answerData.slice();
 				answerData[index] = text;
 				this.setState({ answerData: answerData });
+			}
+		}, {
+			key: 'updateQuestion',
+			value: function updateQuestion(question) {
+				this.setState({ question: question });
 			}
 		}, {
 			key: 'addAnswerInput',
@@ -22594,7 +22601,7 @@
 				return _react2.default.createElement(
 					'div',
 					{ className: 'question_input' },
-					_react2.default.createElement(_Input.TextInput, { placeholder: 'What\'s nine plus ten?', label: 'Question' }),
+					_react2.default.createElement(_Input.TextInput, { placeholder: 'What\'s nine plus ten?', label: 'Question', onchange: this.updateQuestion }),
 					_react2.default.createElement(
 						'div',
 						{ className: 'answers_input' },
