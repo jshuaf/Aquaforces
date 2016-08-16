@@ -20,17 +20,13 @@ const QuestionConsole = React.createClass({
 });
 
 const NewSetForm = React.createClass({
-	addQuestionInput() {
-		return;
-	},
 	render() {
 		return (
 			<div id="new_set">
 				<h2>New Question Set</h2>
 				<TextInput label="Title" placeholder="My Question Set" />
 				<QuestionInputGroup />
-				<ExpandButton text="Add an answer" onclick={this.addQuestionInput} />
-				<Checkbox text="Private set" />
+				<Checkbox label="Private set" />
 			</div>
 		);
 	},
@@ -60,25 +56,43 @@ TextInput.propTypes = {
 	label: PropTypes.string.isRequired,
 };
 
-const QuestionInputGroup = React.createClass({
+class QuestionInputGroup extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			numberOfQuestions: 1,
+		};
+		this.addQuestionInput = this.addQuestionInput.bind(this);
+	}
+	addQuestionInput() {
+		this.setState((previousState, previousProps) => ({
+			numberOfQuestions: previousState.numberOfQuestions + 1,
+		}));
+	}
 	render() {
+		const questionInputs = [];
+		for (let i = 0; i < this.state.numberOfQuestions; i++) {
+			questionInputs.push(<QuestionInput key={i} />);
+		}
 		return (
 			<div id="question_input_group">
 				<h3>Questions</h3>
 				<span style={{ fontStyle: 'italic' }}>Avoid synonyms among answers.</span>
 				<br />
-				<QuestionInput />
-				<ExpandButton />
+				{questionInputs}
+				<ExpandButton onClick={this.addQuestionInput} />
 			</div>
 		);
-	},
-});
+	}
+}
 
 class QuestionInput extends React.Component {
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			numberOfAnswers: 1,
 		};
+		this.addAnswerInput = this.addAnswerInput.bind(this);
 	}
 
 	addAnswerInput() {
@@ -95,26 +109,26 @@ class QuestionInput extends React.Component {
 		return (<div className="question_input">
 			<TextInput placeholder="What's nine plus ten?" label="Question" />
 			<div className="answers_input">
-				<TextInput placeholder="Twenty one." label="Answer" />
+				{answerInputs}
 			</div>
-			<ExpandButton onclick={this.addAnswerInput} />
+			<ExpandButton onClick={this.addAnswerInput} />
 		</div>);
 	}
 }
 
-function ExpandButton({ onclick, children }) {
+function ExpandButton({ onClick, children }) {
 	const style = {
 
 	};
 	return (
-		<button onClick={onclick} style={style}>
+		<button onClick={onClick} style={style}>
 			{children || 'More'}
 		</button>
 	);
 }
 
 ExpandButton.propTypes = {
-	onclick: PropTypes.func.isRequired,
+	onClick: PropTypes.func.isRequired,
 	children: PropTypes.string,
 };
 

@@ -22442,9 +22442,6 @@
 	
 	var NewSetForm = _react2.default.createClass({
 		displayName: "NewSetForm",
-		addQuestionInput: function addQuestionInput() {
-			return;
-		},
 		render: function render() {
 			return _react2.default.createElement(
 				"div",
@@ -22456,7 +22453,6 @@
 				),
 				_react2.default.createElement(TextInput, { label: "Title", placeholder: "My Question Set" }),
 				_react2.default.createElement(QuestionInputGroup, null),
-				_react2.default.createElement(ExpandButton, { text: "Add an answer", onclick: this.addQuestionInput }),
 				_react2.default.createElement(Checkbox, { label: "Private set" })
 			);
 		}
@@ -22493,41 +22489,73 @@
 		label: _react.PropTypes.string.isRequired
 	};
 	
-	var QuestionInputGroup = _react2.default.createClass({
-		displayName: "QuestionInputGroup",
-		render: function render() {
-			return _react2.default.createElement(
-				"div",
-				{ id: "question_input_group" },
-				_react2.default.createElement(
-					"h3",
-					null,
-					"Questions"
-				),
-				_react2.default.createElement(
-					"span",
-					{ style: { fontStyle: 'italic' } },
-					"Avoid synonyms among answers."
-				),
-				_react2.default.createElement("br", null),
-				_react2.default.createElement(QuestionInput, null),
-				_react2.default.createElement(ExpandButton, null)
-			);
-		}
-	});
+	var QuestionInputGroup = function (_React$Component) {
+		_inherits(QuestionInputGroup, _React$Component);
 	
-	var QuestionInput = function (_React$Component) {
-		_inherits(QuestionInput, _React$Component);
+		function QuestionInputGroup(props) {
+			_classCallCheck(this, QuestionInputGroup);
+	
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionInputGroup).call(this, props));
+	
+			_this.state = {
+				numberOfQuestions: 1
+			};
+			_this.addQuestionInput = _this.addQuestionInput.bind(_this);
+			return _this;
+		}
+	
+		_createClass(QuestionInputGroup, [{
+			key: "addQuestionInput",
+			value: function addQuestionInput() {
+				this.setState(function (previousState, previousProps) {
+					return {
+						numberOfQuestions: previousState.numberOfQuestions + 1
+					};
+				});
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var questionInputs = [];
+				for (var i = 0; i < this.state.numberOfQuestions; i++) {
+					questionInputs.push(_react2.default.createElement(QuestionInput, { key: i }));
+				}
+				return _react2.default.createElement(
+					"div",
+					{ id: "question_input_group" },
+					_react2.default.createElement(
+						"h3",
+						null,
+						"Questions"
+					),
+					_react2.default.createElement(
+						"span",
+						{ style: { fontStyle: 'italic' } },
+						"Avoid synonyms among answers."
+					),
+					_react2.default.createElement("br", null),
+					questionInputs,
+					_react2.default.createElement(ExpandButton, { onClick: this.addQuestionInput })
+				);
+			}
+		}]);
+	
+		return QuestionInputGroup;
+	}(_react2.default.Component);
+	
+	var QuestionInput = function (_React$Component2) {
+		_inherits(QuestionInput, _React$Component2);
 	
 		function QuestionInput(props) {
 			_classCallCheck(this, QuestionInput);
 	
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionInput).call(this, props));
+			var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionInput).call(this, props));
 	
-			_this.state = {
+			_this2.state = {
 				numberOfAnswers: 1
 			};
-			return _this;
+			_this2.addAnswerInput = _this2.addAnswerInput.bind(_this2);
+			return _this2;
 		}
 	
 		_createClass(QuestionInput, [{
@@ -22553,9 +22581,9 @@
 					_react2.default.createElement(
 						"div",
 						{ className: "answers_input" },
-						_react2.default.createElement(TextInput, { placeholder: "Twenty one.", label: "Answer" })
+						answerInputs
 					),
-					_react2.default.createElement(ExpandButton, { onclick: this.addAnswerInput })
+					_react2.default.createElement(ExpandButton, { onClick: this.addAnswerInput })
 				);
 			}
 		}]);
@@ -22564,19 +22592,19 @@
 	}(_react2.default.Component);
 	
 	function ExpandButton(_ref2) {
-		var onclick = _ref2.onclick;
+		var onClick = _ref2.onClick;
 		var children = _ref2.children;
 	
 		var style = {};
 		return _react2.default.createElement(
 			"button",
-			{ onClick: onclick, style: style },
+			{ onClick: onClick, style: style },
 			children || 'More'
 		);
 	}
 	
 	ExpandButton.propTypes = {
-		onclick: _react.PropTypes.func.isRequired,
+		onClick: _react.PropTypes.func.isRequired,
 		children: _react.PropTypes.string
 	};
 	
