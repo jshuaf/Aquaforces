@@ -24399,13 +24399,12 @@
 					}
 				}),
 				question.incorrectAnswers.map(function (answer) {
-					var input = incorrectAnswerInputs[answer.id];
-					var text = input ? input.node.value : '';
 					return _react2.default.createElement(_Input.TextInput, {
 						placeholder: 'Twenty one.', label: 'Incorrect Answer',
 						id: answer.id, key: answer.id,
 						onChange: function onChange() {
-							dispatch((0, _actions.editIncorrectAnswer)(question.id, answer.id, text));
+							var input = incorrectAnswerInputs[answer.id];
+							if (input) dispatch((0, _actions.editIncorrectAnswer)(question.id, answer.id, input.node.value));
 						},
 						ref: function ref(component) {
 							incorrectAnswerInputs[answer.id] = component;

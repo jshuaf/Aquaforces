@@ -21,16 +21,16 @@ function QuestionInput({ dispatch, question }) {
 					ref={(component) => { correctAnswerInput = component; }}
 				/>
 			{
-				question.incorrectAnswers.map((answer) => {
-					const input = incorrectAnswerInputs[answer.id];
-					const text = input ? input.node.value : '';
-					return (<TextInput
+				question.incorrectAnswers.map((answer) =>
+					<TextInput
 						placeholder="Twenty one." label="Incorrect Answer"
 						id={answer.id} key={answer.id}
-						onChange={() => { dispatch(editIncorrectAnswer(question.id, answer.id, text)); }}
+						onChange={() => {
+							const input = incorrectAnswerInputs[answer.id];
+							if (input) dispatch(editIncorrectAnswer(question.id, answer.id, input.node.value));
+						}}
 						ref={(component) => { incorrectAnswerInputs[answer.id] = component; }}
-					/>);
-				})
+					/>)
 			}
 			</div>
 			<ExpandButton onClick={() => { dispatch(addAnswerInput(question.id)); }} />
