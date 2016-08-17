@@ -2,12 +2,10 @@ import React, { PropTypes } from 'react';
 import { TextInput, Checkbox } from '../shared/Input.jsx';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
 
-class QuestionConsole extends React.Component {
-	render() {
-		return (
-			<NewSetForm />
-		);
-	}
+function QuestionConsole() {
+	return (
+		<NewSetForm />
+	);
 }
 
 class NewSetForm extends React.Component {

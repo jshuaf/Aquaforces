@@ -1,45 +1,39 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ExpandButton } from '../shared/Input.jsx';
 import QuestionInput from './QuestionInput.jsx';
 import { addQuestionInput } from './actions';
 
-class QuestionInputGroup extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			numberOfQuestions: 1,
-		};
-		this.addQuestionInput = this.addQuestionInput.bind(this);
-	}
-	addQuestionInput() {
-		this.setState((previousState, previousProps) => ({
-			numberOfQuestions: previousState.numberOfQuestions + 1,
-		}));
-	}
-	render() {
-		const questionInputs = [];
-		for (let i = 0; i < this.state.numberOfQuestions; i++) {
-			questionInputs.push(<QuestionInput key={i} />);
-		}
-		return (
-			<div id="question_input_group">
-				<h3>Questions</h3>
-				<span style={{ fontStyle: 'italic' }}>Avoid synonyms among answers.</span>
-				<br />
-				{questionInputs}
-				<ExpandButton onClick={this.addQuestionInput} />
-			</div>
-		);
-	}
+function QuestionInputGroup({ questions, addQuestionInput }) {
+	return (
+		<div id="question_input_group">
+			<h3>Questions</h3>
+			<span style={{ fontStyle: 'italic' }}>Avoid synonyms among answers.</span>
+			<br />
+			{questions.map((question) =>
+				<QuestionInput key={question.id} question={question} />
+			)}
+			<ExpandButton onClick={addQuestionInput} />
+		</div>
+	);
 }
 
+QuestionInputGroup.propTypes = {
+	addQuestionInput: PropTypes.func.isRequired,
+	questions: PropTypes.arrayOf(PropTypes.shape({
+		text: PropTypes.string.isRequired,
+		correctAnswer: PropTypes.string.isRequired,
+		incorrectAnswer: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+		id: PropTypes.number.isRequired,
+	}).isRequired).isRequired,
+};
+
 const mapStateToProps = (state) => ({
-	questions: state.questions,
+	questions: state.newQuestionSet.questions,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	onAddQuestionInput: () => {
+	addQuestionInput: () => {
 		dispatch(addQuestionInput());
 	},
 });
