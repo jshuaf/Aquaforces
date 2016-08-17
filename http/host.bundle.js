@@ -24060,11 +24060,15 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 189);
+	
 	var _Input = __webpack_require__(/*! ../shared/Input.jsx */ 200);
 	
 	var _QuestionInputGroup = __webpack_require__(/*! ./QuestionInputGroup.jsx */ 201);
 	
 	var _QuestionInputGroup2 = _interopRequireDefault(_QuestionInputGroup);
+	
+	var _actions = __webpack_require__(/*! ./actions */ 203);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -24108,9 +24112,15 @@
 						null,
 						'New Question Set'
 					),
-					_react2.default.createElement(_Input.TextInput, { label: 'Title', placeholder: 'My Question Set', ref: function ref(t) {
-							_this2.title = t;
-						} }),
+					_react2.default.createElement(_Input.TextInput, {
+						label: 'Title', placeholder: 'My Question Set',
+						ref: function ref(t) {
+							_this2.titleInput = t;
+						},
+						onChange: function onChange() {
+							_this2.props.dispatch((0, _actions.editSetTitle)(_this2.titleInput.node.value));
+						}
+					}),
 					_react2.default.createElement(_QuestionInputGroup2.default, null),
 					_react2.default.createElement(_Input.Checkbox, { label: 'Private set' }),
 					_react2.default.createElement(
@@ -24124,6 +24134,14 @@
 	
 		return NewSetForm;
 	}(_react2.default.Component);
+	
+	NewSetForm.propTypes = {
+		dispatch: _react.PropTypes.func.isRequired
+	};
+	
+	/* eslint-disable no-class-assign */
+	NewSetForm = (0, _reactRedux.connect)()(NewSetForm);
+	/* eslint-enable no-class-assign */
 	
 	exports.default = QuestionConsole;
 
