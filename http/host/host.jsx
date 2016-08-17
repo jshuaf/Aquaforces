@@ -1,9 +1,10 @@
 import { render } from 'react-dom';
 import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import GameHost from './GameHost.jsx';
 import QuestionConsole from './QuestionConsole.jsx';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import questionConsoleReducer from './reducers.js';
 
 const store = createStore(questionConsoleReducer);
 
@@ -173,7 +174,7 @@ function endGame() {
 }*/
 
 render(
-	<Provider>
+	<Provider store={store}>
 		<QuestionConsole />
 	</Provider>,
 	document.getElementById('mountNode')
