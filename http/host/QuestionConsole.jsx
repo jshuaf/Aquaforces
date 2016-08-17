@@ -1,5 +1,10 @@
 import React, { PropTypes } from 'react';
+import { createStore } from 'redux';
 import { TextInput, Checkbox, ExpandButton } from '../shared/Input.jsx';
+import questionConsoleReducer from './reducers';
+import { addQuestionInput } from './actions';
+
+const store = createStore(questionConsoleReducer);
 
 class QuestionConsole extends React.Component {
 	render() {
@@ -77,7 +82,7 @@ class QuestionInput extends React.Component {
 		};
 	}
 
-	updateAnswerData(text, id) {
+	updateAnswerData(text, index) {
 		const answerData = this.state.answerData.slice();
 		answerData[index] = text;
 		this.setState({ answerData });
