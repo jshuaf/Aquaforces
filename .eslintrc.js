@@ -13,6 +13,7 @@ module.exports = {
 		"react/jsx-indent": ["off"],
 		"react/no-multi-comp": ["off"],
 		"react/jsx-indent-props": ["off"],
+		"react/jsx-closing-bracket-location": ["off"],
 		"no-mixed-operators": ["error",
 			{
 				"groups": [

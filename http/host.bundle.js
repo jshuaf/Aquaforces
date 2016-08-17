@@ -24122,7 +24122,14 @@
 						}
 					}),
 					_react2.default.createElement(_QuestionInputGroup2.default, null),
-					_react2.default.createElement(_Input.Checkbox, { label: 'Private set' }),
+					_react2.default.createElement(_Input.Checkbox, {
+						label: 'Private set', ref: function ref(c) {
+							_this2.checkboxInput = c;
+						},
+						onChange: function onChange() {
+							_this2.props.dispatch((0, _actions.toggleSetPrivacy)(_this2.checkboxInput.node.checked));
+						}
+					}),
 					_react2.default.createElement(
 						'button',
 						{ onClick: this.submitQuestionSet },
@@ -24157,11 +24164,10 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.TextInput = undefined;
+	exports.Checkbox = exports.TextInput = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	exports.Checkbox = Checkbox;
 	exports.ExpandButton = ExpandButton;
 	
 	var _react = __webpack_require__(/*! react */ 168);
@@ -24231,34 +24237,55 @@
 		index: 0
 	};
 	
-	function Checkbox(_ref) {
-		var label = _ref.label;
+	var Checkbox = exports.Checkbox = function (_React$Component2) {
+		_inherits(Checkbox, _React$Component2);
 	
-		var containerStyle = {
-			display: 'flex',
-			width: '16%',
-			height: '8%'
-		};
+		function Checkbox() {
+			_classCallCheck(this, Checkbox);
 	
-		return _react2.default.createElement(
-			'div',
-			{ className: 'checkbox', style: containerStyle },
-			_react2.default.createElement('input', { type: 'checkbox' }),
-			_react2.default.createElement(
-				'span',
-				null,
-				label
-			)
-		);
-	}
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(Checkbox).apply(this, arguments));
+		}
+	
+		_createClass(Checkbox, [{
+			key: 'render',
+			value: function render() {
+				var _this4 = this;
+	
+				var containerStyle = {
+					display: 'flex',
+					width: '16%',
+					height: '8%'
+				};
+	
+				return _react2.default.createElement(
+					'div',
+					{ className: 'checkbox', style: containerStyle },
+					_react2.default.createElement('input', {
+						type: 'checkbox', ref: function ref(n) {
+							_this4.node = n;
+						},
+						onChange: this.props.onChange
+					}),
+					_react2.default.createElement(
+						'span',
+						null,
+						this.props.label
+					)
+				);
+			}
+		}]);
+	
+		return Checkbox;
+	}(_react2.default.Component);
 	
 	Checkbox.propTypes = {
-		label: _react.PropTypes.string.isRequired
+		label: _react.PropTypes.string.isRequired,
+		onChange: _react.PropTypes.func
 	};
 	
-	function ExpandButton(_ref2) {
-		var onClick = _ref2.onClick;
-		var children = _ref2.children;
+	function ExpandButton(_ref) {
+		var onClick = _ref.onClick;
+		var children = _ref.children;
 	
 		var style = {
 			textDecoration: 'underline'

@@ -34,23 +34,29 @@ TextInput.defaultProps = {
 	index: 0,
 };
 
-export function Checkbox({ label }) {
-	const containerStyle = {
-		display: 'flex',
-		width: '16%',
-		height: '8%',
-	};
+export class Checkbox extends React.Component {
+	render() {
+		const containerStyle = {
+			display: 'flex',
+			width: '16%',
+			height: '8%',
+		};
 
-	return (
-		<div className="checkbox" style={containerStyle}>
-			<input type="checkbox" />
-			<span>{label}</span>
-		</div>
-	);
+		return (
+			<div className="checkbox" style={containerStyle}>
+				<input
+					type="checkbox" ref={(n) => { this.node = n; }}
+					onChange={this.props.onChange}
+				/>
+				<span>{this.props.label}</span>
+			</div>
+		);
+	}
 }
 
 Checkbox.propTypes = {
 	label: PropTypes.string.isRequired,
+	onChange: PropTypes.func,
 };
 
 export function ExpandButton({ onClick, children }) {

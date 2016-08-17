@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { TextInput, Checkbox } from '../shared/Input.jsx';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
-import { editSetTitle } from './actions';
+import { editSetTitle, toggleSetPrivacy } from './actions';
 
 function QuestionConsole() {
 	return (
@@ -28,7 +28,10 @@ class NewSetForm extends React.Component {
 					onChange={() => { this.props.dispatch(editSetTitle(this.titleInput.node.value)); }}
 				/>
 				<QuestionInputGroupHandler />
-				<Checkbox label="Private set" />
+				<Checkbox
+					label="Private set" ref={(c) => { this.checkboxInput = c; }}
+					onChange={() => { this.props.dispatch(toggleSetPrivacy(this.checkboxInput.node.checked)); }}
+				/>
 				<button onClick={this.submitQuestionSet}>Submit</button>
 			</div>
 		);
