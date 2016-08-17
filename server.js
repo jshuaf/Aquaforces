@@ -351,7 +351,7 @@ let serverHandler = o(function*(req, res) {
 				res.end(yield fs.readFile('html/a/foot.html', yield));
 			}));
 		}));
-		googReq.end('clientID=' + config.googleAuth.clientID + '&clientSecret=' + config.googleAuth.clientSecret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
+		googReq.end('client_id=' + config.googleAuth.clientID + '&client_secret=' + config.googleAuth.clientSecret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
 		googReq.on('error', o(function*(e) {
 			yield respondPage('Login Error', req, res, yield, {}, 500);
 			res.write('<h1>Login Error</h1>');
