@@ -8,24 +8,21 @@ function QuestionInput({ dispatch, question }) {
 		<div className="question_input">
 			<TextInput
 				placeholder="What's nine plus ten?" label="Question"
-				onchange={() => { dispatch(editQuestionText(question.id, this.value)); }}
+				onChange={() => { dispatch(editQuestionText(question.id, this.value)); }}
 			/>
 			<div className="answers_input">
+				<TextInput
+					placeholder="Twenty one." label="Correct Answer" key={0}
+					onChange={() => { dispatch(editCorrectAnswer(question.id, this.value)); }}
+				/>
 			{
-				question.incorrectAnswers.map((answer, index) => {
-					if (index === 0) {
-						return (<TextInput
-							placeholder="Twenty one." label="Answer"
-							id={answer.id} key={answer.id}
-							onchange={() => { dispatch(editCorrectAnswer(question.id, this.value)); }}
-						/>);
-					}
-					return (<TextInput
-						placeholder="Twenty one." label="Answer"
+				question.incorrectAnswers.map((answer) =>
+					<TextInput
+						placeholder="Twenty one." label="Incorrect Answer"
 						id={answer.id} key={answer.id}
-						onchange={() => { dispatch(editIncorrectAnswer(question.id, answer.id, this.value)); }}
-					/>);
-				})
+						onChange={() => { dispatch(editIncorrectAnswer(question.id, answer.id, this.value)); }}
+					/>
+				)
 			}
 			</div>
 			<ExpandButton onClick={() => { dispatch(addAnswerInput(question.id)); }} />

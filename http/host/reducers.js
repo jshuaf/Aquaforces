@@ -6,7 +6,10 @@ const initialQuestionSetState = {
 	questions: [{
 		text: '',
 		correctAnswer: '',
-		incorrectAnswers: [],
+		incorrectAnswers: [{
+			text: '',
+			id: 1,
+		}],
 		id: 1,
 		nextAnswerID: 2,
 	}],
@@ -22,9 +25,12 @@ function newQuestionSet(state = initialQuestionSetState, action) {
 				{
 					text: '',
 					correctAnswer: '',
-					incorrectAnswers: [],
+					incorrectAnswers: [{
+						text: '',
+						id: 1,
+					}],
 					id: state.nextQuestionID,
-					nextAnswerID: 1,
+					nextAnswerID: 2,
 				},
 			],
 			nextQuestionID: state.nextQuestionID + 1,

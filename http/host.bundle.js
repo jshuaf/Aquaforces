@@ -24378,27 +24378,24 @@
 			{ className: 'question_input' },
 			_react2.default.createElement(_Input.TextInput, {
 				placeholder: 'What\'s nine plus ten?', label: 'Question',
-				onchange: function onchange() {
+				onChange: function onChange() {
 					dispatch((0, _actions.editQuestionText)(question.id, _this.value));
 				}
 			}),
 			_react2.default.createElement(
 				'div',
 				{ className: 'answers_input' },
-				question.incorrectAnswers.map(function (answer, index) {
-					if (index === 0) {
-						return _react2.default.createElement(_Input.TextInput, {
-							placeholder: 'Twenty one.', label: 'Answer',
-							id: answer.id, key: answer.id,
-							onchange: function onchange() {
-								dispatch((0, _actions.editCorrectAnswer)(question.id, _this.value));
-							}
-						});
+				_react2.default.createElement(_Input.TextInput, {
+					placeholder: 'Twenty one.', label: 'Correct Answer', key: 0,
+					onChange: function onChange() {
+						dispatch((0, _actions.editCorrectAnswer)(question.id, _this.value));
 					}
+				}),
+				question.incorrectAnswers.map(function (answer) {
 					return _react2.default.createElement(_Input.TextInput, {
-						placeholder: 'Twenty one.', label: 'Answer',
+						placeholder: 'Twenty one.', label: 'Incorrect Answer',
 						id: answer.id, key: answer.id,
-						onchange: function onchange() {
+						onChange: function onChange() {
 							dispatch((0, _actions.editIncorrectAnswer)(question.id, answer.id, _this.value));
 						}
 					});
@@ -24503,7 +24500,10 @@
 		questions: [{
 			text: '',
 			correctAnswer: '',
-			incorrectAnswers: [],
+			incorrectAnswers: [{
+				text: '',
+				id: 1
+			}],
 			id: 1,
 			nextAnswerID: 2
 		}],
@@ -24520,9 +24520,12 @@
 					questions: [].concat(_toConsumableArray(state.questions), [{
 						text: '',
 						correctAnswer: '',
-						incorrectAnswers: [],
+						incorrectAnswers: [{
+							text: '',
+							id: 1
+						}],
 						id: state.nextQuestionID,
-						nextAnswerID: 1
+						nextAnswerID: 2
 					}]),
 					nextQuestionID: state.nextQuestionID + 1
 				});
