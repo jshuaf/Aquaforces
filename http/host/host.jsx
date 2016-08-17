@@ -2,6 +2,10 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import GameHost from './GameHost.jsx';
 import QuestionConsole from './QuestionConsole.jsx';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+const store = createStore(questionConsoleReducer);
 
 /*
 const socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port !== 80 ? ':' + location.port : '') + '/host/');

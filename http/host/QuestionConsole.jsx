@@ -1,10 +1,9 @@
 import React, { PropTypes } from 'react';
 import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import { TextInput, Checkbox, ExpandButton } from '../shared/Input.jsx';
 import questionConsoleReducer from './reducers';
 import { addQuestionInput } from './actions';
-
-const store = createStore(questionConsoleReducer);
 
 class QuestionConsole extends React.Component {
 	render() {
