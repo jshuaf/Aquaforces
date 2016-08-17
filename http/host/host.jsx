@@ -6,7 +6,7 @@ import GameHost from './GameHost.jsx';
 import QuestionConsole from './QuestionConsole.jsx';
 import questionConsoleReducer from './reducers.js';
 
-const store = createStore(questionConsoleReducer);
+const store = createStore(questionConsoleReducer, window.devToolsExtension && window.devToolsExtension());
 
 /*
 const socket = new WebSocket((location.protocol ===
