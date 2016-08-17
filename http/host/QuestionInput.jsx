@@ -1,55 +1,54 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { ExpandButton, TextInput } from '../shared/Input.jsx';
+import { addAnswerInput, editCorrectAnswer, editIncorrectAnswer, editQuestionText } from './actions';
 
-class QuestionInput extends React.Component {
-	constructor(props) {
-		super(props);
-		this.addAnswerInput = this.addAnswerInput.bind(this);
-		this.updateAnswerData = this.updateAnswerData.bind(this);
-		this.updateQuestion = this.updateQuestion.bind(this);
-		this.state = {
-			numberOfAnswers: 1,
-			answers: [<TextInput
-				placeholder="Twenty one." label="Answer"
-				key={0} onchange={this.updateAnswerData} id={0}
-			/>],
-			answerData: [null],
-			question: null,
-		};
-	}
-
-	updateAnswerData(text, index) {
-		const answerData = this.state.answerData.slice();
-		answerData[index] = text;
-		this.setState({ answerData });
-	}
-
-	updateQuestion(question) {
-		this.setState({ question });
-	}
-
-	addAnswerInput() {
-		this.setState((previousState, previousProps) => ({
-			numberOfAnswers: previousState.numberOfAnswers + 1,
-			answers: previousState.answers.concat(
-				<TextInput
-					placeholder="Twenty one." label="Answer" id={previousState.numberOfAnswers}
-					key={previousState.numberOfAnswers} onchange={this.updateAnswerData}
-				/>
-			),
-			answerData: previousState.answerData.concat(null),
-		}));
-	}
-
-	render() {
-		return (<div className="question_input">
-			<TextInput placeholder="What's nine plus ten?" label="Question" onchange={this.updateQuestion} />
+function QuestionInput({ dispatch, question }) {
+	return (
+		<div className="question_input">
+			<TextInput
+				placeholder="What's nine plus ten?" label="Question" ref={(t) => { this.questionText = t; }}
+				onchange={() => { dispatch(editQuestionText(question.id, this.questionText)); }}
+			/>
 			<div className="answers_input">
-				{this.state.answers}
+			{
+				question.incorrectAnswers.map((answer, index) => {
+					if (index === 0) {
+						return (<TextInput
+							placeholder="Twenty one." label="Answer"
+							id={answer.id} key={answer.id}
+							onchange={() => { dispatch(editCorrectAnswer(question.id, this.value)); }}
+						/>);
+					}
+					return (<TextInput
+						placeholder="Twenty one." label="Answer"
+						id={answer.id} key={answer.id}
+						onchange={() => { dispatch(editIncorrectAnswer(question.id, answer.id, this.value)); }}
+					/>);
+				})
+			}
 			</div>
-			<ExpandButton onClick={this.addAnswerInput} />
-		</div>);
-	}
+			<ExpandButton onClick={() => { dispatch(addAnswerInput(question.id)); }} />
+		</div>
+	);
 }
+
+QuestionInput.propTypes = {
+	dispatch: PropTypes.func.isRequired,
+	question: PropTypes.shape({
+		text: PropTypes.string.isRequired,
+		correctAnswer: PropTypes.string.isRequired,
+		incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
+			text: PropTypes.string.isRequired,
+			id: PropTypes.number.isRequired,
+		})).isRequired,
+		id: PropTypes.number.isRequired,
+	}).isRequired,
+	editCorrectAnswer: PropTypes.func.isRequired,
+	editIncorrectAnswer: PropTypes.func.isRequired,
+	editQuestionText: PropTypes.func.isRequired,
+};
+
+QuestionInput = connect()(QuestionInput);
 
 export default QuestionInput;

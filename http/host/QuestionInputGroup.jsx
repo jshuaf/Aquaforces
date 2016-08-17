@@ -23,9 +23,12 @@ QuestionInputGroup.propTypes = {
 	questions: PropTypes.arrayOf(PropTypes.shape({
 		text: PropTypes.string.isRequired,
 		correctAnswer: PropTypes.string.isRequired,
-		incorrectAnswer: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+		incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
+			text: PropTypes.string.isRequired,
+			id: PropTypes.number.isRequired,
+		})).isRequired,
 		id: PropTypes.number.isRequired,
-	}).isRequired).isRequired,
+	})).isRequired,
 };
 
 const mapStateToProps = (state) => ({
