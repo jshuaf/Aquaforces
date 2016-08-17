@@ -1,6 +1,6 @@
 import { ADD_QUESTION_INPUT, ADD_ANSWER_INPUT } from './actions';
 
-function questionSets(state = [], action) {
+function newQuestionSet(state = [], action) {
 	switch (action.type) {
 	case ADD_QUESTION_INPUT:
 		return Object.assign({}, state, {
@@ -31,6 +31,6 @@ function questionSets(state = [], action) {
 
 export default function questionConsoleReducer(state = {}, action) {
 	return {
-		questionSets: questionSets(state.questionSets, action),
+		newQuestionSet: newQuestionSet(state.newQuestionSet, action),
 	};
 }

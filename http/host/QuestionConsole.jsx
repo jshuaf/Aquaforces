@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
-import { TextInput, Checkbox, ExpandButton } from '../shared/Input.jsx';
-import questionConsoleReducer from './reducers';
-import { addQuestionInput } from './actions';
-import QuestionInputGroup from './QuestionInputGroup.jsx';
+import { TextInput, Checkbox } from '../shared/Input.jsx';
+import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
 
 class QuestionConsole extends React.Component {
 	render() {
@@ -25,7 +23,7 @@ class NewSetForm extends React.Component {
 			<div id="new_set">
 				<h2>New Question Set</h2>
 				<TextInput label="Title" placeholder="My Question Set" ref={(t) => { this.title = t; }} />
-				<QuestionInputGroup />
+				<QuestionInputGroupHandler />
 				<Checkbox label="Private set" />
 				<button onClick={this.submitQuestionSet}>Submit</button>
 			</div>
