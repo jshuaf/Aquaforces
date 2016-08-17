@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { Provider } from 'react-redux';
 import { TextInput, Checkbox, ExpandButton } from '../shared/Input.jsx';
 import questionConsoleReducer from './reducers';
 import { addQuestionInput } from './actions';

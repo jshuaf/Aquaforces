@@ -1,6 +1,8 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import { ExpandButton } from '../shared/Input.jsx';
 import QuestionInput from './QuestionInput.jsx';
+import { addQuestionInput } from './actions';
 
 class QuestionInputGroup extends React.Component {
 	constructor(props) {
@@ -32,4 +34,19 @@ class QuestionInputGroup extends React.Component {
 	}
 }
 
-export default QuestionInputGroup;
+const mapStateToProps = (state) => ({
+	questions: state.questions,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	onAddQuestionInput: () => {
+		dispatch(addQuestionInput());
+	},
+});
+
+const QuestionInputGroupHandler = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(QuestionInputGroup);
+
+export default QuestionInputGroupHandler;
