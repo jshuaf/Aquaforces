@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { TextInput, Checkbox } from '../shared/Input.jsx';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
 

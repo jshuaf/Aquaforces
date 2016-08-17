@@ -1,7 +1,16 @@
 import * as actions from './actions';
 
 const initialQuestionSetState = {
-	title: '', nextQuestionID: 1, questions: [], privacy: false,
+	title: '',
+	nextQuestionID: 2,
+	questions: [{
+		text: '',
+		correctAnswer: '',
+		incorrectAnswers: [],
+		id: 1,
+		nextAnswerID: 2,
+	}],
+	privacy: false,
 };
 
 function newQuestionSet(state = initialQuestionSetState, action) {

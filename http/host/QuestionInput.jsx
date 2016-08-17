@@ -7,8 +7,8 @@ function QuestionInput({ dispatch, question }) {
 	return (
 		<div className="question_input">
 			<TextInput
-				placeholder="What's nine plus ten?" label="Question" ref={(t) => { this.questionText = t; }}
-				onchange={() => { dispatch(editQuestionText(question.id, this.questionText)); }}
+				placeholder="What's nine plus ten?" label="Question"
+				onchange={() => { dispatch(editQuestionText(question.id, this.value)); }}
 			/>
 			<div className="answers_input">
 			{
@@ -44,11 +44,10 @@ QuestionInput.propTypes = {
 		})).isRequired,
 		id: PropTypes.number.isRequired,
 	}).isRequired,
-	editCorrectAnswer: PropTypes.func.isRequired,
-	editIncorrectAnswer: PropTypes.func.isRequired,
-	editQuestionText: PropTypes.func.isRequired,
 };
 
+/* eslint-disable no-func-assign */
 QuestionInput = connect()(QuestionInput);
+/* eslint-enable no-func-assign */
 
 export default QuestionInput;
