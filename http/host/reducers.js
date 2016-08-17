@@ -1,24 +1,35 @@
-import { ADD_QUESTION_INPUT, ADD_ANSWER_INPUT } from './actions';
+import * as actions from './actions';
 
-function newQuestionSet(state = [], action) {
+const initialQuestionSetState = {
+	title: '', nextQuestionID: 1, questions: [], privacy: false,
+};
+
+function newQuestionSet(state = initialQuestionSetState, action) {
 	switch (action.type) {
-	case ADD_QUESTION_INPUT:
+	case actions.ADD_QUESTION_INPUT:
 		return Object.assign({}, state, {
 			questions: [
 				...state.questions,
 				{
-					text: null,
-					correctAnswer: null,
+					text: '',
+					correctAnswer: '',
 					incorrectAnswers: [],
+					id: state.nextQuestionID,
+					nextAnswerID: 1,
 				},
 			],
+			nextQuestionID: state.nextQuestionID + 1,
 		});
-	case ADD_ANSWER_INPUT:
+	case actions.ADD_ANSWER_INPUT:
 		return Object.assign({}, state, {
 			questions: state.questions.map((question) => {
 				if (question.id === action.questionID) {
 					return Object.assign({}, question, {
-						incorrectAnswers: [...question.incorrectAnswers, null],
+						incorrectAnswers: [...question.incorrectAnswers, {
+							text: '',
+							id: question.nextAnswerID,
+						}],
+						nextAnswerID: question.nextAnswerID + 1,
 					});
 				}
 				return question;
