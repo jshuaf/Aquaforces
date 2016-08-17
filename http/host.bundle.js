@@ -24192,7 +24192,7 @@
 					),
 					_react2.default.createElement('input', {
 						ref: function ref(i) {
-							_this2.input = i;
+							_this2.node = i;
 						}, placeholder: this.props.placeholder,
 						onChange: this.props.onChange
 					})
@@ -24368,18 +24368,22 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function QuestionInput(_ref) {
-		var _this = this;
-	
 		var dispatch = _ref.dispatch;
 		var question = _ref.question;
 	
+		var incorrectAnswerInputs = {};
+		var correctAnswerInput = void 0;
+		var questionTextInput = void 0;
 		return _react2.default.createElement(
 			'div',
 			{ className: 'question_input' },
 			_react2.default.createElement(_Input.TextInput, {
 				placeholder: 'What\'s nine plus ten?', label: 'Question',
+				ref: function ref(component) {
+					questionTextInput = component;
+				},
 				onChange: function onChange() {
-					dispatch((0, _actions.editQuestionText)(question.id, _this.value));
+					dispatch((0, _actions.editQuestionText)(question.id, questionTextInput.node.value));
 				}
 			}),
 			_react2.default.createElement(
@@ -24388,15 +24392,23 @@
 				_react2.default.createElement(_Input.TextInput, {
 					placeholder: 'Twenty one.', label: 'Correct Answer', key: 0,
 					onChange: function onChange() {
-						dispatch((0, _actions.editCorrectAnswer)(question.id, _this.value));
+						dispatch((0, _actions.editCorrectAnswer)(question.id, correctAnswerInput.node.value));
+					},
+					ref: function ref(component) {
+						correctAnswerInput = component;
 					}
 				}),
 				question.incorrectAnswers.map(function (answer) {
+					var input = incorrectAnswerInputs[answer.id];
+					var text = input ? input.node.value : '';
 					return _react2.default.createElement(_Input.TextInput, {
 						placeholder: 'Twenty one.', label: 'Incorrect Answer',
 						id: answer.id, key: answer.id,
 						onChange: function onChange() {
-							dispatch((0, _actions.editIncorrectAnswer)(question.id, answer.id, _this.value));
+							dispatch((0, _actions.editIncorrectAnswer)(question.id, answer.id, text));
+						},
+						ref: function ref(component) {
+							incorrectAnswerInputs[answer.id] = component;
 						}
 					});
 				})

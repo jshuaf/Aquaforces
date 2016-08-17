@@ -16,7 +16,7 @@ export class TextInput extends React.Component {
 			<div className="textInput" style={containerStyle}>
 				<span style={labelStyle}>{this.props.label}</span>
 				<input
-					ref={(i) => { this.input = i; }} placeholder={this.props.placeholder}
+					ref={(i) => { this.node = i; }} placeholder={this.props.placeholder}
 					onChange={this.props.onChange}
 				/>
 			</div>

@@ -4,25 +4,33 @@ import { ExpandButton, TextInput } from '../shared/Input.jsx';
 import { addAnswerInput, editCorrectAnswer, editIncorrectAnswer, editQuestionText } from './actions';
 
 function QuestionInput({ dispatch, question }) {
+	const incorrectAnswerInputs = {};
+	let correctAnswerInput;
+	let questionTextInput;
 	return (
 		<div className="question_input">
 			<TextInput
 				placeholder="What's nine plus ten?" label="Question"
-				onChange={() => { dispatch(editQuestionText(question.id, this.value)); }}
+				ref={(component) => { questionTextInput = component; }}
+				onChange={() => { dispatch(editQuestionText(question.id, questionTextInput.node.value)); }}
 			/>
 			<div className="answers_input">
 				<TextInput
 					placeholder="Twenty one." label="Correct Answer" key={0}
-					onChange={() => { dispatch(editCorrectAnswer(question.id, this.value)); }}
+					onChange={() => { dispatch(editCorrectAnswer(question.id, correctAnswerInput.node.value)); }}
+					ref={(component) => { correctAnswerInput = component; }}
 				/>
 			{
-				question.incorrectAnswers.map((answer) =>
-					<TextInput
+				question.incorrectAnswers.map((answer) => {
+					const input = incorrectAnswerInputs[answer.id];
+					const text = input ? input.node.value : '';
+					return (<TextInput
 						placeholder="Twenty one." label="Incorrect Answer"
 						id={answer.id} key={answer.id}
-						onChange={() => { dispatch(editIncorrectAnswer(question.id, answer.id, this.value)); }}
-					/>
-				)
+						onChange={() => { dispatch(editIncorrectAnswer(question.id, answer.id, text)); }}
+						ref={(component) => { incorrectAnswerInputs[answer.id] = component; }}
+					/>);
+				})
 			}
 			</div>
 			<ExpandButton onClick={() => { dispatch(addAnswerInput(question.id)); }} />
