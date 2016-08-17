@@ -24118,7 +24118,7 @@
 							_this2.titleInput = t;
 						},
 						onChange: function onChange() {
-							_this2.props.dispatch((0, _actions.editSetTitle)(_this2.titleInput.node.value));
+							_this2.props.editSetTitle(_this2.titleInput.node.value);
 						}
 					}),
 					_react2.default.createElement(_QuestionInputGroup2.default, null),
@@ -24127,7 +24127,7 @@
 							_this2.checkboxInput = c;
 						},
 						onChange: function onChange() {
-							_this2.props.dispatch((0, _actions.toggleSetPrivacy)(_this2.checkboxInput.node.checked));
+							_this2.props.toggleSetPrivacy(_this2.checkboxInput.node.checked);
 						}
 					}),
 					_react2.default.createElement(
@@ -24143,11 +24143,29 @@
 	}(_react2.default.Component);
 	
 	NewSetForm.propTypes = {
-		dispatch: _react.PropTypes.func.isRequired
+		editSetTitle: _react.PropTypes.func.isRequired,
+		toggleSetPrivacy: _react.PropTypes.func.isRequired
+	};
+	
+	var mapStateToProps = function mapStateToProps(state) {
+		return {
+			newQuestionSet: state.newQuestionSet
+		};
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+		return {
+			editSetTitle: function editSetTitle(text) {
+				dispatch((0, _actions.editSetTitle)(text));
+			},
+			toggleSetPrivacy: function toggleSetPrivacy(privacy) {
+				dispatch((0, _actions.toggleSetPrivacy)(privacy));
+			}
+		};
 	};
 	
 	/* eslint-disable no-class-assign */
-	NewSetForm = (0, _reactRedux.connect)()(NewSetForm);
+	NewSetForm = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewSetForm);
 	/* eslint-enable no-class-assign */
 	
 	exports.default = QuestionConsole;
@@ -24526,7 +24544,7 @@
 	var editIncorrectAnswer = exports.editIncorrectAnswer = makeActionCreator(EDIT_INCORRECT_ANSWER, 'questionID', 'answerID', 'text');
 	var editQuestionText = exports.editQuestionText = makeActionCreator(EDIT_QUESTION_TEXT, 'questionID', 'text');
 	var editSetTitle = exports.editSetTitle = makeActionCreator(EDIT_SET_TITLE, 'text');
-	var toggleSetPrivacy = exports.toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'private');
+	var toggleSetPrivacy = exports.toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy');
 
 /***/ },
 /* 204 */
@@ -24646,7 +24664,7 @@
 				});
 			case actions.TOGGLE_SET_PRIVACY:
 				return Object.assign({}, state, {
-					privacy: action.private
+					privacy: action.privacy
 				});
 			default:
 				return state;

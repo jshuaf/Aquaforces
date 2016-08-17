@@ -96,7 +96,7 @@ function newQuestionSet(state = initialQuestionSetState, action) {
 		});
 	case actions.TOGGLE_SET_PRIVACY:
 		return Object.assign({}, state, {
-			privacy: action.private,
+			privacy: action.privacy,
 		});
 	default:
 		return state;

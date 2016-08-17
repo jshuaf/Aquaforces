@@ -22,4 +22,4 @@ export const editCorrectAnswer = makeActionCreator(EDIT_CORRECT_ANSWER, 'questio
 export const editIncorrectAnswer = makeActionCreator(EDIT_INCORRECT_ANSWER, 'questionID', 'answerID', 'text');
 export const editQuestionText = makeActionCreator(EDIT_QUESTION_TEXT, 'questionID', 'text');
 export const editSetTitle = makeActionCreator(EDIT_SET_TITLE, 'text');
-export const toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'private');
+export const toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy');

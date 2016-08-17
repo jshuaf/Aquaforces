@@ -25,12 +25,12 @@ class NewSetForm extends React.Component {
 				<TextInput
 					label="Title" placeholder="My Question Set"
 					ref={(t) => { this.titleInput = t; }}
-					onChange={() => { this.props.dispatch(editSetTitle(this.titleInput.node.value)); }}
+					onChange={() => { this.props.editSetTitle(this.titleInput.node.value); }}
 				/>
 				<QuestionInputGroupHandler />
 				<Checkbox
 					label="Private set" ref={(c) => { this.checkboxInput = c; }}
-					onChange={() => { this.props.dispatch(toggleSetPrivacy(this.checkboxInput.node.checked)); }}
+					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
 				/>
 				<button onClick={this.submitQuestionSet}>Submit</button>
 			</div>
@@ -39,11 +39,25 @@ class NewSetForm extends React.Component {
 }
 
 NewSetForm.propTypes = {
-	dispatch: PropTypes.func.isRequired,
+	editSetTitle: PropTypes.func.isRequired,
+	toggleSetPrivacy: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = (state) => ({
+	newQuestionSet: state.newQuestionSet,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	editSetTitle: (text) => {
+		dispatch(editSetTitle(text));
+	},
+	toggleSetPrivacy: (privacy) => {
+		dispatch(toggleSetPrivacy(privacy));
+	},
+});
+
 /* eslint-disable no-class-assign */
-NewSetForm = connect()(NewSetForm);
+NewSetForm = connect(mapStateToProps, mapDispatchToProps)(NewSetForm);
 /* eslint-enable no-class-assign */
 
 export default QuestionConsole;
