@@ -108,7 +108,7 @@ const serverHandler = o(function* (req, res) {
 	req.url = url.parse(req.url, true);
 
 	// Set constants based on request
-	let reqPath = req.url.pathname;
+	const reqPath = req.url.pathname;
 	const usesIODomain = reqPath.includes('.io');
 
 	// Find the logged-in user
@@ -125,7 +125,8 @@ const serverHandler = o(function* (req, res) {
 	if (reqPath.substr(0, 5) === '/api/' && !usesIODomain) {
 		// API Request
 		// Slice off the /api
-		reqPath = reqPath.substr(4);
+
+		req.url.pathname = req.url.pathname.substr(4);
 		if (req.method !== 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
 		if (url.parse(req.headers.referer || '').host !== req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
 

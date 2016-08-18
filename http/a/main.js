@@ -19,16 +19,6 @@ HTMLElement.prototype.insertAfter = function (newEl, refEl) {
 function html(input) {
 	return input.toString().replaceAll(['&', '<', '>', '"', '\t', '\n', '\b'], ['&amp;', '&lt;', '&gt;', '&quot;', '&#9;', '&#10;', '']);
 }
-function request(uri, callback, params) {
-	const i = new XMLHttpRequest();
-	i.open('POST', uri, true);
-	i.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	i.send(params);
-	i.onload = function () {
-		callback(this.status === 204 ? 'Success' : this.responseText);
-	};
-	return i;
-}
 
 function shuffle(array) {
 	let currentIndex = array.length, temporaryValue, randomIndex;

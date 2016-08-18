@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { TextInput, Checkbox } from '../shared/Input.jsx';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
 import { editSetTitle, toggleSetPrivacy } from './actions';
-import { request } from 'request';
+
+const request = require('request');
 
 function QuestionConsole() {
 	return (
@@ -28,13 +29,14 @@ class NewSetForm extends React.Component {
 	submitQuestionSet() {
 		this.verifyQuestionSet();
 		const set = this.props.newQuestionSet;
+		const url = `${location.protocol}//${location.host}/api/new-qset`;
 		request({
-			url: './new-qset',
+			url,
 			method: 'post',
 			json: true,
 			body: set,
 		}, (error, response, body) => {
-			if (error) return console.err(error);
+			if (error) return console.error(error);
 			console.log(response);
 			console.log(body);
 		});

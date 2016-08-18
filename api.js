@@ -19,7 +19,6 @@ module.exports = function (req, res, post, user) {
 		if (user) dbcs.users.update({ _id: user._id }, { $set: { cookie: [] } });
 		res.end();
 	} else if (req.url.pathname === '/new-qset') {
-		console.log(post);
 		/*
 		if (!post.name) {
 			return res.badRequest('Error: Set name is required.');
