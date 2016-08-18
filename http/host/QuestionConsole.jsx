@@ -37,8 +37,6 @@ class NewSetForm extends React.Component {
 			body: set,
 		}, (error, response, body) => {
 			if (error) return console.error(error);
-			console.log(response);
-			console.log(body);
 		});
 	}
 	render() {

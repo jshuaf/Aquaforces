@@ -25374,8 +25374,6 @@
 					body: set
 				}, function (error, response, body) {
 					if (error) return console.error(error);
-					console.log(response);
-					console.log(body);
 				});
 			}
 		}, {

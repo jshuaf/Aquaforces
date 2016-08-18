@@ -29,7 +29,6 @@ const http = require('http'),
 	path = require('path'),
 	spawn = require('child_process').spawn,
 	url = require('url'),
-	querystring = require('querystring'),
 	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient,
@@ -142,7 +141,7 @@ const serverHandler = o(function* (req, res) {
 		});
 		req.on('end', () => {
 			if (req.abort) return;
-			post = querystring.parse(post);
+			post = JSON.parse(post);
 			apiServer(req, res, post);
 		});
 	} else if (reqPath.includes('.')) {

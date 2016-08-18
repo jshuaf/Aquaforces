@@ -1,12 +1,12 @@
 /* global generateID:true dbcs:true config:true*/
 
 const cookie = require('cookie');
+
 module.exports = function (req, res, post, user) {
 	res.badRequest = (message) => {
 		res.writeHead(400);
 		return res.end(message);
 	};
-	console.log(post, post.questions);
 
 	if (req.url.pathname === '/logout') {
 		res.writeHead(303, {
@@ -24,25 +24,19 @@ module.exports = function (req, res, post, user) {
 			return res.badRequest('Error: Set name is required.');
 		} else if (post.title.length > 144) {
 			return res.badRequest('Error: Set name length should be 144 characters or less.');
-		} else if (!user && post.public !== 1) {
+		} else if (!user && post.privacy === true) {
 			return res.badRequest('Error: Sets made by users who are not logged in must be public.');
 		}
 
-		let rawQuestions;
-		try {
-			rawQuestions = JSON.parse(post.questions);
-		} catch (e) {
-			return res.badRequest('Invalid JSON in questions.');
-		}
-		if (!(rawQuestions instanceof Array)) {
+		if (!(post.questions instanceof Array)) {
 			return res.badRequest('Error: Questions must be an array.');
 		}
 		const verifiedQuestions = [];
-		for (let i = 0; i < rawQuestions.length; i++) {
-			const q = rawQuestions[i];
+		for (let i = 0; i < post.questions.length; i++) {
+			const q = post.questions[i];
 			if (!q.text || !q.correctAnswer || !q.incorrectAnswers) {
 				return res.badRequest(`Error: Question ${i} must have text, a correct answer, and incorrect answers.`);
-			} else if (!(q.correctAnswer instanceof String)) {
+			} else if (!(typeof q.correctAnswer === 'string')) {
 				return res.badRequest(`Error: Correct answer of question ${i} must be a string.`);
 			} else if (!(q.incorrectAnswers instanceof Array)) {
 				return res.badRequest(`Error: Incorrect answers in question ${i} must be an array.`);
@@ -55,7 +49,7 @@ module.exports = function (req, res, post, user) {
 			for (let j = 0; j < q.incorrectAnswers.length; j++) {
 				if (!q.incorrectAnswers[j].text) {
 					return res.badRequest(`Error: Incorrect answer ${j} of question {i} must have text.`);
-				} else if (!(q.incorrectAnswers[j] instanceof String)) {
+				} else if (!(typeof q.incorrectAnswers[j].text === 'string')) {
 					return res.badRequest(`Error: Incorrect answer ${j} of question ${i} must be a string.`);
 				} else if (q.incorrectAnswers[j].length > 64) {
 					return res.badRequest(
@@ -66,24 +60,24 @@ module.exports = function (req, res, post, user) {
 			verifiedQuestions.push({
 				text: q.text,
 				correctAnswer: q.correctAnswer,
-				incorrectAnswers: q.incorrectAnswers,
+				incorrectAnswers: q.incorrectAnswers.map((a) => ({ text: a.text })),
 			});
-			console.log(verifiedQuestions);
 		}
-		/*
-		const question = {
+
+		const questionSet = {
 			_id: generateID(),
-			title: post.name,
-			questions,
+			title: post.title,
+			verifiedQuestions,
 			timeAdded: new Date().getTime(),
-			public: post.public,
+			privacy: post.privacy,
 		};
 		if (user) {
-			question.userID = user._id;
-			question.userName = user.name;
+			questionSet.userID = user._id;
+			questionSet.userName = user.name;
 		}
-		dbcs.qsets.insert(question);
-		res.badRequest(question._id);*/
+
+		dbcs.qsets.insert(questionSet);
+		res.end(res.writeHead(200));
 	} else if (req.url.pathname === '/delete-qset') {
 		dbcs.qsets.findOne({ _id: post.id }, function (err, qset) {
 			if (err) throw err;
