@@ -60,7 +60,7 @@ export class Checkbox extends React.Component {
 			<div className="checkbox" style={containerStyle}>
 				<input
 					type="checkbox" ref={(n) => { this.node = n; }}
-					onChange={this.props.onChange}
+					onChange={this.props.onChange} required={this.props.required}
 				/>
 				<span>{this.props.label}</span>
 			</div>
@@ -71,6 +71,7 @@ export class Checkbox extends React.Component {
 Checkbox.propTypes = {
 	label: PropTypes.string.isRequired,
 	onChange: PropTypes.func,
+	required: PropTypes.bool,
 };
 
 export function ExpandButton({ onClick, children }) {

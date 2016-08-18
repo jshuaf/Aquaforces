@@ -36,7 +36,7 @@ class NewSetForm extends React.Component {
 				/>
 				<QuestionInputGroupHandler />
 				<Checkbox
-					label="Private set" ref={(c) => { this.checkboxInput = c; }}
+					label="Private set" ref={(c) => { this.checkboxInput = c; }} required
 					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
 				/>
 			<input onClick={this.submitQuestionSet} type="submit" name="Submit" />

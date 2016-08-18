@@ -10,13 +10,13 @@ function QuestionInput({ dispatch, question }) {
 	return (
 		<div className="question_input">
 			<TextInput
-				placeholder="What's nine plus ten?" label="Question"
+				placeholder="What's nine plus ten?" label="Question" required
 				ref={(component) => { questionTextInput = component; }}
 				onChange={() => { dispatch(editQuestionText(question.id, questionTextInput.node.value)); }}
 			/>
 			<div className="answers_input">
 				<TextInput
-					placeholder="Twenty one." label="Correct Answer" key={0}
+					placeholder="Twenty one." label="Correct Answer" key={0} required
 					onChange={() => { dispatch(editCorrectAnswer(question.id, correctAnswerInput.node.value)); }}
 					ref={(component) => { correctAnswerInput = component; }}
 				/>

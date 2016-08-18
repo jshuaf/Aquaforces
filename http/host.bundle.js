@@ -24134,7 +24134,7 @@
 					_react2.default.createElement(_Input.Checkbox, {
 						label: 'Private set', ref: function ref(c) {
 							_this2.checkboxInput = c;
-						},
+						}, required: true,
 						onChange: function onChange() {
 							_this2.props.toggleSetPrivacy(_this2.checkboxInput.node.checked);
 						}
@@ -24316,7 +24316,7 @@
 						type: 'checkbox', ref: function ref(n) {
 							_this4.node = n;
 						},
-						onChange: this.props.onChange
+						onChange: this.props.onChange, required: this.props.required
 					}),
 					_react2.default.createElement(
 						'span',
@@ -24332,7 +24332,8 @@
 	
 	Checkbox.propTypes = {
 		label: _react.PropTypes.string.isRequired,
-		onChange: _react.PropTypes.func
+		onChange: _react.PropTypes.func,
+		required: _react.PropTypes.bool
 	};
 	
 	function ExpandButton(_ref) {
@@ -24475,7 +24476,7 @@
 			'div',
 			{ className: 'question_input' },
 			_react2.default.createElement(_Input.TextInput, {
-				placeholder: 'What\'s nine plus ten?', label: 'Question',
+				placeholder: 'What\'s nine plus ten?', label: 'Question', required: true,
 				ref: function ref(component) {
 					questionTextInput = component;
 				},
@@ -24487,7 +24488,7 @@
 				'div',
 				{ className: 'answers_input' },
 				_react2.default.createElement(_Input.TextInput, {
-					placeholder: 'Twenty one.', label: 'Correct Answer', key: 0,
+					placeholder: 'Twenty one.', label: 'Correct Answer', key: 0, required: true,
 					onChange: function onChange() {
 						dispatch((0, _actions.editCorrectAnswer)(question.id, correctAnswerInput.node.value));
 					},
