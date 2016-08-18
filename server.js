@@ -1,8 +1,9 @@
+import { html, addVersionNonces, getVersionNonce, mime } from './essentials';
+
 /* eslint-disable prefer-template */
-global.config = {
+const config = {
 	port: process.argv.includes('--production') ? 80 : 3000,
 	mongoPath: 'mongodb://localhost:27017/Aquaforces',
-	secureCookies: false,
 	googleAuth: {
 		clientID: process.argv.includes('--test') ?
 			'' : '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com',
@@ -11,7 +12,7 @@ global.config = {
 };
 
 const apiServer = require('./api');
-require('./essentials');
+// require('./essentials');
 require('colors');
 
 // Database Storage
@@ -32,7 +33,8 @@ const http = require('http'),
 	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient,
-	WS = require('ws');
+	WS = require('ws'),
+	o = require('yield-yield');
 	/* eslint-enable one-var */
 
 // Response Pages
@@ -234,7 +236,7 @@ const serverHandler = o(function* (req, res) {
 		let searchText = '';
 
 		// Edit filter based on search queries
-		q.split(/\s+/).forEach(function (token) {
+		q.split(/\s+/).forEach((token) => {
 			if (token === 'is:mine' && user) filter.userID = user._id;
 			if (token === 'is:public') filter.public = true;
 			if (token === 'is:favorite' && user) filter._id = { $in: user.favorites };
@@ -258,12 +260,12 @@ const serverHandler = o(function* (req, res) {
 					let liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
 					liestr += '<label>Question <input placeholder="What\'s one plus one?" required="" maxlength="144" value="' + html(question.text) + '" /></label>';
 					liestr += '<p>Answers:</p><ul>';
-					question.answers.forEach(function (answer) {
+					question.answers.forEach((answer) => {
 						listr += '<li>' + html(answer) + '</li>';
 						liestr += '<li><input type="checkbox" checked="" /> <input required="" maxlength="64" placeholder="Two" value="' + html(answer) + '" /></li>';
 					});
 					listr += '</ul><ul class="cross-list">';
-					question.incorrectAnswers.forEach(function (answer) {
+					question.incorrectAnswers.forEach((answer) => {
 						listr += '<li>' + html(answer) + '</li>';
 						liestr += '<li><input type="checkbox" /> <input required="" maxlength="64" placeholder="Two" value="' + html(answer) + '" /></li>';
 					});
@@ -310,7 +312,7 @@ const serverHandler = o(function* (req, res) {
 			},
 		}, o(function* (googRes) {
 			let data = '';
-			googRes.on('data', function (d) {
+			googRes.on('data', (d) => {
 				data += d;
 			});
 			yield googRes.on('end', yield);

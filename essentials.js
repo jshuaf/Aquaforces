@@ -27,10 +27,9 @@ Number.prototype.bound = function (l, h) {
 };
 /* eslint-enable no-extend-native */
 
-// Global Constants
-global.o = require('yield-yield');
+const o = require('yield-yield');
 
-global.mime = {
+export const mime = {
 	'.html': 'text/html',
 	'.css': 'text/css',
 	'.js': 'text/javascript',
@@ -40,7 +39,7 @@ global.mime = {
 	'.ico': 'image/x-icon',
 };
 
-global.html = function (input) {
+export const html = function (input) {
 	// Parse and convert an HTML string
 	return input.toString().replaceAll(
 		['&', '<', '>', '"', '\t', '\n', '\b'],
@@ -48,7 +47,7 @@ global.html = function (input) {
 	);
 };
 
-global.getVersionNonce = o(function* (pathname, file, callback) {
+export const getVersionNonce = o(function* (pathname, file, callback) {
 	// Get a unique cache version number given a file path
 	try {
 		return callback(null, crypto.createHash('md5')
@@ -60,7 +59,7 @@ global.getVersionNonce = o(function* (pathname, file, callback) {
 	}
 });
 
-global.addVersionNonces = o(function* (str, pathname, callback) {
+export const addVersionNonces = o(function* (str, pathname, callback) {
 	// Add version nonce to a given file path
 	for (let i = 0; i < str.length; i++) {
 		if (str.substr(i).match(/^\.[A-z]{1,8}"/)) {

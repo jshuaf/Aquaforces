@@ -13,7 +13,7 @@ module.exports = function (req, res, post, user) {
 				path: '/',
 				expires: new Date(new Date().setDate(new Date().getDate() - 30)),
 				httpOnly: true,
-				secure: config.secureCookies,
+				secure: false,
 			}),
 		});
 		if (user) dbcs.users.update({ _id: user._id }, { $set: { cookie: [] } });
