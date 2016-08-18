@@ -1,8 +1,7 @@
-/* global respondPage:true o:true config:true html:true addVersionNonces: true dbcs:true*/
-/* eslint-disable no-process-env */
+/* eslint-disable prefer-template */
 global.config = {
-	port: process.env.PORT || (process.argv.includes('--production') ? 80 : 3000),
-	mongoPath: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/Aquaforces',
+	port: process.argv.includes('--production') ? 80 : 3000,
+	mongoPath: 'mongodb://localhost:27017/Aquaforces',
 	secureCookies: false,
 	googleAuth: {
 		clientID: process.argv.includes('--test') ?
@@ -10,7 +9,6 @@ global.config = {
 		clientSecret: process.argv.includes('--test') ? '' : 'sW_Qt7Lj63m5Bshun_kdnJvt',
 	},
 };
-/* eslint-enable no-process-env */
 
 const apiServer = require('./api');
 require('./essentials');
@@ -40,25 +38,7 @@ const http = require('http'),
 // Response Pages
 /* eslint-disable max-len */
 
-global.errorForbidden = (req, res, msg) => {
-	respondPage('403', req, res, o(function* () {
-		res.write('<h1>Error 403</h1>');
-		res.write(msg || '<p>Permission denied.</p>');
-		res.write('<p><a href="javascript:history.go(-1)">Go back</a>.</p>');
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	}), {}, 403);
-};
-
-global.errorNotFound = (req, res) => {
-	respondPage('404', req, res, o(function* () {
-		res.write('<h1>Error 404</h1>');
-		res.write('<p>The requested file could not be found.</p>');
-		res.write('<p><a href="javascript:history.go(-1)">Go back</a>.</p>');
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	}), {}, 404);
-};
-
-global.respondPage = o(function* (title, req, res, callback, header, status) {
+const respondPage = o(function* (title, req, res, callback, header, status) {
 	// Parse the header
 	if (title) title = html(title);
 	if (!header) header = {};
@@ -86,13 +66,31 @@ global.respondPage = o(function* (title, req, res, callback, header, status) {
 	}
 });
 
-global.errorsHTML = function (errs) {
+const errorNotFound = (req, res) => {
+	respondPage('404', req, res, o(function* () {
+		res.write('<h1>Error 404</h1>');
+		res.write('<p>The requested file could not be found.</p>');
+		res.write('<p><a href="javascript:history.go(-1)">Go back</a>.</p>');
+		res.end(yield fs.readFile('./html/a/foot.html', yield));
+	}), {}, 404);
+};
+
+const errorsHTML = function (errs) {
 	if (errs.length === 1) {
 		return '<div class="error">' + errs[0] + '</div>';
 	} else if (errs.length) {
 		return '<div class="error">\t<ul>\t\t<li>' + errs.join('</li>\t\t<li>') + '</li>\t</ul></div>';
 	}
 	return '';
+};
+
+const errorForbidden = (req, res, msg) => {
+	respondPage('403', req, res, o(function* () {
+		res.write('<h1>Error 403</h1>');
+		res.write(msg || '<p>Permission denied.</p>');
+		res.write('<p><a href="javascript:history.go(-1)">Go back</a>.</p>');
+		res.end(yield fs.readFile('./html/a/foot.html', yield));
+	}), {}, 403);
 };
 
 const cache = {};
@@ -130,7 +128,7 @@ const serverHandler = o(function* (req, res) {
 		if (url.parse(req.headers.referer || '').host !== req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
 
 		let post = '';
-		req.on('data', function (data) {
+		req.on('data', (data) => {
 			if (req.abort) return;
 			post += data;
 			if (post.length > 1e6) {
@@ -337,7 +335,7 @@ const serverHandler = o(function* (req, res) {
 				path: '/plus/v1/people/me?access_token=' + encodeURIComponent(data.access_token),
 			}, o(function* (apiRes) {
 				let apiData = '';
-				apiRes.on('data', function (d) {
+				apiRes.on('data', (d) => {
 					apiData += d;
 				});
 				yield apiRes.on('end', yield);
