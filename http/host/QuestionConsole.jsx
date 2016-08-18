@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { TextInput, Checkbox } from '../shared/Input.jsx';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
 import { editSetTitle, toggleSetPrivacy } from './actions';
+import { request } from 'request';
 
 function QuestionConsole() {
 	return (
@@ -26,6 +27,17 @@ class NewSetForm extends React.Component {
 	}
 	submitQuestionSet() {
 		this.verifyQuestionSet();
+		const set = this.props.newQuestionSet;
+		request({
+			url: './new-qset',
+			method: 'post',
+			json: true,
+			body: set,
+		}, (error, response, body) => {
+			if (error) return console.err(error);
+			console.log(response);
+			console.log(body);
+		});
 	}
 	render() {
 		return (
