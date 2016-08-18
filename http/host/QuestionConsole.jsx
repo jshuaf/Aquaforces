@@ -1,114 +1,86 @@
 import React, { PropTypes } from 'react';
-import { TextInput, Checkbox, ExpandButton } from '../shared/Input.jsx';
+import { connect } from 'react-redux';
+import { TextInput, Checkbox } from '../shared/Input.jsx';
+import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
+import { editSetTitle, toggleSetPrivacy } from './actions';
 
-class QuestionConsole extends React.Component {
-	render() {
-		return (
-			<NewSetForm />
-		);
-	}
+function QuestionConsole() {
+	return (
+		<NewSetForm />
+	);
 }
 
 class NewSetForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.submitQuestionSet = this.submitQuestionSet.bind(this);
+		this.verifyQuestionSet = this.verifyQuestionSet.bind(this);
+	}
+	verifyQuestionSet() {
+		const set = this.props.newQuestionSet;
+		if (!set.title) {
+			this.titleInput.error('Need a set title.');
+		} else {
+			this.titleInput.clearError();
+		}
 	}
 	submitQuestionSet() {
-		// TODO: add question set submission functionality
+		this.verifyQuestionSet();
 	}
 	render() {
 		return (
-			<div id="new_set">
+			<form id="new_set">
 				<h2>New Question Set</h2>
-				<TextInput label="Title" placeholder="My Question Set" ref={(t) => { this.title = t; }} />
-				<QuestionInputGroup />
-				<Checkbox label="Private set" />
-				<button onClick={this.submitQuestionSet}>Submit</button>
-			</div>
-		);
-	}
-}
-
-class QuestionInputGroup extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			numberOfQuestions: 1,
-		};
-		this.addQuestionInput = this.addQuestionInput.bind(this);
-	}
-	addQuestionInput() {
-		this.setState((previousState, previousProps) => ({
-			numberOfQuestions: previousState.numberOfQuestions + 1,
-		}));
-	}
-	render() {
-		const questionInputs = [];
-		for (let i = 0; i < this.state.numberOfQuestions; i++) {
-			questionInputs.push(<QuestionInput key={i} />);
-		}
-		return (
-			<div id="question_input_group">
-				<h3>Questions</h3>
-				<span style={{ fontStyle: 'italic' }}>Avoid synonyms among answers.</span>
-				<br />
-				{questionInputs}
-				<ExpandButton onClick={this.addQuestionInput} />
-			</div>
-		);
-	}
-}
-
-class QuestionInput extends React.Component {
-	constructor(props) {
-		super(props);
-		this.addAnswerInput = this.addAnswerInput.bind(this);
-		this.updateAnswerData = this.updateAnswerData.bind(this);
-		this.updateQuestion = this.updateQuestion.bind(this);
-		this.state = {
-			numberOfAnswers: 1,
-			answers: [<TextInput
-				placeholder="Twenty one." label="Answer"
-				key={0} onchange={this.updateAnswerData} id={0}
-			/>],
-			answerData: [null],
-			question: null,
-		};
-	}
-
-	updateAnswerData(text, id) {
-		const answerData = this.state.answerData.slice();
-		answerData[index] = text;
-		this.setState({ answerData });
-	}
-
-	updateQuestion(question) {
-		this.setState({ question });
-	}
-
-	addAnswerInput() {
-		this.setState((previousState, previousProps) => ({
-			numberOfAnswers: previousState.numberOfAnswers + 1,
-			answers: previousState.answers.concat(
 				<TextInput
-					placeholder="Twenty one." label="Answer" id={previousState.numberOfAnswers}
-					key={previousState.numberOfAnswers} onchange={this.updateAnswerData}
+					label="Title" placeholder="My Question Set" required
+					ref={(t) => { this.titleInput = t; }}
+					onChange={() => { this.props.editSetTitle(this.titleInput.node.value); }}
 				/>
-			),
-			answerData: previousState.answerData.concat(null),
-		}));
-	}
-
-	render() {
-		return (<div className="question_input">
-			<TextInput placeholder="What's nine plus ten?" label="Question" onchange={this.updateQuestion} />
-			<div className="answers_input">
-				{this.state.answers}
-			</div>
-			<ExpandButton onClick={this.addAnswerInput} />
-		</div>);
+				<QuestionInputGroupHandler />
+				<Checkbox
+					label="Private set" ref={(c) => { this.checkboxInput = c; }} required
+					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
+				/>
+			<input onClick={this.submitQuestionSet} type="submit" name="Submit" />
+			</form>
+		);
 	}
 }
+
+NewSetForm.propTypes = {
+	editSetTitle: PropTypes.func.isRequired,
+	toggleSetPrivacy: PropTypes.func.isRequired,
+	newQuestionSet: PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		nextQuestionID: PropTypes.number.isRequired,
+		questions: PropTypes.arrayOf(PropTypes.shape({
+			text: PropTypes.string.isRequired,
+			correctAnswer: PropTypes.string.isRequired,
+			incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
+				text: PropTypes.string.isRequired,
+				id: PropTypes.number.isRequired,
+			})).isRequired,
+			id: PropTypes.number.isRequired,
+		})).isRequired,
+		privacy: PropTypes.bool.isRequired,
+	}),
+};
+
+const mapStateToProps = (state) => ({
+	newQuestionSet: state.newQuestionSet,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	editSetTitle: (text) => {
+		dispatch(editSetTitle(text));
+	},
+	toggleSetPrivacy: (privacy) => {
+		dispatch(toggleSetPrivacy(privacy));
+	},
+});
+
+/* eslint-disable no-class-assign */
+NewSetForm = connect(mapStateToProps, mapDispatchToProps)(NewSetForm);
+/* eslint-enable no-class-assign */
 
 export default QuestionConsole;

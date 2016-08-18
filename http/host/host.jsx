@@ -1,10 +1,17 @@
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import GameHost from './GameHost.jsx';
 import QuestionConsole from './QuestionConsole.jsx';
+import questionConsoleReducer from './reducers.js';
+
+const store = createStore(questionConsoleReducer, window.devToolsExtension && window.devToolsExtension());
 
 /*
-const socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port !== 80 ? ':' + location.port : '') + '/host/');
+const socket = new WebSocket((location.protocol ===
+	'http:' ? 'ws://' : 'wss://') + location.hostname +
+	(location.port !== 80 ? ':' + location.port : '') + '/host/');
 const cont = document.getElementById('cont');
 
 const crews = {};w
@@ -166,4 +173,9 @@ function endGame() {
 	}));
 }*/
 
-ReactDOM.render(<QuestionConsole />, document.getElementById('mountNode'));
+render(
+	<Provider store={store}>
+		<QuestionConsole />
+	</Provider>,
+	document.getElementById('mountNode')
+);
