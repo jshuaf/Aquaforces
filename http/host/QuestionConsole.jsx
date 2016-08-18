@@ -43,7 +43,7 @@ class NewSetForm extends React.Component {
 	}
 	render() {
 		return (
-			<form id="new_set">
+			<form id="new_set" onSubmit={(e) => e.preventDefault()}>
 				<h2>New Question Set</h2>
 				<TextInput
 					label="Title" placeholder="My Question Set" required
@@ -52,7 +52,7 @@ class NewSetForm extends React.Component {
 				/>
 				<QuestionInputGroupHandler />
 				<Checkbox
-					label="Private set" ref={(c) => { this.checkboxInput = c; }} required
+					label="Private set" ref={(c) => { this.checkboxInput = c; }}
 					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
 				/>
 			<input onClick={this.submitQuestionSet} type="submit" name="Submit" />

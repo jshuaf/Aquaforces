@@ -25385,7 +25385,9 @@
 	
 				return _react2.default.createElement(
 					'form',
-					{ id: 'new_set' },
+					{ id: 'new_set', onSubmit: function onSubmit(e) {
+							return e.preventDefault();
+						} },
 					_react2.default.createElement(
 						'h2',
 						null,
@@ -25404,7 +25406,7 @@
 					_react2.default.createElement(_Input.Checkbox, {
 						label: 'Private set', ref: function ref(c) {
 							_this2.checkboxInput = c;
-						}, required: true,
+						},
 						onChange: function onChange() {
 							_this2.props.toggleSetPrivacy(_this2.checkboxInput.node.checked);
 						}
