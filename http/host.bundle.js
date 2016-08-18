@@ -25302,163 +25302,36 @@
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(console) {'use strict';
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
 	var _react = __webpack_require__(/*! react */ 174);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRedux = __webpack_require__(/*! react-redux */ 195);
+	var _NewSetForm = __webpack_require__(/*! ./NewSetForm.jsx */ 412);
 	
-	var _Input = __webpack_require__(/*! ../shared/Input.jsx */ 206);
+	var _NewSetForm2 = _interopRequireDefault(_NewSetForm);
 	
-	var _QuestionInputGroup = __webpack_require__(/*! ./QuestionInputGroup.jsx */ 207);
+	var _QuestionSetList = __webpack_require__(/*! ./QuestionSetList.jsx */ 413);
 	
-	var _QuestionInputGroup2 = _interopRequireDefault(_QuestionInputGroup);
-	
-	var _actions = __webpack_require__(/*! ./actions */ 209);
+	var _QuestionSetList2 = _interopRequireDefault(_QuestionSetList);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var request = __webpack_require__(/*! request */ 210);
-	
 	function QuestionConsole() {
-		return _react2.default.createElement(NewSetForm, null);
+		return _react2.default.createElement(
+			'div',
+			{ id: 'questionConsole' },
+			_react2.default.createElement(_NewSetForm2.default, null),
+			_react2.default.createElement(_QuestionSetList2.default, null)
+		);
 	}
 	
-	var NewSetForm = function (_React$Component) {
-		_inherits(NewSetForm, _React$Component);
-	
-		function NewSetForm(props) {
-			_classCallCheck(this, NewSetForm);
-	
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NewSetForm).call(this, props));
-	
-			_this.submitQuestionSet = _this.submitQuestionSet.bind(_this);
-			_this.verifyQuestionSet = _this.verifyQuestionSet.bind(_this);
-			return _this;
-		}
-	
-		_createClass(NewSetForm, [{
-			key: 'verifyQuestionSet',
-			value: function verifyQuestionSet() {
-				var set = this.props.newQuestionSet;
-				if (!set.title) {
-					this.titleInput.error('Need a set title.');
-				} else {
-					this.titleInput.clearError();
-				}
-			}
-		}, {
-			key: 'submitQuestionSet',
-			value: function submitQuestionSet() {
-				this.verifyQuestionSet();
-				var set = this.props.newQuestionSet;
-				var url = location.protocol + '//' + location.host + '/api/new-qset';
-				request({
-					url: url,
-					method: 'post',
-					json: true,
-					body: set
-				}, function (error, response, body) {
-					if (error) return console.error(error);
-				});
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var _this2 = this;
-	
-				return _react2.default.createElement(
-					'form',
-					{ id: 'new_set', onSubmit: function onSubmit(e) {
-							return e.preventDefault();
-						} },
-					_react2.default.createElement(
-						'h2',
-						null,
-						'New Question Set'
-					),
-					_react2.default.createElement(_Input.TextInput, {
-						label: 'Title', placeholder: 'My Question Set', required: true,
-						ref: function ref(t) {
-							_this2.titleInput = t;
-						},
-						onChange: function onChange() {
-							_this2.props.editSetTitle(_this2.titleInput.node.value);
-						}
-					}),
-					_react2.default.createElement(_QuestionInputGroup2.default, null),
-					_react2.default.createElement(_Input.Checkbox, {
-						label: 'Private set', ref: function ref(c) {
-							_this2.checkboxInput = c;
-						},
-						onChange: function onChange() {
-							_this2.props.toggleSetPrivacy(_this2.checkboxInput.node.checked);
-						}
-					}),
-					_react2.default.createElement('input', { onClick: this.submitQuestionSet, type: 'submit', name: 'Submit' })
-				);
-			}
-		}]);
-	
-		return NewSetForm;
-	}(_react2.default.Component);
-	
-	NewSetForm.propTypes = {
-		editSetTitle: _react.PropTypes.func.isRequired,
-		toggleSetPrivacy: _react.PropTypes.func.isRequired,
-		newQuestionSet: _react.PropTypes.shape({
-			title: _react.PropTypes.string.isRequired,
-			nextQuestionID: _react.PropTypes.number.isRequired,
-			questions: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-				text: _react.PropTypes.string.isRequired,
-				correctAnswer: _react.PropTypes.string.isRequired,
-				incorrectAnswers: _react.PropTypes.arrayOf(_react.PropTypes.shape({
-					text: _react.PropTypes.string.isRequired,
-					id: _react.PropTypes.number.isRequired
-				})).isRequired,
-				id: _react.PropTypes.number.isRequired
-			})).isRequired,
-			privacy: _react.PropTypes.bool.isRequired
-		})
-	};
-	
-	var mapStateToProps = function mapStateToProps(state) {
-		return {
-			newQuestionSet: state.newQuestionSet
-		};
-	};
-	
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-		return {
-			editSetTitle: function editSetTitle(text) {
-				dispatch((0, _actions.editSetTitle)(text));
-			},
-			toggleSetPrivacy: function toggleSetPrivacy(privacy) {
-				dispatch((0, _actions.toggleSetPrivacy)(privacy));
-			}
-		};
-	};
-	
-	/* eslint-disable no-class-assign */
-	NewSetForm = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewSetForm);
-	/* eslint-enable no-class-assign */
-	
 	exports.default = QuestionConsole;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/console-browserify/index.js */ 1)))
 
 /***/ },
 /* 206 */
@@ -25860,6 +25733,8 @@
 	var EDIT_SET_TITLE = exports.EDIT_SET_TITLE = 'EDIT_SET_TITLE';
 	var TOGGLE_SET_PRIVACY = exports.TOGGLE_SET_PRIVACY = 'TOGGLE_SET_PRIVACY';
 	
+	var POPULATE_QUESTION_SET_LIST = exports.POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
+	
 	function makeActionCreator(type) {
 		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 			argNames[_key - 1] = arguments[_key];
@@ -25885,6 +25760,8 @@
 	var editQuestionText = exports.editQuestionText = makeActionCreator(EDIT_QUESTION_TEXT, 'questionID', 'text');
 	var editSetTitle = exports.editSetTitle = makeActionCreator(EDIT_SET_TITLE, 'text');
 	var toggleSetPrivacy = exports.toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy');
+	
+	var populateQuestionSetList = exports.populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
 
 /***/ },
 /* 210 */
@@ -78534,14 +78411,260 @@
 		}
 	}
 	
+	function questionSets() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+		var action = arguments[1];
+	
+		switch (action.type) {
+			case actions.POPULATE_QUESTION_SET_LIST:
+				return Object.assign({}, state, action.questionSets);
+			default:
+				return state;
+		}
+	}
+	
 	function questionConsoleReducer() {
 		var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 		var action = arguments[1];
 	
 		return {
-			newQuestionSet: newQuestionSet(state.newQuestionSet, action)
+			newQuestionSet: newQuestionSet(state.newQuestionSet, action),
+			questionSets: questionSets(state.questionSets, action)
 		};
 	}
+
+/***/ },
+/* 412 */
+/*!**********************************!*\
+  !*** ./http/host/NewSetForm.jsx ***!
+  \**********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(console) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 174);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 195);
+	
+	var _QuestionInputGroup = __webpack_require__(/*! ./QuestionInputGroup.jsx */ 207);
+	
+	var _QuestionInputGroup2 = _interopRequireDefault(_QuestionInputGroup);
+	
+	var _Input = __webpack_require__(/*! ../shared/Input.jsx */ 206);
+	
+	var _actions = __webpack_require__(/*! ./actions */ 209);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var request = __webpack_require__(/*! request */ 210);
+	
+	var NewSetForm = function (_React$Component) {
+		_inherits(NewSetForm, _React$Component);
+	
+		function NewSetForm(props) {
+			_classCallCheck(this, NewSetForm);
+	
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NewSetForm).call(this, props));
+	
+			_this.submitQuestionSet = _this.submitQuestionSet.bind(_this);
+			_this.verifyQuestionSet = _this.verifyQuestionSet.bind(_this);
+			return _this;
+		}
+	
+		_createClass(NewSetForm, [{
+			key: 'verifyQuestionSet',
+			value: function verifyQuestionSet() {
+				var set = this.props.newQuestionSet;
+				if (!set.title) {
+					this.titleInput.error('Need a set title.');
+				} else {
+					this.titleInput.clearError();
+				}
+			}
+		}, {
+			key: 'submitQuestionSet',
+			value: function submitQuestionSet() {
+				this.verifyQuestionSet();
+				var set = this.props.newQuestionSet;
+				var url = location.protocol + '//' + location.host + '/api/new-qset';
+				request({
+					url: url,
+					method: 'post',
+					json: true,
+					body: set
+				}, function (error, response, body) {
+					if (error) return console.error(error);
+				});
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+	
+				return _react2.default.createElement(
+					'form',
+					{ id: 'new_set', onSubmit: function onSubmit(e) {
+							return e.preventDefault();
+						} },
+					_react2.default.createElement(
+						'h2',
+						null,
+						'New Question Set'
+					),
+					_react2.default.createElement(_Input.TextInput, {
+						label: 'Title', placeholder: 'My Question Set', required: true,
+						ref: function ref(t) {
+							_this2.titleInput = t;
+						},
+						onChange: function onChange() {
+							_this2.props.editSetTitle(_this2.titleInput.node.value);
+						}
+					}),
+					_react2.default.createElement(_QuestionInputGroup2.default, null),
+					_react2.default.createElement(_Input.Checkbox, {
+						label: 'Private set', ref: function ref(c) {
+							_this2.checkboxInput = c;
+						},
+						onChange: function onChange() {
+							_this2.props.toggleSetPrivacy(_this2.checkboxInput.node.checked);
+						}
+					}),
+					_react2.default.createElement('input', { onClick: this.submitQuestionSet, type: 'submit', name: 'Submit' })
+				);
+			}
+		}]);
+	
+		return NewSetForm;
+	}(_react2.default.Component);
+	
+	NewSetForm.propTypes = {
+		editSetTitle: _react.PropTypes.func.isRequired,
+		toggleSetPrivacy: _react.PropTypes.func.isRequired,
+		newQuestionSet: _react.PropTypes.shape({
+			title: _react.PropTypes.string.isRequired,
+			nextQuestionID: _react.PropTypes.number.isRequired,
+			questions: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+				text: _react.PropTypes.string.isRequired,
+				correctAnswer: _react.PropTypes.string.isRequired,
+				incorrectAnswers: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+					text: _react.PropTypes.string.isRequired,
+					id: _react.PropTypes.number.isRequired
+				})).isRequired,
+				id: _react.PropTypes.number.isRequired
+			})).isRequired,
+			privacy: _react.PropTypes.bool.isRequired
+		})
+	};
+	
+	var mapStateToProps = function mapStateToProps(state) {
+		return {
+			newQuestionSet: state.newQuestionSet
+		};
+	};
+	
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+		return {
+			editSetTitle: function editSetTitle(text) {
+				dispatch((0, _actions.editSetTitle)(text));
+			},
+			toggleSetPrivacy: function toggleSetPrivacy(privacy) {
+				dispatch((0, _actions.toggleSetPrivacy)(privacy));
+			}
+		};
+	};
+	
+	/* eslint-disable no-class-assign */
+	NewSetForm = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(NewSetForm);
+	/* eslint-enable no-class-assign */
+	
+	exports.default = NewSetForm;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/console-browserify/index.js */ 1)))
+
+/***/ },
+/* 413 */
+/*!***************************************!*\
+  !*** ./http/host/QuestionSetList.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(console) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 174);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var request = __webpack_require__(/*! request */ 210);
+	
+	var QuestionSetList = function (_React$Component) {
+		_inherits(QuestionSetList, _React$Component);
+	
+		function QuestionSetList(props) {
+			_classCallCheck(this, QuestionSetList);
+	
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionSetList).call(this, props));
+	
+			_this.getQuestionSets = _this.getQuestionSets.bind(_this);
+			return _this;
+		}
+	
+		_createClass(QuestionSetList, [{
+			key: 'getQuestionSets',
+			value: function getQuestionSets() {
+				var url = location.protocol + '//' + location.host + '/api/get-qsets';
+				request({
+					url: url,
+					body: {},
+					json: true,
+					method: 'post'
+				}, function (error, response, body) {
+					if (error) return console.error(error);
+					console.log(body);
+				});
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'button',
+					{ onClick: this.getQuestionSets },
+					'Click me'
+				);
+			}
+		}]);
+	
+		return QuestionSetList;
+	}(_react2.default.Component);
+	
+	exports.default = QuestionSetList;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/console-browserify/index.js */ 1)))
 
 /***/ }
 /******/ ]);

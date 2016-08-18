@@ -103,8 +103,18 @@ function newQuestionSet(state = initialQuestionSetState, action) {
 	}
 }
 
+function questionSets(state = [], action) {
+	switch (action.type) {
+	case actions.POPULATE_QUESTION_SET_LIST:
+		return Object.assign({}, state, action.questionSets);
+	default:
+		return state;
+	}
+}
+
 export default function questionConsoleReducer(state = {}, action) {
 	return {
 		newQuestionSet: newQuestionSet(state.newQuestionSet, action),
+		questionSets: questionSets(state.questionSets, action),
 	};
 }

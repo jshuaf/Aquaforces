@@ -6,6 +6,8 @@ export const EDIT_QUESTION_TEXT = 'EDIT_QUESTION_TEXT';
 export const EDIT_SET_TITLE = 'EDIT_SET_TITLE';
 export const TOGGLE_SET_PRIVACY = 'TOGGLE_SET_PRIVACY';
 
+export const POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
+
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
 		const action = { type };
@@ -23,3 +25,5 @@ export const editIncorrectAnswer = makeActionCreator(EDIT_INCORRECT_ANSWER, 'que
 export const editQuestionText = makeActionCreator(EDIT_QUESTION_TEXT, 'questionID', 'text');
 export const editSetTitle = makeActionCreator(EDIT_SET_TITLE, 'text');
 export const toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy');
+
+export const populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');

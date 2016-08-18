@@ -67,7 +67,7 @@ module.exports = function (req, res, post, user) {
 		const questionSet = {
 			_id: generateID(),
 			title: post.title,
-			verifiedQuestions,
+			questions: verifiedQuestions,
 			timeAdded: new Date().getTime(),
 			privacy: post.privacy,
 		};
@@ -78,6 +78,15 @@ module.exports = function (req, res, post, user) {
 
 		dbcs.qsets.insert(questionSet);
 		res.end(res.writeHead(200));
+	} else if (req.url.pathname === '/get-qsets') {
+		const qsets = [];
+		dbcs.qsets.find({}).each((err, qset) => {
+			if (qset) qsets.push(qset);
+			else {
+				res.writeHead(200);
+				return res.end(JSON.stringify(qsets));
+			}
+		});
 	} else if (req.url.pathname === '/delete-qset') {
 		dbcs.qsets.findOne({ _id: post.id }, function (err, qset) {
 			if (err) throw err;
@@ -169,3 +178,4 @@ module.exports = function (req, res, post, user) {
 		return res.end('Error: The API feature requested has not been implemented.');
 	}
 };
+
