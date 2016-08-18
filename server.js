@@ -1,6 +1,6 @@
-import { html, addVersionNonces, getVersionNonce, mime } from './essentials';
-
 /* eslint-disable prefer-template */
+/* eslint-disable no-undef */
+/* global dbcs:true */
 const config = {
 	port: process.argv.includes('--production') ? 80 : 3000,
 	mongoPath: 'mongodb://localhost:27017/Aquaforces',
@@ -12,7 +12,7 @@ const config = {
 };
 
 const apiServer = require('./api');
-// require('./essentials');
+require('./essentials')();
 require('colors');
 
 // Database Storage
