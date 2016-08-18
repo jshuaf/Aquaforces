@@ -24091,13 +24091,22 @@
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NewSetForm).call(this, props));
 	
 			_this.submitQuestionSet = _this.submitQuestionSet.bind(_this);
+			_this.verifyQuestionSet = _this.verifyQuestionSet.bind(_this);
 			return _this;
 		}
 	
 		_createClass(NewSetForm, [{
+			key: 'verifyQuestionSet',
+			value: function verifyQuestionSet() {
+				var set = this.props.newQuestionSet;
+				if (!set.title) {
+					this.titleInput.error('Need a set title.');
+				}
+			}
+		}, {
 			key: 'submitQuestionSet',
 			value: function submitQuestionSet() {
-				// TODO: add question set submission functionality
+				this.verifyQuestionSet();
 			}
 		}, {
 			key: 'render',
@@ -24105,7 +24114,7 @@
 				var _this2 = this;
 	
 				return _react2.default.createElement(
-					'div',
+					'form',
 					{ id: 'new_set' },
 					_react2.default.createElement(
 						'h2',
@@ -24113,7 +24122,7 @@
 						'New Question Set'
 					),
 					_react2.default.createElement(_Input.TextInput, {
-						label: 'Title', placeholder: 'My Question Set',
+						label: 'Title', placeholder: 'My Question Set', required: true,
 						ref: function ref(t) {
 							_this2.titleInput = t;
 						},
@@ -24130,11 +24139,7 @@
 							_this2.props.toggleSetPrivacy(_this2.checkboxInput.node.checked);
 						}
 					}),
-					_react2.default.createElement(
-						'button',
-						{ onClick: this.submitQuestionSet },
-						'Submit'
-					)
+					_react2.default.createElement('input', { onClick: this.submitQuestionSet, type: 'submit', name: 'Submit' })
 				);
 			}
 		}]);
@@ -24144,7 +24149,21 @@
 	
 	NewSetForm.propTypes = {
 		editSetTitle: _react.PropTypes.func.isRequired,
-		toggleSetPrivacy: _react.PropTypes.func.isRequired
+		toggleSetPrivacy: _react.PropTypes.func.isRequired,
+		newQuestionSet: _react.PropTypes.shape({
+			title: _react.PropTypes.string.isRequired,
+			nextQuestionID: _react.PropTypes.number.isRequired,
+			questions: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+				text: _react.PropTypes.string.isRequired,
+				correctAnswer: _react.PropTypes.string.isRequired,
+				incorrectAnswers: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+					text: _react.PropTypes.string.isRequired,
+					id: _react.PropTypes.number.isRequired
+				})).isRequired,
+				id: _react.PropTypes.number.isRequired
+			})).isRequired,
+			privacy: _react.PropTypes.bool.isRequired
+		})
 	};
 	
 	var mapStateToProps = function mapStateToProps(state) {
@@ -24203,13 +24222,24 @@
 	var TextInput = exports.TextInput = function (_React$Component) {
 		_inherits(TextInput, _React$Component);
 	
-		function TextInput() {
+		function TextInput(props) {
 			_classCallCheck(this, TextInput);
 	
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(TextInput).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TextInput).call(this, props));
+	
+			_this.error = _this.error.bind(_this);
+			_this.state = {
+				errorMessage: null
+			};
+			return _this;
 		}
 	
 		_createClass(TextInput, [{
+			key: 'error',
+			value: function error(errorMessage) {
+				this.setState({ errorMessage: errorMessage });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				var _this2 = this;
@@ -24224,6 +24254,9 @@
 					marginBottom: '2%',
 					marginLeft: '1%'
 				};
+				var inputStyle = {
+					backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'white'
+				};
 				return _react2.default.createElement(
 					'div',
 					{ className: 'textInput', style: containerStyle },
@@ -24236,7 +24269,7 @@
 						ref: function ref(i) {
 							_this2.node = i;
 						}, placeholder: this.props.placeholder,
-						onChange: this.props.onChange
+						onChange: this.props.onChange, style: inputStyle, required: this.props.required
 					})
 				);
 			}
@@ -24248,7 +24281,8 @@
 	TextInput.propTypes = {
 		placeholder: _react.PropTypes.string,
 		label: _react.PropTypes.string.isRequired,
-		onChange: _react.PropTypes.func
+		onChange: _react.PropTypes.func,
+		required: _react.PropTypes.bool
 	};
 	
 	TextInput.defaultProps = {

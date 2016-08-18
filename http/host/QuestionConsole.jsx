@@ -14,16 +14,23 @@ class NewSetForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.submitQuestionSet = this.submitQuestionSet.bind(this);
+		this.verifyQuestionSet = this.verifyQuestionSet.bind(this);
+	}
+	verifyQuestionSet() {
+		const set = this.props.newQuestionSet;
+		if (!set.title) {
+			this.titleInput.error('Need a set title.');
+		}
 	}
 	submitQuestionSet() {
-		// TODO: add question set submission functionality
+		this.verifyQuestionSet();
 	}
 	render() {
 		return (
-			<div id="new_set">
+			<form id="new_set">
 				<h2>New Question Set</h2>
 				<TextInput
-					label="Title" placeholder="My Question Set"
+					label="Title" placeholder="My Question Set" required
 					ref={(t) => { this.titleInput = t; }}
 					onChange={() => { this.props.editSetTitle(this.titleInput.node.value); }}
 				/>
@@ -32,8 +39,8 @@ class NewSetForm extends React.Component {
 					label="Private set" ref={(c) => { this.checkboxInput = c; }}
 					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
 				/>
-				<button onClick={this.submitQuestionSet}>Submit</button>
-			</div>
+			<input onClick={this.submitQuestionSet} type="submit" name="Submit" />
+			</form>
 		);
 	}
 }
@@ -41,6 +48,20 @@ class NewSetForm extends React.Component {
 NewSetForm.propTypes = {
 	editSetTitle: PropTypes.func.isRequired,
 	toggleSetPrivacy: PropTypes.func.isRequired,
+	newQuestionSet: PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		nextQuestionID: PropTypes.number.isRequired,
+		questions: PropTypes.arrayOf(PropTypes.shape({
+			text: PropTypes.string.isRequired,
+			correctAnswer: PropTypes.string.isRequired,
+			incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
+				text: PropTypes.string.isRequired,
+				id: PropTypes.number.isRequired,
+			})).isRequired,
+			id: PropTypes.number.isRequired,
+		})).isRequired,
+		privacy: PropTypes.bool.isRequired,
+	}),
 };
 
 const mapStateToProps = (state) => ({

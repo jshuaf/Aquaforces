@@ -1,6 +1,16 @@
 import React, { PropTypes } from 'react';
 
 export class TextInput extends React.Component {
+	constructor(props) {
+		super(props);
+		this.error = this.error.bind(this);
+		this.state = {
+			errorMessage: null,
+		};
+	}
+	error(errorMessage) {
+		this.setState({ errorMessage });
+	}
 	render() {
 		const containerStyle = {
 			display: 'flex',
@@ -12,12 +22,15 @@ export class TextInput extends React.Component {
 			marginBottom: '2%',
 			marginLeft: '1%',
 		};
+		const inputStyle = {
+			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'white',
+		};
 		return (
 			<div className="textInput" style={containerStyle}>
 				<span style={labelStyle}>{this.props.label}</span>
 				<input
 					ref={(i) => { this.node = i; }} placeholder={this.props.placeholder}
-					onChange={this.props.onChange}
+					onChange={this.props.onChange} style={inputStyle} required={this.props.required}
 				/>
 			</div>
 		);
@@ -28,6 +41,7 @@ TextInput.propTypes = {
 	placeholder: PropTypes.string,
 	label: PropTypes.string.isRequired,
 	onChange: PropTypes.func,
+	required: PropTypes.bool,
 };
 
 TextInput.defaultProps = {

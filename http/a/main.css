@@ -63,7 +63,6 @@ h1 { margin: 0 0 0.4em }
 }
 [hidden] > * { display: none }
 #cont label { font-size: 1.3em }
-form:not(.left-align) { margin: 0 auto }
 .centerbox {
 	display: table;
 	margin: 1em auto;
@@ -105,19 +104,12 @@ label input:not(#crewnum):not([type='checkbox']) { width: 100% }
 @media (min-width: 500px) {
 	.pregamescreen form:not(#search-form) { padding: 0 10% }
 }
-form:not([hidden]) {
-	transition: opacity 0.5s;
-	display: table;
-}
 form[hidden] {
 	opacity: 0;
 	height: 0;
 	display: block;
 	padding: 1px;
 	margin-bottom: -2px;
-}
-form:not([hidden]) + form[hidden] {
-	display: table;
 }
 h1 button, h1 small, #subheader small {
 	float: right;
