@@ -24101,6 +24101,8 @@
 				var set = this.props.newQuestionSet;
 				if (!set.title) {
 					this.titleInput.error('Need a set title.');
+				} else {
+					this.titleInput.clearError();
 				}
 			}
 		}, {
@@ -24240,6 +24242,11 @@
 				this.setState({ errorMessage: errorMessage });
 			}
 		}, {
+			key: 'clearError',
+			value: function clearError() {
+				this.setState({ errorMessage: null });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				var _this2 = this;
@@ -24257,6 +24264,34 @@
 				var inputStyle = {
 					backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'white'
 				};
+				var errorContainerStyle = {
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'left',
+					width: '100%',
+					marginLeft: '1%',
+					marginTop: '2%'
+				};
+				var errorIconStyle = {
+					height: '1.2rem',
+					width: '1.2rem',
+					marginRight: '0.5rem'
+				};
+				var errorMessageStyle = {
+					color: '#D25244',
+					fontSize: '0.85rem'
+				};
+	
+				var errorDiv = this.state.errorMessage ? _react2.default.createElement(
+					'div',
+					{ style: errorContainerStyle },
+					_react2.default.createElement('img', { src: '../img/icons/exclamation.svg', alt: '', style: errorIconStyle }),
+					_react2.default.createElement(
+						'span',
+						{ style: errorMessageStyle },
+						this.state.errorMessage
+					)
+				) : undefined;
 				return _react2.default.createElement(
 					'div',
 					{ className: 'textInput', style: containerStyle },
@@ -24270,7 +24305,8 @@
 							_this2.node = i;
 						}, placeholder: this.props.placeholder,
 						onChange: this.props.onChange, style: inputStyle, required: this.props.required
-					})
+					}),
+					errorDiv
 				);
 			}
 		}]);

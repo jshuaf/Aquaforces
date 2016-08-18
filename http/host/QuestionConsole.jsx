@@ -20,6 +20,8 @@ class NewSetForm extends React.Component {
 		const set = this.props.newQuestionSet;
 		if (!set.title) {
 			this.titleInput.error('Need a set title.');
+		} else {
+			this.titleInput.clearError();
 		}
 	}
 	submitQuestionSet() {

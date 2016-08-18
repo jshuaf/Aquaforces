@@ -11,6 +11,9 @@ export class TextInput extends React.Component {
 	error(errorMessage) {
 		this.setState({ errorMessage });
 	}
+	clearError() {
+		this.setState({ errorMessage: null });
+	}
 	render() {
 		const containerStyle = {
 			display: 'flex',
@@ -25,6 +28,29 @@ export class TextInput extends React.Component {
 		const inputStyle = {
 			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'white',
 		};
+		const errorContainerStyle = {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'left',
+			width: '100%',
+			marginLeft: '1%',
+			marginTop: '2%',
+		};
+		const errorIconStyle = {
+			height: '1.2rem',
+			width: '1.2rem',
+			marginRight: '0.5rem',
+		};
+		const errorMessageStyle = {
+			color: '#D25244',
+			fontSize: '0.85rem',
+		};
+
+		const errorDiv = this.state.errorMessage ?
+			<div style={errorContainerStyle}>
+				<img src="../img/icons/exclamation.svg" alt="" style={errorIconStyle} />
+				<span style={errorMessageStyle}>{this.state.errorMessage}</span>
+			</div> : undefined;
 		return (
 			<div className="textInput" style={containerStyle}>
 				<span style={labelStyle}>{this.props.label}</span>
@@ -32,6 +58,8 @@ export class TextInput extends React.Component {
 					ref={(i) => { this.node = i; }} placeholder={this.props.placeholder}
 					onChange={this.props.onChange} style={inputStyle} required={this.props.required}
 				/>
+			{errorDiv}
+				{}
 			</div>
 		);
 	}
