@@ -9,8 +9,18 @@ function questionSets(state = [], action) {
 	}
 }
 
+function gameStatus(state = 'notStarted', action) {
+	switch (action.type) {
+	case actions.START_GAME:
+		return 'boarding';
+	default:
+		return state;
+	}
+}
+
 export default function gameHostReducer(state = {}, action) {
 	return {
 		questionSets: questionSets(state.questionSets, action),
+		gameStatus: gameStatus(state.gameStatus, action),
 	};
 }

@@ -7,9 +7,13 @@ import gameHostReducer from './reducers';
 
 const store = createStore(gameHostReducer, window.devToolsExtension && window.devToolsExtension());
 
+const socketProtocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
+const socketPort = location.port !== 80 ? `:${location.port}` : '';
+const socket = new WebSocket(`${socketProtocol}${location.hostname}${socketPort}/host`);
+
 render(
 	<Provider store={store}>
-		<GameHost />
+		<GameHost socket={socket} />
 	</Provider>,
 	document.getElementById('mountNode'));
 /*

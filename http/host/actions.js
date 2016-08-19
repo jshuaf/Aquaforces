@@ -1,4 +1,5 @@
 export const POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
+export const START_GAME = 'START_GAME';
 
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
@@ -11,3 +12,4 @@ function makeActionCreator(type, ...argNames) {
 }
 
 export const populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
+export const startGame = makeActionCreator(START_GAME);
