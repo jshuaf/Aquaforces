@@ -106,7 +106,7 @@ function newQuestionSet(state = initialQuestionSetState, action) {
 function questionSets(state = [], action) {
 	switch (action.type) {
 	case actions.POPULATE_QUESTION_SET_LIST:
-		return Object.assign({}, state, action.questionSets);
+		return action.questionSets;
 	default:
 		return state;
 	}

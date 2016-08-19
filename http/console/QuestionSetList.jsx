@@ -6,11 +6,7 @@ import QuestionSet from './QuestionSet.jsx';
 const request = require('request');
 
 class QuestionSetList extends React.Component {
-	constructor(props) {
-		super(props);
-		this.getQuestionSets = this.getQuestionSets.bind(this);
-	}
-	getQuestionSets() {
+	componentDidMount() {
 		const url = `${location.protocol}//${location.host}/api/get-qsets`;
 		request({
 			url,
@@ -19,7 +15,7 @@ class QuestionSetList extends React.Component {
 			method: 'post',
 		}, (error, response, body) => {
 			if (error) return console.error(error);
-			populateQuestionSetList(body);
+			this.props.populateQuestionSetList(body);
 		});
 	}
 	render() {
