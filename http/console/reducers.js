@@ -107,6 +107,10 @@ function questionSets(state = [], action) {
 	switch (action.type) {
 	case actions.POPULATE_QUESTION_SET_LIST:
 		return action.questionSets;
+	case actions.DELETE_SET:
+		return state.filter((questionSet) =>
+			questionSet._id !== action.id
+		);
 	default:
 		return state;
 	}

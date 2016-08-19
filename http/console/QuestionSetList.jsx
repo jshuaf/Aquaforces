@@ -6,10 +6,6 @@ import QuestionSet from './QuestionSet.jsx';
 const request = require('request');
 
 class QuestionSetList extends React.Component {
-	constructor(props) {
-		super(props);
-		this.deleteSet = this.deleteSet.bind(this);
-	}
 	componentDidMount() {
 		const url = `${location.protocol}//${location.host}/api/get-qsets`;
 		request({
