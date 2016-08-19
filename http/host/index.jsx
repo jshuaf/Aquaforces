@@ -1,13 +1,3 @@
-import { render } from 'react-dom';
-import React from 'react';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import GameHost from './GameHost.jsx';
-import QuestionConsole from './QuestionConsole.jsx';
-import questionConsoleReducer from './reducers.js';
-
-const store = createStore(questionConsoleReducer, window.devToolsExtension && window.devToolsExtension());
-
 /*
 const socket = new WebSocket((location.protocol ===
 	'http:' ? 'ws://' : 'wss://') + location.hostname +
@@ -172,10 +162,3 @@ function endGame() {
 		event: 'endGame',
 	}));
 }*/
-
-render(
-	<Provider store={store}>
-		<QuestionConsole />
-	</Provider>,
-	document.getElementById('mountNode')
-);

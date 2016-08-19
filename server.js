@@ -227,7 +227,7 @@ const serverHandler = o(function* (req, res) {
 		yield respondPage(null, req, res, yield, { inhead: '<link rel="stylesheet" href="/landing.css" />' });
 		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.clientID));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (reqPath === '/host/' && !usesIODomain) {
+	} else if (reqPath === '/console/' && !usesIODomain) {
 		// Host console
 		yield respondPage('Question Sets', req, res, yield, { inhead: '<link rel="stylesheet" href="/a/host.css" />', noBG: true });
 		const filter = user ? { $or: [{ userID: user._id }, { public: true }] } : { public: true };
@@ -275,7 +275,7 @@ const serverHandler = o(function* (req, res) {
 				});
 				qsetstr += '</ol><a class="new-question">add question</a></details>';
 			} else {
-				let data = (yield fs.readFile('./html/host.html', yield)).toString()
+				let data = (yield fs.readFile('./html/console.html', yield)).toString()
 					.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
 					.replaceAll('$host', encodeURIComponent(`http://${req.headers.host}`))
 					.replaceAll('$googleClientID', config.googleAuth.clientID);
