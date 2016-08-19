@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 const Question = function ({ text, correctAnswer, incorrectAnswers }) {
 	return (
 		<div className="question">
-			<h4>{text}</h4>;
+			<h4>{text}</h4>
 			<CorrectAnswer text={correctAnswer} />
 			{incorrectAnswers.map((incorrectAnswer, index) =>
 				<IncorrectAnswer text={incorrectAnswer.text} key={index} />
@@ -23,7 +23,7 @@ Question.propTypes = {
 };
 
 const CorrectAnswer = function ({ text }) {
-	return <h5>{text}</h5>;
+	return <p>Correct answer: {text}</p>;
 };
 
 CorrectAnswer.propTypes = {
@@ -31,7 +31,7 @@ CorrectAnswer.propTypes = {
 };
 
 const IncorrectAnswer = function ({ text }) {
-	return <h5>{text}</h5>;
+	return <p>Incorrect answer: {text}</p>;
 };
 
 IncorrectAnswer.propTypes = {

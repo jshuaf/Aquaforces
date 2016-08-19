@@ -7,6 +7,7 @@ export const EDIT_SET_TITLE = 'EDIT_SET_TITLE';
 export const TOGGLE_SET_PRIVACY = 'TOGGLE_SET_PRIVACY';
 
 export const POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
+export const DELETE_SET = 'DELETE_SET';
 
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
@@ -27,3 +28,4 @@ export const editSetTitle = makeActionCreator(EDIT_SET_TITLE, 'text');
 export const toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy');
 
 export const populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
+export const deleteSet = makeActionCreator(DELETE_SET, 'id');

@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Question from './Question.jsx';
+import { deleteSet } from './actions';
 
 class QuestionSet extends React.Component {
 	constructor(props) {
@@ -7,8 +9,7 @@ class QuestionSet extends React.Component {
 		this.deleteSet = this.deleteSet.bind(this);
 	}
 	deleteSet() {
-		console.log('delete a set');
-		return;
+		this.props.deleteSet(this.props._id);
 	}
 	render() {
 		return (
@@ -18,13 +19,15 @@ class QuestionSet extends React.Component {
 					<Question {...question} key={index} />
 				)}
 				{this.props.privacy ? <span key={-2}>Private set</span> : <span key={-2}>Public set</span>}
-				<button key={-3} onClick={this.deleteSet}>Delete set</button>
+				<button onClick={this.deleteSet}>Delete set </button>
 			</div>
 		);
 	}
 }
 
 QuestionSet.propTypes = {
+	deleteSet: PropTypes.func.isRequired,
+	_id: PropTypes.string.isRequired,
 	title: PropTypes.string.isRequired,
 	nextQuestionID: PropTypes.number.isRequired,
 	questions: PropTypes.arrayOf(PropTypes.shape({
@@ -38,5 +41,15 @@ QuestionSet.propTypes = {
 	})).isRequired,
 	privacy: PropTypes.bool.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+	deleteSet: (id) => {
+		dispatch(deleteSet(id));
+	},
+});
+
+/* eslint-disable no-class-assign */
+QuestionSet = connect(null, mapDispatchToProps)(QuestionSet)
+/* eslint-enable no-class-assign */;
 
 export default QuestionSet;
