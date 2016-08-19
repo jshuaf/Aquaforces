@@ -69,7 +69,7 @@ module.exports = function (req, res, post, user) {
 		}
 
 		dbcs.qsets.insert(questionSet);
-		res.end(res.writeHead(200));
+		res.end(res.writeHead(204));
 	} else if (req.url.pathname === '/get-qsets') {
 		const qsets = [];
 		dbcs.qsets.find({}).each((err, qset) => {
@@ -80,24 +80,22 @@ module.exports = function (req, res, post, user) {
 			}
 		});
 	} else if (req.url.pathname === '/delete-qset') {
-		dbcs.qsets.findOne({ _id: post.id }, function (err, qset) {
+		dbcs.qsets.findOne({ _id: post.id }, (err, qset) => {
 			if (err) throw err;
 			if (!qset) {
 				return res.badRequest('Error: Question set not found.');
-			} else if (!user.admin && qset.userID !== user._id) {
+			} else if (user && !user.admin && qset.userID !== user._id) {
 				return res.badRequest('Error: You may not delete question sets that aren\'t yours.');
 			}
 			dbcs.qsets.remove({ _id: post.id });
-			res.writeHead(204);
-			res.end();
+			res.end(res.writeHead(204));
 		});
 	} else if (req.url.pathname === '/edit-question') {
 		dbcs.qsets.findOne({ _id: post.id }, function (err, qset) {
 			if (err) throw err;
 			if (!qset) {
 				return res.badRequest('Error: Question set not found.');
-			}
-			if (!user.admin && qset.userID !== user._id) {
+			} else if (!user.admin && qset.userID !== user._id) {
 				return res.badRequest('Error: You may not edit question sets that aren\'t yours.');
 			}
 			if (post.num !== 'new' && !qset.questions[parseInt(post.num, 10)]) {

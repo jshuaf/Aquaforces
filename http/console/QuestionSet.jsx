@@ -3,13 +3,24 @@ import { connect } from 'react-redux';
 import Question from './Question.jsx';
 import { deleteSet } from './actions';
 
+const request = require('request');
+
 class QuestionSet extends React.Component {
 	constructor(props) {
 		super(props);
 		this.deleteSet = this.deleteSet.bind(this);
 	}
 	deleteSet() {
-		this.props.deleteSet(this.props._id);
+		const url = `${location.protocol}//${location.host}/api/delete-qset`;
+		request({
+			url,
+			method: 'post',
+			json: true,
+			body: { id: this.props._id },
+		}, (error) => {
+			if (error) return console.error(error);
+			this.props.deleteSet(this.props._id);
+		});
 	}
 	render() {
 		return (

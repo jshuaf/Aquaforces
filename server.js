@@ -142,7 +142,7 @@ const serverHandler = o(function* (req, res) {
 		req.on('end', () => {
 			if (req.abort) return;
 			post = JSON.parse(post);
-			apiServer(req, res, post);
+			apiServer(req, res, post, user);
 		});
 	} else if (reqPath.includes('.')) {
 		// Static file serving
