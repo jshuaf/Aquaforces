@@ -474,7 +474,7 @@ mongo.connect(config.mongoPath, (err, db) => {
 	console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
 
 	/* eslint-disable global-require */
-	require('./sockets')(server);
+	require('./sockets/index')(server);
 	/* eslint-enable global-require */
 	console.log('Sockets running on port 3000 over plain WS.'.cyan);
 
