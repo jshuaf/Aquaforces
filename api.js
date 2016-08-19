@@ -31,7 +31,7 @@ module.exports = function (req, res, post, user) {
 		if (!(post.questions instanceof Array)) {
 			return res.badRequest('Error: Questions must be an array.');
 		}
-		const verifiedQuestions = [];
+
 		for (let i = 0; i < post.questions.length; i++) {
 			const q = post.questions[i];
 			if (!q.text || !q.correctAnswer || !q.incorrectAnswers) {
@@ -56,21 +56,13 @@ module.exports = function (req, res, post, user) {
 						`Error: Incorrect answer ${j} of question ${i} should be under 64 characters.`);
 				}
 			}
-
-			verifiedQuestions.push({
-				text: q.text,
-				correctAnswer: q.correctAnswer,
-				incorrectAnswers: q.incorrectAnswers.map((a) => ({ text: a.text })),
-			});
 		}
 
-		const questionSet = {
+		const questionSet = Object.assign({
 			_id: generateID(),
-			title: post.title,
-			questions: verifiedQuestions,
 			timeAdded: new Date().getTime(),
-			privacy: post.privacy,
-		};
+		}, post);
+
 		if (user) {
 			questionSet.userID = user._id;
 			questionSet.userName = user.name;

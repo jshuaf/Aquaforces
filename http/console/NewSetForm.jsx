@@ -29,7 +29,7 @@ class NewSetForm extends React.Component {
 			method: 'post',
 			json: true,
 			body: set,
-		}, (error, response, body) => {
+		}, (error) => {
 			if (error) return console.error(error);
 		});
 	}
