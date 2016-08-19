@@ -72,11 +72,13 @@ class GameHost extends React.Component {
 }
 
 GameHost.propTypes = {
-	name: PropTypes.string.isRequired,
-	users: PropTypes.arrayOf(PropTypes.string).isRequired,
-	position: PropTypes.number.isRequired,
-	status: PropTypes.string.isRequired,
-	boat: PropTypes.string.isRequired,
+	initialCrews: PropTypes.shape({
+		name: PropTypes.string.isRequired,
+		users: PropTypes.arrayOf(PropTypes.string).isRequired,
+		position: PropTypes.number.isRequired,
+		status: PropTypes.string.isRequired,
+		boat: PropTypes.string.isRequired,
+	}).isRequired,
 };
 
 export default GameHost;

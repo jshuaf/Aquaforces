@@ -23788,11 +23788,13 @@
 	}(_react2.default.Component);
 	
 	GameHost.propTypes = {
-		name: _react.PropTypes.string.isRequired,
-		users: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
-		position: _react.PropTypes.number.isRequired,
-		status: _react.PropTypes.string.isRequired,
-		boat: _react.PropTypes.string.isRequired
+		initialCrews: _react.PropTypes.shape({
+			name: _react.PropTypes.string.isRequired,
+			users: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
+			position: _react.PropTypes.number.isRequired,
+			status: _react.PropTypes.string.isRequired,
+			boat: _react.PropTypes.string.isRequired
+		}).isRequired
 	};
 	
 	exports.default = GameHost;
@@ -23901,7 +23903,7 @@
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -23913,61 +23915,69 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Leaderboard = _react2.default.createClass({
-		displayName: 'Leaderboard',
+	var Leaderboard = function Leaderboard(_ref) {
+		var crews = _ref.crews;
 	
 		// MARK: make leaderboard sort
-		render: function render() {
-			var style = {
-				borderStyle: 'dotted',
-				borderColor: 'green',
-				borderWidth: 1.0
-			};
-			return _react2.default.createElement(
-				'div',
+		return _react2.default.createElement(
+			"div",
+			null,
+			_react2.default.createElement(
+				"h4",
 				null,
 				_react2.default.createElement(
-					'h4',
+					"strong",
 					null,
-					_react2.default.createElement(
-						'strong',
-						null,
-						'Leaderboard'
-					)
-				),
-				Object.keys(this.props.crews).map(function (crewNumber, i) {
-					var crew = this.props.crews[crewNumber];
-					return _react2.default.createElement(LeaderboardEntry, { crewNumber: crewNumber, crewPosition: crew.position, key: i });
-				}.bind(this))
-			);
-		}
-	});
-	
-	var LeaderboardEntry = _react2.default.createClass({
-		displayName: 'LeaderboardEntry',
-		render: function render() {
-			var style = {
-				fontSize: (this.props.crewPosition + 1) * 15 + 'px',
-				padding: 5 + this.props.crewPosition + 'px'
-			};
-			return _react2.default.createElement(
-				'div',
-				{ className: 'leaderboardEntry' },
-				_react2.default.createElement(
-					'h5',
-					null,
-					'Crew ',
-					this.props.crewNumber,
-					': ',
-					_react2.default.createElement(
-						'span',
-						{ style: style, className: 'pill' },
-						Math.round(this.props.crewPosition * 10) / 10
-					)
+					"Leaderboard"
 				)
-			);
-		}
-	});
+			),
+			Object.keys(crews).map(function (crewNumber, i) {
+				var crew = crews[crewNumber];
+				return _react2.default.createElement(LeaderboardEntry, { crewNumber: crewNumber, crewPosition: crew.position, key: i });
+			})
+		);
+	};
+	
+	Leaderboard.propTypes = {
+		crews: _react.PropTypes.shape({
+			name: _react.PropTypes.string.isRequired,
+			users: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
+			position: _react.PropTypes.number.isRequired,
+			status: _react.PropTypes.string.isRequired,
+			boat: _react.PropTypes.string.isRequired
+		}).isRequired
+	};
+	
+	var LeaderboardEntry = function LeaderboardEntry(_ref2) {
+		var crewNumber = _ref2.crewNumber;
+		var crewPosition = _ref2.crewPosition;
+	
+		var style = {
+			fontSize: (crewPosition + 1) * 15 + "px",
+			padding: 5 + crewPosition + "px"
+		};
+		return _react2.default.createElement(
+			"div",
+			{ className: "leaderboardEntry" },
+			_react2.default.createElement(
+				"h5",
+				null,
+				"Crew ",
+				crewNumber,
+				":",
+				_react2.default.createElement(
+					"span",
+					{ style: style, className: "pill" },
+					Math.round(crewPosition * 10) / 10
+				)
+			)
+		);
+	};
+	
+	LeaderboardEntry.propTypes = {
+		crewNumber: _react.PropTypes.number.isRequired,
+		crewPosition: _react.PropTypes.number.isRequired
+	};
 	
 	exports.default = Leaderboard;
 
