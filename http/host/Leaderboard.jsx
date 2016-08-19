@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
 
-const Leaderboard = ({ crews }) => {
+const Leaderboard = ({ crews }) =>
 	// MARK: make leaderboard sort
-	return (
-		<div>
+	<div>
 		<h4><strong>Leaderboard</strong></h4>
 		{
 			Object.keys(crews).map((crewNumber, i) => {
@@ -11,9 +10,7 @@ const Leaderboard = ({ crews }) => {
 				return <LeaderboardEntry crewNumber={crewNumber} crewPosition={crew.position} key={i} />;
 			})
 		}
-		</div>
-	);
-};
+	</div>;
 
 Leaderboard.propTypes = {
 	crews: PropTypes.shape({

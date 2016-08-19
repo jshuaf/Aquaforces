@@ -91,7 +91,7 @@ module.exports = function (req, res, post, user) {
 			res.end(res.writeHead(204));
 		});
 	} else if (req.url.pathname === '/edit-question') {
-		dbcs.qsets.findOne({ _id: post.id }, function (err, qset) {
+		dbcs.qsets.findOne({ _id: post.id }, (err, qset) => {
 			if (err) throw err;
 			if (!qset) {
 				return res.badRequest('Error: Question set not found.');

@@ -23950,24 +23950,25 @@
 	
 	var Leaderboard = function Leaderboard(_ref) {
 		var crews = _ref.crews;
-	
-		// MARK: make leaderboard sort
-		return _react2.default.createElement(
-			"div",
-			null,
+		return (
+			// MARK: make leaderboard sort
 			_react2.default.createElement(
-				"h4",
+				"div",
 				null,
 				_react2.default.createElement(
-					"strong",
+					"h4",
 					null,
-					"Leaderboard"
-				)
-			),
-			Object.keys(crews).map(function (crewNumber, i) {
-				var crew = crews[crewNumber];
-				return _react2.default.createElement(LeaderboardEntry, { crewNumber: crewNumber, crewPosition: crew.position, key: i });
-			})
+					_react2.default.createElement(
+						"strong",
+						null,
+						"Leaderboard"
+					)
+				),
+				Object.keys(crews).map(function (crewNumber, i) {
+					var crew = crews[crewNumber];
+					return _react2.default.createElement(LeaderboardEntry, { crewNumber: crewNumber, crewPosition: crew.position, key: i });
+				})
+			)
 		);
 	};
 	

@@ -229,7 +229,7 @@ const serverHandler = o(function* (req, res) {
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath === '/console/' && !usesIODomain) {
 		// Host console
-		yield respondPage('Question Sets', req, res, yield, { inhead: '<link rel="stylesheet" href="/a/host.css" />', noBG: true });
+		yield respondPage('Question Sets', req, res, yield, { inhead: '', noBG: true });
 		const filter = user ? { $or: [{ userID: user._id }, { public: true }] } : { public: true };
 		const q = (req.url.query.q || '').trim();
 		let qsetstr = '';
