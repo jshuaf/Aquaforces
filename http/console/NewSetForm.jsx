@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
 import { TextInput, Checkbox } from '../shared/Input.jsx';
-import { editSetTitle, toggleSetPrivacy } from './actions';
+import { editSetTitle, toggleSetPrivacy, addSet } from './actions';
 
 const request = require('request');
 
@@ -31,6 +31,7 @@ class NewSetForm extends React.Component {
 			body: set,
 		}, (error) => {
 			if (error) return console.error(error);
+			this.props.addSet(set);
 		});
 	}
 	render() {
@@ -56,6 +57,7 @@ class NewSetForm extends React.Component {
 NewSetForm.propTypes = {
 	editSetTitle: PropTypes.func.isRequired,
 	toggleSetPrivacy: PropTypes.func.isRequired,
+	addSet: PropTypes.func.isRequired,
 	newQuestionSet: PropTypes.shape({
 		title: PropTypes.string.isRequired,
 		nextQuestionID: PropTypes.number.isRequired,
@@ -82,6 +84,9 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 	toggleSetPrivacy: (privacy) => {
 		dispatch(toggleSetPrivacy(privacy));
+	},
+	addSet: (set) => {
+		dispatch(addSet(set));
 	},
 });
 
