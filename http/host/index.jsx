@@ -9,7 +9,7 @@ const socket = new WebSocket((location.protocol ===
 	(location.port !== 80 ? ':' + location.port : '') + '/host/');
 const cont = document.getElementById('cont');
 
-const crews = {};w
+const crews = {};
 const usersWithoutCrews = [];
 
 let gameHost;

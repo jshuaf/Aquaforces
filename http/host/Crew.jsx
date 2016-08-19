@@ -1,0 +1,73 @@
+import React from 'react';
+
+const Crew = React.createClass({
+	getInitialState() {
+		return {
+			velocity: 0,
+			deltaVelocity: 10,
+			maximumDeltaVelocity: 10,
+			hp: 1,
+			current: -0.1,
+			isRaft: false,
+			isWhirlpool: false,
+		};
+	},
+
+	getDefaultProps() {
+		return {
+			currentConstant: 0.003,
+			velocityConstant: 0.00001,
+			deltaHPConstant: -0.1,
+		};
+	},
+
+	processWhirlpool(status) {
+		switch (status) {
+		case 'new':
+			this.setState({ isWhirlpool: true });
+			break;
+		case 'timeout':
+			this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
+			break;
+		case 'wrongAnswer':
+			this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
+			break;
+		case 'correctAnswer':
+			this.setState({ position: this.state.position + 0.3, isWhirlpool: false });
+			break;
+		default:
+			break;
+		}
+	},
+
+	processAnswer(wasCorrectAnswer) {
+		if (wasCorrectAnswer) {
+			this.setState({
+				velocity: this.state.velocity + this.state.deltaVelocity,
+			});
+		} else if (this.state.isRaft) {
+			this.setState({ deltaVelocity: this.state.deltaVelocity * 0.25 });
+		} else {
+			this.setState({
+				hp: this.state.hp + this.props.deltaHPConstant,
+			});
+			if (!this.state.isRaft && this.state.hp <= 0) {
+				this.setState({ isRaft: true });
+			}
+		}
+	},
+
+	render() {
+		let style = {
+			width: '10rem',
+			marginLeft: (this.props.position * 100) + 'px',
+			borderRadius: '5px',
+			border: 'none',
+			background: 'url(/img/boats-side/' + (this.state.isRaft ? 'rafts' : 'canoes') + '/' + this.props.size + '-members.svg) no-repeat center top',
+		};
+		const className = this.state.isRaft ? 'raft' : 'racetrack-boat';
+		return <div className={className} style={style}><p>Crew {this.props.crewNumber}</p></div>;
+	},
+});
+
+export default Crew;

@@ -68,7 +68,7 @@
 		(location.port !== 80 ? ':' + location.port : '') + '/host/');
 	const cont = document.getElementById('cont');
 
-	const crews = {};w
+	const crews = {};
 	const usersWithoutCrews = [];
 
 	let gameHost;
@@ -23650,89 +23650,171 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 174);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Crew = __webpack_require__(/*! ./Crew.jsx */ 416);
+	
+	var _Crew2 = _interopRequireDefault(_Crew);
+	
+	var _Leaderboard = __webpack_require__(/*! ./Leaderboard.jsx */ 417);
+	
+	var _Leaderboard2 = _interopRequireDefault(_Leaderboard);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var GameHost = function (_React$Component) {
+		_inherits(GameHost, _React$Component);
+	
+		function GameHost(props) {
+			_classCallCheck(this, GameHost);
+	
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameHost).call(this, props));
+	
+			_this.state = {
+				gameStatus: 'hasNotStarted',
+				startTime: new Date(),
+				crews: _this.props.initialCrews
+			};
+			_this.crews = {};
+			return _this;
+		}
+	
+		_createClass(GameHost, [{
+			key: 'answerSelected',
+			value: function answerSelected(wasCorrectAnswer, crewNumber) {
+				var crew = this.crews[crewNumber.toString()];
+				if (wasCorrectAnswer) {
+					this.updateCrewPosition(crewNumber, 0.1);
+					crew.processAnswer(wasCorrectAnswer);
+				}
+			}
+		}, {
+			key: 'updateCrewPosition',
+			value: function updateCrewPosition(crewNumber, increment) {
+				// MARK: move the camera around
+				var oldCrews = this.state.crews;
+				oldCrews[crewNumber].position += increment;
+				this.setState({
+					crews: oldCrews
+				});
+			}
+		}, {
+			key: 'updateCrewStatus',
+			value: function updateCrewStatus(crewNumber, newStatus) {
+				var oldCrews = this.state;
+				oldCrews.crews[crewNumber].props.status = newStatus;
+				this.setState(oldCrews);
+			}
+		}, {
+			key: 'updateCrewBoat',
+			value: function updateCrewBoat(crewNumber, newBoat) {
+				var oldCrews = this.state;
+				oldCrews.crews[crewNumber].props.boat = newBoat;
+				this.setState(oldCrews);
+			}
+		}, {
+			key: 'whirlpoolStatusChanged',
+			value: function whirlpoolStatusChanged(status, crewNumber) {
+				var crew = this.crews[crewNumber.toString()];
+				crew.processWhirlpool(status);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+	
+				return _react2.default.createElement(
+					'div',
+					{ className: 'container' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'row' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'three columns' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'panel' },
+								_react2.default.createElement(_Leaderboard2.default, { crews: this.state.crews })
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'nine columns' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'panel' },
+								_react2.default.createElement(
+									'h4',
+									null,
+									_react2.default.createElement(
+										'strong',
+										null,
+										'Live stream'
+									)
+								),
+								Object.keys(this.state.crews).map(function (crewNumber, i) {
+									var crew = _this2.state.crews[crewNumber];
+									return _react2.default.createElement(_Crew2.default, {
+										position: crew.position, status: crew.status,
+										boat: crew.boat, size: crew.users.length,
+										crewNumber: crewNumber, key: i,
+										ref: function ref(c) {
+											_this2.crews[crewNumber] = c;
+										} });
+								})
+							)
+						)
+					)
+				);
+			}
+		}]);
+	
+		return GameHost;
+	}(_react2.default.Component);
+	
+	GameHost.propTypes = {
+		name: _react.PropTypes.string.isRequired,
+		users: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
+		position: _react.PropTypes.number.isRequired,
+		status: _react.PropTypes.string.isRequired,
+		boat: _react.PropTypes.string.isRequired
+	};
+	
+	exports.default = GameHost;
+
+/***/ },
+/* 416 */
+/*!****************************!*\
+  !*** ./http/host/Crew.jsx ***!
+  \****************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
 	var _react = __webpack_require__(/*! react */ 174);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var GameHost = _react2.default.createClass({
-		displayName: 'GameHost',
-		getInitialState: function getInitialState() {
-			return {
-				gameStatus: 'hasNotStarted',
-				startTime: new Date(),
-				crews: this.props.initialCrews
-			};
-		},
-		answerSelected: function answerSelected(wasCorrectAnswer, crewNumber) {
-			var crew = this.refs[crewNumber.toString()];
-			if (wasCorrectAnswer) this.updateCrewPosition(crewNumber, 0.1);
-			crew.processAnswer(wasCorrectAnswer);
-		},
-		updateCrewPosition: function updateCrewPosition(crewNumber, increment) {
-			// MARK: move the camera around
-			var oldCrews = this.state.crews;
-			oldCrews[crewNumber].position += increment;
-			this.setState({
-				crews: oldCrews
-			});
-		},
-		updateCrewStatus: function updateCrewStatus(crewNumber, newStatus) {
-			var oldCrews = this.state;
-			oldCrews.crews[crewNumber].props.status = newStatus;
-			this.setState(oldCrews);
-		},
-		updateCrewBoat: function updateCrewBoat(crewNumber, newBoat) {
-			var oldCrews = this.state;
-			oldCrews.crews[crewNumber].props.boat = newBoat;
-			this.setState(oldCrews);
-		},
-		whirlpoolStatusChanged: function whirlpoolStatusChanged(status, crewNumber) {
-			var crew = this.refs[crewNumber.toString()];
-			crew.processWhirlpool(status);
-		},
-		render: function render() {
-			return _react2.default.createElement(
-				'div',
-				{ className: 'container' },
-				_react2.default.createElement(
-					'div',
-					{ className: 'row' },
-					_react2.default.createElement(
-						'div',
-						{ className: 'three columns' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'panel' },
-							_react2.default.createElement(Leaderboard, { crews: this.state.crews })
-						)
-					),
-					_react2.default.createElement(
-						'div',
-						{ className: 'nine columns' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'panel' },
-							_react2.default.createElement(
-								'h4',
-								null,
-								_react2.default.createElement(
-									'strong',
-									null,
-									'Live stream'
-								)
-							),
-							Object.keys(this.state.crews).map(function (crewNumber, i) {
-								var crew = this.state.crews[crewNumber];
-								return _react2.default.createElement(Crew, { position: crew.position, status: crew.status, boat: crew.boat, size: crew.users.length, crewNumber: crewNumber, key: i, ref: crewNumber.toString() });
-							}.bind(this))
-						)
-					)
-				)
-			);
-		}
-	});
 	
 	var Crew = _react2.default.createClass({
 		displayName: 'Crew',
@@ -23810,6 +23892,27 @@
 		}
 	});
 	
+	exports.default = Crew;
+
+/***/ },
+/* 417 */
+/*!***********************************!*\
+  !*** ./http/host/Leaderboard.jsx ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 174);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	var Leaderboard = _react2.default.createClass({
 		displayName: 'Leaderboard',
 	
@@ -23865,6 +23968,8 @@
 			);
 		}
 	});
+	
+	exports.default = Leaderboard;
 
 /***/ }
 /******/ ]);

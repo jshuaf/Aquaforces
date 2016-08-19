@@ -20,7 +20,6 @@ html:not(.hostgame):not(.no-bg) {
 
 @media (min-height: 36em) {
 	html:not(.hostgame):not(.no-bg) {
-		background-image: url('/img/background.svg');
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: bottom left;
