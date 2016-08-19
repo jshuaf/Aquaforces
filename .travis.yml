@@ -5,7 +5,7 @@ services:
   - mongodb
 script:
   - npm test
-  - ./node_modules/.bin/synk test
+  - ./node_modules/.bin/snyk test
   - ./node_modules/.bin/nsp check
   - ./node_modules/.bin/eslint ./
   - ./node_modules/.bin/stylelint ./*/*.css ./*/*/*.css -f verbose
