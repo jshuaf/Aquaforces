@@ -3,12 +3,6 @@ node_js:
   - stable
 services:
   - mongodb
-install:
-  - npm install
-  - npm install snyk
-  - npm install nsp
-  - npm install eslint
-  - npm install stylelint
 script:
   - npm test
   - ./node_modules/.bin/synk test
