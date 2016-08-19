@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ExpandButton, TextInput } from '../shared/Input.jsx';
 import { addAnswerInput, editCorrectAnswer, editIncorrectAnswer, editQuestionText } from './actions';

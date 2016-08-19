@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-export class TextInput extends React.Component {
+export class TextInput extends Component {
 	constructor(props) {
 		super(props);
 		this.error = this.error.bind(this);
@@ -76,7 +76,7 @@ TextInput.defaultProps = {
 	index: 0,
 };
 
-export class Checkbox extends React.Component {
+export class Checkbox extends Component {
 	render() {
 		const containerStyle = {
 			display: 'flex',

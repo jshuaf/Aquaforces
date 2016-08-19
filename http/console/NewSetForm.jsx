@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
 import { TextInput, Checkbox } from '../shared/Input.jsx';
@@ -6,7 +6,7 @@ import { editSetTitle, toggleSetPrivacy, addSet } from './actions';
 
 const request = require('request');
 
-class NewSetForm extends React.Component {
+class NewSetForm extends Component {
 	constructor(props) {
 		super(props);
 		this.submitQuestionSet = this.submitQuestionSet.bind(this);

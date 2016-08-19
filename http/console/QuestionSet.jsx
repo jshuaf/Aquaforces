@@ -1,11 +1,11 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Question from './Question.jsx';
 import { deleteSet } from './actions';
 
 const request = require('request');
 
-class QuestionSet extends React.Component {
+class QuestionSet extends Component {
 	constructor(props) {
 		super(props);
 		this.deleteSet = this.deleteSet.bind(this);

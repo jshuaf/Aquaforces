@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 const Question = function ({ text, correctAnswer, incorrectAnswers }) {
 	return (

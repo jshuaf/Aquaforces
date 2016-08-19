@@ -1,8 +1,17 @@
-import React from 'react';
 import { render } from 'react-dom';
+import React from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import GameHost from './GameHost.jsx';
+import gameHostReducer from './reducers';
 
-render(<GameHost />, document.getElementById('mountNode'));
+const store = createStore(gameHostReducer, window.devToolsExtension && window.devToolsExtension());
+
+render(
+	<Provider store={store}>
+		<GameHost />
+	</Provider>,
+	document.getElementById('mountNode'));
 /*
 const socket = new WebSocket((location.protocol ===
 	'http:' ? 'ws://' : 'wss://') + location.hostname +

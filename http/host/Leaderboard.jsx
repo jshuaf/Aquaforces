@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 const Leaderboard = ({ crews }) =>
 	// MARK: make leaderboard sort

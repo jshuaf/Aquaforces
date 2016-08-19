@@ -1,6 +1,6 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-class Crew extends React.Component {
+class Crew extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {

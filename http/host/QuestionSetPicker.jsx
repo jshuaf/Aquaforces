@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { populateQuestionSetList } from './actions';
-import QuestionSet from './QuestionSet.jsx';
 
 const request = require('request');
 
-class QuestionSetList extends Component {
+class QuestionSetPickerDisplay extends Component {
 	componentDidMount() {
 		const url = `${location.protocol}//${location.host}/api/get-qsets`;
 		request({
@@ -20,29 +19,21 @@ class QuestionSetList extends Component {
 	}
 	render() {
 		return (
-			<div id="questionSets">
-				<h1>Question Sets</h1>
-			{
-				this.props.questionSets.map((questionSet, index) =>
-					<QuestionSet {...questionSet} key={index} />
-				)
-			}
-		</div>
-		);
+			<div id="questionSetPicker">
+				<h5>Pick a question set to use.</h5>
+				<select>
+					{
+						this.props.questionSets.map((questionSet, index) =>
+							<option key={index}>{questionSet.title}</option>
+						)
+					}
+				</select>
+			</div>
+	);
 	}
 }
 
-const mapStateToProps = (state) => ({
-	questionSets: state.questionSets,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-	populateQuestionSetList: (questionSets) => {
-		dispatch(populateQuestionSetList(questionSets));
-	},
-});
-
-QuestionSetList.propTypes = {
+QuestionSetPickerDisplay.propTypes = {
 	populateQuestionSetList: PropTypes.func.isRequired,
 	questionSets: PropTypes.arrayOf(PropTypes.shape({
 		title: PropTypes.string.isRequired,
@@ -60,8 +51,18 @@ QuestionSetList.propTypes = {
 	})).isRequired,
 };
 
+const mapStateToProps = (state) => ({
+	questionSets: state.questionSets,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	populateQuestionSetList: (questionSets) => {
+		dispatch(populateQuestionSetList(questionSets));
+	},
+});
+
 /* eslint-disable no-class-assign */
-QuestionSetList = connect(mapStateToProps, mapDispatchToProps)(QuestionSetList);
+const QuestionSetPicker = connect(mapStateToProps, mapDispatchToProps)(QuestionSetPickerDisplay);
 /* eslint-enable no-class-assign */
 
-export default QuestionSetList;
+export default QuestionSetPicker;
