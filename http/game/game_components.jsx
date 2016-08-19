@@ -719,7 +719,7 @@ const River = React.createClass({
 					newRightBound = currentSidePositions[i];
 				}
 			}
-    																																								});
+    																																																												});
 
 		newLeftBound += currentMaximumGap * 0.25;
 		newRightBound -= currentMaximumGap * 0.25;

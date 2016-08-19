@@ -3,7 +3,9 @@ import React from 'react';
 function getValuesOfObject(object) {
 	const values = [];
 	for (const key in object) {
-		values.push(object[key]);
+		if ({}.hasOwnProperty.call(object, key)) {
+			values.push(object[key]);
+		}
 	}
 	return values;
 }
