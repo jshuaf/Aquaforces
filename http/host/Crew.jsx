@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-const Crew = React.createClass({
-	getInitialState() {
-		return {
+class Crew extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
 			velocity: 0,
 			deltaVelocity: 10,
 			maximumDeltaVelocity: 10,
@@ -11,16 +12,14 @@ const Crew = React.createClass({
 			isRaft: false,
 			isWhirlpool: false,
 		};
-	},
-
+	}
 	getDefaultProps() {
 		return {
 			currentConstant: 0.003,
 			velocityConstant: 0.00001,
 			deltaHPConstant: -0.1,
 		};
-	},
-
+	}
 	processWhirlpool(status) {
 		switch (status) {
 		case 'new':
@@ -38,8 +37,7 @@ const Crew = React.createClass({
 		default:
 			break;
 		}
-	},
-
+	}
 	processAnswer(wasCorrectAnswer) {
 		if (wasCorrectAnswer) {
 			this.setState({
@@ -55,19 +53,27 @@ const Crew = React.createClass({
 				this.setState({ isRaft: true });
 			}
 		}
-	},
-
+	}
 	render() {
 		let style = {
 			width: '10rem',
-			marginLeft: (this.props.position * 100) + 'px',
+			marginLeft: `${this.props.position * 100}px`,
 			borderRadius: '5px',
 			border: 'none',
-			background: 'url(/img/boats-side/' + (this.state.isRaft ? 'rafts' : 'canoes') + '/' + this.props.size + '-members.svg) no-repeat center top',
+			background: `url(/img/boats-side/
+				${this.state.isRaft ? 'rafts' : 'canoes'}
+				/${this.props.size}-members.svg no-repeat center top,`,
 		};
 		const className = this.state.isRaft ? 'raft' : 'racetrack-boat';
 		return <div className={className} style={style}><p>Crew {this.props.crewNumber}</p></div>;
-	},
-});
+	}
+}
+
+Crew.propTypes = {
+	deltaHPConstant: PropTypes.number.isRequired,
+	position: PropTypes.number.isRequired,
+	size: PropTypes.number.isRequired,
+	crewNumber: PropTypes.number.isRequired,
+};
 
 export default Crew;

@@ -23812,16 +23812,29 @@
 		value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(/*! react */ 174);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Crew = _react2.default.createClass({
-		displayName: 'Crew',
-		getInitialState: function getInitialState() {
-			return {
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Crew = function (_React$Component) {
+		_inherits(Crew, _React$Component);
+	
+		function Crew(props) {
+			_classCallCheck(this, Crew);
+	
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Crew).call(this, props));
+	
+			_this.state = {
 				velocity: 0,
 				deltaVelocity: 10,
 				maximumDeltaVelocity: 10,
@@ -23830,69 +23843,89 @@
 				isRaft: false,
 				isWhirlpool: false
 			};
-		},
-		getDefaultProps: function getDefaultProps() {
-			return {
-				currentConstant: 0.003,
-				velocityConstant: 0.00001,
-				deltaHPConstant: -0.1
-			};
-		},
-		processWhirlpool: function processWhirlpool(status) {
-			switch (status) {
-				case 'new':
-					this.setState({ isWhirlpool: true });
-					break;
-				case 'timeout':
-					this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
-					break;
-				case 'wrongAnswer':
-					this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
-					break;
-				case 'correctAnswer':
-					this.setState({ position: this.state.position + 0.3, isWhirlpool: false });
-					break;
-				default:
-					break;
+			return _this;
+		}
+	
+		_createClass(Crew, [{
+			key: 'getDefaultProps',
+			value: function getDefaultProps() {
+				return {
+					currentConstant: 0.003,
+					velocityConstant: 0.00001,
+					deltaHPConstant: -0.1
+				};
 			}
-		},
-		processAnswer: function processAnswer(wasCorrectAnswer) {
-			if (wasCorrectAnswer) {
-				this.setState({
-					velocity: this.state.velocity + this.state.deltaVelocity
-				});
-			} else if (this.state.isRaft) {
-				this.setState({ deltaVelocity: this.state.deltaVelocity * 0.25 });
-			} else {
-				this.setState({
-					hp: this.state.hp + this.props.deltaHPConstant
-				});
-				if (!this.state.isRaft && this.state.hp <= 0) {
-					this.setState({ isRaft: true });
+		}, {
+			key: 'processWhirlpool',
+			value: function processWhirlpool(status) {
+				switch (status) {
+					case 'new':
+						this.setState({ isWhirlpool: true });
+						break;
+					case 'timeout':
+						this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
+						break;
+					case 'wrongAnswer':
+						this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
+						break;
+					case 'correctAnswer':
+						this.setState({ position: this.state.position + 0.3, isWhirlpool: false });
+						break;
+					default:
+						break;
 				}
 			}
-		},
-		render: function render() {
-			var style = {
-				width: '10rem',
-				marginLeft: this.props.position * 100 + 'px',
-				borderRadius: '5px',
-				border: 'none',
-				background: 'url(/img/boats-side/' + (this.state.isRaft ? 'rafts' : 'canoes') + '/' + this.props.size + '-members.svg) no-repeat center top'
-			};
-			var className = this.state.isRaft ? 'raft' : 'racetrack-boat';
-			return _react2.default.createElement(
-				'div',
-				{ className: className, style: style },
-				_react2.default.createElement(
-					'p',
-					null,
-					'Crew ',
-					this.props.crewNumber
-				)
-			);
-		}
-	});
+		}, {
+			key: 'processAnswer',
+			value: function processAnswer(wasCorrectAnswer) {
+				if (wasCorrectAnswer) {
+					this.setState({
+						velocity: this.state.velocity + this.state.deltaVelocity
+					});
+				} else if (this.state.isRaft) {
+					this.setState({ deltaVelocity: this.state.deltaVelocity * 0.25 });
+				} else {
+					this.setState({
+						hp: this.state.hp + this.props.deltaHPConstant
+					});
+					if (!this.state.isRaft && this.state.hp <= 0) {
+						this.setState({ isRaft: true });
+					}
+				}
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var style = {
+					width: '10rem',
+					marginLeft: this.props.position * 100 + 'px',
+					borderRadius: '5px',
+					border: 'none',
+					background: 'url(/img/boats-side/\n\t\t\t\t' + (this.state.isRaft ? 'rafts' : 'canoes') + '\n\t\t\t\t/' + this.props.size + '-members.svg no-repeat center top,'
+				};
+				var className = this.state.isRaft ? 'raft' : 'racetrack-boat';
+				return _react2.default.createElement(
+					'div',
+					{ className: className, style: style },
+					_react2.default.createElement(
+						'p',
+						null,
+						'Crew ',
+						this.props.crewNumber
+					)
+				);
+			}
+		}]);
+	
+		return Crew;
+	}(_react2.default.Component);
+	
+	Crew.propTypes = {
+		deltaHPConstant: _react.PropTypes.number.isRequired,
+		position: _react.PropTypes.number.isRequired,
+		size: _react.PropTypes.number.isRequired,
+		crewNumber: _react.PropTypes.number.isRequired
+	};
 	
 	exports.default = Crew;
 
