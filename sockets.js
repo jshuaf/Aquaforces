@@ -6,8 +6,6 @@ const maxFuzzyTime = 5000;
 module.exports = (server) => {
 	const wss = new ws.Server({ server });
 	wss.on('connection', (tws) => {
-		console.log('SOCKET CONNECT ' + tws.upgradeReq.url);
-
 		tws.trysend = (msg) => {
 			try {
 				tws.send(JSON.stringify(msg));
@@ -109,13 +107,9 @@ module.exports = (server) => {
 			});
 		};
 
-		setInterval(() => {
-			tws.trysend({ event: 'ping' });
-		}, 20000);
-
 		switch (tws.upgradeReq.url) {
 		case '/play/': {
-			tws.on('message', function (m, raw) {
+			tws.on('message', (m) => {
 				try {
 					m = JSON.parse(m);
 				} catch (e) {
@@ -288,7 +282,7 @@ module.exports = (server) => {
 
 				case 'whirlpoolQuestionTimeout':
 					tws.crew().whirlpool = { present: false, question: null };
-					tws.crew().members.forEach(function (member) {
+					tws.crew().members.forEach((member) => {
 						member.trysend({ event: 'whirlpoolConclusion', wasCorrect: false });
 					});
 					tws.sendToGameHost({
@@ -352,7 +346,7 @@ module.exports = (server) => {
 				}
 
 				default: {
-					tws.error('Unknown socket event ' + m.event + ' received.');
+					tws.error(`Unknown socket event ${m.event} received.`);
 				}
 				}
 			});
@@ -378,7 +372,7 @@ module.exports = (server) => {
 		}
 
 		case '/host/': {
-			tws.on('message', (m, raw) => {
+			tws.on('message', (m) => {
 				try {
 					m = JSON.parse(m);
 				} catch (e) {
