@@ -23,8 +23,8 @@ class QuestionSetList extends React.Component {
 			<div id="questionSets">
 				<h1>Question Sets</h1>
 			{
-				this.props.questionSets.map((questionSet) =>
-					<QuestionSet {...questionSet} />
+				this.props.questionSets.map((questionSet, index) =>
+					<QuestionSet {...questionSet} key={index} />
 				)
 			}
 		</div>

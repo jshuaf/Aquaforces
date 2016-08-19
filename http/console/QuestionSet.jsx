@@ -13,12 +13,12 @@ class QuestionSet extends React.Component {
 	render() {
 		return (
 			<div className="questionSet">
-				<h4>{this.props.title}</h4>
+				<h4 key={-1}>{this.props.title}</h4>
 				{this.props.questions.map((question, index) =>
 					<Question {...question} key={index} />
 				)}
-				{this.props.privacy ? <span>Private set</span> : <span>Public set</span>}
-				<button onClick={this.deleteSet}>Delete set</button>
+				{this.props.privacy ? <span key={-2}>Private set</span> : <span key={-2}>Public set</span>}
+				<button key={-3} onClick={this.deleteSet}>Delete set</button>
 			</div>
 		);
 	}
