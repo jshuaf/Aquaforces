@@ -11,6 +11,10 @@ const socketProtocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
 const socketPort = location.port !== 80 ? `:${location.port}` : '';
 const socket = new WebSocket(`${socketProtocol}${location.hostname}${socketPort}/host`);
 
+socket.sendJSON = (m) => {
+	socket.send(JSON.stringify(m));
+};
+
 render(
 	<Provider store={store}>
 		<GameHost socket={socket} />

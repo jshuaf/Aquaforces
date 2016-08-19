@@ -11,7 +11,7 @@ function questionSets(state = [], action) {
 
 function gameStatus(state = 'notStarted', action) {
 	switch (action.type) {
-	case actions.START_GAME:
+	case actions.NEW_GAME:
 		return 'boarding';
 	default:
 		return state;

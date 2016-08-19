@@ -75,6 +75,10 @@
 	var socketPort = location.port !== 80 ? ':' + location.port : '';
 	var socket = new WebSocket('' + socketProtocol + location.hostname + socketPort + '/host');
 	
+	socket.sendJSON = function (m) {
+		socket.send(JSON.stringify(m));
+	};
+	
 	(0, _reactDom.render)(_react2.default.createElement(
 		_reactRedux.Provider,
 		{ store: store },
@@ -77640,9 +77644,12 @@
 		}
 	
 		_createClass(GameHostDisplay, [{
-			key: 'startGame',
-			value: function startGame() {
-				this.props.startGame();
+			key: 'newGame',
+			value: function newGame() {
+				this.props.newGame();
+				this.props.socket.sendJSON({
+					event: 'newGame'
+				});
 			}
 		}, {
 			key: 'render',
@@ -77653,7 +77660,7 @@
 					_react2.default.createElement(_QuestionSetPicker2.default, null),
 					_react2.default.createElement(
 						'button',
-						{ onClick: this.startGame },
+						{ onClick: this.newGame },
 						'Start game'
 					)
 				);
@@ -77664,7 +77671,7 @@
 	}(_react.Component);
 	
 	GameHostDisplay.propTypes = {
-		startGame: _react.PropTypes.func.isRequired,
+		newGame: _react.PropTypes.func.isRequired,
 		gameStatus: _react.PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
 		socket: _react.PropTypes.instanceOf(WebSocket).isRequired
 	};
@@ -77677,8 +77684,8 @@
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 		return {
-			startGame: function startGame() {
-				dispatch((0, _actions.startGame)());
+			newGame: function newGame() {
+				dispatch((0, _actions.newGame)());
 			}
 		};
 	};
@@ -77726,7 +77733,7 @@
 		var action = arguments[1];
 	
 		switch (action.type) {
-			case actions.START_GAME:
+			case actions.NEW_GAME:
 				return 'boarding';
 			default:
 				return state;
@@ -77756,7 +77763,7 @@
 		value: true
 	});
 	var POPULATE_QUESTION_SET_LIST = exports.POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
-	var START_GAME = exports.START_GAME = 'START_GAME';
+	var NEW_GAME = exports.NEW_GAME = 'NEW_GAME';
 	
 	function makeActionCreator(type) {
 		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -77777,7 +77784,7 @@
 	}
 	
 	var populateQuestionSetList = exports.populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
-	var startGame = exports.startGame = makeActionCreator(START_GAME);
+	var newGame = exports.newGame = makeActionCreator(NEW_GAME);
 
 /***/ },
 /* 420 */

@@ -14,7 +14,7 @@ module.exports = (tws, m, games) => {
 			questions: [],
 			hasStarted: false,
 		};
-
+		console.log('recieved');
 				// generate random math questions
 				// MARK: pull data from database
 		for (let i = 0; i < 100; i++) {
