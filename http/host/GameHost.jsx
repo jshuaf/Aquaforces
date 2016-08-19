@@ -1,17 +1,6 @@
 import React from 'react';
 
-function getValuesOfObject(object) {
-	const values = [];
-	for (const key in object) {
-		if ({}.hasOwnProperty.call(object, key)) {
-			values.push(object[key]);
-		}
-	}
-	return values;
-}
-
 const GameHost = React.createClass({
-	// MARK: ADD END GAME
 	getInitialState() {
 		return {
 			gameStatus: 'hasNotStarted',

@@ -1,3 +1,8 @@
+import React from 'react';
+import { render } from 'react-dom';
+import GameHost from './GameHost.jsx';
+
+render(<GameHost />, document.getElementById('mountNode'));
 /*
 const socket = new WebSocket((location.protocol ===
 	'http:' ? 'ws://' : 'wss://') + location.hostname +

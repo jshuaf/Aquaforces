@@ -286,6 +286,10 @@ const serverHandler = o(function* (req, res) {
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
+	} else if (reqPath === '/host/' && !usesIODomain) {
+		yield respondPage(null, req, res, yield, {});
+		res.write((yield fs.readFile('./html/host.html', yield)));
+		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath === '/login/google' && !usesIODomain) {
 		// Redirect URI after attempted Google login
 		const tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?clientID=' + config.googleAuth.clientID + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
