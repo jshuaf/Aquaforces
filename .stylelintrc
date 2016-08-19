@@ -88,5 +88,5 @@
 		"no-eol-whitespace": true,
 		"no-invalid-double-slash-comments": true
 	},
-	ignoreFiles: ["normalize.css", "skeleton.css", "sweetalert.css"]
+	ignoreFiles: ["./http/a/normalize.css", "./http/a/skeleton.css", "./http/a/sweetalert.css"]
 }
