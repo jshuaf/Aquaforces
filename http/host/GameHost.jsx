@@ -6,7 +6,7 @@ import { newGame } from './actions';
 class GameHostDisplay extends Component {
 	constructor(props) {
 		super(props);
-		this.startGame = this.startGame.bind(this);
+		this.newGame = this.newGame.bind(this);
 	}
 	newGame() {
 		this.props.newGame();

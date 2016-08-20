@@ -6,7 +6,7 @@ const games = {};
 module.exports = (server) => {
 	const wss = new ws.Server({ server });
 	wss.on('connection', (tws) => {
-		require('./helpers')(tws);
+		console.log(tws.upgradeReq.url);
 		switch (tws.upgradeReq.url) {
 		case '/play/': {
 			let message;
@@ -17,8 +17,7 @@ module.exports = (server) => {
 					return tws.error('JSON error.');
 				}
 			});
-
-			require('./game')(tws, message, games);
+			if (message) require('./game')(tws, message, games);
 
 			tws.on('close', () => {
 				if (tws.game) {
@@ -49,7 +48,7 @@ module.exports = (server) => {
 					return tws.error('JSON error.');
 				}
 			});
-			require('./host')(tws, message, games);
+			if (message) require('./host')(tws, message, games);
 			break;
 		}
 		default: {

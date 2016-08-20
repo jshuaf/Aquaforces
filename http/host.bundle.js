@@ -47,7 +47,7 @@
   \*****************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(console) {'use strict';
 	
 	var _reactDom = __webpack_require__(/*! react-dom */ 1);
 	
@@ -73,10 +73,14 @@
 	
 	var socketProtocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
 	var socketPort = location.port !== 80 ? ':' + location.port : '';
-	var socket = new WebSocket('' + socketProtocol + location.hostname + socketPort + '/host');
+	var socket = new WebSocket('' + socketProtocol + location.hostname + socketPort + '/host/');
 	
 	socket.sendJSON = function (m) {
-		socket.send(JSON.stringify(m));
+		try {
+			socket.send(JSON.stringify(m));
+		} catch (e) {
+			console.error(e);
+		}
 	};
 	
 	(0, _reactDom.render)(_react2.default.createElement(
@@ -248,6 +252,7 @@
 			event: 'endGame',
 		}));
 	}*/
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/console-browserify/index.js */ 4)))
 
 /***/ },
 /* 1 */
@@ -77639,7 +77644,7 @@
 	
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameHostDisplay).call(this, props));
 	
-			_this.startGame = _this.startGame.bind(_this);
+			_this.newGame = _this.newGame.bind(_this);
 			return _this;
 		}
 	

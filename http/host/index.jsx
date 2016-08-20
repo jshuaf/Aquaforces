@@ -9,10 +9,14 @@ const store = createStore(gameHostReducer, window.devToolsExtension && window.de
 
 const socketProtocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
 const socketPort = location.port !== 80 ? `:${location.port}` : '';
-const socket = new WebSocket(`${socketProtocol}${location.hostname}${socketPort}/host`);
+const socket = new WebSocket(`${socketProtocol}${location.hostname}${socketPort}/host/`);
 
 socket.sendJSON = (m) => {
-	socket.send(JSON.stringify(m));
+	try {
+		socket.send(JSON.stringify(m));
+	} catch (e) {
+		console.error(e);
+	}
 };
 
 render(
