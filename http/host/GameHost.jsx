@@ -10,9 +10,10 @@ class GameHostDisplay extends Component {
 	}
 	newGame() {
 		this.props.newGame();
-		this.props.socket.sendJSON({
+		this.props.socket.send(JSON.stringify({
 			event: 'newGame',
-		});
+			set: this.props.selectedSet,
+		}));
 	}
 	render() {
 		return (
@@ -28,10 +29,26 @@ GameHostDisplay.propTypes = {
 	newGame: PropTypes.func.isRequired,
 	gameStatus: PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
 	socket: PropTypes.instanceOf(WebSocket).isRequired,
+	selectedSet: PropTypes.shape({
+		_id: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
+		nextQuestionID: PropTypes.number.isRequired,
+		questions: PropTypes.arrayOf(PropTypes.shape({
+			text: PropTypes.string.isRequired,
+			correctAnswer: PropTypes.string.isRequired,
+			incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
+				text: PropTypes.string.isRequired,
+				id: PropTypes.number.isRequired,
+			})).isRequired,
+			id: PropTypes.number.isRequired,
+		})).isRequired,
+		privacy: PropTypes.bool.isRequired,
+	}),
 };
 
 const mapStateToProps = (state) => ({
 	gameStatus: state.gameStatus,
+	selectedSet: state.boarding.selectedSet,
 });
 
 const mapDispatchToProps = (dispatch) => ({

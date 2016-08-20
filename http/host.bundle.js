@@ -77652,9 +77652,10 @@
 			key: 'newGame',
 			value: function newGame() {
 				this.props.newGame();
-				this.props.socket.sendJSON({
-					event: 'newGame'
-				});
+				this.props.socket.send(JSON.stringify({
+					event: 'newGame',
+					set: this.props.selectedSet
+				}));
 			}
 		}, {
 			key: 'render',
@@ -77678,12 +77679,28 @@
 	GameHostDisplay.propTypes = {
 		newGame: _react.PropTypes.func.isRequired,
 		gameStatus: _react.PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
-		socket: _react.PropTypes.instanceOf(WebSocket).isRequired
+		socket: _react.PropTypes.instanceOf(WebSocket).isRequired,
+		selectedSet: _react.PropTypes.shape({
+			_id: _react.PropTypes.string.isRequired,
+			title: _react.PropTypes.string.isRequired,
+			nextQuestionID: _react.PropTypes.number.isRequired,
+			questions: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+				text: _react.PropTypes.string.isRequired,
+				correctAnswer: _react.PropTypes.string.isRequired,
+				incorrectAnswers: _react.PropTypes.arrayOf(_react.PropTypes.shape({
+					text: _react.PropTypes.string.isRequired,
+					id: _react.PropTypes.number.isRequired
+				})).isRequired,
+				id: _react.PropTypes.number.isRequired
+			})).isRequired,
+			privacy: _react.PropTypes.bool.isRequired
+		})
 	};
 	
 	var mapStateToProps = function mapStateToProps(state) {
 		return {
-			gameStatus: state.gameStatus
+			gameStatus: state.gameStatus,
+			selectedSet: state.boarding.selectedSet
 		};
 	};
 	
@@ -77745,12 +77762,12 @@
 		}
 	}
 	
-	var initialOnboardingState = {
+	var initialBoardingState = {
 		selectedSet: null
 	};
 	
-	function onboarding() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? initialOnboardingState : arguments[0];
+	function boarding() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? initialBoardingState : arguments[0];
 		var action = arguments[1];
 	
 		switch (action.type) {
@@ -77770,7 +77787,7 @@
 		return {
 			questionSets: questionSets(state.questionSets, action),
 			gameStatus: gameStatus(state.gameStatus, action),
-			onboarding: onboarding(state.onboarding, action)
+			boarding: boarding(state.boarding, action)
 		};
 	}
 
@@ -77872,6 +77889,7 @@
 				}, function (error, response, body) {
 					if (error) return console.error(error);
 					_this2.props.populateQuestionSetList(body);
+					_this2.props.updateSelectedSet(_this2.props.questionSets[0]);
 				});
 			}
 		}, {

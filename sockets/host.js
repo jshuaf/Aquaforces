@@ -2,9 +2,9 @@ module.exports = (tws, m, games) => {
 	/* eslint-disable global-require */
 	require('./helpers')(tws);
 	/* eslint-enable global-require */
+	console.log(m);
 	switch (m.event) {
 	case 'newGame': {
-		console.log('recieved');
 		const id = Math.floor(Math.random() * 1e4);
 		games[id] = {
 			host: tws,
@@ -14,16 +14,6 @@ module.exports = (tws, m, games) => {
 			questions: [],
 			hasStarted: false,
 		};
-				// generate random math questions
-				// MARK: pull data from database
-		for (let i = 0; i < 100; i++) {
-			games[id].questions.push({
-				text: 'What\'s ' + i + ' + ' + i + '?',
-				answer: (2 * i).toString(),
-				incorrectAnswers: [i.toString(), i.toString() + i.toString(),
-							(3 * i).toString(), (4 * i).toString()],
-			});
-		}
 
 		tws.game = games[id];
 		tws.trysend({ event: 'newGame', id });

@@ -6,17 +6,18 @@ const games = {};
 module.exports = (server) => {
 	const wss = new ws.Server({ server });
 	wss.on('connection', (tws) => {
+		require('./helpers')(tws);
 		switch (tws.upgradeReq.url) {
 		case '/play/': {
 			let message;
 			tws.on('message', (m) => {
 				try {
 					message = JSON.parse(m);
+					if (message) require('./game')(tws, message, games);
 				} catch (e) {
 					return tws.error('JSON error.');
 				}
 			});
-			if (message) require('./game')(tws, message, games);
 
 			tws.on('close', () => {
 				if (tws.game) {
@@ -43,11 +44,11 @@ module.exports = (server) => {
 			tws.on('message', (m) => {
 				try {
 					message = JSON.parse(m);
+					if (message) require('./host')(tws, message, games);
 				} catch (e) {
 					return tws.error('JSON error.');
 				}
 			});
-			if (message) require('./host')(tws, message, games);
 			break;
 		}
 		default: {

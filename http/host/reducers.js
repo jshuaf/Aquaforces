@@ -18,11 +18,11 @@ function gameStatus(state = 'notStarted', action) {
 	}
 }
 
-const initialOnboardingState = {
+const initialBoardingState = {
 	selectedSet: null,
 };
 
-function onboarding(state = initialOnboardingState, action) {
+function boarding(state = initialBoardingState, action) {
 	switch (action.type) {
 	case actions.UPDATE_SELECTED_SET:
 		return Object.assign({}, state, {
@@ -37,6 +37,6 @@ export default function gameHostReducer(state = {}, action) {
 	return {
 		questionSets: questionSets(state.questionSets, action),
 		gameStatus: gameStatus(state.gameStatus, action),
-		onboarding: onboarding(state.onboarding, action),
+		boarding: boarding(state.boarding, action),
 	};
 }

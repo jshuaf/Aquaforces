@@ -20,6 +20,7 @@ class QuestionSetPickerDisplay extends Component {
 		}, (error, response, body) => {
 			if (error) return console.error(error);
 			this.props.populateQuestionSetList(body);
+			this.props.updateSelectedSet(this.props.questionSets[0]);
 		});
 	}
 	updateSelectedSet() {
