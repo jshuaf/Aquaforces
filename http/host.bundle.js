@@ -77625,11 +77625,11 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 195);
 	
-	var _QuestionSetPicker = __webpack_require__(/*! ./QuestionSetPicker.jsx */ 420);
+	var _QuestionSetPicker = __webpack_require__(/*! ./QuestionSetPicker.jsx */ 416);
 	
 	var _QuestionSetPicker2 = _interopRequireDefault(_QuestionSetPicker);
 	
-	var _actions = __webpack_require__(/*! ./actions */ 419);
+	var _actions = __webpack_require__(/*! ./actions */ 417);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -77720,120 +77720,7 @@
 	exports.default = GameHost;
 
 /***/ },
-/* 416 */,
-/* 417 */,
-/* 418 */
-/*!*******************************!*\
-  !*** ./http/host/reducers.js ***!
-  \*******************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.default = gameHostReducer;
-	
-	var _actions = __webpack_require__(/*! ./actions */ 419);
-	
-	var actions = _interopRequireWildcard(_actions);
-	
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-	
-	function questionSets() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-		var action = arguments[1];
-	
-		switch (action.type) {
-			case actions.POPULATE_QUESTION_SET_LIST:
-				return action.questionSets;
-			default:
-				return state;
-		}
-	}
-	
-	function gameStatus() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? 'notStarted' : arguments[0];
-		var action = arguments[1];
-	
-		switch (action.type) {
-			case actions.NEW_GAME:
-				return 'boarding';
-			default:
-				return state;
-		}
-	}
-	
-	var initialBoardingState = {
-		selectedSet: null
-	};
-	
-	function boarding() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? initialBoardingState : arguments[0];
-		var action = arguments[1];
-	
-		switch (action.type) {
-			case actions.UPDATE_SELECTED_SET:
-				return Object.assign({}, state, {
-					selectedSet: action.selectedSet
-				});
-			default:
-				return state;
-		}
-	}
-	
-	function gameHostReducer() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-		var action = arguments[1];
-	
-		return {
-			questionSets: questionSets(state.questionSets, action),
-			gameStatus: gameStatus(state.gameStatus, action),
-			boarding: boarding(state.boarding, action)
-		};
-	}
-
-/***/ },
-/* 419 */
-/*!******************************!*\
-  !*** ./http/host/actions.js ***!
-  \******************************/
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	var POPULATE_QUESTION_SET_LIST = exports.POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
-	var UPDATE_SELECTED_SET = exports.UPDATE_SELECTED_SET = 'UPDATE_SELECTED_SET';
-	var NEW_GAME = exports.NEW_GAME = 'NEW_GAME';
-	
-	function makeActionCreator(type) {
-		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-			argNames[_key - 1] = arguments[_key];
-		}
-	
-		return function () {
-			for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-				args[_key2] = arguments[_key2];
-			}
-	
-			var action = { type: type };
-			argNames.forEach(function (arg, index) {
-				action[argNames[index]] = args[index];
-			});
-			return action;
-		};
-	}
-	
-	var populateQuestionSetList = exports.populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
-	var updateSelectedSet = exports.updateSelectedSet = makeActionCreator(UPDATE_SELECTED_SET, 'selectedSet');
-	var newGame = exports.newGame = makeActionCreator(NEW_GAME);
-
-/***/ },
-/* 420 */
+/* 416 */
 /*!*****************************************!*\
   !*** ./http/host/QuestionSetPicker.jsx ***!
   \*****************************************/
@@ -77853,7 +77740,7 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 195);
 	
-	var _actions = __webpack_require__(/*! ./actions */ 419);
+	var _actions = __webpack_require__(/*! ./actions */ 417);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -77975,6 +77862,117 @@
 	
 	exports.default = QuestionSetPicker;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/console-browserify/index.js */ 4)))
+
+/***/ },
+/* 417 */
+/*!******************************!*\
+  !*** ./http/host/actions.js ***!
+  \******************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	var POPULATE_QUESTION_SET_LIST = exports.POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
+	var UPDATE_SELECTED_SET = exports.UPDATE_SELECTED_SET = 'UPDATE_SELECTED_SET';
+	var NEW_GAME = exports.NEW_GAME = 'NEW_GAME';
+	
+	function makeActionCreator(type) {
+		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+			argNames[_key - 1] = arguments[_key];
+		}
+	
+		return function () {
+			for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+				args[_key2] = arguments[_key2];
+			}
+	
+			var action = { type: type };
+			argNames.forEach(function (arg, index) {
+				action[argNames[index]] = args[index];
+			});
+			return action;
+		};
+	}
+	
+	var populateQuestionSetList = exports.populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
+	var updateSelectedSet = exports.updateSelectedSet = makeActionCreator(UPDATE_SELECTED_SET, 'selectedSet');
+	var newGame = exports.newGame = makeActionCreator(NEW_GAME);
+
+/***/ },
+/* 418 */
+/*!*******************************!*\
+  !*** ./http/host/reducers.js ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = gameHostReducer;
+	
+	var _actions = __webpack_require__(/*! ./actions */ 417);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function questionSets() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+		var action = arguments[1];
+	
+		switch (action.type) {
+			case actions.POPULATE_QUESTION_SET_LIST:
+				return action.questionSets;
+			default:
+				return state;
+		}
+	}
+	
+	function gameStatus() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? 'notStarted' : arguments[0];
+		var action = arguments[1];
+	
+		switch (action.type) {
+			case actions.NEW_GAME:
+				return 'boarding';
+			default:
+				return state;
+		}
+	}
+	
+	var initialBoardingState = {
+		selectedSet: null
+	};
+	
+	function boarding() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? initialBoardingState : arguments[0];
+		var action = arguments[1];
+	
+		switch (action.type) {
+			case actions.UPDATE_SELECTED_SET:
+				return Object.assign({}, state, {
+					selectedSet: action.selectedSet
+				});
+			default:
+				return state;
+		}
+	}
+	
+	function gameHostReducer() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+		var action = arguments[1];
+	
+		return {
+			questionSets: questionSets(state.questionSets, action),
+			gameStatus: gameStatus(state.gameStatus, action),
+			boarding: boarding(state.boarding, action)
+		};
+	}
 
 /***/ }
 /******/ ]);
