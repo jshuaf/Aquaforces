@@ -6,7 +6,6 @@ const games = {};
 module.exports = (server) => {
 	const wss = new ws.Server({ server });
 	wss.on('connection', (tws) => {
-		console.log(tws.upgradeReq.url);
 		switch (tws.upgradeReq.url) {
 		case '/play/': {
 			let message;

@@ -1,10 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { populateQuestionSetList } from './actions';
+import { populateQuestionSetList, updateSelectedSet } from './actions';
 
 const request = require('request');
 
 class QuestionSetPickerDisplay extends Component {
+	constructor(props) {
+		super(props);
+		this.updateSelectedSet = this.updateSelectedSet.bind(this);
+		this.picker = null;
+	}
 	componentDidMount() {
 		const url = `${location.protocol}//${location.host}/api/get-qsets`;
 		request({
@@ -17,11 +22,14 @@ class QuestionSetPickerDisplay extends Component {
 			this.props.populateQuestionSetList(body);
 		});
 	}
+	updateSelectedSet() {
+		this.props.updateSelectedSet(this.props.questionSets[this.picker.selectedIndex]);
+	}
 	render() {
 		return (
 			<div id="questionSetPicker">
 				<h5>Pick a question set to use.</h5>
-				<select>
+				<select ref={(s) => { this.picker = s; }} onChange={this.updateSelectedSet}>
 					{
 						this.props.questionSets.map((questionSet, index) =>
 							<option key={index}>{questionSet.title}</option>
@@ -35,6 +43,7 @@ class QuestionSetPickerDisplay extends Component {
 
 QuestionSetPickerDisplay.propTypes = {
 	populateQuestionSetList: PropTypes.func.isRequired,
+	updateSelectedSet: PropTypes.func.isRequired,
 	questionSets: PropTypes.arrayOf(PropTypes.shape({
 		title: PropTypes.string.isRequired,
 		nextQuestionID: PropTypes.number.isRequired,
@@ -58,6 +67,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	populateQuestionSetList: (questionSets) => {
 		dispatch(populateQuestionSetList(questionSets));
+	},
+	updateSelectedSet: (questionSet) => {
+		dispatch(updateSelectedSet(questionSet));
 	},
 });
 

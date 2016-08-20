@@ -18,9 +18,25 @@ function gameStatus(state = 'notStarted', action) {
 	}
 }
 
+const initialOnboardingState = {
+	selectedSet: null,
+};
+
+function onboarding(state = initialOnboardingState, action) {
+	switch (action.type) {
+	case actions.UPDATE_SELECTED_SET:
+		return Object.assign({}, state, {
+			selectedSet: action.selectedSet,
+		});
+	default:
+		return state;
+	}
+}
+
 export default function gameHostReducer(state = {}, action) {
 	return {
 		questionSets: questionSets(state.questionSets, action),
 		gameStatus: gameStatus(state.gameStatus, action),
+		onboarding: onboarding(state.onboarding, action),
 	};
 }

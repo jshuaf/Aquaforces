@@ -77745,13 +77745,32 @@
 		}
 	}
 	
+	var initialOnboardingState = {
+		selectedSet: null
+	};
+	
+	function onboarding() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? initialOnboardingState : arguments[0];
+		var action = arguments[1];
+	
+		switch (action.type) {
+			case actions.UPDATE_SELECTED_SET:
+				return Object.assign({}, state, {
+					selectedSet: action.selectedSet
+				});
+			default:
+				return state;
+		}
+	}
+	
 	function gameHostReducer() {
 		var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 		var action = arguments[1];
 	
 		return {
 			questionSets: questionSets(state.questionSets, action),
-			gameStatus: gameStatus(state.gameStatus, action)
+			gameStatus: gameStatus(state.gameStatus, action),
+			onboarding: onboarding(state.onboarding, action)
 		};
 	}
 
@@ -77768,6 +77787,7 @@
 		value: true
 	});
 	var POPULATE_QUESTION_SET_LIST = exports.POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
+	var UPDATE_SELECTED_SET = exports.UPDATE_SELECTED_SET = 'UPDATE_SELECTED_SET';
 	var NEW_GAME = exports.NEW_GAME = 'NEW_GAME';
 	
 	function makeActionCreator(type) {
@@ -77789,6 +77809,7 @@
 	}
 	
 	var populateQuestionSetList = exports.populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
+	var updateSelectedSet = exports.updateSelectedSet = makeActionCreator(UPDATE_SELECTED_SET, 'selectedSet');
 	var newGame = exports.newGame = makeActionCreator(NEW_GAME);
 
 /***/ },
@@ -77827,10 +77848,14 @@
 	var QuestionSetPickerDisplay = function (_Component) {
 		_inherits(QuestionSetPickerDisplay, _Component);
 	
-		function QuestionSetPickerDisplay() {
+		function QuestionSetPickerDisplay(props) {
 			_classCallCheck(this, QuestionSetPickerDisplay);
 	
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionSetPickerDisplay).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(QuestionSetPickerDisplay).call(this, props));
+	
+			_this.updateSelectedSet = _this.updateSelectedSet.bind(_this);
+			_this.picker = null;
+			return _this;
 		}
 	
 		_createClass(QuestionSetPickerDisplay, [{
@@ -77850,8 +77875,15 @@
 				});
 			}
 		}, {
+			key: 'updateSelectedSet',
+			value: function updateSelectedSet() {
+				this.props.updateSelectedSet(this.props.questionSets[this.picker.selectedIndex]);
+			}
+		}, {
 			key: 'render',
 			value: function render() {
+				var _this3 = this;
+	
 				return _react2.default.createElement(
 					'div',
 					{ id: 'questionSetPicker' },
@@ -77862,7 +77894,9 @@
 					),
 					_react2.default.createElement(
 						'select',
-						null,
+						{ ref: function ref(s) {
+								_this3.picker = s;
+							}, onChange: this.updateSelectedSet },
 						this.props.questionSets.map(function (questionSet, index) {
 							return _react2.default.createElement(
 								'option',
@@ -77880,6 +77914,7 @@
 	
 	QuestionSetPickerDisplay.propTypes = {
 		populateQuestionSetList: _react.PropTypes.func.isRequired,
+		updateSelectedSet: _react.PropTypes.func.isRequired,
 		questionSets: _react.PropTypes.arrayOf(_react.PropTypes.shape({
 			title: _react.PropTypes.string.isRequired,
 			nextQuestionID: _react.PropTypes.number.isRequired,
@@ -77906,6 +77941,9 @@
 		return {
 			populateQuestionSetList: function populateQuestionSetList(questionSets) {
 				dispatch((0, _actions.populateQuestionSetList)(questionSets));
+			},
+			updateSelectedSet: function updateSelectedSet(questionSet) {
+				dispatch((0, _actions.updateSelectedSet)(questionSet));
 			}
 		};
 	};

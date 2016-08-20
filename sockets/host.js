@@ -4,6 +4,7 @@ module.exports = (tws, m, games) => {
 	/* eslint-enable global-require */
 	switch (m.event) {
 	case 'newGame': {
+		console.log('recieved');
 		const id = Math.floor(Math.random() * 1e4);
 		games[id] = {
 			host: tws,
