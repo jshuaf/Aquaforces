@@ -7,6 +7,7 @@ class GameHostDisplay extends Component {
 	constructor(props) {
 		super(props);
 		this.newGame = this.newGame.bind(this);
+		this.startGame = this.startGame.bind(this);
 	}
 	newGame() {
 		this.props.newGame();
@@ -15,19 +16,37 @@ class GameHostDisplay extends Component {
 			set: this.props.selectedSet,
 		}));
 	}
+	startGame() {
+		// MARK: start game
+	}
 	render() {
-		return (
-			<div id="gameHost">
-				<QuestionSetPicker />
-				<button onClick={this.newGame}>Start game</button>
-			</div>
-		);
+		switch (this.props.gameInfo.status) {
+		case 'notStarted':
+			return (
+				<div id="gameHost">
+					<QuestionSetPicker />
+					<button onClick={this.newGame}>New game</button>
+				</div>
+			);
+		case 'boarding':
+			return (
+				<div id="gameHost">
+					<h2>{this.props.gameInfo.id}</h2>
+					<button onClick={this.startGame}>Start game</button>
+				</div>
+			);
+		default:
+			return <p>Error</p>;
+		}
 	}
 }
 
 GameHostDisplay.propTypes = {
 	newGame: PropTypes.func.isRequired,
-	gameStatus: PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
+	gameInfo: PropTypes.shape({
+		status: PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
+		id: PropTypes.number,
+	}).isRequired,
 	socket: PropTypes.instanceOf(WebSocket).isRequired,
 	selectedSet: PropTypes.shape({
 		_id: PropTypes.string.isRequired,
@@ -47,7 +66,7 @@ GameHostDisplay.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-	gameStatus: state.gameStatus,
+	gameInfo: state.gameInfo,
 	selectedSet: state.boarding.selectedSet,
 });
 

@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
 	entry: {
 		host: './http/host/index.jsx',
-		game: './http/game/game.jsx',
+		game: './http/game/index.jsx',
 		console: './http/console/index.jsx',
 	},
 	output: {

@@ -3,7 +3,10 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import GameHost from './GameHost.jsx';
+import { setGameID } from './actions';
 import gameHostReducer from './reducers';
+
+/* global sweetAlert: true */
 
 const store = createStore(gameHostReducer, window.devToolsExtension && window.devToolsExtension());
 
@@ -19,7 +22,14 @@ socket.onmessage = function (m) {
 		console.log(e);
 		return sweetAlert('Socket error.', 'error');
 	}
-	console.log(message);
+
+	switch (message.event) {
+	case 'newGameID':
+		return store.dispatch(setGameID(message.id));
+	default:
+		console.error('Unknown message: ', message.event);
+		return;
+	}
 };
 
 render(

@@ -1,147 +1,180 @@
-let socket = new WebSocket((location.protocol === 'http:' ? 'ws://' : 'wss://') + location.hostname + (location.port !== 80 ? ':' + location.port : '') + '/play/');
-const cont = document.getElementById('cont');
-let gameHasEnded = false;
-let answers = [];
+import React, { Component, PropTypes } from 'react';
 
-let game;
-let username;
-let crewNumber;
-
-function setState(id) {
-	cont.children.forEach((e) => {
-		if (e.id !== id) {
-			e.hidden = true;
-		}
-	});
-	document.getElementById(id).hidden = false;
-	// if filling out form, automatically focus
-	// to the next input field
-	const e = document.getElementById(id).getElementsByTagName('input');
-	if (e.length) e[0].focus();
-}
-
-function setupGameEnvironment() {
-	document.getElementById('content').hidden = true;
-	document.body.style.cssText =
-		'background: #32c0cf repeat-x center top; background-size: cover;';
-}
-
-function confirmMessageRecieved() {
-	socket.send(JSON.stringify({ event: 'messageRecieved' }));
-}
-
-socket.onmessage = function (m) {
-	try {
-		m = JSON.parse(m.data);
-	} catch (e) {
-		console.log(e);
-		return sweetAlert('Socket error.');
+class Game extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			gameFinished: false,
+			// GameTimer
+			startTime: new Date(),
+			// QuestionTimebar
+			questionStartTime: null,
+			// Question
+			questionText: null,
+			// Canoe
+			canoePosition: 0,
+			// Whirlpool
+			whirlpool: false,
+			whirlpoolType: 'Free',
+			whirlpoolQuestion: {},
+			whirlpoolTimebar: null,
+			whirlpoolBonus: 0,
+			rock: false,
+			canoeHP: 100,
+			canoeTopPosition: null,
+			canoeHeight: null,
+			// River Reflections
+			reflectionGroupUpdate: null,
+			update: null,
+		};
+	}
+	answerSelected(answerText) {
+		this.props.socket.send(JSON.stringify({
+			event: 'answerSelected',
+			answer: answerText,
+			username: this.props.username,
+			crewNumber: this.props.crewNumber,
+		}));
+	}
+	showUpdate(title, text) {
+		this.setState({ update: <Update title={title} text={text} animationText="bounceindown animated"></Update> });
+		const rock = this;
+		setTimeout(function () {
+			this.setState({ update: <Update title={title} text={text} animationText="bounceoutup animated"></Update> });
+		}.bind(rock), 2500);
+	}
+	gameTimerOver() {
+		this.setState({
+			gameFinished: true,
+		});
+	}
+	addWhirlpoolTap() {
+		this.setState({
+			whirlpool: true,
+			whirlpoolType: 'Free',
+		});
+	}
+	addWhirlpoolQuestion(question) {
+		this.setState({
+			whirlpool: true,
+			whirlpoolType: 'Question',
+			whirlpoolQuestion: question,
+		});
+	}
+	answerPassedThreshold(answerText) {
+		this.props.socket.send(JSON.stringify({
+			event: 'answerPassedThreshold',
+			answer: answerText,
+			crewNumber: this.props.crewNumber,
+		}));
+	}
+	newQuestion(question) {
+		this.setState({
+			questionText: question,
+		});
+		this.refs.questionTimebar.reset();
+	}
+	correctAnswer(answer) {
+		this.setState({ reflectionGroupUpdate: Date.now() });
+		this.refs.river.wasCorrectAnswer(answer);
+	}
+	incorrectAnswer(answer) {
+		this.refs.river.wasIncorrectAnswer(answer);
+	}
+	addCorrectAnswer(answer) {
+		// add a random number of wrong answers before correct answer
+		this.refs.river.addCorrectAnswer(answer);
+	}
+	whirlpoolQuestionTimeout() {
+		this.props.socket.send(JSON.stringify({
+			event: 'whirlpoolQuestionTimeout',
+			crewNumber: this.props.crewNumber,
+		}));
+	}
+	questionTimeout() {
+		this.props.socket.send(JSON.stringify({
+			event: 'questionTimeout',
+			crewNumber: this.props.crewNumber,
+			question: this.state.questionText,
+		}));
+	}
+	updateHP(canoeHP) {
+		this.setState({ canoeHP });
+	}
+	addRock(rockStartTime) {
+		this.state.rock = true;
+		this.showUpdate('Rock approaching', 'Answer questions faster to avoid hitting it!');
+		this.refs.river.addRock(rockStartTime);
 	}
 
-	confirmMessageRecieved();
-
-	switch (m.event) {
-	case 'ping':
-		break;
-	case 'notice':
-		errorEl.textContent = m.body;
-		errorEl.scrollIntoView();
-		break;
-	case 'error':
-		document.getElementById('joinCrewButton').disabled = false;
-		document.getElementById('joinGameButton').disabled = false;
-		sweetAlert(m.title, m.text, 'error');
-		break;
-	case 'addUser':
-		setState('crew');
-		break;
-	case 'addUserToCrew':
-		document.getElementById('crewnodisplay').textContent =
-			parseInt(document.getElementById('crewno').value, 10);
-		crewNumber = parseInt(document.getElementById('crewno').value, 10);
-		setState('wait');
-		break;
-	case 'removeUserFromCrew':
-		setState('crew');
-		break;
-	case 'removeUserFromGame':
-		setState('join');
-		break;
-	case 'startGame':
-		setState('mountNode');
-		setupGameEnvironment();
-		answers = m.answers;
-		game = ReactDOM.render(<Game
-  socket={socket} username={username}
-  crewNumber={crewNumber} answerData={m.answers}
-  crewSize={m.crewSize}
-  />,
-			document.getElementById('mountNode'));
-		break;
-	case 'answerSelected':
-		if (m.wasCorrectAnswer) {
-			game.correctAnswer(m.answer);
-		} else {
-			game.incorrectAnswer(m.answer);
-		}
-		break;
-	case 'updateHP':
-		game.updateHP(m.hp);
-		break;
-	case 'addRock':
-		game.addRock(m.startTime);
-		break;
-	case 'endRock':
-		game.endRock();
-		break;
-	case 'whirlpoolAhead':
-		game.addWhirlpoolTap();
-		break;
-	case 'whirlpoolQuestion':
-		game.addWhirlpoolQuestion(m.question);
-		break;
-	case 'whirlpoolBonusReceived':
-		console.log('Bonus received');
-		game.setState({ whirlpoolBonus: m.amount });
-		break;
-	case 'whirlpoolConclusion':
-		game.setState({ whirlpool: false });
-		game.state.whirlpoolTimebar.reset();
-		break;
-	case 'correctAnswer':
-		game.addCorrectAnswer(m.answer);
-		break;
-	case 'newQuestion':
-		game.newQuestion(m.question);
-		break;
-	case 'endGame':
-		gameHasEnded = true;
-		break;
-	default:
-		console.log('Game recieved unknown event: ', m.event);
-		break;
+	endRock() {
+		this.refs.river.endRock();
+		this.state.rock = false;
 	}
-};
 
-socket.onclose = () => {
-	sweetAlert('Server connection died.', "We're sorry about that.", 'error');
-};
-document.getElementById('join').addEventListener('submit', (e) => {
-	e.preventDefault();
-	document.getElementById('joinGameButton').disabled = true;
-	socket.send(JSON.stringify({
-		event: 'addUser',
-		code: parseInt(document.getElementById('game-code').value, 10),
-		name: document.getElementById('crewmember-name').value,
-	}));
-	username = document.getElementById('crewmember-name').value;
-});
+	rockHit() {
+		this.props.socket.send(JSON.stringify({ event: 'rockHit' }));
+	}
 
-document.getElementById('crew').addEventListener('submit', (e) => {
-	document.getElementById('joinCrewButton').disabled = true;
-	e.preventDefault();
-	socket.send(JSON.stringify({
-		event: 'addUserToCrew',
-		crewNumber: parseInt(document.getElementById('crewno').value, 10),
-	}));
-});
+	render() {
+		// MARK: add flashing
+		let whirlpoolValue;
+		this.state.whirlpoolTimebar = <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool} />;
+		if (this.state.whirlpool) {
+			if (this.state.whirlpoolType === 'Free') {
+				whirlpoolValue = (
+					<div className="modal-background">
+						<div className="row">
+							<div className="three columns"><p></p></div>
+							<div className="six columns">
+								<WhirlpoolFree socket={this.props.socket} />
+							</div>
+						</div>
+					</div>
+				);
+			}
+			else {
+				whirlpoolValue = (
+					<div className="modal-background">
+						<div className="row">
+							<div className="three columns"><p></p></div>
+							<div className="six columns">
+								<WhirlpoolQuestion question={this.state.whirlpoolQuestion} timebar={this.state.whirlpoolTimebar} socket={this.props.socket} />
+							</div>
+						</div>
+					</div>
+				);
+			}
+		}
+		const timePerQuestion = this.state.rock ? 10000 : 15000;
+		return (
+			<div>
+				<div>{this.state.update}</div>
+				<div className="container" hidden={this.state.gameFinished}>
+					<div>{whirlpoolValue}</div>
+					<div className="panel-group">
+						<div className="panel-top">
+							<GameTimer onFinish={this.gameTimerOver} totalTime={900000} />
+							<Question text={this.state.questionText} />
+						</div>
+						<div className="panel-bottom">
+							<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={timePerQuestion} ref="questionTimebar" keepRunning={!this.state.whirlpool}></QuestionTimebar>
+						</div>
+					</div>
+					<River ref="river"
+						answerData={this.props.answerData}
+						answerSelected={this.answerSelected}
+						answerPassedThreshold={this.answerPassedThreshold}
+						canoeHP={this.state.canoeHP}
+						crewSize={this.props.crewSize}
+						reflectionGroupUpdate={this.state.reflectionGroupUpdate}
+						updateHP={this.updateHP}
+						rockHit={this.rockHit}
+					/>
+				</div>
+			</div>
+		);
+	}
+}
+
+export default Game;

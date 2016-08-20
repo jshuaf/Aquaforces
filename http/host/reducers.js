@@ -9,10 +9,20 @@ function questionSets(state = [], action) {
 	}
 }
 
-function gameStatus(state = 'notStarted', action) {
+const initialGameInfoState = {
+	status: 'notStarted',
+	id: null,
+};
+function gameInfo(state = initialGameInfoState, action) {
 	switch (action.type) {
 	case actions.NEW_GAME:
-		return 'boarding';
+		return Object.assign({}, state, {
+			status: 'boarding',
+		});
+	case actions.SET_GAME_ID:
+		return Object.assign({}, state, {
+			id: action.id,
+		});
 	default:
 		return state;
 	}
@@ -36,7 +46,7 @@ function boarding(state = initialBoardingState, action) {
 export default function gameHostReducer(state = {}, action) {
 	return {
 		questionSets: questionSets(state.questionSets, action),
-		gameStatus: gameStatus(state.gameStatus, action),
+		gameInfo: gameInfo(state.gameInfo, action),
 		boarding: boarding(state.boarding, action),
 	};
 }

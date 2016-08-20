@@ -63,11 +63,15 @@
 	
 	var _GameHost2 = _interopRequireDefault(_GameHost);
 	
+	var _actions = __webpack_require__(/*! ./actions */ 417);
+	
 	var _reducers = __webpack_require__(/*! ./reducers */ 418);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* global sweetAlert: true */
 	
 	var store = (0, _redux.createStore)(_reducers2.default, window.devToolsExtension && window.devToolsExtension());
 	
@@ -83,7 +87,14 @@
 			console.log(e);
 			return sweetAlert('Socket error.', 'error');
 		}
-		console.log(message);
+	
+		switch (message.event) {
+			case 'newGameID':
+				return store.dispatch((0, _actions.setGameID)(message.id));
+			default:
+				console.error('Unknown message: ', message.event);
+				return;
+		}
 	};
 	
 	(0, _reactDom.render)(_react2.default.createElement(
@@ -77648,6 +77659,7 @@
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameHostDisplay).call(this, props));
 	
 			_this.newGame = _this.newGame.bind(_this);
+			_this.startGame = _this.startGame.bind(_this);
 			return _this;
 		}
 	
@@ -77661,18 +77673,47 @@
 				}));
 			}
 		}, {
+			key: 'startGame',
+			value: function startGame() {
+				// MARK: start game
+			}
+		}, {
 			key: 'render',
 			value: function render() {
-				return _react2.default.createElement(
-					'div',
-					{ id: 'gameHost' },
-					_react2.default.createElement(_QuestionSetPicker2.default, null),
-					_react2.default.createElement(
-						'button',
-						{ onClick: this.newGame },
-						'Start game'
-					)
-				);
+				switch (this.props.gameInfo.status) {
+					case 'notStarted':
+						return _react2.default.createElement(
+							'div',
+							{ id: 'gameHost' },
+							_react2.default.createElement(_QuestionSetPicker2.default, null),
+							_react2.default.createElement(
+								'button',
+								{ onClick: this.newGame },
+								'New game'
+							)
+						);
+					case 'boarding':
+						return _react2.default.createElement(
+							'div',
+							{ id: 'gameHost' },
+							_react2.default.createElement(
+								'h2',
+								null,
+								this.props.gameInfo.id
+							),
+							_react2.default.createElement(
+								'button',
+								{ onClick: this.startGame },
+								'Start game'
+							)
+						);
+					default:
+						return _react2.default.createElement(
+							'p',
+							null,
+							'Error'
+						);
+				}
 			}
 		}]);
 	
@@ -77681,7 +77722,10 @@
 	
 	GameHostDisplay.propTypes = {
 		newGame: _react.PropTypes.func.isRequired,
-		gameStatus: _react.PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
+		gameInfo: _react.PropTypes.shape({
+			status: _react.PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
+			id: _react.PropTypes.number
+		}).isRequired,
 		socket: _react.PropTypes.instanceOf(WebSocket).isRequired,
 		selectedSet: _react.PropTypes.shape({
 			_id: _react.PropTypes.string.isRequired,
@@ -77702,7 +77746,7 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 		return {
-			gameStatus: state.gameStatus,
+			gameInfo: state.gameInfo,
 			selectedSet: state.boarding.selectedSet
 		};
 	};
@@ -77878,6 +77922,7 @@
 	var POPULATE_QUESTION_SET_LIST = exports.POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
 	var UPDATE_SELECTED_SET = exports.UPDATE_SELECTED_SET = 'UPDATE_SELECTED_SET';
 	var NEW_GAME = exports.NEW_GAME = 'NEW_GAME';
+	var SET_GAME_ID = exports.SET_GAME_ID = 'SET_GAME_ID';
 	
 	function makeActionCreator(type) {
 		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -77900,6 +77945,7 @@
 	var populateQuestionSetList = exports.populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
 	var updateSelectedSet = exports.updateSelectedSet = makeActionCreator(UPDATE_SELECTED_SET, 'selectedSet');
 	var newGame = exports.newGame = makeActionCreator(NEW_GAME);
+	var setGameID = exports.setGameID = makeActionCreator(SET_GAME_ID, 'id');
 
 /***/ },
 /* 418 */
@@ -77933,13 +77979,23 @@
 		}
 	}
 	
-	function gameStatus() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? 'notStarted' : arguments[0];
+	var initialGameInfoState = {
+		status: 'notStarted',
+		id: null
+	};
+	function gameInfo() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? initialGameInfoState : arguments[0];
 		var action = arguments[1];
 	
 		switch (action.type) {
 			case actions.NEW_GAME:
-				return 'boarding';
+				return Object.assign({}, state, {
+					status: 'boarding'
+				});
+			case actions.SET_GAME_ID:
+				return Object.assign({}, state, {
+					id: action.id
+				});
 			default:
 				return state;
 		}
@@ -77969,7 +78025,7 @@
 	
 		return {
 			questionSets: questionSets(state.questionSets, action),
-			gameStatus: gameStatus(state.gameStatus, action),
+			gameInfo: gameInfo(state.gameInfo, action),
 			boarding: boarding(state.boarding, action)
 		};
 	}
