@@ -1,4 +1,7 @@
-const RiverReflectionGroup = React.createClass({
+import React, { Component, PropTypes } from 'react';
+import RiverReflection from './RiverReflection.jsx';
+
+class RiverReflectionGroup extends Component {
 	getInitialState() {
 		const lighterColor = '#C1E4EB';
 		const darkerColor = '#0068A0';
@@ -7,18 +10,17 @@ const RiverReflectionGroup = React.createClass({
 			backgroundColor: Math.random() < 0.5 ? lighterColor : darkerColor,
 			height: 25 + Math.random() * 10,
 		};
-	},
-
+	}
 	render() {
 		const riverReflections = [];
 		for (let i = 0; i < this.state.numberOfReflections; i++) {
 			riverReflections.push(<RiverReflection
-  backgroundColor={this.state.backgroundColor}
-  riverWidth={this.props.riverWidth}
-  height={this.state.height}
-  width={100 / this.state.numberOfReflections}
-  xOffset={-i}
-  key={i}
+				backgroundColor={this.state.backgroundColor}
+				riverWidth={this.props.riverWidth}
+				height={this.state.height}
+				width={100 / this.state.numberOfReflections}
+				xOffset={-i}
+				key={i}
 			/>);
 		}
 
@@ -35,5 +37,7 @@ const RiverReflectionGroup = React.createClass({
 				{riverReflections}
 			</div>
 		);
-	},
-});
+	}
+}
+
+export default RiverReflectionGroup;

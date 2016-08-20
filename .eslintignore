@@ -1,4 +1,3 @@
 **/*.bundle.js
 **/*.bundle.js.map
 http/a/*.js
-http/game/*.jsx

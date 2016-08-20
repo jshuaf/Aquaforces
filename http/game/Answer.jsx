@@ -1,5 +1,8 @@
-const Answer = React.createClass({
-	getInitialState() {
+import React, { Component, PropTypes } from 'react';
+
+class Answer extends Component {
+	constructor(props) {
+		super(props);
 		const initialY = Math.random() * 100 - 100;
 		const vx = (Math.random() - 0.5) / 300;
 		const vy = (Math.random() - 0.5) / 150 + innerHeight / 15000;
@@ -19,8 +22,21 @@ const Answer = React.createClass({
 				time: null,
 			},
 		};
-	},
-
+	}
+	componentDidMount() {
+		const currentTime = Date.now();
+		const initialX = this.props.generateAnswerPosition(this.refs.answer.offsetWidth);
+		this.setState((previousState, previousProps) => (
+			{
+				startTime: currentTime,
+				lastAnimationTime: currentTime,
+				position: { x: initialX, y: previousState.position.y },
+				offsetWidth: this.refs.answer.offsetWidth,
+			}), () => {
+			const positionAnimation = this.animate(new Date());
+			this.setState({ positionAnimation });
+		});
+	}
 	setPosition() {
 		const timeAtAnimation = Date.now();
 		const dt = timeAtAnimation - this.state.lastAnimationTime;
@@ -53,8 +69,7 @@ const Answer = React.createClass({
 			velocity: { vx: velocityX, vy: velocityY },
 			lastAnimationTime: timeAtAnimation,
 		});
-	},
-
+	}
 	setAngle() {
 		const currentTime = Date.now();
 		const shakeTime = this.state.shake.time;
@@ -72,37 +87,19 @@ const Answer = React.createClass({
 				time: null,
 			} });
 		}
-	},
-
-	componentDidMount() {
-		const currentTime = Date.now();
-		const initialX = this.props.generateAnswerPosition(this.refs.answer.offsetWidth);
-		this.setState((previousState, previousProps) => (
-			{
-				startTime: currentTime,
-				lastAnimationTime: currentTime,
-				position: { x: initialX, y: previousState.position.y },
-				offsetWidth: this.refs.answer.offsetWidth,
-			}), () => {
-			const positionAnimation = this.animate(new Date());
-			this.setState({ positionAnimation });
-		});
-	},
-
+	}
 	disappear() {
 		this.setState({
 			disappeared: true,
 		});
-	},
-
+	}
 	shake() {
 		this.setState({ shake: {
 			time: Date.now(),
 			angle: 0,
 		} });
-	},
-
-	animate(timestamp) {
+	}
+	animate() {
 		if (this.props.keepRunning && !(this.state.passedThreshold)) {
 			this.setPosition();
 			this.setAngle();
@@ -110,12 +107,10 @@ const Answer = React.createClass({
 		} else {
 			this.props.answerPassedThreshold(this.props.text);
 		}
-	},
-
+	}
 	handleClick() {
 		this.props.onClick(this.props.text);
-	},
-
+	}
 	render() {
 		const x = this.state.position.x; const y = this.state.position.y;
 		const style = {
@@ -123,69 +118,10 @@ const Answer = React.createClass({
 		};
 		if (!this.state.disappeared)
 			return (<span style={style} onClick={this.handleClick}
-  ref="answer" className="pill"
-   >{this.props.text}</span>);
-		else {
-			return null;
-		}
-	},
-});
-
-const Canoe = React.createClass({
-	getInitialState() {
-		return {
-			height: null,
-			topPosition: null,
-		};
-	},
-
-	componentDidMount() {
-		this.setState({
-			height: this.refs.canoe.offsetHeight,
-			width: this.refs.canoe.offsetWidth,
-			parentWidth: this.refs.canoe.parentElement.clientWidth,
-			topPosition: this.refs.canoe.getBoundingClientRect().top,
-		});
-	},
-
-	getBounds() {
-		return this.refs.canoe.getBoundingClientRect();
-	},
-
-	render() {
-		// shake 0.82s cubic-bezier(.36,.07,.19,.97) both
-		const hp = this.props.hp;
-		let image = '../img/boats-top';
-
-		if (hp > 50) {
-			image += '/canoe-100';
-		} else if (hp > 25) {
-			image += '/canoe-50';
-		} else if (hp > 10) {
-			image += '/canoe-25';
-		} else if (hp > 0) {
-			image += '/canoe-10';
-		} else if (hp <= 0) {
-			image += '/rafts';
-		}
-
-		image += `/${this.props.crewSize}-members.svg`;
-
-		const canoeStyle = {
-			height: '100%',
-		};
-		const containerStyle = {
-			textAlign: 'center',
-			height: '50%',
-			margin: '0 auto',
-			transform: `translate(0px, ${window.innerHeight / 3.5}px)`,
-			display: 'table',
-		};
-
-		return (
-			<div style={containerStyle}>
-				<img id="canoe" src={image} style={canoeStyle} ref="canoe"></img>
-			</div>
+				ref="answer" className="pill">{this.props.text}</span>
 		);
-	},
-});
+		return null;
+	}
+}
+
+export default Answer;

@@ -1,9 +1,12 @@
-const WhirlpoolFree = React.createClass({
-	getInitialState() {
-		return {
+import React, { Component, PropTypes } from 'react';
+
+class WhirlpoolFree extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
 			tapStreak: 0,
 		};
-	},
+	}
 	processTap() {
 		this.setState({ tapStreak: this.state.tapStreak + 1 });
 		if (this.state.tapStreak === 5) {
@@ -13,7 +16,7 @@ const WhirlpoolFree = React.createClass({
 			}));
 			this.setState({ tapStreak: 0 });
 		}
-	},
+	}
 	render() {
 		return (
 			<div className="modal modal-active panel-group">
@@ -26,5 +29,7 @@ const WhirlpoolFree = React.createClass({
 				</div>
 			</div>
 		);
-	},
-});
+	}
+}
+
+export default WhirlpoolFree;

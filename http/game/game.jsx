@@ -1,4 +1,11 @@
 import React, { Component, PropTypes } from 'react';
+import WhirlpoolFree from './WhirlpoolFree.jsx';
+import WhirlpoolQuestion from './WhirlpoolQuestion.jsx';
+import GameTimer from './GameTimer.jsx';
+import River from './River.jsx';
+import QuestionTimebar from './QuestionTimebar.jsx';
+import Question from './Question.jsx';
+import Update from './Update.jsx';
 
 class Game extends Component {
 	constructor(props) {
@@ -37,10 +44,10 @@ class Game extends Component {
 		}));
 	}
 	showUpdate(title, text) {
-		this.setState({ update: <Update title={title} text={text} animationText="bounceindown animated"></Update> });
+		this.setState({ update: <Update title={title} text={text} animationText="bounceindown animated" /> });
 		const rock = this;
 		setTimeout(function () {
-			this.setState({ update: <Update title={title} text={text} animationText="bounceoutup animated"></Update> });
+			this.setState({ update: <Update title={title} text={text} animationText="bounceoutup animated" /> });
 		}.bind(rock), 2500);
 	}
 	gameTimerOver() {
@@ -119,27 +126,33 @@ class Game extends Component {
 	render() {
 		// MARK: add flashing
 		let whirlpoolValue;
-		this.state.whirlpoolTimebar = <QuestionTimebar onTimeout={this.whirlpoolQuestionTimeout} timePerQuestion={5000 + this.state.whirlpoolBonus} keepRunning={this.state.whirlpool} />;
+		this.state.whirlpoolTimebar =
+			(<QuestionTimebar
+				onTimeout={this.whirlpoolQuestionTimeout}
+				timePerQuestion={5000 + this.state.whirlpoolBonus}
+				keepRunning={this.state.whirlpool}
+			/>);
 		if (this.state.whirlpool) {
 			if (this.state.whirlpoolType === 'Free') {
 				whirlpoolValue = (
 					<div className="modal-background">
 						<div className="row">
-							<div className="three columns"><p></p></div>
 							<div className="six columns">
 								<WhirlpoolFree socket={this.props.socket} />
 							</div>
 						</div>
 					</div>
 				);
-			}
-			else {
+			} else {
 				whirlpoolValue = (
 					<div className="modal-background">
 						<div className="row">
-							<div className="three columns"><p></p></div>
 							<div className="six columns">
-								<WhirlpoolQuestion question={this.state.whirlpoolQuestion} timebar={this.state.whirlpoolTimebar} socket={this.props.socket} />
+								<WhirlpoolQuestion
+									question={this.state.whirlpoolQuestion}
+									timebar={this.state.whirlpoolTimebar}
+									socket={this.props.socket}
+								/>
 							</div>
 						</div>
 					</div>
@@ -158,7 +171,10 @@ class Game extends Component {
 							<Question text={this.state.questionText} />
 						</div>
 						<div className="panel-bottom">
-							<QuestionTimebar onTimeout={this.questionTimeout} timePerQuestion={timePerQuestion} ref="questionTimebar" keepRunning={!this.state.whirlpool}></QuestionTimebar>
+							<QuestionTimebar
+								onTimeout={this.questionTimeout}
+								timePerQuestion={timePerQuestion}
+								ref="questionTimebar" keepRunning={!this.state.whirlpool} />
 						</div>
 					</div>
 					<River ref="river"
