@@ -59,13 +59,13 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 195);
 	
-	var _GameHost = __webpack_require__(/*! ./GameHost.jsx */ 430);
+	var _GameHost = __webpack_require__(/*! ./GameHost.jsx */ 417);
 	
 	var _GameHost2 = _interopRequireDefault(_GameHost);
 	
-	var _actions = __webpack_require__(/*! ./actions */ 432);
+	var _actions = __webpack_require__(/*! ./actions */ 419);
 	
-	var _reducers = __webpack_require__(/*! ./reducers */ 433);
+	var _reducers = __webpack_require__(/*! ./reducers */ 420);
 	
 	var _reducers2 = _interopRequireDefault(_reducers);
 	
@@ -77618,20 +77618,7 @@
 /* 414 */,
 /* 415 */,
 /* 416 */,
-/* 417 */,
-/* 418 */,
-/* 419 */,
-/* 420 */,
-/* 421 */,
-/* 422 */,
-/* 423 */,
-/* 424 */,
-/* 425 */,
-/* 426 */,
-/* 427 */,
-/* 428 */,
-/* 429 */,
-/* 430 */
+/* 417 */
 /*!********************************!*\
   !*** ./http/host/GameHost.jsx ***!
   \********************************/
@@ -77651,11 +77638,11 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 195);
 	
-	var _QuestionSetPicker = __webpack_require__(/*! ./QuestionSetPicker.jsx */ 431);
+	var _QuestionSetPicker = __webpack_require__(/*! ./QuestionSetPicker.jsx */ 418);
 	
 	var _QuestionSetPicker2 = _interopRequireDefault(_QuestionSetPicker);
 	
-	var _actions = __webpack_require__(/*! ./actions */ 432);
+	var _actions = __webpack_require__(/*! ./actions */ 419);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -77779,7 +77766,7 @@
 	exports.default = GameHost;
 
 /***/ },
-/* 431 */
+/* 418 */
 /*!*****************************************!*\
   !*** ./http/host/QuestionSetPicker.jsx ***!
   \*****************************************/
@@ -77799,7 +77786,7 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 195);
 	
-	var _actions = __webpack_require__(/*! ./actions */ 432);
+	var _actions = __webpack_require__(/*! ./actions */ 419);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -77923,7 +77910,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/console-browserify/index.js */ 4)))
 
 /***/ },
-/* 432 */
+/* 419 */
 /*!******************************!*\
   !*** ./http/host/actions.js ***!
   \******************************/
@@ -77963,7 +77950,7 @@
 	var setGameID = exports.setGameID = makeActionCreator(SET_GAME_ID, 'id');
 
 /***/ },
-/* 433 */
+/* 420 */
 /*!*******************************!*\
   !*** ./http/host/reducers.js ***!
   \*******************************/
@@ -77976,7 +77963,7 @@
 	});
 	exports.default = gameHostReducer;
 	
-	var _actions = __webpack_require__(/*! ./actions */ 432);
+	var _actions = __webpack_require__(/*! ./actions */ 419);
 	
 	var actions = _interopRequireWildcard(_actions);
 	
