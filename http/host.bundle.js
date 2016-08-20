@@ -75,12 +75,15 @@
 	var socketPort = location.port !== 80 ? ':' + location.port : '';
 	var socket = new WebSocket('' + socketProtocol + location.hostname + socketPort + '/host/');
 	
-	socket.sendJSON = function (m) {
+	socket.onmessage = function (m) {
+		var message = void 0;
 		try {
-			socket.send(JSON.stringify(m));
+			message = JSON.parse(m.data);
 		} catch (e) {
-			console.error(e);
+			console.log(e);
+			return sweetAlert('Socket error.', 'error');
 		}
+		console.log(message);
 	};
 	
 	(0, _reactDom.render)(_react2.default.createElement(

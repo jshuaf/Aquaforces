@@ -1,33 +1,42 @@
-module.exports = (tws, m, games) => {
+/* global dbcs:true */
+const o = require('yield-yield'
+);
+module.exports = o(function* (tws, m, games) {
 	/* eslint-disable global-require */
 	require('./helpers')(tws);
 	/* eslint-enable global-require */
-	console.log(m);
 	switch (m.event) {
 	case 'newGame': {
-		const id = Math.floor(Math.random() * 1e4);
-		games[id] = {
-			host: tws,
-			crews: [],
-			usernames: [],
-			users: [],
-			questions: [],
-			hasStarted: false,
-		};
+		// Validate the selected set
+		if (!m.set) return tws.error('No set provided in request.');
+		else if (!m.set._id) return tws.error('No set ID provided in request.');
 
-		tws.game = games[id];
-		tws.trysend({ event: 'newGame', id });
+		const qset = yield dbcs.qsets.findOne({ _id: m.set._id }, yield);
+		if (!qset) return tws.error('Requested set not found.');
+		// Generate the answer pool (all answers, correct and incorrect)
 		const answers = [];
-		for (const question of tws.game.questions) {
+		qset.questions.forEach((question) => {
 			if (!answers.includes(question.answer)) {
 				answers.push(question.answer);
 			}
 			for (const answer of question.incorrectAnswers) {
 				if (!answers.includes(answer)) answers.push(answer);
 			}
-		}
+		});
 
-		tws.game.answers = answers;
+		// Create the game
+		const id = Math.floor(Math.random() * 1e4);
+		games[id] = {
+			host: tws,
+			crews: [],
+			users: [],
+			title: qset.title,
+			questions: qset.questions,
+			answers,
+			hasStarted: false,
+		};
+		tws.game = games[id];
+		tws.trysend({ event: 'newGameID', id });
 		break;
 	}
 	case 'removeUserFromCrew': {
@@ -120,4 +129,4 @@ module.exports = (tws, m, games) => {
 	default: {
 		tws.error(`Unknown socket event ${m.event} received.`);
 	} }
-};
+});

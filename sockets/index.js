@@ -15,6 +15,7 @@ module.exports = (server) => {
 					message = JSON.parse(m);
 					if (message) require('./game')(tws, message, games);
 				} catch (e) {
+					console.error(e);
 					return tws.error('JSON error.');
 				}
 			});
@@ -46,6 +47,7 @@ module.exports = (server) => {
 					message = JSON.parse(m);
 					if (message) require('./host')(tws, message, games);
 				} catch (e) {
+					console.error(e);
 					return tws.error('JSON error.');
 				}
 			});

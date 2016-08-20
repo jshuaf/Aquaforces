@@ -11,12 +11,15 @@ const socketProtocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
 const socketPort = location.port !== 80 ? `:${location.port}` : '';
 const socket = new WebSocket(`${socketProtocol}${location.hostname}${socketPort}/host/`);
 
-socket.sendJSON = (m) => {
+socket.onmessage = function (m) {
+	let message;
 	try {
-		socket.send(JSON.stringify(m));
+		message = JSON.parse(m.data);
 	} catch (e) {
-		console.error(e);
+		console.log(e);
+		return sweetAlert('Socket error.', 'error');
 	}
+	console.log(message);
 };
 
 render(
