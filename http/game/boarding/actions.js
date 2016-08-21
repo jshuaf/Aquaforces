@@ -1,4 +1,5 @@
-export const JOIN_GAME = 'JOIN_GAME';
+export const JOIN_GAME_REQUEST = 'JOIN_GAME_REQUEST';
+export const JOIN_GAME_SUCCESS = 'JOIN_GAME_SUCCESS';
 
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
@@ -10,4 +11,5 @@ function makeActionCreator(type, ...argNames) {
 	};
 }
 
-export const joinGame = makeActionCreator(JOIN_GAME, 'id', 'username');
+export const joinGameRequest = makeActionCreator(JOIN_GAME_REQUEST);
+export const joinGameSuccess = makeActionCreator(JOIN_GAME_SUCCESS, 'id', 'username');

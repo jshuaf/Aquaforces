@@ -6,28 +6,27 @@ module.exports = (tws, m, games) => {
 	const maxFuzzyTime = 5000;
 
 	switch (m.event) {
-	case 'addUser': {
-		const tgame = games[m.code];
-		if (!tgame) return tws.error('Invalid game code.', 'Make sure you type it correctly!');
-		if (!m.name) {
+	case 'joinGame': {
+		const game = games[m.id];
+		if (!game) return tws.error('Invalid game code.', 'Make sure you type it correctly!');
+		if (!m.username) {
 			return tws.error('You must enter a username.', 'Be creative!');
-		} else if (m.name.length > 24) {
+		} else if (m.username.length > 24) {
 			return tws.error('You must enter a username less than 24 characters.');
-		} else if (tgame.usernames.includes(m.name)) {
+		} else if (tws.usernames().includes(m.name)) {
 			return tws.error('Your username has been taken', 'Be quicker next time.');
-		} else if (tgame.hasStarted) {
+		} else if (game.hasStarted) {
 			return tws.error('Game has started.', 'Jump in next time!');
 		}
-		tws.user = m.name;
-		tws.game = tgame;
-		tws.game.usernames.push(m.name);
+		tws.username = m.username;
+		tws.game = game;
+		tws.questionsDone = [];
 		tws.game.users.push(tws);
 		tws.sendToGameHost({
 			event: 'addNewUser',
 			user: tws.user,
 		});
-		tws.trysend({ event: 'addUser' });
-		tws.questionsDone = [];
+		tws.trysend({ event: 'joinGame', username: m.username, id: m.id });
 		break;
 	}
 	case 'addUserToCrew': {

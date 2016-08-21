@@ -19,6 +19,12 @@ module.exports = (tws) => {
 
 	tws.crew = () => tws.game.crews[tws.crewNumber];
 
+	tws.usernames = () => {
+		if (tws.game) {
+			return tws.game.users.filter((user) => user.username);
+		}
+	};
+
 	tws.randomCrewMember = () => tws.crew().members[Math.floor(Math.random() * tws.crew().members.length)];
 
 	tws.addWhirlpool = () => {
