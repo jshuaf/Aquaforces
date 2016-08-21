@@ -1,3 +1,5 @@
+export const JOIN_GAME = 'JOIN_GAME';
+
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
 		const action = { type };
@@ -7,3 +9,5 @@ function makeActionCreator(type, ...argNames) {
 		return action;
 	};
 }
+
+export const joinGame = makeActionCreator(JOIN_GAME, 'id', 'username');

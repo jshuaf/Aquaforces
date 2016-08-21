@@ -11,7 +11,7 @@ const store = createStore(gameReducer, window.devToolsExtension && window.devToo
 
 const socketProtocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
 const socketPort = location.port !== 80 ? `:${location.port}` : '';
-const socket = new WebSocket(`${socketProtocol}${location.hostname}${socketPort}/game/`);
+const socket = new WebSocket(`${socketProtocol}${location.hostname}${socketPort}/play/`);
 
 socket.onmessage = function (m) {
 	let message;
@@ -24,7 +24,7 @@ socket.onmessage = function (m) {
 
 	switch (message.event) {
 	default:
-		console.error('Unknown message: ', message.event);
+		console.error('Unknown message: ', message);
 		return;
 	}
 };

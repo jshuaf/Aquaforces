@@ -5,6 +5,7 @@ const initialBoardingState = {
 	id: null,
 	username: null,
 };
+
 function boarding(state = initialBoardingState, action) {
 	switch (action.type) {
 	case actions.JOIN_GAME:
@@ -18,7 +19,7 @@ function boarding(state = initialBoardingState, action) {
 	}
 }
 
-export default function gameHostReducer(state = {}, action) {
+export default function gameReducer(state = {}, action) {
 	return {
 		boarding: boarding(state.boardingStatus, action),
 	};

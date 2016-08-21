@@ -55,8 +55,7 @@ export class TextInput extends Component {
 			<div className="textInput" style={containerStyle}>
 				<span style={labelStyle}>{this.props.label}</span>
 				<input
-					ref={(i) => { this.node = i; }} placeholder={this.props.placeholder}
-					onChange={this.props.onChange} style={inputStyle} required={this.props.required}
+					ref={(i) => { this.node = i; }} style={inputStyle} {...this.props}
 				/>
 			{errorDiv}
 				{}
@@ -68,12 +67,6 @@ export class TextInput extends Component {
 TextInput.propTypes = {
 	placeholder: PropTypes.string,
 	label: PropTypes.string.isRequired,
-	onChange: PropTypes.func,
-	required: PropTypes.bool,
-};
-
-TextInput.defaultProps = {
-	index: 0,
 };
 
 export class Checkbox extends Component {
