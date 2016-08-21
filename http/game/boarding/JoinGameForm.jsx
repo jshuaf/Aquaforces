@@ -27,6 +27,7 @@ class JoinGameFormDisplay extends Component {
 	render() {
 		switch (this.props.boardingStatus) {
 		case 'joiningGame':
+		default:
 			return (
 				<form
 					onSubmit={(e) => { e.preventDefault(); this.onSubmit(); }}
@@ -69,28 +70,6 @@ class JoinGameFormDisplay extends Component {
 						</div>
 					</div>
 				</form>
-				);
-		default:
-			return (
-					<form id="join">
-						<div className="row">
-							<div className="six columns text-center">
-								<img className="navbar-logo" src="/img/logo-black.svg" alt="Aquaforces" />
-								<TextInput placeholder="123456" label="Game number" type="number" min="0" max="9999" />
-								<TextInput placeholder="Michael Phelps" label="Username" type="text" />
-								<input
-									className="button-primary u-full-width" type="submit"
-									value="Submit" id="joinGameButton"
-								/>
-							</div>
-						</div>
-						<div className="row margins">
-							<div className="six columns text-center">
-								<h2 className="marginless">Are you a teacher?</h2>
-								<a href="/host/" className="button button-primary u-full-width">Switch to host dashboard</a>
-							</div>
-						</div>
-					</form>
 				);
 		}
 	}

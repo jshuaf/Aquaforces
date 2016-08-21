@@ -7,11 +7,10 @@ function GameDisplay({ boardingStatus, socket }) {
 	switch (boardingStatus) {
 	case 'joiningGame':
 	case 'joiningCrew':
+	default:
 		return <JoinGameForm socket={socket} />;
 	case 'started':
 		return <GamePlay />;
-	default:
-		return <JoinGameForm socket={socket} />;
 	}
 }
 
