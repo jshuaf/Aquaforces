@@ -9,14 +9,16 @@ class JoinGameFormDisplay extends Component {
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 	onSubmit() {
+		const formData = {};
+		this.form.elements.forEach((element, index) => {
+			if (index !== this.form.elements.length - 1) formData[element.name] = element.value;
+		});
 		switch (this.props.boardingStatus) {
 		case 'joiningGame':
 			this.props.joinGameRequest();
-			this.props.socket.send(JSON.stringify({
+			this.props.socket.send(JSON.stringify(Object.assign(formData, {
 				event: 'joinGame',
-				id: data.gameID,
-				username: data.username,
-			}));
+			})));
 			break;
 		default:
 			return;
@@ -26,15 +28,21 @@ class JoinGameFormDisplay extends Component {
 		switch (this.props.boardingStatus) {
 		case 'joiningGame':
 			return (
-				<form id="join" onSubmit={(e) => { e.preventDefault(); onSubmit(console.log(this)); }}>
+				<form
+					onSubmit={(e) => { e.preventDefault(); this.onSubmit(); }}
+					ref={(f) => { this.form = f; }}
+				>
 					<div className="row">
 						<div className="six columns text-center">
 							<img className="navbar-logo" src="/img/logo-black.svg" alt="Aquaforces" />
 							<TextInput
-								placeholder="123456" label="Game number"
+								placeholder="1234" label="Game number" name="id"
 								type="number" min="0" max="9999" required
 							/>
-							<TextInput placeholder="Michael Phelps" label="Username" type="text" required />
+							<TextInput
+								placeholder="Michael Phelps" name="username"
+								label="Username" type="text" required
+							/>
 							<input
 								className="button-primary u-full-width" type="submit"
 								value="Submit" id="joinGameButton"
@@ -57,9 +65,7 @@ class JoinGameFormDisplay extends Component {
 							<TextInput type="number" min="1" max="12" label="Crew number" placeholder="4" />
 							<input
 								className="button-primary" type="submit"
-								value="Submit" id="joinCrewButton">
-								Join crew
-							</input>
+								value="Submit" id="joinCrewButton" />
 						</div>
 					</div>
 				</form>
@@ -93,6 +99,7 @@ class JoinGameFormDisplay extends Component {
 JoinGameFormDisplay.propTypes = {
 	boardingStatus: PropTypes.oneOf(['joiningGame', 'joiningCrew']),
 	joinGameRequest: PropTypes.func.isRequired,
+	socket: PropTypes.instanceOf(WebSocket).isRequired,
 };
 
 const mapStateToProps = (state) => ({

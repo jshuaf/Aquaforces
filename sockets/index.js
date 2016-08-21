@@ -16,7 +16,7 @@ module.exports = (server) => {
 					if (message) require('./game')(tws, message, games);
 				} catch (e) {
 					console.error(e);
-					return tws.error('JSON error.');
+					return tws.error('Error parsing message');
 				}
 			});
 
@@ -48,12 +48,13 @@ module.exports = (server) => {
 					if (message) require('./host')(tws, message, games);
 				} catch (e) {
 					console.error(e);
-					return tws.error('JSON error.');
+					return tws.error('Error parsing message.');
 				}
 			});
 			break;
 		}
 		default: {
+			console.log(tws.upgradeReq.url);
 			tws.trysend({
 				event: 'error',
 				body: 'Invalid upgrade URL.',

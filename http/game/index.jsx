@@ -25,6 +25,8 @@ socket.onmessage = function (m) {
 	}
 
 	switch (message.event) {
+	case 'error':
+		return sweetAlert(message.title, message.text, 'error');
 	case 'joinGame':
 		delete message.event;
 		return store.dispatch(boardingActions.joinGameSuccess(message));

@@ -1,4 +1,5 @@
-import * as actions from './play/actions';
+import * as playActions from './play/actions';
+import * as boardingActions from './boarding/actions';
 
 const initialBoardingState = {
 	status: 'joiningGame',
@@ -9,11 +10,11 @@ const initialBoardingState = {
 
 function boarding(state = initialBoardingState, action) {
 	switch (action.type) {
-	case actions.JOIN_GAME_REQUEST:
+	case boardingActions.JOIN_GAME_REQUEST:
 		return Object.assign({}, state, {
 			pendingRequest: true,
 		});
-	case actions.JOIN_GAME_SUCCESS:
+	case boardingActions.JOIN_GAME_SUCCESS:
 		delete action.type;
 		return Object.assign({}, state, action, {
 			pendingRequest: false,

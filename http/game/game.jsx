@@ -3,16 +3,15 @@ import { connect } from 'react-redux';
 import GamePlay from './play/GamePlay.jsx';
 import JoinGameForm from './boarding/JoinGameForm.jsx';
 
-class GameDisplay extends Component {
-	render() {
-		switch (this.props.boardingStatus) {
-		case 'joiningGame' || 'joiningCrew':
-			return <JoinGameForm />;
-		case 'started':
-			return <GamePlay />;
-		default:
-			return <JoinGameForm />;
-		}
+function GameDisplay({ boardingStatus, socket }) {
+	switch (boardingStatus) {
+	case 'joiningGame':
+	case 'joiningCrew':
+		return <JoinGameForm socket={socket} />;
+	case 'started':
+		return <GamePlay />;
+	default:
+		return <JoinGameForm socket={socket} />;
 	}
 }
 

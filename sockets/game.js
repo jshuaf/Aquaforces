@@ -9,6 +9,7 @@ module.exports = (tws, m, games) => {
 	case 'joinGame': {
 		const game = games[m.id];
 		if (!game) return tws.error('Invalid game code.', 'Make sure you type it correctly!');
+		tws.game = game;
 		if (!m.username) {
 			return tws.error('You must enter a username.', 'Be creative!');
 		} else if (m.username.length > 24) {
@@ -19,7 +20,6 @@ module.exports = (tws, m, games) => {
 			return tws.error('Game has started.', 'Jump in next time!');
 		}
 		tws.username = m.username;
-		tws.game = game;
 		tws.questionsDone = [];
 		tws.game.users.push(tws);
 		tws.sendToGameHost({
