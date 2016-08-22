@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 
 class QuestionTimebar extends Component {
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			timeLeft: this.props.timePerQuestion,
 			timeStart: Date.now(),
 		};

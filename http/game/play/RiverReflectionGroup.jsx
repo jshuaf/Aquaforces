@@ -2,10 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import RiverReflection from './RiverReflection.jsx';
 
 class RiverReflectionGroup extends Component {
-	getInitialState() {
+	constructor(props) {
+		super(props);
 		const lighterColor = '#C1E4EB';
 		const darkerColor = '#0068A0';
-		return {
+		this.state = {
 			numberOfReflections: Math.floor(2 + 2 * Math.random()),
 			backgroundColor: Math.random() < 0.5 ? lighterColor : darkerColor,
 			height: 25 + Math.random() * 10,

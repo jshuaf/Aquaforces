@@ -6,8 +6,9 @@ import RiverReflectionGroup from './RiverReflectionGroup.jsx';
 import Answer from './Answer.jsx';
 
 class River extends Component {
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			// Answers
 			answers: [],
 			answersToAdd: [],

@@ -3,8 +3,9 @@ import React, { Component, PropTypes } from 'react';
 /* global shuffle:true */
 
 class WhirlpoolQuestion extends Component {
-	getInitialState() {
-		return {
+	constructor(props) {
+		super(props);
+		this.state = {
 			answers: null,
 		};
 	}
