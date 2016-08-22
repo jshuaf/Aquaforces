@@ -26,14 +26,16 @@ module.exports = (tws, m, games) => {
 			event: 'addNewUser',
 			user: tws.user,
 		});
-		delete m.event;
-		return tws.trysend(Object.assign(m, { event: 'joinGame' }));
+		return tws.trysend(m);
 	}
-	case 'addUserToCrew': {
+	case 'joinCrew': {
 		tws.checkGameExists();
-		if (!m.crewNumber || typeof m.crewNumber !== 'number') {
+		if (!m.crewNumber || isNaN(m.crewNumber)) {
 			return tws.error('You must enter a crew number.');
-		} else if (!(m.crewNumber <= 12 && m.crewNumber >= 1)) {
+		} else if (typeof m.crewNumber !== 'number') {
+			m.crewNumber = +m.crewNumber;
+		}
+		if (!(m.crewNumber <= 12 && m.crewNumber >= 1)) {
 			return tws.error('Invalid crew number', 'Pick a crew number between 1 and 12.');
 		} else if (tws.game.hasStarted) {
 			return tws.error('Game has started.', 'Jump in next time!');
@@ -49,17 +51,15 @@ module.exports = (tws, m, games) => {
 			};
 		} else if (tws.game.crews[m.crewNumber].members.length >= 4) {
 			return tws.error('Your crew is full.', 'Crews can have 2 - 4 sailors.');
-		} else tws.game.crews[m.crewNumber].members.push(tws);
+		}
+		tws.game.crews[m.crewNumber].members.push(tws);
 		tws.crewNumber = m.crewNumber;
 		tws.sendToGameHost({
 			event: 'addUserToCrew',
 			user: tws.user,
 			crew: m.crewNumber,
 		});
-		tws.trysend({
-			event: 'addUserToCrew',
-		});
-		break;
+		return tws.trysend(m);
 	}
 	case 'answerSelected': {
 		tws.checkGameExists();

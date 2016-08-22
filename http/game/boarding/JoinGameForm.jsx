@@ -44,11 +44,11 @@ class JoinGameFormDisplay extends Component {
 							<img className="navbar-logo" src="/img/logo-black.svg" alt="Aquaforces" />
 							<TextInput
 								placeholder="1234" label="Game number" name="gameID"
-								type="number" min="0" max="9999" required
+								type="number" min="0" max="9999" required autoComplete="off"
 							/>
 							<TextInput
 								placeholder="Michael Phelps" name="username"
-								label="Username" type="text" required
+								label="Username" type="text" required autoComplete="off"
 							/>
 							<input
 								className="button-primary u-full-width" type="submit"
@@ -66,10 +66,16 @@ class JoinGameFormDisplay extends Component {
 			);
 		case 'joiningCrew':
 			return (
-				<form id="crew" hidden="">
+				<form
+					onSubmit={(e) => { e.preventDefault(); this.onSubmit(); }}
+					ref={(f) => { this.form = f; }}
+				>
 					<div className="row">
 						<div className="four columns text-center">
-							<TextInput type="number" min="1" max="12" label="Crew number" placeholder="4" />
+							<TextInput
+								type="number" min="1" max="12" autoComplete="off"
+								label="Crew number" placeholder="4" name="crewNumber"
+							/>
 							<input
 								className="button-primary" type="submit"
 								value="Submit" id="joinCrewButton" />

@@ -17,16 +17,16 @@ function boarding(state = initialBoardingState, action) {
 			pendingRequest: true,
 		});
 	case boardingActions.JOIN_GAME_SUCCESS:
-		delete action.type;
 		return Object.assign({}, state, action, {
 			pendingRequest: false,
 			status: 'joiningCrew',
+			type: undefined,
 		});
 	case boardingActions.JOIN_CREW_SUCCESS:
-		delete action.type;
 		return Object.assign({}, state, action, {
 			pendingRequest: false,
 			status: 'joined',
+			type: undefined,
 		});
 	default:
 		return state;

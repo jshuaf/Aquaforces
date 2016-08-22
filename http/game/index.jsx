@@ -29,7 +29,10 @@ socket.onmessage = function (m) {
 		return sweetAlert(message.title, message.text, 'error');
 	case 'joinGame':
 		delete message.event;
-		return store.dispatch(boardingActions.joinGameSuccess(message));
+		return store.dispatch(boardingActions.joinGameSuccess(message.gameID, message.username));
+	case 'joinCrew':
+		delete message.event;
+		return store.dispatch(boardingActions.joinCrewSuccess(message.crewNumber));
 	default:
 		console.error('Unknown message: ', message);
 		return;
