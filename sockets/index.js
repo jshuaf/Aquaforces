@@ -51,6 +51,14 @@ module.exports = (server) => {
 					return tws.error('Error parsing message.');
 				}
 			});
+			tws.on('close', () => {
+				Object.keys(games).forEach((gameID) => {
+					const game = games[gameID];
+					if (game.host === tws) {
+						return delete games[gameID];
+					}
+				});
+			});
 			break;
 		}
 		default: {
