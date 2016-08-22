@@ -50,8 +50,10 @@ function boarding(state = initialBoardingState, action) {
 		});
 	case actions.ADD_USER_TO_CREW: {
 		const oldUserIndex = state.usersWithoutCrews.indexOf(action.username);
+		const usersWithoutCrews = state.usersWithoutCrews.slice();
+		usersWithoutCrews.splice(oldUserIndex, 1);
 		return Object.assign({}, state, {
-			usersWithoutCrews: state.usersWithoutCrews.splice(oldUserIndex, 1),
+			usersWithoutCrews,
 			crews: Object.assign({}, state.crews, {
 				[action.crewNumber]:
 					state.crews[action.crewNumber] ?
@@ -59,6 +61,23 @@ function boarding(state = initialBoardingState, action) {
 					[action.username],
 			}),
 		});
+	}
+	case actions.REMOVE_USER_FROM_GAME: {
+		const oldUserIndex = state.usersWithoutCrews.indexOf(action.username);
+		if (oldUserIndex >= 0) {
+			const usersWithoutCrews = state.usersWithoutCrews.slice();
+			usersWithoutCrews.splice(oldUserIndex, 1);
+			return Object.assign({}, state, { usersWithoutCrews });
+		}
+		const crews = Object.assign({}, state.crews);
+		Object.keys(state.crews).forEach((crewNumber) => {
+			const crew = state.crews[crewNumber].slice();
+			if (crew.includes(action.username)) {
+				crew.splice(crew.indexOf(action.username), 1);
+			}
+			crews[crewNumber] = crew;
+		});
+		return Object.assign({}, state, { crews });
 	}
 	default:
 		return state;

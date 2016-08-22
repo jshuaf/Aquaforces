@@ -4,6 +4,7 @@ export const NEW_GAME = 'NEW_GAME';
 export const SET_GAME_ID = 'SET_GAME_ID';
 export const ADD_USER_TO_GAME = 'ADD_USER_TO_GAME';
 export const ADD_USER_TO_CREW = 'ADD_USER_TO_CREW';
+export const REMOVE_USER_FROM_GAME = 'REMOVE_USER_FROM_GAME';
 
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
@@ -21,3 +22,4 @@ export const newGame = makeActionCreator(NEW_GAME);
 export const setGameID = makeActionCreator(SET_GAME_ID, 'gameID');
 export const addUserToGame = makeActionCreator(ADD_USER_TO_GAME, 'username');
 export const addUserToCrew = makeActionCreator(ADD_USER_TO_CREW, 'username', 'crewNumber');
+export const removeUserFromGame = makeActionCreator(REMOVE_USER_FROM_GAME, 'username');

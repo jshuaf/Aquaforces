@@ -96,6 +96,8 @@
 				return store.dispatch((0, _actions.addUserToGame)(message.username));
 			case 'addUserToCrew':
 				return store.dispatch((0, _actions.addUserToCrew)(message.username, message.crewNumber));
+			case 'removeUserFromGame':
+				return store.dispatch((0, _actions.removeUserFromGame)(message.username));
 			default:
 				console.error('Unknown message: ', message.event);
 				return;
@@ -77995,6 +77997,7 @@
 	var SET_GAME_ID = exports.SET_GAME_ID = 'SET_GAME_ID';
 	var ADD_USER_TO_GAME = exports.ADD_USER_TO_GAME = 'ADD_USER_TO_GAME';
 	var ADD_USER_TO_CREW = exports.ADD_USER_TO_CREW = 'ADD_USER_TO_CREW';
+	var REMOVE_USER_FROM_GAME = exports.REMOVE_USER_FROM_GAME = 'REMOVE_USER_FROM_GAME';
 	
 	function makeActionCreator(type) {
 		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -78020,6 +78023,7 @@
 	var setGameID = exports.setGameID = makeActionCreator(SET_GAME_ID, 'gameID');
 	var addUserToGame = exports.addUserToGame = makeActionCreator(ADD_USER_TO_GAME, 'username');
 	var addUserToCrew = exports.addUserToCrew = makeActionCreator(ADD_USER_TO_CREW, 'username', 'crewNumber');
+	var removeUserFromGame = exports.removeUserFromGame = makeActionCreator(REMOVE_USER_FROM_GAME, 'username');
 
 /***/ },
 /* 436 */
@@ -78033,6 +78037,9 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
 	exports.default = gameHostReducer;
 	
 	var _actions = __webpack_require__(/*! ./actions */ 435);
@@ -78103,10 +78110,38 @@
 			case actions.ADD_USER_TO_CREW:
 				{
 					var oldUserIndex = state.usersWithoutCrews.indexOf(action.username);
+					var usersWithoutCrews = state.usersWithoutCrews.slice();
+					usersWithoutCrews.splice(oldUserIndex, 1);
 					return Object.assign({}, state, {
-						usersWithoutCrews: state.usersWithoutCrews.splice(oldUserIndex, 1),
+						usersWithoutCrews: usersWithoutCrews,
 						crews: Object.assign({}, state.crews, _defineProperty({}, action.crewNumber, state.crews[action.crewNumber] ? state.crews[action.crewNumber].concat(action.username) : [action.username]))
 					});
+				}
+			case actions.REMOVE_USER_FROM_GAME:
+				{
+					var _ret = function () {
+						var oldUserIndex = state.usersWithoutCrews.indexOf(action.username);
+						if (oldUserIndex >= 0) {
+							var _usersWithoutCrews = state.usersWithoutCrews.slice();
+							_usersWithoutCrews.splice(oldUserIndex, 1);
+							return {
+								v: Object.assign({}, state, { usersWithoutCrews: _usersWithoutCrews })
+							};
+						}
+						var crews = Object.assign({}, state.crews);
+						Object.keys(state.crews).forEach(function (crewNumber) {
+							var crew = state.crews[crewNumber].slice();
+							if (crew.includes(action.username)) {
+								crew.splice(crew.indexOf(action.username), 1);
+							}
+							crews[crewNumber] = crew;
+						});
+						return {
+							v: Object.assign({}, state, { crews: crews })
+						};
+					}();
+	
+					if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 				}
 			default:
 				return state;
