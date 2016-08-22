@@ -21,4 +21,4 @@ export const joinCrewRequest = makeActionCreator(JOIN_CREW_REQUEST);
 export const joinCrewSuccess = makeActionCreator(JOIN_CREW_SUCCESS, 'crewNumber');
 export const populateInitialGameData = makeActionCreator(
 	POPULATE_INITIAL_GAME_DATA, 'username', 'answers', 'crewSize', 'crewNumber');
-export const startGame = makeActionCreator(startGame);
+export const startGame = makeActionCreator(START_GAME);
