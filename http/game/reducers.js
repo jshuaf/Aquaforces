@@ -33,8 +33,27 @@ function boarding(state = initialBoardingState, action) {
 	}
 }
 
+const initialGameState = {
+	username: null,
+	answers: [],
+	crewSize: null,
+	crewNumber: null,
+};
+
+function game(state = initialGameState, action) {
+	switch (action.type) {
+	case boardingActions.POPULATE_INITIAL_GAME_DATA:
+		return Object.assign({}, state, action, {
+			type: undefined,
+		});
+	default:
+		return state;
+	}
+}
+
 export default function gameReducer(state = {}, action) {
 	return {
 		boarding: boarding(state.boardingStatus, action),
+		game: game(state.game, action),
 	};
 }

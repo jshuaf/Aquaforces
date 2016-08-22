@@ -4,7 +4,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Game from './Game.jsx';
 import gameReducer from './reducers';
-import { joinGameSuccess, joinCrewSuccess } from './boarding/actions';
+import { joinGameSuccess, joinCrewSuccess, populateInitialGameData } from './boarding/actions';
 
 /* global sweetAlert: true */
 
@@ -31,6 +31,49 @@ socket.onmessage = function (m) {
 	case 'joinCrew':
 		document.getElementsByTagName('title')[0].innerHTML = 'Play · Aquaforces';
 		return store.dispatch(joinCrewSuccess(message.crewNumber));
+	case 'startGame':
+		store.dispatch(
+			populateInitialGameData(message.username, message.answers, message.crewSize, message.crewNumber));
+		break;
+	case 'answerSelected':
+		if (m.wasCorrectAnswer) {
+			game.correctAnswer(m.answer);
+		} else {
+			game.incorrectAnswer(m.answer);
+		}
+		break;
+	case 'updateHP':
+		game.updateHP(m.hp);
+		break;
+	case 'addRock':
+		game.addRock(m.startTime);
+		break;
+	case 'endRock':
+		game.endRock();
+		break;
+	case 'whirlpoolAhead':
+		game.addWhirlpoolTap();
+		break;
+	case 'whirlpoolQuestion':
+		game.addWhirlpoolQuestion(m.question);
+		break;
+	case 'whirlpoolBonusReceived':
+		console.log('Bonus received');
+		game.setState({ whirlpoolBonus: m.amount });
+		break;
+	case 'whirlpoolConclusion':
+		game.setState({ whirlpool: false });
+		game.state.whirlpoolTimebar.reset();
+		break;
+	case 'correctAnswer':
+		game.addCorrectAnswer(m.answer);
+		break;
+	case 'newQuestion':
+		game.newQuestion(m.question);
+		break;
+	case 'endGame':
+		gameHasEnded = true;
+		break;
 	default:
 		console.error('Unknown message: ', message);
 		return;

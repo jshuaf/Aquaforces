@@ -84,15 +84,6 @@ module.exports = o(function* (tws, m, games) {
 			}
 		}
 		tws.game.hasStarted = true;
-		tws.game.crews.forEach((crew) => {
-			crew.members.forEach((ttws) => {
-				ttws.trysend({
-					event: 'startGame',
-					answers: tws.game.answers,
-					crewSize: crew.members.length,
-				});
-			});
-		});
 		const plainCrews = {};
 		for (const crewNumber in tws.game.crews) {
 			if ({}.hasOwnProperty.call(tws.game.crews, crewNumber)) {
@@ -101,8 +92,10 @@ module.exports = o(function* (tws, m, games) {
 				crew.members.forEach((ttws) => {
 					ttws.trysend({
 						event: 'startGame',
+						username: ttws.username,
 						answers: tws.game.answers,
 						crewSize: crew.members.length,
+						crewNumber: ttws.crewNumber,
 					});
 					plainMembers.push(ttws.username);
 				});

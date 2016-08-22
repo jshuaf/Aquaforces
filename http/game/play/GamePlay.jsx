@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import {connect} from 'react-redux';
 import WhirlpoolFree from './WhirlpoolFree.jsx';
 import WhirlpoolQuestion from './WhirlpoolQuestion.jsx';
 import GameTimer from './GameTimer.jsx';
@@ -7,7 +8,7 @@ import QuestionTimebar from './QuestionTimebar.jsx';
 import Question from './Question.jsx';
 import Update from './Update.jsx';
 
-class GamePlay extends Component {
+class GamePlayDisplay extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -192,5 +193,14 @@ class GamePlay extends Component {
 		);
 	}
 }
+
+const mapStateToProps = (state) => ({
+	answerData: state.answers,
+	username: state.username,
+	crewNumber: state.crewNumber,
+	crewSize: state.crewSize,
+});
+
+const GamePlay = connect(mapStateToProps, null)(GamePlayDisplay);
 
 export default GamePlay;
