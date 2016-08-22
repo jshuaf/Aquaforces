@@ -12,7 +12,7 @@
     "test": "node server --test",
     "dev": "./node_modules/.bin/webpack -d --watch --display-error-details",
     "production": "./node_modules/.bin/webpack -d --optimize-minize",
-    "lint": "./node_modules/.bin/eslint . --fix --ext .jsx, .js || true"
+    "lint": "./node_modules/.bin/eslint . --ext .jsx, .js || true"
   },
   "author": "BoniO Interns",
   "repository": {
