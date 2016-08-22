@@ -4,7 +4,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Game from './Game.jsx';
 import gameReducer from './reducers';
-import { joinGameSuccess, joinCrewSuccess, populateInitialGameData } from './boarding/actions';
+import { joinGameSuccess, joinCrewSuccess, populateInitialGameData, startGame } from './boarding/actions';
 
 /* global sweetAlert: true */
 
@@ -13,6 +13,12 @@ const store = createStore(gameReducer, window.devToolsExtension && window.devToo
 const socketProtocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
 const socketPort = location.port !== 80 ? `:${location.port}` : '';
 const socket = new WebSocket(`${socketProtocol}${location.hostname}${socketPort}/play/`);
+
+const game = render(
+	<Provider store={store}>
+		<Game socket={socket} />
+	</Provider>,
+	document.getElementById('mountNode'));
 
 socket.onmessage = function (m) {
 	let message;
@@ -34,45 +40,42 @@ socket.onmessage = function (m) {
 	case 'startGame':
 		store.dispatch(
 			populateInitialGameData(message.username, message.answers, message.crewSize, message.crewNumber));
-		break;
+		return store.dispatch(startGame());
 	case 'answerSelected':
 		if (m.wasCorrectAnswer) {
-			game.correctAnswer(m.answer);
+			game.gamePlay.correctAnswer(m.answer);
 		} else {
-			game.incorrectAnswer(m.answer);
+			game.gamePlay.incorrectAnswer(m.answer);
 		}
 		break;
 	case 'updateHP':
-		game.updateHP(m.hp);
+		game.gamePlay.updateHP(m.hp);
 		break;
 	case 'addRock':
-		game.addRock(m.startTime);
+		game.gamePlay.addRock(m.startTime);
 		break;
 	case 'endRock':
-		game.endRock();
+		game.gamePlay.endRock();
 		break;
 	case 'whirlpoolAhead':
-		game.addWhirlpoolTap();
+		game.gamePlay.addWhirlpoolTap();
 		break;
 	case 'whirlpoolQuestion':
-		game.addWhirlpoolQuestion(m.question);
+		game.gamePlay.addWhirlpoolQuestion(m.question);
 		break;
 	case 'whirlpoolBonusReceived':
 		console.log('Bonus received');
-		game.setState({ whirlpoolBonus: m.amount });
+		game.gamePlay.setState({ whirlpoolBonus: m.amount });
 		break;
 	case 'whirlpoolConclusion':
-		game.setState({ whirlpool: false });
-		game.state.whirlpoolTimebar.reset();
+		game.gamePlay.setState({ whirlpool: false });
+		game.gamePlay.state.whirlpoolTimebar.reset();
 		break;
 	case 'correctAnswer':
-		game.addCorrectAnswer(m.answer);
+		game.gamePlay.addCorrectAnswer(m.answer);
 		break;
 	case 'newQuestion':
-		game.newQuestion(m.question);
-		break;
-	case 'endGame':
-		gameHasEnded = true;
+		game.gamePlay.newQuestion(m.question);
 		break;
 	default:
 		console.error('Unknown message: ', message);
@@ -84,12 +87,6 @@ socket.onclose = function (m) {
 	sweetAlert('Socket closed', null, 'error');
 	console.error(m);
 };
-
-render(
-	<Provider store={store}>
-		<Game socket={socket} />
-	</Provider>,
-	document.getElementById('mountNode'));
 
 /*
 const cont = document.getElementById('cont');

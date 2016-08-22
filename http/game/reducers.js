@@ -28,6 +28,10 @@ function boarding(state = initialBoardingState, action) {
 			status: 'joined',
 			type: undefined,
 		});
+	case boardingActions.START_GAME:
+		return Object.assign({}, state, {
+			status: 'started',
+		});
 	default:
 		return state;
 	}

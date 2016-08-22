@@ -3,6 +3,7 @@ export const JOIN_GAME_SUCCESS = 'JOIN_GAME_SUCCESS';
 export const JOIN_CREW_REQUEST = 'JOIN_CREW_REQUEST';
 export const JOIN_CREW_SUCCESS = 'JOIN_CREW_SUCCESS';
 export const POPULATE_INITIAL_GAME_DATA = 'POPULATE_INITIAL_GAME_DATA';
+export const START_GAME = 'START_GAME';
 
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
@@ -20,3 +21,4 @@ export const joinCrewRequest = makeActionCreator(JOIN_CREW_REQUEST);
 export const joinCrewSuccess = makeActionCreator(JOIN_CREW_SUCCESS, 'crewNumber');
 export const populateInitialGameData = makeActionCreator(
 	POPULATE_INITIAL_GAME_DATA, 'username', 'answers', 'crewSize', 'crewNumber');
+export const startGame = makeActionCreator(startGame);
