@@ -88,7 +88,7 @@ class JoinGameFormDisplay extends Component {
 }
 
 JoinGameFormDisplay.propTypes = {
-	boardingStatus: PropTypes.oneOf(['joiningGame', 'joiningCrew']),
+	boardingStatus: PropTypes.oneOf(['joiningGame', 'joiningCrew', 'joined']),
 	joinGameRequest: PropTypes.func.isRequired,
 	joinCrewRequest: PropTypes.func.isRequired,
 	socket: PropTypes.instanceOf(WebSocket).isRequired,

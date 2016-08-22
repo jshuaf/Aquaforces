@@ -31,7 +31,9 @@ class GameHostDisplay extends Component {
 		case 'boarding':
 			return (
 				<div id="gameHost">
-					<h2>{this.props.gameInfo.id}</h2>
+					<h2>{this.props.gameInfo.gameID}</h2>
+					<h4>Users without crews:</h4>
+					{this.props.usersWithoutCrews.map((user, index) => <p key={index}>{user}</p>)}
 					<button onClick={this.startGame}>Start game</button>
 				</div>
 			);
@@ -45,7 +47,7 @@ GameHostDisplay.propTypes = {
 	newGame: PropTypes.func.isRequired,
 	gameInfo: PropTypes.shape({
 		status: PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
-		id: PropTypes.number,
+		gameID: PropTypes.number,
 	}).isRequired,
 	socket: PropTypes.instanceOf(WebSocket).isRequired,
 	selectedSet: PropTypes.shape({
@@ -63,11 +65,13 @@ GameHostDisplay.propTypes = {
 		})).isRequired,
 		privacy: PropTypes.bool.isRequired,
 	}),
+	usersWithoutCrews: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const mapStateToProps = (state) => ({
 	gameInfo: state.gameInfo,
 	selectedSet: state.boarding.selectedSet,
+	usersWithoutCrews: state.boarding.usersWithoutCrews,
 });
 
 const mapDispatchToProps = (dispatch) => ({

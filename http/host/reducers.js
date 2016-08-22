@@ -11,7 +11,7 @@ function questionSets(state = [], action) {
 
 const initialGameInfoState = {
 	status: 'notStarted',
-	id: null,
+	gameID: null,
 };
 function gameInfo(state = initialGameInfoState, action) {
 	switch (action.type) {
@@ -21,7 +21,7 @@ function gameInfo(state = initialGameInfoState, action) {
 		});
 	case actions.SET_GAME_ID:
 		return Object.assign({}, state, {
-			id: action.id,
+			gameID: action.gameID,
 		});
 	default:
 		return state;
@@ -30,6 +30,7 @@ function gameInfo(state = initialGameInfoState, action) {
 
 const initialBoardingState = {
 	selectedSet: null,
+	usersWithoutCrews: [],
 };
 
 function boarding(state = initialBoardingState, action) {
@@ -37,6 +38,10 @@ function boarding(state = initialBoardingState, action) {
 	case actions.UPDATE_SELECTED_SET:
 		return Object.assign({}, state, {
 			selectedSet: action.selectedSet,
+		});
+	case actions.ADD_USER_TO_GAME:
+		return Object.assign({}, state, {
+			usersWithoutCrews: state.usersWithoutCrews.concat(action.username),
 		});
 	default:
 		return state;

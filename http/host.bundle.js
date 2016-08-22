@@ -91,6 +91,8 @@
 		switch (message.event) {
 			case 'newGameID':
 				return store.dispatch((0, _actions.setGameID)(message.id));
+			case 'addUserToGame':
+				return store.dispatch((0, _actions.addUserToGame)(message.username));
 			default:
 				console.error('Unknown message: ', message.event);
 				return;
@@ -77722,8 +77724,20 @@
 							_react2.default.createElement(
 								'h2',
 								null,
-								this.props.gameInfo.id
+								this.props.gameInfo.gameID
 							),
+							_react2.default.createElement(
+								'h4',
+								null,
+								'Users without crews:'
+							),
+							this.props.usersWithoutCrews.map(function (user, index) {
+								return _react2.default.createElement(
+									'p',
+									{ key: index },
+									user
+								);
+							}),
 							_react2.default.createElement(
 								'button',
 								{ onClick: this.startGame },
@@ -77747,7 +77761,7 @@
 		newGame: _react.PropTypes.func.isRequired,
 		gameInfo: _react.PropTypes.shape({
 			status: _react.PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
-			id: _react.PropTypes.number
+			gameID: _react.PropTypes.number
 		}).isRequired,
 		socket: _react.PropTypes.instanceOf(WebSocket).isRequired,
 		selectedSet: _react.PropTypes.shape({
@@ -77764,13 +77778,15 @@
 				id: _react.PropTypes.number.isRequired
 			})).isRequired,
 			privacy: _react.PropTypes.bool.isRequired
-		})
+		}),
+		usersWithoutCrews: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired
 	};
 	
 	var mapStateToProps = function mapStateToProps(state) {
 		return {
 			gameInfo: state.gameInfo,
-			selectedSet: state.boarding.selectedSet
+			selectedSet: state.boarding.selectedSet,
+			usersWithoutCrews: state.boarding.usersWithoutCrews
 		};
 	};
 	
@@ -77946,6 +77962,7 @@
 	var UPDATE_SELECTED_SET = exports.UPDATE_SELECTED_SET = 'UPDATE_SELECTED_SET';
 	var NEW_GAME = exports.NEW_GAME = 'NEW_GAME';
 	var SET_GAME_ID = exports.SET_GAME_ID = 'SET_GAME_ID';
+	var ADD_USER_TO_GAME = exports.ADD_USER_TO_GAME = 'ADD_USER_TO_GAME';
 	
 	function makeActionCreator(type) {
 		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -77968,7 +77985,8 @@
 	var populateQuestionSetList = exports.populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
 	var updateSelectedSet = exports.updateSelectedSet = makeActionCreator(UPDATE_SELECTED_SET, 'selectedSet');
 	var newGame = exports.newGame = makeActionCreator(NEW_GAME);
-	var setGameID = exports.setGameID = makeActionCreator(SET_GAME_ID, 'id');
+	var setGameID = exports.setGameID = makeActionCreator(SET_GAME_ID, 'gameID');
+	var addUserToGame = exports.addUserToGame = makeActionCreator(ADD_USER_TO_GAME, 'username');
 
 /***/ },
 /* 436 */
@@ -78004,7 +78022,7 @@
 	
 	var initialGameInfoState = {
 		status: 'notStarted',
-		id: null
+		gameID: null
 	};
 	function gameInfo() {
 		var state = arguments.length <= 0 || arguments[0] === undefined ? initialGameInfoState : arguments[0];
@@ -78017,7 +78035,7 @@
 				});
 			case actions.SET_GAME_ID:
 				return Object.assign({}, state, {
-					id: action.id
+					gameID: action.gameID
 				});
 			default:
 				return state;
@@ -78025,7 +78043,8 @@
 	}
 	
 	var initialBoardingState = {
-		selectedSet: null
+		selectedSet: null,
+		usersWithoutCrews: []
 	};
 	
 	function boarding() {
@@ -78036,6 +78055,10 @@
 			case actions.UPDATE_SELECTED_SET:
 				return Object.assign({}, state, {
 					selectedSet: action.selectedSet
+				});
+			case actions.ADD_USER_TO_GAME:
+				return Object.assign({}, state, {
+					usersWithoutCrews: state.usersWithoutCrews.concat(action.username)
 				});
 			default:
 				return state;

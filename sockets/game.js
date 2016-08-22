@@ -23,8 +23,8 @@ module.exports = (tws, m, games) => {
 		tws.questionsDone = [];
 		tws.game.users.push(tws);
 		tws.sendToGameHost({
-			event: 'addNewUser',
-			user: tws.user,
+			event: 'addUserToGame',
+			username: tws.username,
 		});
 		return tws.trysend(m);
 	}

@@ -4,8 +4,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Game from './Game.jsx';
 import gameReducer from './reducers';
-import * as boardingActions from './boarding/actions';
-import * as playActions from './play/actions';
+import { joinGameSuccess, joinCrewSuccess } from './boarding/actions';
 
 /* global sweetAlert: true */
 
@@ -29,10 +28,10 @@ socket.onmessage = function (m) {
 		return sweetAlert(message.title, message.text, 'error');
 	case 'joinGame':
 		delete message.event;
-		return store.dispatch(boardingActions.joinGameSuccess(message.gameID, message.username));
+		return store.dispatch(joinGameSuccess(message.gameID, message.username));
 	case 'joinCrew':
 		delete message.event;
-		return store.dispatch(boardingActions.joinCrewSuccess(message.crewNumber));
+		return store.dispatch(joinCrewSuccess(message.crewNumber));
 	default:
 		console.error('Unknown message: ', message);
 		return;

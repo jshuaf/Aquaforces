@@ -3,7 +3,7 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import GameHost from './GameHost.jsx';
-import { setGameID } from './actions';
+import { setGameID, addUserToGame } from './actions';
 import gameHostReducer from './reducers';
 
 /* global sweetAlert: true */
@@ -26,6 +26,8 @@ socket.onmessage = function (m) {
 	switch (message.event) {
 	case 'newGameID':
 		return store.dispatch(setGameID(message.id));
+	case 'addUserToGame':
+		return store.dispatch(addUserToGame(message.username));
 	default:
 		console.error('Unknown message: ', message.event);
 		return;
