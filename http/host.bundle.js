@@ -93,6 +93,8 @@
 				return store.dispatch((0, _actions.setGameID)(message.id));
 			case 'addUserToGame':
 				return store.dispatch((0, _actions.addUserToGame)(message.username));
+			case 'addUserToCrew':
+				return store.dispatch((0, _actions.addUserToCrew)(message.username, message.crewNumber));
 			default:
 				console.error('Unknown message: ', message.event);
 				return;
@@ -77705,6 +77707,8 @@
 		}, {
 			key: 'render',
 			value: function render() {
+				var _this2 = this;
+	
 				switch (this.props.gameInfo.status) {
 					case 'notStarted':
 						return _react2.default.createElement(
@@ -77737,6 +77741,23 @@
 									{ key: index },
 									user
 								);
+							}),
+							_react2.default.createElement(
+								'h4',
+								null,
+								'Crews:'
+							),
+							Object.keys(this.props.crews).map(function (key) {
+								return _this2.props.crews[key].map(function (user, index) {
+									return _react2.default.createElement(
+										'p',
+										{ key: index },
+										'User ',
+										user,
+										' is in crew ',
+										key
+									);
+								});
 							}),
 							_react2.default.createElement(
 								'button',
@@ -77779,14 +77800,16 @@
 			})).isRequired,
 			privacy: _react.PropTypes.bool.isRequired
 		}),
-		usersWithoutCrews: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired
+		usersWithoutCrews: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
+		crews: _react.PropTypes.objectOf(_react.PropTypes.arrayOf(_react.PropTypes.string)).isRequired
 	};
 	
 	var mapStateToProps = function mapStateToProps(state) {
 		return {
 			gameInfo: state.gameInfo,
 			selectedSet: state.boarding.selectedSet,
-			usersWithoutCrews: state.boarding.usersWithoutCrews
+			usersWithoutCrews: state.boarding.usersWithoutCrews,
+			crews: state.boarding.crews
 		};
 	};
 	
@@ -77963,6 +77986,7 @@
 	var NEW_GAME = exports.NEW_GAME = 'NEW_GAME';
 	var SET_GAME_ID = exports.SET_GAME_ID = 'SET_GAME_ID';
 	var ADD_USER_TO_GAME = exports.ADD_USER_TO_GAME = 'ADD_USER_TO_GAME';
+	var ADD_USER_TO_CREW = exports.ADD_USER_TO_CREW = 'ADD_USER_TO_CREW';
 	
 	function makeActionCreator(type) {
 		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -77987,6 +78011,7 @@
 	var newGame = exports.newGame = makeActionCreator(NEW_GAME);
 	var setGameID = exports.setGameID = makeActionCreator(SET_GAME_ID, 'gameID');
 	var addUserToGame = exports.addUserToGame = makeActionCreator(ADD_USER_TO_GAME, 'username');
+	var addUserToCrew = exports.addUserToCrew = makeActionCreator(ADD_USER_TO_CREW, 'username', 'crewNumber');
 
 /***/ },
 /* 436 */
@@ -78007,6 +78032,8 @@
 	var actions = _interopRequireWildcard(_actions);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
 	function questionSets() {
 		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
@@ -78044,7 +78071,8 @@
 	
 	var initialBoardingState = {
 		selectedSet: null,
-		usersWithoutCrews: []
+		usersWithoutCrews: [],
+		crews: {}
 	};
 	
 	function boarding() {
@@ -78060,6 +78088,14 @@
 				return Object.assign({}, state, {
 					usersWithoutCrews: state.usersWithoutCrews.concat(action.username)
 				});
+			case actions.ADD_USER_TO_CREW:
+				{
+					var oldUserIndex = state.usersWithoutCrews.indexOf(action.username);
+					return Object.assign({}, state, {
+						usersWithoutCrews: state.usersWithoutCrews.splice(oldUserIndex, 1),
+						crews: Object.assign({}, state.crews, _defineProperty({}, action.crewNumber, state.crews[action.crewNumber] ? state.crews[action.crewNumber].concat(action.username) : [action.username]))
+					});
+				}
 			default:
 				return state;
 		}

@@ -34,6 +34,12 @@ class GameHostDisplay extends Component {
 					<h2>{this.props.gameInfo.gameID}</h2>
 					<h4>Users without crews:</h4>
 					{this.props.usersWithoutCrews.map((user, index) => <p key={index}>{user}</p>)}
+					<h4>Crews:</h4>
+					{Object.keys(this.props.crews).map((key) =>
+						this.props.crews[key].map((user, index) =>
+							<p key={index}>User {user} is in crew {key}</p>
+						)
+					)}
 					<button onClick={this.startGame}>Start game</button>
 				</div>
 			);
@@ -66,12 +72,14 @@ GameHostDisplay.propTypes = {
 		privacy: PropTypes.bool.isRequired,
 	}),
 	usersWithoutCrews: PropTypes.arrayOf(PropTypes.string).isRequired,
+	crews: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
 };
 
 const mapStateToProps = (state) => ({
 	gameInfo: state.gameInfo,
 	selectedSet: state.boarding.selectedSet,
 	usersWithoutCrews: state.boarding.usersWithoutCrews,
+	crews: state.boarding.crews,
 });
 
 const mapDispatchToProps = (dispatch) => ({

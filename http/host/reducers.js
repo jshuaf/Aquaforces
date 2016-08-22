@@ -31,6 +31,7 @@ function gameInfo(state = initialGameInfoState, action) {
 const initialBoardingState = {
 	selectedSet: null,
 	usersWithoutCrews: [],
+	crews: {},
 };
 
 function boarding(state = initialBoardingState, action) {
@@ -43,6 +44,18 @@ function boarding(state = initialBoardingState, action) {
 		return Object.assign({}, state, {
 			usersWithoutCrews: state.usersWithoutCrews.concat(action.username),
 		});
+	case actions.ADD_USER_TO_CREW: {
+		const oldUserIndex = state.usersWithoutCrews.indexOf(action.username);
+		return Object.assign({}, state, {
+			usersWithoutCrews: state.usersWithoutCrews.splice(oldUserIndex, 1),
+			crews: Object.assign({}, state.crews, {
+				[action.crewNumber]:
+					state.crews[action.crewNumber] ?
+					state.crews[action.crewNumber].concat(action.username) :
+					[action.username],
+			}),
+		});
+	}
 	default:
 		return state;
 	}

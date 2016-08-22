@@ -3,6 +3,7 @@ export const UPDATE_SELECTED_SET = 'UPDATE_SELECTED_SET';
 export const NEW_GAME = 'NEW_GAME';
 export const SET_GAME_ID = 'SET_GAME_ID';
 export const ADD_USER_TO_GAME = 'ADD_USER_TO_GAME';
+export const ADD_USER_TO_CREW = 'ADD_USER_TO_CREW';
 
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
@@ -19,3 +20,4 @@ export const updateSelectedSet = makeActionCreator(UPDATE_SELECTED_SET, 'selecte
 export const newGame = makeActionCreator(NEW_GAME);
 export const setGameID = makeActionCreator(SET_GAME_ID, 'gameID');
 export const addUserToGame = makeActionCreator(ADD_USER_TO_GAME, 'username');
+export const addUserToCrew = makeActionCreator(ADD_USER_TO_CREW, 'username', 'crewNumber');
