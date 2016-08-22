@@ -83,7 +83,6 @@ module.exports = o(function* (tws, m, games) {
 				else if (crew.members.length > 4) return tws.error(`Crew ${crewNumber} can have at most four people.`);
 			}
 		}
-		/* eslint-enable no-restricted-syntax */
 		tws.game.hasStarted = true;
 		tws.game.crews.forEach((crew) => {
 			crew.members.forEach((ttws) => {
@@ -94,8 +93,26 @@ module.exports = o(function* (tws, m, games) {
 				});
 			});
 		});
+		const plainCrews = {};
+		for (const crewNumber in tws.game.crews) {
+			if ({}.hasOwnProperty.call(tws.game.crews, crewNumber)) {
+				const crew = tws.game.crews[crewNumber];
+				const plainMembers = [];
+				crew.members.forEach((ttws) => {
+					ttws.trysend({
+						event: 'startGame',
+						answers: tws.game.answers,
+						crewSize: crew.members.length,
+					});
+					plainMembers.push(ttws.username);
+				});
+				plainCrews[crewNumber] = plainMembers;
+			}
+		}
+		/* eslint-enable no-restricted-syntax */
 		tws.trysend({
 			event: 'startGame',
+			crews: plainCrews,
 		});
 		tws.game.crews.forEach((crew) => {
 			crew.members.forEach((member) => {

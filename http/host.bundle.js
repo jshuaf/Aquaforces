@@ -78049,7 +78049,7 @@
   \*******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(console) {'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -78164,7 +78164,7 @@
 	}
 	
 	var initialGameHostState = {
-		crews: []
+		crews: {}
 	};
 	
 	function gameHost() {
@@ -78175,8 +78175,8 @@
 			case actions.POPULATE_INITIAL_CREW_DATA:
 				{
 					var _ret2 = function () {
-						var crews = [];
-						action.crews.forEach(function (crewNumber) {
+						var crews = {};
+						Object.keys(action.crews).forEach(function (crewNumber) {
 							var crewMembers = action.crews[crewNumber];
 							crews[crewNumber] = {
 								name: 'Crew ' + crewNumber,
@@ -78186,6 +78186,7 @@
 								boat: 'canoe'
 							};
 						});
+						console.log(crews);
 						return {
 							v: Object.assign({}, state, { crews: crews })
 						};
@@ -78208,6 +78209,7 @@
 			gameHost: gameHost(state.gameHost, action)
 		};
 	}
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/console-browserify/index.js */ 4)))
 
 /***/ },
 /* 437 */
@@ -78228,6 +78230,8 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 195);
+	
 	var _Crew = __webpack_require__(/*! ./Crew.jsx */ 438);
 	
 	var _Crew2 = _interopRequireDefault(_Crew);
@@ -78244,13 +78248,13 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var GamePlayHost = function (_Component) {
-		_inherits(GamePlayHost, _Component);
+	var GamePlayHostDisplay = function (_Component) {
+		_inherits(GamePlayHostDisplay, _Component);
 	
-		function GamePlayHost(props) {
-			_classCallCheck(this, GamePlayHost);
+		function GamePlayHostDisplay(props) {
+			_classCallCheck(this, GamePlayHostDisplay);
 	
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GamePlayHost).call(this, props));
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GamePlayHostDisplay).call(this, props));
 	
 			_this.state = {
 				gameStatus: 'hasNotStarted',
@@ -78261,7 +78265,7 @@
 			return _this;
 		}
 	
-		_createClass(GamePlayHost, [{
+		_createClass(GamePlayHostDisplay, [{
 			key: 'answerSelected',
 			value: function answerSelected(wasCorrectAnswer, crewNumber) {
 				var crew = this.crews[crewNumber.toString()];
@@ -78352,18 +78356,26 @@
 			}
 		}]);
 	
-		return GamePlayHost;
+		return GamePlayHostDisplay;
 	}(_react.Component);
 	
-	GamePlayHost.propTypes = {
-		initialCrews: _react.PropTypes.shape({
+	GamePlayHostDisplay.propTypes = {
+		initialCrews: _react.PropTypes.objectOf(_react.PropTypes.shape({
 			name: _react.PropTypes.string.isRequired,
 			members: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
 			position: _react.PropTypes.number.isRequired,
 			status: _react.PropTypes.string.isRequired,
 			boat: _react.PropTypes.string.isRequired
-		}).isRequired
+		})).isRequired
 	};
+	
+	var mapStateToProps = function mapStateToProps(state) {
+		return {
+			initialCrews: state.gameHost.crews
+		};
+	};
+	
+	var GamePlayHost = (0, _reactRedux.connect)(mapStateToProps, null)(GamePlayHostDisplay);
 	
 	exports.default = GamePlayHost;
 

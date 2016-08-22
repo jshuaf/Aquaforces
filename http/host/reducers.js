@@ -86,14 +86,14 @@ function boarding(state = initialBoardingState, action) {
 }
 
 const initialGameHostState = {
-	crews: [],
+	crews: {},
 };
 
 function gameHost(state = initialGameHostState, action) {
 	switch (action.type) {
 	case actions.POPULATE_INITIAL_CREW_DATA: {
-		const crews = [];
-		action.crews.forEach((crewNumber) => {
+		const crews = {};
+		Object.keys(action.crews).forEach((crewNumber) => {
 			const crewMembers = action.crews[crewNumber];
 			crews[crewNumber] = {
 				name: `Crew ${crewNumber}`,
@@ -103,6 +103,7 @@ function gameHost(state = initialGameHostState, action) {
 				boat: 'canoe',
 			};
 		});
+		console.log(crews);
 		return Object.assign({}, state, { crews });
 	}
 	default:

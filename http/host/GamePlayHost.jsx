@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Crew from './Crew.jsx';
 import Leaderboard from './Leaderboard.jsx';
 
-class GamePlayHost extends Component {
+class GamePlayHostDisplay extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -71,14 +72,20 @@ class GamePlayHost extends Component {
 	}
 }
 
-GamePlayHost.propTypes = {
-	initialCrews: PropTypes.shape({
+GamePlayHostDisplay.propTypes = {
+	initialCrews: PropTypes.objectOf(PropTypes.shape({
 		name: PropTypes.string.isRequired,
 		members: PropTypes.arrayOf(PropTypes.string).isRequired,
 		position: PropTypes.number.isRequired,
 		status: PropTypes.string.isRequired,
 		boat: PropTypes.string.isRequired,
-	}).isRequired,
+	})).isRequired,
 };
+
+const mapStateToProps = (state) => ({
+	initialCrews: state.gameHost.crews,
+});
+
+const GamePlayHost = connect(mapStateToProps, null)(GamePlayHostDisplay);
 
 export default GamePlayHost;
