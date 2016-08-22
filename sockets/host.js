@@ -72,7 +72,7 @@ module.exports = o(function* (tws, m, games) {
 	}
 	case 'startGame': {
 		tws.checkGameExists();
-		if (tws.game.crews.length < 1) {
+		if (Object.keys(tws.game.crews).length < 1) {
 			return tws.error('Need more crews to begin game.', 'Tell your sailors to join a crew!');
 		}
 		/* eslint-disable no-restricted-syntax */

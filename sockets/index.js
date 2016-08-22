@@ -27,12 +27,10 @@ module.exports = (server) => {
 						username: tws.username,
 					});
 					if (tws.crew()) {
-						const index = tws.game.users.indexOf(tws);
-						const crewMembers = tws.crew().members;
-						tws.game.users.splice(index, 1);
-						crewMembers.splice(crewMembers.indexOf(tws), 1);
-						if (crewMembers.length === 0) {
-							tws.game.crews.splice(tws.game.crews.indexOf(tws.crew()), 1);
+						tws.game.users.splice(tws.game.users.indexOf(tws), 1);
+						tws.crew().members.splice(tws.crew().members.indexOf(tws), 1);
+						if (tws.crew().members.length === 0) {
+							delete tws.game.crews[tws.crewNumber];
 						}
 					}
 				}
