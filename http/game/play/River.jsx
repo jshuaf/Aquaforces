@@ -8,6 +8,24 @@ import Answer from './Answer.jsx';
 class River extends Component {
 	constructor(props) {
 		super(props);
+		this.answerPassedThreshold = this.answerPassedThreshold.bind(this);
+		this.updateAnswers = this.updateAnswers.bind(this);
+		this.wasCorrectAnswer = this.wasCorrectAnswer.bind(this);
+		this.wasIncorrectAnswer = this.wasIncorrectAnswer.bind(this);
+		this.addRock = this.addRock.bind(this);
+		this.animateRock = this.animateRock.bind(this);
+		this.rockHit = this.rockHit.bind(this);
+		this.endRock = this.endRock.bind(this);
+		this.clearFlash = this.clearFlash.bind(this);
+		this.flashRedTwice = this.flashRedTwice.bind(this);
+		this.findMaximumGap = this.findMaximumGap.bind(this);
+		this.startRiverReflections = this.startRiverReflections.bind(this);
+		this.updateRiverReflections = this.updateRiverReflections.bind(this);
+		this.removeReflectionGroup = this.removeReflectionGroup.bind(this);
+		this.addReflectionGroup = this.addReflectionGroup.bind(this);
+		this.generateAnswerPosition = this.generateAnswerPosition.bind(this);
+		this.addCorrectAnswer = this.addCorrectAnswer.bind(this);
+		this.riverBounds = this.riverBounds.bind(this);
 		this.state = {
 			// Answers
 			answers: [],
