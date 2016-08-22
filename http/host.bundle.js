@@ -101,6 +101,7 @@
 			case 'removeUserFromGame':
 				return store.dispatch((0, _actions.removeUserFromGame)(message.username));
 			case 'startGame':
+				store.dispatch((0, _actions.populateInitialCrewData)(message.crews));
 				return store.dispatch((0, _actions.startGameSuccess)());
 			default:
 				console.error('Unknown message: ', message.event);
@@ -77967,7 +77968,7 @@
 	
 	var mapStateToProps = function mapStateToProps(state) {
 		return {
-			questionSets: state.questionSets
+			questionSets: state.boarding.questionSets
 		};
 	};
 	
@@ -78010,6 +78011,7 @@
 	var REMOVE_USER_FROM_GAME = exports.REMOVE_USER_FROM_GAME = 'REMOVE_USER_FROM_GAME';
 	var START_GAME_REQUEST = exports.START_GAME_REQUEST = 'START_GAME_REQUEST';
 	var START_GAME_SUCCESS = exports.START_GAME_SUCCESS = 'START_GAME_SUCCESS';
+	var POPULATE_INITIAL_CREW_DATA = exports.POPULATE_INITIAL_CREW_DATA = 'POPULATE_INITIAL_CREW_DATA';
 	
 	function makeActionCreator(type) {
 		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -78038,6 +78040,7 @@
 	var removeUserFromGame = exports.removeUserFromGame = makeActionCreator(REMOVE_USER_FROM_GAME, 'username');
 	var startGameRequest = exports.startGameRequest = makeActionCreator(START_GAME_REQUEST);
 	var startGameSuccess = exports.startGameSuccess = makeActionCreator(START_GAME_SUCCESS);
+	var populateInitialCrewData = exports.populateInitialCrewData = makeActionCreator(POPULATE_INITIAL_CREW_DATA, 'crews');
 
 /***/ },
 /* 436 */
@@ -78063,18 +78066,6 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	function questionSets() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-		var action = arguments[1];
-	
-		switch (action.type) {
-			case actions.POPULATE_QUESTION_SET_LIST:
-				return action.questionSets;
-			default:
-				return state;
-		}
-	}
 	
 	var initialGameInfoState = {
 		status: 'notStarted',
@@ -78110,6 +78101,7 @@
 	}
 	
 	var initialBoardingState = {
+		questionSets: [],
 		selectedSet: null,
 		usersWithoutCrews: [],
 		crews: {}
@@ -78120,6 +78112,8 @@
 		var action = arguments[1];
 	
 		switch (action.type) {
+			case actions.POPULATE_QUESTION_SET_LIST:
+				return Object.assign({}, state, { questionSets: action.questionSets });
 			case actions.UPDATE_SELECTED_SET:
 				return Object.assign({}, state, {
 					selectedSet: action.selectedSet
@@ -78155,7 +78149,7 @@
 							if (crew.includes(action.username)) {
 								crew.splice(crew.indexOf(action.username), 1);
 							}
-							crews[crewNumber] = crew;
+							if (crew.length > 0) crews[crewNumber] = crew;
 						});
 						return {
 							v: Object.assign({}, state, { crews: crews })
@@ -78169,14 +78163,49 @@
 		}
 	}
 	
+	var initialGameHostState = {
+		crews: []
+	};
+	
+	function gameHost() {
+		var state = arguments.length <= 0 || arguments[0] === undefined ? initialGameHostState : arguments[0];
+		var action = arguments[1];
+	
+		switch (action.type) {
+			case actions.POPULATE_INITIAL_CREW_DATA:
+				{
+					var _ret2 = function () {
+						var crews = [];
+						action.crews.forEach(function (crewNumber) {
+							var crewMembers = action.crews[crewNumber];
+							crews[crewNumber] = {
+								name: 'Crew ' + crewNumber,
+								users: crewMembers,
+								position: 0,
+								status: 'rowing',
+								boat: 'canoe'
+							};
+						});
+						return {
+							v: Object.assign({}, state, { crews: crews })
+						};
+					}();
+	
+					if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object") return _ret2.v;
+				}
+			default:
+				return state;
+		}
+	}
+	
 	function gameHostReducer() {
 		var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 		var action = arguments[1];
 	
 		return {
-			questionSets: questionSets(state.questionSets, action),
 			gameInfo: gameInfo(state.gameInfo, action),
-			boarding: boarding(state.boarding, action)
+			boarding: boarding(state.boarding, action),
+			gameHost: gameHost(state.gameHost, action)
 		};
 	}
 
@@ -78329,7 +78358,7 @@
 	GamePlayHost.propTypes = {
 		initialCrews: _react.PropTypes.shape({
 			name: _react.PropTypes.string.isRequired,
-			users: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
+			members: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
 			position: _react.PropTypes.number.isRequired,
 			status: _react.PropTypes.string.isRequired,
 			boat: _react.PropTypes.string.isRequired

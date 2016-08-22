@@ -74,7 +74,7 @@ class GamePlayHost extends Component {
 GamePlayHost.propTypes = {
 	initialCrews: PropTypes.shape({
 		name: PropTypes.string.isRequired,
-		users: PropTypes.arrayOf(PropTypes.string).isRequired,
+		members: PropTypes.arrayOf(PropTypes.string).isRequired,
 		position: PropTypes.number.isRequired,
 		status: PropTypes.string.isRequired,
 		boat: PropTypes.string.isRequired,

@@ -62,7 +62,7 @@ QuestionSetPickerDisplay.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-	questionSets: state.questionSets,
+	questionSets: state.boarding.questionSets,
 });
 
 const mapDispatchToProps = (dispatch) => ({

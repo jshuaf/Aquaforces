@@ -3,7 +3,9 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import GameHost from './GameHost.jsx';
-import { setGameID, addUserToGame, addUserToCrew, removeUserFromGame, startGameSuccess } from './actions';
+import {
+	setGameID, addUserToGame, addUserToCrew,
+	removeUserFromGame, startGameSuccess, populateInitialCrewData } from './actions';
 import gameHostReducer from './reducers';
 
 /* global sweetAlert: true */
@@ -36,6 +38,7 @@ socket.onmessage = function (m) {
 	case 'removeUserFromGame':
 		return store.dispatch(removeUserFromGame(message.username));
 	case 'startGame':
+		store.dispatch(populateInitialCrewData(message.crews));
 		return store.dispatch(startGameSuccess());
 	default:
 		console.error('Unknown message: ', message.event);

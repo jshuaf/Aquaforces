@@ -7,6 +7,7 @@ export const ADD_USER_TO_CREW = 'ADD_USER_TO_CREW';
 export const REMOVE_USER_FROM_GAME = 'REMOVE_USER_FROM_GAME';
 export const START_GAME_REQUEST = 'START_GAME_REQUEST';
 export const START_GAME_SUCCESS = 'START_GAME_SUCCESS';
+export const POPULATE_INITIAL_CREW_DATA = 'POPULATE_INITIAL_CREW_DATA';
 
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
@@ -27,3 +28,4 @@ export const addUserToCrew = makeActionCreator(ADD_USER_TO_CREW, 'username', 'cr
 export const removeUserFromGame = makeActionCreator(REMOVE_USER_FROM_GAME, 'username');
 export const startGameRequest = makeActionCreator(START_GAME_REQUEST);
 export const startGameSuccess = makeActionCreator(START_GAME_SUCCESS);
+export const populateInitialCrewData = makeActionCreator(POPULATE_INITIAL_CREW_DATA, 'crews');

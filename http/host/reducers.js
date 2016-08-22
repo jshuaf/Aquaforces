@@ -1,14 +1,5 @@
 import * as actions from './actions';
 
-function questionSets(state = [], action) {
-	switch (action.type) {
-	case actions.POPULATE_QUESTION_SET_LIST:
-		return action.questionSets;
-	default:
-		return state;
-	}
-}
-
 const initialGameInfoState = {
 	status: 'notStarted',
 	gameID: null,
@@ -40,6 +31,7 @@ function gameInfo(state = initialGameInfoState, action) {
 }
 
 const initialBoardingState = {
+	questionSets: [],
 	selectedSet: null,
 	usersWithoutCrews: [],
 	crews: {},
@@ -47,6 +39,8 @@ const initialBoardingState = {
 
 function boarding(state = initialBoardingState, action) {
 	switch (action.type) {
+	case actions.POPULATE_QUESTION_SET_LIST:
+		return Object.assign({}, state, { questionSets: action.questionSets });
 	case actions.UPDATE_SELECTED_SET:
 		return Object.assign({}, state, {
 			selectedSet: action.selectedSet,
@@ -82,7 +76,32 @@ function boarding(state = initialBoardingState, action) {
 			if (crew.includes(action.username)) {
 				crew.splice(crew.indexOf(action.username), 1);
 			}
-			crews[crewNumber] = crew;
+			if (crew.length > 0) crews[crewNumber] = crew;
+		});
+		return Object.assign({}, state, { crews });
+	}
+	default:
+		return state;
+	}
+}
+
+const initialGameHostState = {
+	crews: [],
+};
+
+function gameHost(state = initialGameHostState, action) {
+	switch (action.type) {
+	case actions.POPULATE_INITIAL_CREW_DATA: {
+		const crews = [];
+		action.crews.forEach((crewNumber) => {
+			const crewMembers = action.crews[crewNumber];
+			crews[crewNumber] = {
+				name: `Crew ${crewNumber}`,
+				users: crewMembers,
+				position: 0,
+				status: 'rowing',
+				boat: 'canoe',
+			};
 		});
 		return Object.assign({}, state, { crews });
 	}
@@ -93,8 +112,8 @@ function boarding(state = initialBoardingState, action) {
 
 export default function gameHostReducer(state = {}, action) {
 	return {
-		questionSets: questionSets(state.questionSets, action),
 		gameInfo: gameInfo(state.gameInfo, action),
 		boarding: boarding(state.boarding, action),
+		gameHost: gameHost(state.gameHost, action),
 	};
 }
