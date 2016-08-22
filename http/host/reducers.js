@@ -12,7 +12,9 @@ function questionSets(state = [], action) {
 const initialGameInfoState = {
 	status: 'notStarted',
 	gameID: null,
+	pending: false,
 };
+
 function gameInfo(state = initialGameInfoState, action) {
 	switch (action.type) {
 	case actions.NEW_GAME:
@@ -23,9 +25,14 @@ function gameInfo(state = initialGameInfoState, action) {
 		return Object.assign({}, state, {
 			gameID: action.gameID,
 		});
-	case actions.START_GAME:
+	case actions.START_GAME_REQUEST:
+		return Object.assign({}, state, {
+			pending: true,
+		});
+	case actions.START_GAME_SUCCESS:
 		return Object.assign({}, state, {
 			status: 'inProgress',
+			pending: false,
 		});
 	default:
 		return state;

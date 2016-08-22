@@ -3,7 +3,7 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import GameHost from './GameHost.jsx';
-import { setGameID, addUserToGame, addUserToCrew, removeUserFromGame } from './actions';
+import { setGameID, addUserToGame, addUserToCrew, removeUserFromGame, startGameSuccess } from './actions';
 import gameHostReducer from './reducers';
 
 /* global sweetAlert: true */
@@ -24,6 +24,8 @@ socket.onmessage = function (m) {
 	}
 
 	switch (message.event) {
+	case 'error':
+		return sweetAlert(message.title, message.text, 'error');
 	case 'newGameID':
 		document.getElementsByTagName('title')[0].innerHTML = `Game ${message.id} · Aquaforces`;
 		return store.dispatch(setGameID(message.id));
@@ -33,6 +35,8 @@ socket.onmessage = function (m) {
 		return store.dispatch(addUserToCrew(message.username, message.crewNumber));
 	case 'removeUserFromGame':
 		return store.dispatch(removeUserFromGame(message.username));
+	case 'startGame':
+		return store.dispatch(startGameSuccess());
 	default:
 		console.error('Unknown message: ', message.event);
 		return;

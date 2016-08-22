@@ -89,6 +89,8 @@
 		}
 	
 		switch (message.event) {
+			case 'error':
+				return sweetAlert(message.title, message.text, 'error');
 			case 'newGameID':
 				document.getElementsByTagName('title')[0].innerHTML = 'Game ' + message.id + ' · Aquaforces';
 				return store.dispatch((0, _actions.setGameID)(message.id));
@@ -98,6 +100,8 @@
 				return store.dispatch((0, _actions.addUserToCrew)(message.username, message.crewNumber));
 			case 'removeUserFromGame':
 				return store.dispatch((0, _actions.removeUserFromGame)(message.username));
+			case 'startGame':
+				return store.dispatch((0, _actions.startGameSuccess)());
 			default:
 				console.error('Unknown message: ', message.event);
 				return;
@@ -77670,6 +77674,10 @@
 	
 	var _QuestionSetPicker2 = _interopRequireDefault(_QuestionSetPicker);
 	
+	var _GamePlayHost = __webpack_require__(/*! ./GamePlayHost.jsx */ 437);
+	
+	var _GamePlayHost2 = _interopRequireDefault(_GamePlayHost);
+	
 	var _actions = __webpack_require__(/*! ./actions */ 435);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -77705,7 +77713,7 @@
 		}, {
 			key: 'startGame',
 			value: function startGame() {
-				this.props.startGame();
+				this.props.startGameRequest();
 				this.props.socket.send(JSON.stringify({
 					event: 'startGame'
 				}));
@@ -77771,6 +77779,8 @@
 								'Start game'
 							)
 						);
+					case 'inProgress':
+						return _react2.default.createElement(_GamePlayHost2.default, null);
 					default:
 						return _react2.default.createElement(
 							'p',
@@ -77786,7 +77796,7 @@
 	
 	GameHostDisplay.propTypes = {
 		newGame: _react.PropTypes.func.isRequired,
-		startGame: _react.PropTypes.func.isRequired,
+		startGameRequest: _react.PropTypes.func.isRequired,
 		gameInfo: _react.PropTypes.shape({
 			status: _react.PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
 			gameID: _react.PropTypes.number
@@ -77825,8 +77835,8 @@
 			newGame: function newGame() {
 				dispatch((0, _actions.newGame)());
 			},
-			startGame: function startGame() {
-				dispatch((0, _actions.startGame)());
+			startGameRequest: function startGameRequest() {
+				dispatch((0, _actions.startGameRequest)());
 			}
 		};
 	};
@@ -77998,6 +78008,8 @@
 	var ADD_USER_TO_GAME = exports.ADD_USER_TO_GAME = 'ADD_USER_TO_GAME';
 	var ADD_USER_TO_CREW = exports.ADD_USER_TO_CREW = 'ADD_USER_TO_CREW';
 	var REMOVE_USER_FROM_GAME = exports.REMOVE_USER_FROM_GAME = 'REMOVE_USER_FROM_GAME';
+	var START_GAME_REQUEST = exports.START_GAME_REQUEST = 'START_GAME_REQUEST';
+	var START_GAME_SUCCESS = exports.START_GAME_SUCCESS = 'START_GAME_SUCCESS';
 	
 	function makeActionCreator(type) {
 		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -78024,6 +78036,8 @@
 	var addUserToGame = exports.addUserToGame = makeActionCreator(ADD_USER_TO_GAME, 'username');
 	var addUserToCrew = exports.addUserToCrew = makeActionCreator(ADD_USER_TO_CREW, 'username', 'crewNumber');
 	var removeUserFromGame = exports.removeUserFromGame = makeActionCreator(REMOVE_USER_FROM_GAME, 'username');
+	var startGameRequest = exports.startGameRequest = makeActionCreator(START_GAME_REQUEST);
+	var startGameSuccess = exports.startGameSuccess = makeActionCreator(START_GAME_SUCCESS);
 
 /***/ },
 /* 436 */
@@ -78064,8 +78078,10 @@
 	
 	var initialGameInfoState = {
 		status: 'notStarted',
-		gameID: null
+		gameID: null,
+		pending: false
 	};
+	
 	function gameInfo() {
 		var state = arguments.length <= 0 || arguments[0] === undefined ? initialGameInfoState : arguments[0];
 		var action = arguments[1];
@@ -78079,9 +78095,14 @@
 				return Object.assign({}, state, {
 					gameID: action.gameID
 				});
-			case actions.START_GAME:
+			case actions.START_GAME_REQUEST:
 				return Object.assign({}, state, {
-					status: 'inProgress'
+					pending: true
+				});
+			case actions.START_GAME_SUCCESS:
+				return Object.assign({}, state, {
+					status: 'inProgress',
+					pending: false
 				});
 			default:
 				return state;
@@ -78158,6 +78179,380 @@
 			boarding: boarding(state.boarding, action)
 		};
 	}
+
+/***/ },
+/* 437 */
+/*!************************************!*\
+  !*** ./http/host/GamePlayHost.jsx ***!
+  \************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 174);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Crew = __webpack_require__(/*! ./Crew.jsx */ 438);
+	
+	var _Crew2 = _interopRequireDefault(_Crew);
+	
+	var _Leaderboard = __webpack_require__(/*! ./Leaderboard.jsx */ 439);
+	
+	var _Leaderboard2 = _interopRequireDefault(_Leaderboard);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var GamePlayHost = function (_Component) {
+		_inherits(GamePlayHost, _Component);
+	
+		function GamePlayHost(props) {
+			_classCallCheck(this, GamePlayHost);
+	
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GamePlayHost).call(this, props));
+	
+			_this.state = {
+				gameStatus: 'hasNotStarted',
+				startTime: new Date(),
+				crews: _this.props.initialCrews
+			};
+			_this.crews = {};
+			return _this;
+		}
+	
+		_createClass(GamePlayHost, [{
+			key: 'answerSelected',
+			value: function answerSelected(wasCorrectAnswer, crewNumber) {
+				var crew = this.crews[crewNumber.toString()];
+				if (wasCorrectAnswer) {
+					this.updateCrewPosition(crewNumber, 0.1);
+					crew.processAnswer(wasCorrectAnswer);
+				}
+			}
+		}, {
+			key: 'updateCrewPosition',
+			value: function updateCrewPosition(crewNumber, increment) {
+				// MARK: move the camera around
+				var oldCrews = this.state.crews;
+				oldCrews[crewNumber].position += increment;
+				this.setState({
+					crews: oldCrews
+				});
+			}
+		}, {
+			key: 'updateCrewStatus',
+			value: function updateCrewStatus(crewNumber, newStatus) {
+				var oldCrews = this.state;
+				oldCrews.crews[crewNumber].props.status = newStatus;
+				this.setState(oldCrews);
+			}
+		}, {
+			key: 'updateCrewBoat',
+			value: function updateCrewBoat(crewNumber, newBoat) {
+				var oldCrews = this.state;
+				oldCrews.crews[crewNumber].props.boat = newBoat;
+				this.setState(oldCrews);
+			}
+		}, {
+			key: 'whirlpoolStatusChanged',
+			value: function whirlpoolStatusChanged(status, crewNumber) {
+				var crew = this.crews[crewNumber.toString()];
+				crew.processWhirlpool(status);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+	
+				return _react2.default.createElement(
+					'div',
+					{ className: 'container' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'row' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'three columns' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'panel' },
+								_react2.default.createElement(_Leaderboard2.default, { crews: this.state.crews })
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'nine columns' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'panel' },
+								_react2.default.createElement(
+									'h4',
+									null,
+									_react2.default.createElement(
+										'strong',
+										null,
+										'Live stream'
+									)
+								),
+								Object.keys(this.state.crews).map(function (crewNumber, i) {
+									var crew = _this2.state.crews[crewNumber];
+									return _react2.default.createElement(_Crew2.default, {
+										position: crew.position, status: crew.status,
+										boat: crew.boat, size: crew.users.length,
+										crewNumber: crewNumber, key: i,
+										ref: function ref(c) {
+											_this2.crews[crewNumber] = c;
+										} });
+								})
+							)
+						)
+					)
+				);
+			}
+		}]);
+	
+		return GamePlayHost;
+	}(_react.Component);
+	
+	GamePlayHost.propTypes = {
+		initialCrews: _react.PropTypes.shape({
+			name: _react.PropTypes.string.isRequired,
+			users: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
+			position: _react.PropTypes.number.isRequired,
+			status: _react.PropTypes.string.isRequired,
+			boat: _react.PropTypes.string.isRequired
+		}).isRequired
+	};
+	
+	exports.default = GamePlayHost;
+
+/***/ },
+/* 438 */
+/*!****************************!*\
+  !*** ./http/host/Crew.jsx ***!
+  \****************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 174);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Crew = function (_Component) {
+		_inherits(Crew, _Component);
+	
+		function Crew(props) {
+			_classCallCheck(this, Crew);
+	
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Crew).call(this, props));
+	
+			_this.state = {
+				velocity: 0,
+				deltaVelocity: 10,
+				maximumDeltaVelocity: 10,
+				hp: 1,
+				current: -0.1,
+				isRaft: false,
+				isWhirlpool: false
+			};
+			return _this;
+		}
+	
+		_createClass(Crew, [{
+			key: 'getDefaultProps',
+			value: function getDefaultProps() {
+				return {
+					currentConstant: 0.003,
+					velocityConstant: 0.00001,
+					deltaHPConstant: -0.1
+				};
+			}
+		}, {
+			key: 'processWhirlpool',
+			value: function processWhirlpool(status) {
+				switch (status) {
+					case 'new':
+						this.setState({ isWhirlpool: true });
+						break;
+					case 'timeout':
+						this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
+						break;
+					case 'wrongAnswer':
+						this.setState({ hp: this.state.hp - 0.25, isWhirlpool: false });
+						break;
+					case 'correctAnswer':
+						this.setState({ position: this.state.position + 0.3, isWhirlpool: false });
+						break;
+					default:
+						break;
+				}
+			}
+		}, {
+			key: 'processAnswer',
+			value: function processAnswer(wasCorrectAnswer) {
+				if (wasCorrectAnswer) {
+					this.setState({
+						velocity: this.state.velocity + this.state.deltaVelocity
+					});
+				} else if (this.state.isRaft) {
+					this.setState({ deltaVelocity: this.state.deltaVelocity * 0.25 });
+				} else {
+					this.setState({
+						hp: this.state.hp + this.props.deltaHPConstant
+					});
+					if (!this.state.isRaft && this.state.hp <= 0) {
+						this.setState({ isRaft: true });
+					}
+				}
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var style = {
+					width: '10rem',
+					marginLeft: this.props.position * 100 + 'px',
+					borderRadius: '5px',
+					border: 'none',
+					background: 'url(/img/boats-side/\n\t\t\t\t' + (this.state.isRaft ? 'rafts' : 'canoes') + '\n\t\t\t\t/' + this.props.size + '-members.svg no-repeat center top,'
+				};
+				var className = this.state.isRaft ? 'raft' : 'racetrack-boat';
+				return _react2.default.createElement(
+					'div',
+					{ className: className, style: style },
+					_react2.default.createElement(
+						'p',
+						null,
+						'Crew ',
+						this.props.crewNumber
+					)
+				);
+			}
+		}]);
+	
+		return Crew;
+	}(_react.Component);
+	
+	Crew.propTypes = {
+		deltaHPConstant: _react.PropTypes.number.isRequired,
+		position: _react.PropTypes.number.isRequired,
+		size: _react.PropTypes.number.isRequired,
+		crewNumber: _react.PropTypes.number.isRequired
+	};
+	
+	exports.default = Crew;
+
+/***/ },
+/* 439 */
+/*!***********************************!*\
+  !*** ./http/host/Leaderboard.jsx ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 174);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Leaderboard = function Leaderboard(_ref) {
+		var crews = _ref.crews;
+		return (
+			// MARK: make leaderboard sort
+			_react2.default.createElement(
+				"div",
+				null,
+				_react2.default.createElement(
+					"h4",
+					null,
+					_react2.default.createElement(
+						"strong",
+						null,
+						"Leaderboard"
+					)
+				),
+				Object.keys(crews).map(function (crewNumber, i) {
+					var crew = crews[crewNumber];
+					return _react2.default.createElement(LeaderboardEntry, { crewNumber: crewNumber, crewPosition: crew.position, key: i });
+				})
+			)
+		);
+	};
+	
+	Leaderboard.propTypes = {
+		crews: _react.PropTypes.shape({
+			name: _react.PropTypes.string.isRequired,
+			users: _react.PropTypes.arrayOf(_react.PropTypes.string).isRequired,
+			position: _react.PropTypes.number.isRequired,
+			status: _react.PropTypes.string.isRequired,
+			boat: _react.PropTypes.string.isRequired
+		}).isRequired
+	};
+	
+	var LeaderboardEntry = function LeaderboardEntry(_ref2) {
+		var crewNumber = _ref2.crewNumber;
+		var crewPosition = _ref2.crewPosition;
+	
+		var style = {
+			fontSize: (crewPosition + 1) * 15 + "px",
+			padding: 5 + crewPosition + "px"
+		};
+		return _react2.default.createElement(
+			"div",
+			{ className: "leaderboardEntry" },
+			_react2.default.createElement(
+				"h5",
+				null,
+				"Crew ",
+				crewNumber,
+				":",
+				_react2.default.createElement(
+					"span",
+					{ style: style, className: "pill" },
+					Math.round(crewPosition * 10) / 10
+				)
+			)
+		);
+	};
+	
+	LeaderboardEntry.propTypes = {
+		crewNumber: _react.PropTypes.number.isRequired,
+		crewPosition: _react.PropTypes.number.isRequired
+	};
+	
+	exports.default = Leaderboard;
 
 /***/ }
 /******/ ]);

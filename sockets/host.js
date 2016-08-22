@@ -16,11 +16,11 @@ module.exports = o(function* (tws, m, games) {
 		// Generate the answer pool (all answers, correct and incorrect)
 		const answers = [];
 		qset.questions.forEach((question) => {
-			if (!answers.includes(question.answer)) {
-				answers.push(question.answer);
+			if (!answers.includes(question.correctAnswer)) {
+				answers.push(question.correctAnswer);
 			}
 			for (const answer of question.incorrectAnswers) {
-				if (!answers.includes(answer)) answers.push(answer);
+				if (!answers.includes(answer.text)) answers.push(answer.text);
 			}
 		});
 
@@ -63,7 +63,6 @@ module.exports = o(function* (tws, m, games) {
 		tws.game.users.forEach((ttws, i) => {
 			if (ttws.user === m.user) {
 				tws.game.users.splice(i, 1);
-				tws.game.usernames.splice(i, 1);
 				ttws.trysend({
 					event: 'removeUserFromGame',
 				});
@@ -76,11 +75,15 @@ module.exports = o(function* (tws, m, games) {
 		if (tws.game.crews.length < 1) {
 			return tws.error('Need more crews to begin game.', 'Tell your sailors to join a crew!');
 		}
-		Object.keys(tws.game.crews).forEach((crewNumber) => {
-			const crew = tws.game.crews[crewNumber];
-			if (crew.members.length < 2) return tws.error('Need at least two people in every crew.');
-			else if (crew.members.length > 4) return tws.error('Maximum four people in every crew.');
-		});
+		/* eslint-disable no-restricted-syntax */
+		for (const crewNumber in tws.game.crews) {
+			if ({}.hasOwnProperty.call(tws.game.crews, crewNumber)) {
+				const crew = tws.game.crews[crewNumber];
+				if (crew.members.length < 2) return tws.error(`Crew ${crewNumber} must have at least two people.`);
+				else if (crew.members.length > 4) return tws.error(`Crew ${crewNumber} can have at most four people.`);
+			}
+		}
+		/* eslint-enable no-restricted-syntax */
 		tws.game.hasStarted = true;
 		tws.game.crews.forEach((crew) => {
 			crew.members.forEach((ttws) => {

@@ -51,8 +51,9 @@ module.exports = (tws, m, games) => {
 			};
 		} else if (tws.game.crews[m.crewNumber].members.length >= 4) {
 			return tws.error('Your crew is full.', 'Crews can have 2 - 4 sailors.');
+		} else {
+			tws.game.crews[m.crewNumber].members.push(tws);
 		}
-		tws.game.crews[m.crewNumber].members.push(tws);
 		tws.crewNumber = m.crewNumber;
 		tws.sendToGameHost({
 			event: 'addUserToCrew',
