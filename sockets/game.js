@@ -56,8 +56,8 @@ module.exports = (tws, m, games) => {
 		tws.crewNumber = m.crewNumber;
 		tws.sendToGameHost({
 			event: 'addUserToCrew',
-			user: tws.user,
-			crew: m.crewNumber,
+			username: tws.username,
+			crewNumber: m.crewNumber,
 		});
 		return tws.trysend(m);
 	}

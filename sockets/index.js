@@ -30,7 +30,7 @@ module.exports = (server) => {
 						const index = tws.game.users.indexOf(tws);
 						const crewMembers = tws.crew().members;
 						tws.game.users.splice(index, 1);
-						tws.game.usernames.splice(index, 1);
+						tws.usernames().splice(index, 1);
 						crewMembers.splice(crewMembers.indexOf(tws), 1);
 						if (crewMembers.length === 0) {
 							tws.game.crews.splice(tws.game.crews.indexOf(tws.crew()), 1);
