@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { TextInput } from '../../shared/Input.jsx';
-import { joinGameRequest, joinGameSuccess } from './actions';
+import { joinGameRequest, joinCrewRequest } from './actions';
 
 class JoinGameFormDisplay extends Component {
 	constructor(props) {
@@ -18,6 +18,12 @@ class JoinGameFormDisplay extends Component {
 			this.props.joinGameRequest();
 			this.props.socket.send(JSON.stringify(Object.assign(formData, {
 				event: 'joinGame',
+			})));
+			break;
+		case 'joiningCrew':
+			this.props.joinCrewRequest();
+			this.props.socket.send(JSON.stringify(Object.assign(formData, {
+				event: 'joinCrew',
 			})));
 			break;
 		default:
@@ -78,6 +84,7 @@ class JoinGameFormDisplay extends Component {
 JoinGameFormDisplay.propTypes = {
 	boardingStatus: PropTypes.oneOf(['joiningGame', 'joiningCrew']),
 	joinGameRequest: PropTypes.func.isRequired,
+	joinCrewRequest: PropTypes.func.isRequired,
 	socket: PropTypes.instanceOf(WebSocket).isRequired,
 };
 
@@ -88,6 +95,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	joinGameRequest: () => {
 		dispatch(joinGameRequest());
+	},
+	joinCrewRequest: () => {
+		dispatch(joinCrewRequest());
 	},
 });
 

@@ -1,4 +1,8 @@
 /node_modules/
 npm-debug.log
-/http/*.bundle.js
-/http/*.bundle.js.map
+/http/game.bundle.js
+/http/game.bundle.js.map
+/http/console.bundle.js
+/http/console.bundle.js.map
+/http/host.bundle.js
+/http/host.bundle.js.map
