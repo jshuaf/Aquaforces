@@ -25,7 +25,7 @@ module.exports = o(function* (tws, m, games) {
 		});
 
 		// Create the game
-		const id = Math.floor(Math.random() * 1e4);
+		const id = 1000 + Math.floor(Math.random() * 8999);
 		games[id] = {
 			host: tws,
 			crews: [],
