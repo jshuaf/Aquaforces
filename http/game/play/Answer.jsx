@@ -6,7 +6,7 @@ class Answer extends Component {
 		const initialY = Math.random() * 100 - 100;
 		const vx = (Math.random() - 0.5) / 300;
 		const vy = (Math.random() - 0.5) / 150 + innerHeight / 15000;
-		return {
+		this.state = {
 			position: {
 				x: null,
 				y: initialY,

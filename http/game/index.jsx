@@ -24,7 +24,6 @@ render(
 
 socket.onmessage = function (m) {
 	let message;
-	console.log(game);
 	try {
 		message = JSON.parse(m.data);
 	} catch (e) {
