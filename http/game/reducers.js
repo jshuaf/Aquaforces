@@ -26,7 +26,7 @@ function boarding(state = initialBoardingState, action) {
 		delete action.type;
 		return Object.assign({}, state, action, {
 			pendingRequest: false,
-			status: 'joiningCrew',
+			status: 'joined',
 		});
 	default:
 		return state;

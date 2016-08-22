@@ -43,7 +43,7 @@ class JoinGameFormDisplay extends Component {
 						<div className="six columns text-center">
 							<img className="navbar-logo" src="/img/logo-black.svg" alt="Aquaforces" />
 							<TextInput
-								placeholder="1234" label="Game number" name="id"
+								placeholder="1234" label="Game number" name="gameID"
 								type="number" min="0" max="9999" required
 							/>
 							<TextInput

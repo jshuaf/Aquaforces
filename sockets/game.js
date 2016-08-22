@@ -7,7 +7,7 @@ module.exports = (tws, m, games) => {
 
 	switch (m.event) {
 	case 'joinGame': {
-		const game = games[m.id];
+		const game = games[m.gameID];
 		if (!game) return tws.error('Invalid game code.', 'Make sure you type it correctly!');
 		tws.game = game;
 		if (!m.username) {
@@ -26,8 +26,8 @@ module.exports = (tws, m, games) => {
 			event: 'addNewUser',
 			user: tws.user,
 		});
-		tws.trysend({ event: 'joinGame', username: m.username, id: m.id });
-		break;
+		delete m.event;
+		return tws.trysend(Object.assign(m, { event: 'joinGame' }));
 	}
 	case 'addUserToCrew': {
 		tws.checkGameExists();

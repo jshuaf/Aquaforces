@@ -36,6 +36,11 @@ socket.onmessage = function (m) {
 	}
 };
 
+socket.onclose = function (m) {
+	sweetAlert('Socket closed', null, 'error');
+	console.error(m);
+};
+
 render(
 	<Provider store={store}>
 		<Game socket={socket} />
