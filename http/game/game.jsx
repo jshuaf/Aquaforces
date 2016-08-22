@@ -4,6 +4,10 @@ import GamePlay from './play/GamePlay.jsx';
 import JoinGameForm from './boarding/JoinGameForm.jsx';
 
 class GameDisplay extends Component {
+	constructor(props) {
+		super(props);
+		this.gamePlay = null;
+	}
 	render() {
 		switch (this.props.boardingStatus) {
 		case 'joiningGame':
@@ -12,7 +16,7 @@ class GameDisplay extends Component {
 		case 'joined':
 			return <p>You joined the game.</p>;
 		case 'started':
-			return <GamePlay socket={this.props.socket} ref={(g) => { this.gamePlay = g; }} />;
+			return <GamePlay socket={this.props.socket} ref={this.props.instance} />;
 		default:
 			return;
 		}
@@ -22,6 +26,7 @@ class GameDisplay extends Component {
 GameDisplay.propTypes = {
 	boardingStatus: PropTypes.oneOf(['joiningGame', 'joiningCrew', 'joined', 'started']).isRequired,
 	socket: PropTypes.instanceOf(WebSocket).isRequired,
+	instance: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({

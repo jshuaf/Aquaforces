@@ -116,10 +116,10 @@ class Answer extends Component {
 		const style = {
 			transform: `translate(${x}px, ${y}px) rotate(${this.state.shake.angle}deg)`,
 		};
-		if (!this.state.disappeared)
+		if (!this.state.disappeared) {
 			return (<span style={style} onClick={this.handleClick}
-				ref="answer" className="pill">{this.props.text}</span>
-		);
+				ref="answer" className="pill">{this.props.text}</span>);
+		}
 		return null;
 	}
 }

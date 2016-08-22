@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import WhirlpoolFree from './WhirlpoolFree.jsx';
 import WhirlpoolQuestion from './WhirlpoolQuestion.jsx';
 import GameTimer from './GameTimer.jsx';
@@ -195,12 +195,12 @@ class GamePlayDisplay extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	answerData: state.answers,
-	username: state.username,
-	crewNumber: state.crewNumber,
-	crewSize: state.crewSize,
+	answerData: state.game.answers,
+	username: state.game.username,
+	crewNumber: state.game.crewNumber,
+	crewSize: state.game.crewSize,
 });
 
-const GamePlay = connect(mapStateToProps, null)(GamePlayDisplay);
+const GamePlay = connect(mapStateToProps, null, null, { withRef: true })(GamePlayDisplay);
 
 export default GamePlay;

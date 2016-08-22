@@ -14,14 +14,17 @@ const socketProtocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
 const socketPort = location.port !== 80 ? `:${location.port}` : '';
 const socket = new WebSocket(`${socketProtocol}${location.hostname}${socketPort}/play/`);
 
-const game = render(
+let game;
+
+render(
 	<Provider store={store}>
-		<Game socket={socket} />
+		<Game socket={socket} instance={(ref) => { if (ref) game = ref.getWrappedInstance(); }} />
 	</Provider>,
 	document.getElementById('mountNode'));
 
 socket.onmessage = function (m) {
 	let message;
+	console.log(game);
 	try {
 		message = JSON.parse(m.data);
 	} catch (e) {
@@ -43,39 +46,39 @@ socket.onmessage = function (m) {
 		return store.dispatch(startGame());
 	case 'answerSelected':
 		if (m.wasCorrectAnswer) {
-			game.gamePlay.correctAnswer(m.answer);
+			game.correctAnswer(m.answer);
 		} else {
-			game.gamePlay.incorrectAnswer(m.answer);
+			game.incorrectAnswer(m.answer);
 		}
 		break;
 	case 'updateHP':
-		game.gamePlay.updateHP(m.hp);
+		game.updateHP(m.hp);
 		break;
 	case 'addRock':
-		game.gamePlay.addRock(m.startTime);
+		game.addRock(m.startTime);
 		break;
 	case 'endRock':
-		game.gamePlay.endRock();
+		game.endRock();
 		break;
 	case 'whirlpoolAhead':
-		game.gamePlay.addWhirlpoolTap();
+		game.addWhirlpoolTap();
 		break;
 	case 'whirlpoolQuestion':
-		game.gamePlay.addWhirlpoolQuestion(m.question);
+		game.addWhirlpoolQuestion(m.question);
 		break;
 	case 'whirlpoolBonusReceived':
 		console.log('Bonus received');
-		game.gamePlay.setState({ whirlpoolBonus: m.amount });
+		game.setState({ whirlpoolBonus: m.amount });
 		break;
 	case 'whirlpoolConclusion':
-		game.gamePlay.setState({ whirlpool: false });
-		game.gamePlay.state.whirlpoolTimebar.reset();
+		game.setState({ whirlpool: false });
+		game.state.whirlpoolTimebar.reset();
 		break;
 	case 'correctAnswer':
-		game.gamePlay.addCorrectAnswer(m.answer);
+		game.addCorrectAnswer(m.answer);
 		break;
 	case 'newQuestion':
-		game.gamePlay.newQuestion(m.question);
+		game.newQuestion(m.question);
 		break;
 	default:
 		console.error('Unknown message: ', message);
