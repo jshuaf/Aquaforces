@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Crew from './Crew.jsx';
 import Leaderboard from './Leaderboard.jsx';
 
-class GameHost extends Component {
+class GamePlayHost extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -71,7 +71,7 @@ class GameHost extends Component {
 	}
 }
 
-GameHost.propTypes = {
+GamePlayHost.propTypes = {
 	initialCrews: PropTypes.shape({
 		name: PropTypes.string.isRequired,
 		users: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -81,4 +81,4 @@ GameHost.propTypes = {
 	}).isRequired,
 };
 
-export default GameHost;
+export default GamePlayHost;

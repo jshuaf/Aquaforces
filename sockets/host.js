@@ -83,12 +83,11 @@ module.exports = o(function* (tws, m, games) {
 		});
 		tws.game.hasStarted = true;
 		tws.game.crews.forEach((crew) => {
-			const crewSize = crew.members.length;
 			crew.members.forEach((ttws) => {
 				ttws.trysend({
 					event: 'startGame',
 					answers: tws.game.answers,
-					crewSize,
+					crewSize: crew.members.length,
 				});
 			});
 		});

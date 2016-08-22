@@ -23,6 +23,10 @@ function gameInfo(state = initialGameInfoState, action) {
 		return Object.assign({}, state, {
 			gameID: action.gameID,
 		});
+	case actions.START_GAME:
+		return Object.assign({}, state, {
+			status: 'inProgress',
+		});
 	default:
 		return state;
 	}

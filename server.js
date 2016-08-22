@@ -215,7 +215,7 @@ const serverHandler = o(function* (req, res) {
 		}
 	} else if (reqPath === '/play/' || (usesIODomain && reqPath === '/')) {
 		// Gameplay screen
-		yield respondPage(null, req, res, yield);
+		yield respondPage('Join a game', req, res, yield);
 		res.write((yield addVersionNonces((yield fs.readFile('./html/play.html', yield)).toString(), reqPath, yield)));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath === '/') {
@@ -287,7 +287,7 @@ const serverHandler = o(function* (req, res) {
 			}
 		}));
 	} else if (reqPath === '/host/' && !usesIODomain) {
-		yield respondPage(null, req, res, yield, {});
+		yield respondPage('Start a game', req, res, yield, {});
 		res.write((yield fs.readFile('./html/host.html', yield)));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath === '/login/google' && !usesIODomain) {

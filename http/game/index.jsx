@@ -27,10 +27,9 @@ socket.onmessage = function (m) {
 	case 'error':
 		return sweetAlert(message.title, message.text, 'error');
 	case 'joinGame':
-		delete message.event;
 		return store.dispatch(joinGameSuccess(message.gameID, message.username));
 	case 'joinCrew':
-		delete message.event;
+		document.getElementsByTagName('title')[0].innerHTML = 'Play · Aquaforces';
 		return store.dispatch(joinCrewSuccess(message.crewNumber));
 	default:
 		console.error('Unknown message: ', message);

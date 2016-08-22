@@ -90,6 +90,7 @@
 	
 		switch (message.event) {
 			case 'newGameID':
+				document.getElementsByTagName('title')[0].innerHTML = 'Game ' + message.id + ' · Aquaforces';
 				return store.dispatch((0, _actions.setGameID)(message.id));
 			case 'addUserToGame':
 				return store.dispatch((0, _actions.addUserToGame)(message.username));
@@ -77702,7 +77703,10 @@
 		}, {
 			key: 'startGame',
 			value: function startGame() {
-				// MARK: start game
+				this.props.startGame();
+				this.props.socket.send(JSON.stringify({
+					event: 'startGame'
+				}));
 			}
 		}, {
 			key: 'render',
@@ -77780,6 +77784,7 @@
 	
 	GameHostDisplay.propTypes = {
 		newGame: _react.PropTypes.func.isRequired,
+		startGame: _react.PropTypes.func.isRequired,
 		gameInfo: _react.PropTypes.shape({
 			status: _react.PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
 			gameID: _react.PropTypes.number
@@ -77817,6 +77822,9 @@
 		return {
 			newGame: function newGame() {
 				dispatch((0, _actions.newGame)());
+			},
+			startGame: function startGame() {
+				dispatch((0, _actions.startGame)());
 			}
 		};
 	};
@@ -78063,6 +78071,10 @@
 			case actions.SET_GAME_ID:
 				return Object.assign({}, state, {
 					gameID: action.gameID
+				});
+			case actions.START_GAME:
+				return Object.assign({}, state, {
+					status: 'inProgress'
 				});
 			default:
 				return state;

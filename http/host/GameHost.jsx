@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionSetPicker from './QuestionSetPicker.jsx';
-import { newGame } from './actions';
+import { newGame, startGame } from './actions';
 
 class GameHostDisplay extends Component {
 	constructor(props) {
@@ -17,7 +17,10 @@ class GameHostDisplay extends Component {
 		}));
 	}
 	startGame() {
-		// MARK: start game
+		this.props.startGame();
+		this.props.socket.send(JSON.stringify({
+			event: 'startGame',
+		}));
 	}
 	render() {
 		switch (this.props.gameInfo.status) {
@@ -51,6 +54,7 @@ class GameHostDisplay extends Component {
 
 GameHostDisplay.propTypes = {
 	newGame: PropTypes.func.isRequired,
+	startGame: PropTypes.func.isRequired,
 	gameInfo: PropTypes.shape({
 		status: PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
 		gameID: PropTypes.number,
@@ -85,6 +89,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	newGame: () => {
 		dispatch(newGame());
+	},
+	startGame: () => {
+		dispatch(startGame());
 	},
 });
 

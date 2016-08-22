@@ -25,6 +25,7 @@ socket.onmessage = function (m) {
 
 	switch (message.event) {
 	case 'newGameID':
+		document.getElementsByTagName('title')[0].innerHTML = `Game ${message.id} · Aquaforces`;
 		return store.dispatch(setGameID(message.id));
 	case 'addUserToGame':
 		return store.dispatch(addUserToGame(message.username));
