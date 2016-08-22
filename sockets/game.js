@@ -14,7 +14,7 @@ module.exports = (tws, m, games) => {
 			return tws.error('You must enter a username.', 'Be creative!');
 		} else if (m.username.length > 24) {
 			return tws.error('You must enter a username less than 24 characters.');
-		} else if (tws.usernames().includes(m.name)) {
+		} else if (tws.usernames().includes(m.username)) {
 			return tws.error('Your username has been taken', 'Be quicker next time.');
 		} else if (game.hasStarted) {
 			return tws.error('Game has started.', 'Jump in next time!');

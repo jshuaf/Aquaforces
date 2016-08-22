@@ -21,7 +21,7 @@ module.exports = (tws) => {
 
 	tws.usernames = () => {
 		if (tws.game) {
-			return tws.game.users.filter((user) => user.username);
+			return tws.game.users.map((user) => user.username);
 		}
 	};
 
