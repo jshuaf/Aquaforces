@@ -59,7 +59,6 @@ module.exports = (server) => {
 			break;
 		}
 		default: {
-			console.log(tws.upgradeReq.url);
 			tws.trysend({
 				event: 'error',
 				body: 'Invalid upgrade URL.',
