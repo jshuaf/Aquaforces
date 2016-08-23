@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import WhirlpoolFree from './WhirlpoolFree.jsx';
 import WhirlpoolQuestion from './WhirlpoolQuestion.jsx';
@@ -35,20 +36,7 @@ class GamePlayDisplay extends Component {
 			reflectionGroupUpdate: null,
 			update: null,
 		};
-		this.answerSelected = this.answerSelected.bind(this);
-		this.showUpdate = this.showUpdate.bind(this);
-		this.gameTimerOver = this.gameTimerOver.bind(this);
-		this.addWhirlpoolTap = this.addWhirlpoolTap.bind(this);
-		this.addWhirlpoolQuestion = this.addWhirlpoolQuestion.bind(this);
-		this.answerPassedThreshold = this.answerPassedThreshold.bind(this);
-		this.newQuestion = this.newQuestion.bind(this);
-		this.correctAnswer = this.correctAnswer.bind(this);
-		this.incorrectAnswer = this.incorrectAnswer.bind(this);
-		this.addCorrectAnswer = this.addCorrectAnswer.bind(this);
-		this.whirlpoolQuestionTimeout = this.whirlpoolQuestionTimeout.bind(this);
-		this.questionTimeout = this.questionTimeout.bind(this);
-		this.updateHP = this.updateHP.bind(this);
-		this.addRock = this.addRock.bind(this);
+		autoBind(this);
 	}
 	answerSelected(answerText) {
 		this.props.socket.send(JSON.stringify({
@@ -94,18 +82,18 @@ class GamePlayDisplay extends Component {
 		this.setState({
 			questionText: question,
 		});
-		this.refs.questionTimebar.reset();
+		this.questionTimebar.reset();
 	}
 	correctAnswer(answer) {
 		this.setState({ reflectionGroupUpdate: Date.now() });
-		this.refs.river.wasCorrectAnswer(answer);
+		this.river.wasCorrectAnswer(answer);
 	}
 	incorrectAnswer(answer) {
-		this.refs.river.wasIncorrectAnswer(answer);
+		this.river.wasIncorrectAnswer(answer);
 	}
 	addCorrectAnswer(answer) {
 		// add a random number of wrong answers before correct answer
-		this.refs.river.addCorrectAnswer(answer);
+		this.river.addCorrectAnswer(answer);
 	}
 	whirlpoolQuestionTimeout() {
 		this.props.socket.send(JSON.stringify({
@@ -126,11 +114,11 @@ class GamePlayDisplay extends Component {
 	addRock(rockStartTime) {
 		this.state.rock = true;
 		this.showUpdate('Rock approaching', 'Answer questions faster to avoid hitting it!');
-		this.refs.river.addRock(rockStartTime);
+		this.river.addRock(rockStartTime);
 	}
 
 	endRock() {
-		this.refs.river.endRock();
+		this.river.endRock();
 		this.state.rock = false;
 	}
 
@@ -189,10 +177,13 @@ class GamePlayDisplay extends Component {
 							<QuestionTimebar
 								onTimeout={this.questionTimeout}
 								timePerQuestion={timePerQuestion}
-								ref="questionTimebar" keepRunning={!this.state.whirlpool} />
+								ref={(q) => { this.questionTimebar = q; }}
+								keepRunning={!this.state.whirlpool}
+							/>
 						</div>
 					</div>
-					<River ref="river"
+					<River
+						ref={(r) => { this.river = r; }}
 						answerData={this.props.answerData}
 						answerSelected={this.answerSelected}
 						answerPassedThreshold={this.answerPassedThreshold}

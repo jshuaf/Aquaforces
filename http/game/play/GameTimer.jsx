@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 
 class GameTimer extends Component {
 	constructor(props) {
@@ -8,8 +9,7 @@ class GameTimer extends Component {
 			finished: false,
 			timeStart: Date.now(),
 		};
-		this.zeroPad = this.zeroPad.bind(this);
-		this.updateTimer = this.updateTimer.bind(this);
+		autoBind(this);
 	}
 	componentDidMount() {
 		setInterval(() => {
@@ -19,7 +19,7 @@ class GameTimer extends Component {
 		}, 50);
 	}
 	zeroPad(t) {
-		if (t < 10) return '0' + t;
+		if (t < 10) return `0${t}`;
 		return t;
 	}
 	updateTimer() {

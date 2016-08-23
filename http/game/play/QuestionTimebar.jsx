@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 
 class QuestionTimebar extends Component {
 	constructor(props) {
@@ -7,8 +8,7 @@ class QuestionTimebar extends Component {
 			timeLeft: this.props.timePerQuestion,
 			timeStart: Date.now(),
 		};
-		this.updateTime = this.updateTime.bind(this);
-		this.reset = this.reset.bind(this);
+		autoBind(this);
 	}
 	componentDidMount() {
 		setInterval(() => {
