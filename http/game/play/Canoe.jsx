@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 
 class Canoe extends Component {
 	constructor(props) {
@@ -7,18 +8,21 @@ class Canoe extends Component {
 			height: null,
 			topPosition: null,
 		};
-		this.getBounds = this.getBounds.bind(this);
+		autoBind(this);
 	}
 	componentDidMount() {
-		this.setState({
-			height: this.refs.canoe.offsetHeight,
-			width: this.refs.canoe.offsetWidth,
-			parentWidth: this.refs.canoe.parentElement.clientWidth,
-			topPosition: this.refs.canoe.getBoundingClientRect().top,
-		});
+		this.calculateDimensions();
 	}
 	getBounds() {
-		return this.refs.canoe.getBoundingClientRect();
+		return this.canoe.getBoundingClientRect();
+	}
+	calculateDimensions() {
+		this.setState({
+			height: this.canoe.offsetHeight,
+			width: this.canoe.offsetWidth,
+			parentWidth: this.canoe.parentElement.clientWidth,
+			topPosition: this.canoe.getBoundingClientRect().top,
+		});
 	}
 	render() {
 		// shake 0.82s cubic-bezier(.36,.07,.19,.97) both
@@ -52,7 +56,7 @@ class Canoe extends Component {
 
 		return (
 			<div style={containerStyle}>
-				<img id="canoe" src={image} style={canoeStyle} ref="canoe"></img>
+				<img id="canoe" src={image} style={canoeStyle} ref={(c) => { this.canoe = c; }} alt="" />
 			</div>
 		);
 	}

@@ -11,6 +11,7 @@ module.exports = {
 		"max-len": ["error", 120],
 		"no-console": ["off"],
 		"react/jsx-indent": ["off"],
+		"react/prop-types": ["warn"],
 		"react/no-multi-comp": ["off"],
 		"react/jsx-indent-props": ["off"],
 		"react/jsx-closing-bracket-location": ["off"],

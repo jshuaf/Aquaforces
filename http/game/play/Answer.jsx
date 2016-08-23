@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 
 class Answer extends Component {
 	constructor(props) {
@@ -22,32 +23,11 @@ class Answer extends Component {
 				time: null,
 			},
 		};
-		this.setPosition = this.setPosition.bind(this);
-		this.setAngle = this.setAngle.bind(this);
-		this.disappear = this.disappear.bind(this);
-		this.shake = this.shake.bind(this);
-		this.animate = this.animate.bind(this);
-		this.handleClick = this.handleClick.bind(this);
-		this.setPosition = this.setPosition.bind(this);
-		this.setAngle = this.setAngle.bind(this);
-		this.disappear = this.disappear.bind(this);
-		this.shake = this.shake.bind(this);
-		this.animate = this.animate.bind(this);
-		this.handleClick = this.handleClick.bind(this);
+		this.answer = null;
+		autoBind(this);
 	}
 	componentDidMount() {
-		const currentTime = Date.now();
-		const initialX = this.props.generateAnswerPosition(this.refs.answer.offsetWidth);
-		this.setState((previousState, previousProps) => (
-			{
-				startTime: currentTime,
-				lastAnimationTime: currentTime,
-				position: { x: initialX, y: previousState.position.y },
-				offsetWidth: this.refs.answer.offsetWidth,
-			}), () => {
-			const positionAnimation = this.animate(new Date());
-			this.setState({ positionAnimation });
-		});
+		this.startAnimation();
 	}
 	setPosition() {
 		const timeAtAnimation = Date.now();
@@ -100,6 +80,20 @@ class Answer extends Component {
 			} });
 		}
 	}
+	startAnimation() {
+		const currentTime = Date.now();
+		const initialX = this.props.generateAnswerPosition(this.answer.offsetWidth);
+		this.setState((previousState) => (
+			{
+				startTime: currentTime,
+				lastAnimationTime: currentTime,
+				position: { x: initialX, y: previousState.position.y },
+				offsetWidth: this.answer.offsetWidth,
+			}), () => {
+			const positionAnimation = this.animate(new Date());
+			this.setState({ positionAnimation });
+		});
+	}
 	disappear() {
 		this.setState({
 			disappeared: true,
@@ -129,8 +123,12 @@ class Answer extends Component {
 			transform: `translate(${x}px, ${y}px) rotate(${this.state.shake.angle}deg)`,
 		};
 		if (!this.state.disappeared) {
-			return (<span style={style} onClick={this.handleClick}
-				ref="answer" className="pill">{this.props.text}</span>);
+			return (
+				<span
+					style={style} onClick={this.handleClick}
+					ref={(a) => { this.answer = a; }} className="pill">{this.props.text}
+				</span>
+			);
 		}
 		return null;
 	}
