@@ -7,6 +7,8 @@ class QuestionTimebar extends Component {
 			timeLeft: this.props.timePerQuestion,
 			timeStart: Date.now(),
 		};
+		this.updateTime = this.updateTime.bind(this);
+		this.reset = this.reset.bind(this);
 	}
 	componentDidMount() {
 		setInterval(() => {

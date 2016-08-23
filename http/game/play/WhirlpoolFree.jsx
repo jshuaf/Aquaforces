@@ -6,6 +6,7 @@ class WhirlpoolFree extends Component {
 		this.state = {
 			tapStreak: 0,
 		};
+		this.processTap = this.processTap.bind(this);
 	}
 	processTap() {
 		this.setState({ tapStreak: this.state.tapStreak + 1 });

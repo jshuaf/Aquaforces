@@ -7,6 +7,7 @@ class Canoe extends Component {
 			height: null,
 			topPosition: null,
 		};
+		this.getBounds = this.getBounds.bind(this);
 	}
 	componentDidMount() {
 		this.setState({

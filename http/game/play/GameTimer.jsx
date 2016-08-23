@@ -8,6 +8,8 @@ class GameTimer extends Component {
 			finished: false,
 			timeStart: Date.now(),
 		};
+		this.zeroPad = this.zeroPad.bind(this);
+		this.updateTimer = this.updateTimer.bind(this);
 	}
 	componentDidMount() {
 		setInterval(() => {

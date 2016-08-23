@@ -35,6 +35,20 @@ class GamePlayDisplay extends Component {
 			reflectionGroupUpdate: null,
 			update: null,
 		};
+		this.answerSelected = this.answerSelected.bind(this);
+		this.showUpdate = this.showUpdate.bind(this);
+		this.gameTimerOver = this.gameTimerOver.bind(this);
+		this.addWhirlpoolTap = this.addWhirlpoolTap.bind(this);
+		this.addWhirlpoolQuestion = this.addWhirlpoolQuestion.bind(this);
+		this.answerPassedThreshold = this.answerPassedThreshold.bind(this);
+		this.newQuestion = this.newQuestion.bind(this);
+		this.correctAnswer = this.correctAnswer.bind(this);
+		this.incorrectAnswer = this.incorrectAnswer.bind(this);
+		this.addCorrectAnswer = this.addCorrectAnswer.bind(this);
+		this.whirlpoolQuestionTimeout = this.whirlpoolQuestionTimeout.bind(this);
+		this.questionTimeout = this.questionTimeout.bind(this);
+		this.updateHP = this.updateHP.bind(this);
+		this.addRock = this.addRock.bind(this);
 	}
 	answerSelected(answerText) {
 		this.props.socket.send(JSON.stringify({

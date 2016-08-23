@@ -22,6 +22,18 @@ class Answer extends Component {
 				time: null,
 			},
 		};
+		this.setPosition = this.setPosition.bind(this);
+		this.setAngle = this.setAngle.bind(this);
+		this.disappear = this.disappear.bind(this);
+		this.shake = this.shake.bind(this);
+		this.animate = this.animate.bind(this);
+		this.handleClick = this.handleClick.bind(this);
+		this.setPosition = this.setPosition.bind(this);
+		this.setAngle = this.setAngle.bind(this);
+		this.disappear = this.disappear.bind(this);
+		this.shake = this.shake.bind(this);
+		this.animate = this.animate.bind(this);
+		this.handleClick = this.handleClick.bind(this);
 	}
 	componentDidMount() {
 		const currentTime = Date.now();

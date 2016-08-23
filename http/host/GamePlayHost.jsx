@@ -12,6 +12,11 @@ class GamePlayHostDisplay extends Component {
 			crews: this.props.initialCrews,
 		};
 		this.crews = {};
+		this.answerSelected = this.answerSelected.bind(this);
+		this.updateCrewPosition = this.updateCrewPosition.bind(this);
+		this.updateCrewStatus = this.updateCrewStatus.bind(this);
+		this.updateCrewBoat = this.updateCrewBoat.bind(this);
+		this.whirlpoolStatusChanged = this.whirlpoolStatusChanged.bind(this);
 	}
 	answerSelected(wasCorrectAnswer, crewNumber) {
 		const crew = this.crews[crewNumber.toString()];

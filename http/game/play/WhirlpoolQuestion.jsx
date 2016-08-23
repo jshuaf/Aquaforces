@@ -8,6 +8,8 @@ class WhirlpoolQuestion extends Component {
 		this.state = {
 			answers: null,
 		};
+		this.processAnswer = this.processAnswer.bind(this);
+		this.preprocessAnswers = this.preprocessAnswers.bind(this);
 	}
 	componentWillMount() {
 		this.preprocessAnswers();
