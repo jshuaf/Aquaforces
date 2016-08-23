@@ -14,14 +14,14 @@ class Canoe extends Component {
 		this.calculateDimensions();
 	}
 	getBounds() {
-		return this.canoe.getBoundingClientRect();
+		return this.refs.canoe.getBoundingClientRect();
 	}
 	calculateDimensions() {
 		this.setState({
-			height: this.canoe.offsetHeight,
-			width: this.canoe.offsetWidth,
-			parentWidth: this.canoe.parentElement.clientWidth,
-			topPosition: this.canoe.getBoundingClientRect().top,
+			height: this.refs.canoe.offsetHeight,
+			width: this.refs.canoe.offsetWidth,
+			parentWidth: this.refs.canoe.parentElement.clientWidth,
+			topPosition: this.refs.canoe.getBoundingClientRect().top,
 		});
 	}
 	render() {
@@ -56,7 +56,7 @@ class Canoe extends Component {
 
 		return (
 			<div style={containerStyle}>
-				<img id="canoe" src={image} style={canoeStyle} ref={(c) => { this.canoe = c; }} alt="" />
+				<img id="canoe" src={image} style={canoeStyle} ref="canoe" alt="" />
 			</div>
 		);
 	}
