@@ -29,7 +29,7 @@ socket.onmessage = function (m) {
 	try {
 		message = JSON.parse(m.data);
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return sweetAlert('Socket error.', 'error');
 	}
 
@@ -68,7 +68,6 @@ socket.onmessage = function (m) {
 		game.addWhirlpoolQuestion(message.question);
 		break;
 	case 'whirlpoolBonusReceived':
-		console.log('Bonus received');
 		game.setState({ whirlpoolBonus: message.amount });
 		break;
 	case 'whirlpoolConclusion':

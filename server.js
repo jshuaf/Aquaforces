@@ -63,7 +63,7 @@ const respondPage = o(function* (title, req, res, callback, header, status) {
 			.replace('$inhead', inhead), req.url.pathname, yield));
 		return callback();
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 });
 

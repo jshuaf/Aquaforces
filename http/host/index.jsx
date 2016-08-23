@@ -29,7 +29,7 @@ socket.onmessage = function (m) {
 	try {
 		message = JSON.parse(m.data);
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return sweetAlert('Socket error.', 'error');
 	}
 
