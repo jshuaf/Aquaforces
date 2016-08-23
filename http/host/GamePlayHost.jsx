@@ -91,6 +91,6 @@ const mapStateToProps = (state) => ({
 	initialCrews: state.gameHost.crews,
 });
 
-const GamePlayHost = connect(mapStateToProps, null)(GamePlayHostDisplay);
+const GamePlayHost = connect(mapStateToProps, null, null, { withRef: true })(GamePlayHostDisplay);
 
 export default GamePlayHost;

@@ -48,7 +48,7 @@ class GameHostDisplay extends Component {
 				</div>
 			);
 		case 'inProgress':
-			return <GamePlayHost />;
+			return <GamePlayHost ref={this.props.instance} />;
 		default:
 			return <p>Error</p>;
 		}
