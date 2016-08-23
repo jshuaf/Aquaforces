@@ -44,17 +44,17 @@ socket.onmessage = function (m) {
 			populateInitialGameData(message.username, message.answers, message.crewSize, message.crewNumber));
 		return store.dispatch(startGame());
 	case 'answerSelected':
-		if (m.wasCorrectAnswer) {
-			game.correctAnswer(m.answer);
+		if (message.wasCorrectAnswer) {
+			game.correctAnswer(message.answer);
 		} else {
-			game.incorrectAnswer(m.answer);
+			game.incorrectAnswer(message.answer);
 		}
 		break;
 	case 'updateHP':
-		game.updateHP(m.hp);
+		game.updateHP(message.hp);
 		break;
 	case 'addRock':
-		game.addRock(m.startTime);
+		game.addRock(message.startTime);
 		break;
 	case 'endRock':
 		game.endRock();
@@ -63,21 +63,22 @@ socket.onmessage = function (m) {
 		game.addWhirlpoolTap();
 		break;
 	case 'whirlpoolQuestion':
-		game.addWhirlpoolQuestion(m.question);
+		game.addWhirlpoolQuestion(message.question);
 		break;
 	case 'whirlpoolBonusReceived':
 		console.log('Bonus received');
-		game.setState({ whirlpoolBonus: m.amount });
+		game.setState({ whirlpoolBonus: message.amount });
 		break;
 	case 'whirlpoolConclusion':
 		game.setState({ whirlpool: false });
 		game.state.whirlpoolTimebar.reset();
 		break;
 	case 'correctAnswer':
-		game.addCorrectAnswer(m.answer);
+		game.addCorrectAnswer(message.answer);
 		break;
 	case 'newQuestion':
-		game.newQuestion(m.question);
+		console.log('recieved', message.question);
+		game.newQuestion(message.question);
 		break;
 	default:
 		console.error('Unknown message: ', message);
@@ -124,7 +125,7 @@ function confirmMessageRecieved() {
 
 socket.onmessage = function (m) {
 	try {
-		m = JSON.parse(m.data);
+		m = JSON.parse(message.data);
 	} catch (e) {
 		console.log(e);
 		return sweetAlert('Socket error.');
@@ -132,17 +133,17 @@ socket.onmessage = function (m) {
 
 	confirmMessageRecieved();
 
-	switch (m.event) {
+	switch (message.event) {
 	case 'ping':
 		break;
 	case 'notice':
-		errorEl.textContent = m.body;
+		errorEl.textContent = message.body;
 		errorEl.scrollIntoView();
 		break;
 	case 'error':
 		document.getElementById('joinCrewButton').disabled = false;
 		document.getElementById('joinGameButton').disabled = false;
-		sweetAlert(m.title, m.text, 'error');
+		sweetAlert(message.title, message.text, 'error');
 		break;
 	case 'addUser':
 		setState('crew');
@@ -162,26 +163,26 @@ socket.onmessage = function (m) {
 	case 'startGame':
 		setState('mountNode');
 		setupGameEnvironment();
-		answers = m.answers;
-		game = ReactDOM.render(<Game
+		answers = message.answers;
+		game = ReactDOmessage.render(<Game
   socket={socket} username={username}
-  crewNumber={crewNumber} answerData={m.answers}
-  crewSize={m.crewSize}
+  crewNumber={crewNumber} answerData={message.answers}
+  crewSize={message.crewSize}
   />,
 			document.getElementById('mountNode'));
 		break;
 	case 'answerSelected':
-		if (m.wasCorrectAnswer) {
-			game.correctAnswer(m.answer);
+		if (message.wasCorrectAnswer) {
+			game.correctAnswer(message.answer);
 		} else {
-			game.incorrectAnswer(m.answer);
+			game.incorrectAnswer(message.answer);
 		}
 		break;
 	case 'updateHP':
-		game.updateHP(m.hp);
+		game.updateHP(message.hp);
 		break;
 	case 'addRock':
-		game.addRock(m.startTime);
+		game.addRock(message.startTime);
 		break;
 	case 'endRock':
 		game.endRock();
@@ -190,27 +191,27 @@ socket.onmessage = function (m) {
 		game.addWhirlpoolTap();
 		break;
 	case 'whirlpoolQuestion':
-		game.addWhirlpoolQuestion(m.question);
+		game.addWhirlpoolQuestion(message.question);
 		break;
 	case 'whirlpoolBonusReceived':
 		console.log('Bonus received');
-		game.setState({ whirlpoolBonus: m.amount });
+		game.setState({ whirlpoolBonus: message.amount });
 		break;
 	case 'whirlpoolConclusion':
 		game.setState({ whirlpool: false });
 		game.state.whirlpoolTimebar.reset();
 		break;
 	case 'correctAnswer':
-		game.addCorrectAnswer(m.answer);
+		game.addCorrectAnswer(message.answer);
 		break;
 	case 'newQuestion':
-		game.newQuestion(m.question);
+		game.newQuestion(message.question);
 		break;
 	case 'endGame':
 		gameHasEnded = true;
 		break;
 	default:
-		console.log('Game recieved unknown event: ', m.event);
+		console.log('Game recieved unknown event: ', message.event);
 		break;
 	}
 };
