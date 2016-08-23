@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { TextInput } from '../../shared/Input.jsx';
+import TextInput from '../../shared/TextInput.jsx';
 import { joinGameRequest, joinCrewRequest } from './actions';
 
 class JoinGameFormDisplay extends Component {

@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
-import { TextInput, Checkbox } from '../shared/Input.jsx';
+import TextInput from '../shared/TextInput.jsx';
+import Checkbox from '../shared/Checkbox.jsx';
 import { editSetTitle, toggleSetPrivacy, addSet } from './actions';
 
 const request = require('request');

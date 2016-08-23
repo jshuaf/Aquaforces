@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { ExpandButton } from '../shared/Input.jsx';
+import ExpandButton from '../shared/ExpandButton.jsx';
 import QuestionInput from './QuestionInput.jsx';
 import { addQuestionInput } from './actions';
 
