@@ -181,13 +181,6 @@ socket.onmessage = function (m) {
 		gameHasStarted = true;
 		gameHost = ReactDOM.render(<GameHost initialCrews={crews} />, document.getElementById('mountNode'));
 		break;
-	case 'answerSelected':
-		gameHost.answerSelected(m.wasCorrectAnswer, m.crewNumber);
-
-		break;
-	case 'whirlpoolStatusChanged':
-		gameHost.whirlpoolStatusChanged(m.status, m.crewNumber);
-		break;
 	case 'removeUser':
 		const e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
 		if (e) {

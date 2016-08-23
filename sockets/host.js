@@ -90,6 +90,7 @@ module.exports = o(function* (tws, m, games) {
 				const crew = tws.game.crews[crewNumber];
 				const plainMembers = [];
 				crew.members.forEach((ttws) => {
+					// inform players the game is starting
 					ttws.trysend({
 						event: 'startGame',
 						username: ttws.username,
@@ -98,6 +99,26 @@ module.exports = o(function* (tws, m, games) {
 						crewNumber: ttws.crewNumber,
 					});
 					plainMembers.push(ttws.username);
+
+					// get a question to send to each player
+					const questionID = Math.floor(Math.random() * tws.game.questions.length);
+					const question = tws.game.questions[questionID];
+					ttws.crew().activeQuestions.push({
+						text: question.text,
+						answer: question.correctAnswer,
+						owner: ttws,
+					});
+					ttws.trysend({
+						event: 'newQuestion',
+						question: question.text,
+					});
+
+					// send the correct answer to another player
+					const tttws = crew.members[Math.floor(Math.random() * crew.members.length)];
+					tttws.trysend({
+						event: 'correctAnswer', answer: question.correctAnswer,
+					});
+					tttws.questionsDone.push(question);
 				});
 				plainCrews[crewNumber] = plainMembers;
 			}
@@ -106,26 +127,6 @@ module.exports = o(function* (tws, m, games) {
 		tws.trysend({
 			event: 'startGame',
 			crews: plainCrews,
-		});
-		tws.game.crews.forEach((crew) => {
-			crew.members.forEach((member) => {
-				const questionID = Math.floor(Math.random() * tws.game.questions.length);
-				const question = tws.game.questions[questionID];
-				member.crew().activeQuestions.push({
-					text: question.text,
-					answer: question.answer,
-					owner: member,
-				});
-				member.trysend({
-					event: 'newQuestion',
-					question: question.text,
-				});
-				const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-				ttws.trysend({
-					event: 'correctAnswer', answer: question.answer,
-				});
-				ttws.questionsDone.push(question);
-			});
 		});
 		break;
 	}

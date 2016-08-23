@@ -244,13 +244,6 @@
 			gameHasStarted = true;
 			gameHost = ReactDOM.render(<GameHost initialCrews={crews} />, document.getElementById('mountNode'));
 			break;
-		case 'answerSelected':
-			gameHost.answerSelected(m.wasCorrectAnswer, m.crewNumber);
-
-			break;
-		case 'whirlpoolStatusChanged':
-			gameHost.whirlpoolStatusChanged(m.status, m.crewNumber);
-			break;
 		case 'removeUser':
 			const e = document.querySelector('[data-username=' + JSON.stringify(m.user) + ']');
 			if (e) {
@@ -78262,6 +78255,11 @@
 				crews: _this.props.initialCrews
 			};
 			_this.crews = {};
+			_this.answerSelected = _this.answerSelected.bind(_this);
+			_this.updateCrewPosition = _this.updateCrewPosition.bind(_this);
+			_this.updateCrewStatus = _this.updateCrewStatus.bind(_this);
+			_this.updateCrewBoat = _this.updateCrewBoat.bind(_this);
+			_this.whirlpoolStatusChanged = _this.whirlpoolStatusChanged.bind(_this);
 			return _this;
 		}
 	
@@ -78398,6 +78396,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _reactAutobind = __webpack_require__(/*! react-autobind */ 440);
+	
+	var _reactAutobind2 = _interopRequireDefault(_reactAutobind);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -78423,19 +78425,11 @@
 				isRaft: false,
 				isWhirlpool: false
 			};
+			(0, _reactAutobind2.default)(_this);
 			return _this;
 		}
 	
 		_createClass(Crew, [{
-			key: 'getDefaultProps',
-			value: function getDefaultProps() {
-				return {
-					currentConstant: 0.003,
-					velocityConstant: 0.00001,
-					deltaHPConstant: -0.1
-				};
-			}
-		}, {
 			key: 'processWhirlpool',
 			value: function processWhirlpool(status) {
 				switch (status) {
@@ -78499,6 +78493,12 @@
 	
 		return Crew;
 	}(_react.Component);
+	
+	Crew.defaultProps = {
+		currentConstant: 0.003,
+		velocityConstant: 0.00001,
+		deltaHPConstant: -0.1
+	};
 	
 	Crew.propTypes = {
 		deltaHPConstant: _react.PropTypes.number.isRequired,
@@ -78594,6 +78594,96 @@
 	};
 	
 	exports.default = Leaderboard;
+
+/***/ },
+/* 440 */
+/*!***********************************!*\
+  !*** ./~/react-autobind/index.js ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(/*! ./lib/autoBind */ 441);
+
+
+/***/ },
+/* 441 */
+/*!******************************************!*\
+  !*** ./~/react-autobind/lib/autoBind.js ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(console) {'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports['default'] = autoBind;
+	var wontBind = ['constructor', 'render', 'componentWillMount', 'componentDidMount', 'componentWillReceiveProps', 'shouldComponentUpdate', 'componentWillUpdate', 'componentDidUpdate', 'componentWillUnmount'];
+	
+	var toBind = [];
+	
+	function autoBind(context) {
+	  if (context === undefined) {
+	    console.error('Autobind error: No context provided.');
+	    return;
+	  }
+	
+	  var objPrototype = Object.getPrototypeOf(context);
+	
+	  if (arguments.length > 1) {
+	    // If a list of methods to bind is provided, use it.
+	    toBind = Array.prototype.slice.call(arguments, 1);
+	  } else {
+	    // If no list of methods to bind is provided, bind all available methods in class.
+	    toBind = Object.getOwnPropertyNames(objPrototype);
+	  }
+	
+	  toBind.forEach(function (method) {
+	    var descriptor = Object.getOwnPropertyDescriptor(objPrototype, method);
+	
+	    if (descriptor === undefined) {
+	      console.warn('Autobind: "' + method + '" method not found in class.');
+	      return;
+	    }
+	
+	    // Return if it's special case function or if not a function at all
+	    if (wontBind.indexOf(method) !== -1 || typeof descriptor.value !== 'function') {
+	      return;
+	    }
+	
+	    Object.defineProperty(objPrototype, method, boundMethod(objPrototype, method, descriptor));
+	  });
+	}
+	
+	/**
+	* From autobind-decorator (https://github.com/andreypopp/autobind-decorator/tree/master)
+	* Return a descriptor removing the value and returning a getter
+	* The getter will return a .bind version of the function
+	* and memoize the result against a symbol on the instance
+	*/
+	function boundMethod(objPrototype, method, descriptor) {
+	  var fn = descriptor.value;
+	
+	  return {
+	    configurable: true,
+	    get: function get() {
+	      if (this === objPrototype || this.hasOwnProperty(method)) {
+	        return fn;
+	      }
+	
+	      var boundFn = fn.bind(this);
+	      Object.defineProperty(this, method, {
+	        value: boundFn,
+	        configurable: true,
+	        writable: true
+	      });
+	      return boundFn;
+	    }
+	  };
+	}
+	module.exports = exports['default'];
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/console-browserify/index.js */ 4)))
 
 /***/ }
 /******/ ]);
