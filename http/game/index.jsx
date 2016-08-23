@@ -2,7 +2,9 @@ import { render } from 'react-dom';
 import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+/* eslint-disable import/no-unresolved */
 import Game from './Game.jsx';
+/* eslint-enable import/no-unresolved */
 import gameReducer from './reducers';
 import { joinGameSuccess, joinCrewSuccess, populateInitialGameData, startGame } from './boarding/actions';
 
