@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 import ReactDOM from 'react-dom';
 import Canoe from './Canoe.jsx';
 import Rock from './Rock.jsx';
@@ -26,36 +27,19 @@ class River extends Component {
 			rockAnimation: null,
 			rockYPosition: -window.innerHeight * 0.1,
 		};
-		this.answerPassedThreshold = this.answerPassedThreshold.bind(this);
-		this.updateAnswers = this.updateAnswers.bind(this);
-		this.wasCorrectAnswer = this.wasCorrectAnswer.bind(this);
-		this.wasIncorrectAnswer = this.wasIncorrectAnswer.bind(this);
-		this.addRock = this.addRock.bind(this);
-		this.animateRock = this.animateRock.bind(this);
-		this.rockHit = this.rockHit.bind(this);
-		this.endRock = this.endRock.bind(this);
-		this.clearFlash = this.clearFlash.bind(this);
-		this.flashRedTwice = this.flashRedTwice.bind(this);
-		this.findMaximumGap = this.findMaximumGap.bind(this);
-		this.startRiverReflections = this.startRiverReflections.bind(this);
-		this.updateRiverReflections = this.updateRiverReflections.bind(this);
-		this.removeReflectionGroup = this.removeReflectionGroup.bind(this);
-		this.addReflectionGroup = this.addReflectionGroup.bind(this);
-		this.generateAnswerPosition = this.generateAnswerPosition.bind(this);
-		this.addCorrectAnswer = this.addCorrectAnswer.bind(this);
-		this.riverBounds = this.riverBounds.bind(this);
+		autoBind(this);
 	}
 	componentDidMount() {
-		// Constants
-		const river = this.refs.river;
-		const canoe = ReactDOM.findDOMNode(this.refs.canoe);
-		const rockHeight = ReactDOM.findDOMNode(this.refs.rock).offsetHeight;
 		// River Reflections
-		this.setState({ riverWidth: river.offsetWidth });
+		this.setRiverWidth();
 		this.startRiverReflections();
 		// Answers
 		this.updateAnswers();
 		setInterval(this.updateAnswers, 2500);
+	}
+	setRiverWidth() {
+		const river = this.refs.river;
+		this.setState({ riverWidth: river.offsetWidth });
 	}
 	answerPassedThreshold(answerText) {
 		this.props.answerPassedThreshold(answerText);
@@ -181,7 +165,8 @@ class River extends Component {
 	findMaximumGap(positions) {
 		// find the best place to add a new element, given a list of positions
 		let currentMaximumGap = 0;
-		let newLeftBound, newRightBound;
+		let newLeftBound;
+		let newRightBound;
 		for (let i = 1; i < positions.length; i++) {
 			const currentGap = positions[i] - positions[i - 1];
 			if (currentGap > currentMaximumGap) {
@@ -332,7 +317,8 @@ class River extends Component {
 		currentPositions.right.sort(ascending);
 
 		let currentMaximumGap = 0;
-		let newLeftBound, newRightBound;
+		let newLeftBound;
+		let newRightBound;
 
 		Object.keys(currentPositions).forEach((side) => {
 			const currentSidePositions = currentPositions[side];
@@ -361,7 +347,9 @@ class River extends Component {
 		const incorrectAnswersToAdd = Math.floor(Math.random() * 1.5);
 		for (let i = 0; i < incorrectAnswersToAdd; i++) {
 			let randomData = this.props.answerData[Math.floor(Math.random() * this.props.answerData.length)];
-			while (currentAnswers.indexOf(randomData) >= 0 || incorrectAnswers.indexOf(randomData) >= 0 || oldAnswersToAdd.indexOf(randomData) >= 0) {
+			while (currentAnswers.indexOf(randomData) >= 0
+				|| incorrectAnswers.indexOf(randomData) >= 0
+				|| oldAnswersToAdd.indexOf(randomData) >= 0) {
 				randomData = this.props.answerData[Math.floor(Math.random() * this.props.answerData.length)];
 			}
 			incorrectAnswers.push(randomData);

@@ -14,6 +14,7 @@ module.exports = {
 		"react/prop-types": ["warn"],
 		"react/jsx-indent-props": ["off"],
 		"react/no-string-refs": ["warn"],
+		"react/no-find-dom-node": ["warn"],
 		"react/jsx-closing-bracket-location": ["off"],
 		"func-names": ["off"],
 		"no-mixed-operators": ["error",

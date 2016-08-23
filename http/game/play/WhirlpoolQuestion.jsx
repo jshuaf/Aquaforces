@@ -40,8 +40,7 @@ class WhirlpoolQuestion extends Component {
 				{
 					answers.map(function (answer) {
 						return (<button
-							className="whirlpool-button u-full-width"
-							onClick={this.processAnswer.bind(this, answer)}>
+							className="whirlpool-button u-full-width">
 							{answer}
 						</button>);
 					})
@@ -52,7 +51,7 @@ class WhirlpoolQuestion extends Component {
 }
 
 export default WhirlpoolQuestion;
-
+	// removed onClick = {this.processAnswer bind(this, answer)} from button
 	// popup - everything stops
 	// one person gets a challenge question - multiple choice
 	// timebar starts from 5 seconds
