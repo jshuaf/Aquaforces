@@ -78378,7 +78378,7 @@
   \*******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(console) {'use strict';
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -78386,7 +78386,7 @@
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 	
-	exports.default = gameHostReducer;
+	var _redux = __webpack_require__(/*! redux */ 181);
 	
 	var _actions = __webpack_require__(/*! ./actions */ 439);
 	
@@ -78515,7 +78515,6 @@
 								boat: 'canoe'
 							};
 						});
-						console.log(crews);
 						return {
 							v: Object.assign({}, state, { crews: crews })
 						};
@@ -78528,17 +78527,8 @@
 		}
 	}
 	
-	function gameHostReducer() {
-		var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-		var action = arguments[1];
-	
-		return {
-			gameInfo: gameInfo(state.gameInfo, action),
-			boarding: boarding(state.boarding, action),
-			gameHost: gameHost(state.gameHost, action)
-		};
-	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/console-browserify/index.js */ 4)))
+	var gameHostReducer = (0, _redux.combineReducers)({ gameInfo: gameInfo, boarding: boarding, gameHost: gameHost });
+	exports.default = gameHostReducer;
 
 /***/ }
 /******/ ]);

@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux';
 import * as actions from './actions';
 
 const initialGameInfoState = {
@@ -103,7 +104,6 @@ function gameHost(state = initialGameHostState, action) {
 				boat: 'canoe',
 			};
 		});
-		console.log(crews);
 		return Object.assign({}, state, { crews });
 	}
 	default:
@@ -111,10 +111,5 @@ function gameHost(state = initialGameHostState, action) {
 	}
 }
 
-export default function gameHostReducer(state = {}, action) {
-	return {
-		gameInfo: gameInfo(state.gameInfo, action),
-		boarding: boarding(state.boarding, action),
-		gameHost: gameHost(state.gameHost, action),
-	};
-}
+const gameHostReducer = combineReducers({ gameInfo, boarding, gameHost });
+export default gameHostReducer;

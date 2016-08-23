@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux';
 import * as playActions from './play/actions';
 import * as boardingActions from './boarding/actions';
 
@@ -55,9 +56,5 @@ function game(state = initialGameState, action) {
 	}
 }
 
-export default function gameReducer(state = {}, action) {
-	return {
-		boarding: boarding(state.boardingStatus, action),
-		game: game(state.game, action),
-	};
-}
+const gameReducer = combineReducers({ boarding, game });
+export default gameReducer;
