@@ -7,7 +7,7 @@ script:
   - npm test
   - ./node_modules/.bin/snyk test
   - ./node_modules/.bin/nsp check
-  - npm run lint
+  - ./node_modules/.bin/eslint . --ext .jsx, .js
   - ./node_modules/.bin/stylelint ./*/*.css ./*/*/*.css -f verbose
 cache:
   directories:

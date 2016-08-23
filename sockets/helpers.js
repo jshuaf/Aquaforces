@@ -1,7 +1,9 @@
 module.exports = (tws) => {
 	tws.trysend = (msg) => {
 		try {
-			tws.send(JSON.stringify(msg));
+			tws.send(JSON.stringify(msg), (error) => {
+				console.error(error);
+			});
 		} catch (e) {
 			console.error(e);
 		}
