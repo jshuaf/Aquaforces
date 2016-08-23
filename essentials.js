@@ -1,54 +1,82 @@
-'use strict';
-const crypto = require('crypto'),
-	fs = require('fs'),
-	path = require('path');
-String.prototype.replaceAll = function(find, replace) {
-	if (typeof find == 'string') return this.split(find).join(replace);
-	let t = this, i, j;
-	while (typeof(i = find.shift()) == 'string' && typeof(j = replace.shift()) == 'string') t = t.replaceAll(i || '', j || '');
-	return t;
-};
-String.prototype.repeat = function(num) {
-	return new Array(++num).join(this);
-};
-Number.prototype.bound = function(l, h) {
-	return isNaN(h) ? Math.min(this, l) : Math.max(Math.min(this, h), l);
-};
-global.o = require('yield-yield');
-global.mime = {
-	'.html': 'text/html',
-	'.css': 'text/css',
-	'.js': 'text/javascript',
-	'.png': 'image/png',
-	'.svg': 'image/svg+xml',
-	'.mp3': 'audio/mpeg',
-	'.ico': 'image/x-icon'
-};
-global.html = function(input) {
-	return input.toString().replaceAll(['&', '<', '>', '"', '\t', '\n', '\b'], ['&amp;', '&lt;', '&gt;', '&quot;', '&#9;', '&#10;', '']);
-};
-global.getVersionNonce = o(function*(pn, file, cb) {
-	try {
-		return cb(null, crypto.createHash('md5').update(yield fs.readFile('http' + path.resolve(pn, pn[pn.length - 1] == '/' ? '' : '..', file), yield)).digest('hex'));
-	} catch (e) {
-		return cb(e);
-	}
-});
-global.addVersionNonces = o(function*(str, pn, cb) {
-	for (let i = 0; i < str.length; i++) {
-		if (str.substr(i).match(/^\.[A-z]{1,8}"/)) {
-			while (str[i] && str[i] != '"') i++;
-			let substr = str.substr(0, i).match(/"[^"]+?$/)[0].substr(1);
-			if (substr.includes('.com') || substr.includes(':')) continue;
-			try {
-				str = str.substr(0, i) + '?v=' + (yield getVersionNonce(pn, substr, yield)) + str.substr(i);
-			} catch (e) {
-				console.error(e);
+const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+const o = require('yield-yield');
+
+// Helper functions
+/* eslint-disable no-extend-native */
+module.exports = function () {
+	String.prototype.replaceAll = function (find, replace) {
+		// Replace all occurences of {find} with {replace}
+		if (typeof find === 'string') return this.split(find).join(replace);
+		let t = this;
+		let i = find.shift();
+		let j = replace.shift();
+		while (typeof (i) === 'string' && typeof (j) === 'string') {
+			i = find.shift();
+			j = replace.shift();
+			t = t.replaceAll(i || '', j || '');
+		}
+		return t;
+	};
+	String.prototype.repeat = function (num) {
+		// Repeat a string {num} times
+		return new Array(++num).join(this);
+	};
+	Number.prototype.bound = function (l, h) {
+		return isNaN(h) ? Math.min(this, l) : Math.max(Math.min(this, h), l);
+	};
+	/* eslint-enable no-extend-native */
+
+	this.mime = {
+		'.html': 'text/html',
+		'.css': 'text/css',
+		'.js': 'text/javascript',
+		'.pathnameg': 'image/pathnameg',
+		'.svg': 'image/svg+xml',
+		'.mp3': 'audio/mpeg',
+		'.ico': 'image/x-icon',
+	};
+
+	this.html = function (input) {
+		// Parse and convert an HTML string
+		return input.toString().replaceAll(
+			['&', '<', '>', '"', '\t', '\n', '\b'],
+			['&amp;', '&lt;', '&gt;', '&quot;', '&#9;', '&#10;', '']
+		);
+	};
+
+	this.getVersionNonce = o(function* (pathname, file, callback) {
+		// Get a unique cache version number given a file path
+		try {
+			return callback(null, crypto.createHash('md5')
+			.update(yield fs.readFile(
+				`http${path.resolve(pathname, pathname[pathname.length - 1] === '/' ? '' : '..', file)}`, yield))
+			.digest('hex'));
+		} catch (e) {
+			return callback(e);
+		}
+	});
+
+	this.addVersionNonces = o(function* (str, pathname, callback) {
+		// Add version nonce to a given file path
+		for (let i = 0; i < str.length; i++) {
+			if (str.substr(i).match(/^\.[A-z]{1,8}"/)) {
+				while (str[i] && str[i] !== '"') i++;
+				const substr = str.substr(0, i).match(/"[^"]+?$/)[0].substr(1);
+				if (substr.includes(':')) throw new Error('Invalid version nonce URI.');
+				try {
+					str = `${str.substr(0, i)}?v=${(
+						yield this.getVersionNonce(pathname, substr, yield))}${str.substr(i)}`;
+				} catch (e) {
+					console.error(e);
+				}
 			}
 		}
-	}
-	cb(null, str);
-});
-global.generateID = function() {
-	return crypto.randomBytes(21).toString('base64').replaceAll(['+', '/'], ['!', '_']);
+		callback(null, str);
+	});
+
+	this.generateID = function () {
+		return crypto.randomBytes(21).toString('base64').replaceAll(['+', '/'], ['!', '_']);
+	};
 };
