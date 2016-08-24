@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import TextInput from '../../shared/TextInput.jsx';
+import Spinner from '../../shared/Spinner.jsx';
 import { joinGameRequest, joinCrewRequest } from './actions';
 
 class JoinGameFormDisplay extends Component {
@@ -33,6 +34,7 @@ class JoinGameFormDisplay extends Component {
 		}
 	}
 	render() {
+		if (this.props.pending) return <Spinner />;
 		switch (this.props.boardingStatus) {
 		case 'joiningGame':
 		default:
@@ -96,10 +98,12 @@ JoinGameFormDisplay.propTypes = {
 	joinGameRequest: PropTypes.func.isRequired,
 	joinCrewRequest: PropTypes.func.isRequired,
 	socket: PropTypes.instanceOf(WebSocket).isRequired,
+	pending: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
 	boardingStatus: state.boarding.status,
+	pending: state.boarding.pending,
 });
 
 const mapDispatchToProps = (dispatch) => ({

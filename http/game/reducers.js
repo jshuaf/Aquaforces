@@ -7,7 +7,7 @@ const initialBoardingState = {
 	gameID: null,
 	username: null,
 	crewNumber: null,
-	pendingRequest: false,
+	pending: false,
 };
 
 function boarding(state = initialBoardingState, action) {
@@ -15,17 +15,17 @@ function boarding(state = initialBoardingState, action) {
 	case boardingActions.JOIN_GAME_REQUEST:
 	case boardingActions.JOIN_CREW_REQUEST:
 		return Object.assign({}, state, {
-			pendingRequest: true,
+			pending: true,
 		});
 	case boardingActions.JOIN_GAME_SUCCESS:
 		return Object.assign({}, state, action, {
-			pendingRequest: false,
+			pending: false,
 			status: 'joiningCrew',
 			type: undefined,
 		});
 	case boardingActions.JOIN_CREW_SUCCESS:
 		return Object.assign({}, state, action, {
-			pendingRequest: false,
+			pending: false,
 			status: 'joined',
 			type: undefined,
 		});
