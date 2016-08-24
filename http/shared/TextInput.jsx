@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 
 export default class TextInput extends Component {
 	constructor(props) {
 		super(props);
-		this.error = this.error.bind(this);
 		this.state = {
 			errorMessage: null,
 		};
+		autoBind(this);
 	}
 	error(errorMessage) {
 		this.setState({ errorMessage });
@@ -58,7 +59,6 @@ export default class TextInput extends Component {
 					ref={(i) => { this.node = i; }} style={inputStyle} {...this.props}
 				/>
 			{errorDiv}
-				{}
 			</div>
 		);
 	}

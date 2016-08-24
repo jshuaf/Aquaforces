@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import TextInput from '../../shared/TextInput.jsx';
 import { joinGameRequest, joinCrewRequest } from './actions';
@@ -6,7 +7,8 @@ import { joinGameRequest, joinCrewRequest } from './actions';
 class JoinGameFormDisplay extends Component {
 	constructor(props) {
 		super(props);
-		this.onSubmit = this.onSubmit.bind(this);
+		autoBind(this);
+		this.usernameField = null;
 	}
 	onSubmit() {
 		const formData = {};
@@ -43,11 +45,13 @@ class JoinGameFormDisplay extends Component {
 						<div className="six columns text-center">
 							<img className="navbar-logo" src="/img/logo-black.svg" alt="Aquaforces" />
 							<TextInput
-								placeholder="1234" label="Game number" name="gameID"
+								placeholder="1234" label="Game number" name="gameID" autofocus
 								type="number" min="0" max="9999" required autoComplete="off"
+								isComplete={t => t.length === 4}
+								onComplete={() => { if (this.usernameField) this.usernameField.focus(); }}
 							/>
 							<TextInput
-								placeholder="Michael Phelps" name="username"
+								placeholder="Michael Phelps" name="username" ref={(u) => { this.usernameField = u; }}
 								label="Username" type="text" required autoComplete="off"
 							/>
 							<input
@@ -73,7 +77,7 @@ class JoinGameFormDisplay extends Component {
 					<div className="row">
 						<div className="four columns text-center">
 							<TextInput
-								type="number" min="1" max="12" autoComplete="off"
+								type="number" min="1" max="12" autoComplete="off" autofocus
 								label="Crew number" placeholder="4" name="crewNumber"
 							/>
 							<input
