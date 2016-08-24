@@ -10,8 +10,10 @@ export default class TextInput extends Component {
 		autoBind(this);
 	}
 	onChange() {
-		const text = this.node.value;
-		if (this.props.isComplete(text)) this.props.onComplete();
+		if (this.props.isComplete && this.props.onComplete) {
+			const text = this.node.value;
+			if (this.props.isComplete(text)) this.props.onComplete();
+		}
 	}
 	error(errorMessage) {
 		this.setState({ errorMessage });
@@ -57,7 +59,9 @@ export default class TextInput extends Component {
 				<span style={errorMessageStyle}>{this.state.errorMessage}</span>
 			</div> : undefined;
 
+		/* eslint-disable no-unused-vars */
 		const { onComplete, isComplete, ...inputProps } = this.props;
+		/* eslint-enable no-unused-vars */
 
 		return (
 			<div className="textInput" style={containerStyle}>

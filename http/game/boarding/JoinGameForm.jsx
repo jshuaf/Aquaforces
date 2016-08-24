@@ -48,7 +48,7 @@ class JoinGameFormDisplay extends Component {
 								placeholder="1234" label="Game number" name="gameID" autoFocus
 								type="number" min="0" max="9999" required autoComplete="off"
 								isComplete={t => t.length === 4}
-								onComplete={() => { if (this.usernameField) this.usernameField.focus(); }}
+								onComplete={() => { if (this.usernameField) this.usernameField.node.focus(); }}
 							/>
 							<TextInput
 								placeholder="Michael Phelps" name="username" ref={(u) => { this.usernameField = u; }}
