@@ -45,7 +45,7 @@ class JoinGameFormDisplay extends Component {
 						<div className="six columns text-center">
 							<img className="navbar-logo" src="/img/logo-black.svg" alt="Aquaforces" />
 							<TextInput
-								placeholder="1234" label="Game number" name="gameID" autofocus
+								placeholder="1234" label="Game number" name="gameID" autoFocus
 								type="number" min="0" max="9999" required autoComplete="off"
 								isComplete={t => t.length === 4}
 								onComplete={() => { if (this.usernameField) this.usernameField.focus(); }}
@@ -77,7 +77,7 @@ class JoinGameFormDisplay extends Component {
 					<div className="row">
 						<div className="four columns text-center">
 							<TextInput
-								type="number" min="1" max="12" autoComplete="off" autofocus
+								type="number" min="1" max="12" autoComplete="off" autoFocus
 								label="Crew number" placeholder="4" name="crewNumber"
 							/>
 							<input
