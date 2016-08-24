@@ -5,6 +5,8 @@ import TextInput from '../shared/TextInput.jsx';
 import Checkbox from '../shared/Checkbox.jsx';
 import { editSetTitle, toggleSetPrivacy, addSet } from './actions';
 
+/* global sweetAlert:true */
+
 const request = require('request');
 
 class NewSetForm extends Component {
@@ -30,8 +32,9 @@ class NewSetForm extends Component {
 			method: 'post',
 			json: true,
 			body: set,
-		}, (error) => {
+		}, (error, res) => {
 			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			this.props.addSet(set);
 		});
 	}

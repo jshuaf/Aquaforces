@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import Question from './Question.jsx';
 import { deleteSet } from './actions';
 
+/* global sweetAlert:true */
+
 const request = require('request');
 
 class QuestionSet extends Component {
@@ -17,8 +19,9 @@ class QuestionSet extends Component {
 			method: 'post',
 			json: true,
 			body: { id: this.props._id },
-		}, (error) => {
+		}, (error, res) => {
 			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			this.props.deleteSet(this.props._id);
 		});
 	}

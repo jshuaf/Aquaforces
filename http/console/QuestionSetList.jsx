@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { populateQuestionSetList } from './actions';
 import QuestionSet from './QuestionSet.jsx';
 
+/* global sweetAlert:true */
+
 const request = require('request');
 
 class QuestionSetList extends Component {
@@ -13,8 +15,9 @@ class QuestionSetList extends Component {
 			body: {},
 			json: true,
 			method: 'post',
-		}, (error, response, body) => {
+		}, (error, res, body) => {
 			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			this.props.populateQuestionSetList(body);
 		});
 	}

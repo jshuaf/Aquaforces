@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { populateQuestionSetList, updateSelectedSet } from './actions';
 
+/* global sweetAlert:true */
+
 const request = require('request');
 
 class QuestionSetPickerDisplay extends Component {
@@ -17,8 +19,9 @@ class QuestionSetPickerDisplay extends Component {
 			body: {},
 			json: true,
 			method: 'post',
-		}, (error, response, body) => {
+		}, (error, res, body) => {
 			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			this.props.populateQuestionSetList(body);
 			this.props.updateSelectedSet(this.props.questionSets[0]);
 		});
