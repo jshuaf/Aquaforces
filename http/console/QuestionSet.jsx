@@ -36,11 +36,9 @@ class QuestionSet extends Component {
 	}
 }
 
-QuestionSet.propTypes = {
-	deleteSet: PropTypes.func.isRequired,
+export const questionSetPropTypes = {
 	_id: PropTypes.string.isRequired,
 	title: PropTypes.string.isRequired,
-	nextQuestionID: PropTypes.number.isRequired,
 	questions: PropTypes.arrayOf(PropTypes.shape({
 		text: PropTypes.string.isRequired,
 		correctAnswer: PropTypes.string.isRequired,
@@ -52,6 +50,10 @@ QuestionSet.propTypes = {
 	})).isRequired,
 	privacy: PropTypes.bool.isRequired,
 };
+
+QuestionSet.propTypes = Object.assign({
+	deleteSet: PropTypes.func.isRequired,
+}, questionSetPropTypes);
 
 const mapDispatchToProps = (dispatch) => ({
 	deleteSet: (id) => {
