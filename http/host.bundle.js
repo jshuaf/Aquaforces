@@ -77662,6 +77662,9 @@
 			value: function render() {
 				var _this2 = this;
 	
+				if (this.props.gameInfo.pending) {
+					return _react2.default.createElement('img', { src: '../img/animations/loading.svg', alt: 'Loading...' });
+				}
 				switch (this.props.gameInfo.status) {
 					case 'notStarted':
 						return _react2.default.createElement(
@@ -77738,6 +77741,7 @@
 		startGameRequest: _react.PropTypes.func.isRequired,
 		gameInfo: _react.PropTypes.shape({
 			status: _react.PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
+			pending: _react.PropTypes.bool.isRequired,
 			gameID: _react.PropTypes.number
 		}).isRequired,
 		socket: _react.PropTypes.instanceOf(WebSocket).isRequired,
