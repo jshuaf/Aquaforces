@@ -33,6 +33,10 @@ function boarding(state = initialBoardingState, action) {
 		return Object.assign({}, state, {
 			status: 'started',
 		});
+	case boardingActions.STOP_PENDING:
+		return Object.assign({}, state, {
+			pending: false,
+		});
 	default:
 		return state;
 	}

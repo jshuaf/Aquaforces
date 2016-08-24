@@ -33,6 +33,7 @@ socket.onmessage = function (m) {
 
 	switch (message.event) {
 	case 'error':
+		store.dispatch(stopPending());
 		return sweetAlert(message.title, message.text, 'error');
 	case 'joinGame':
 		return store.dispatch(joinGameSuccess(message.gameID, message.username));
