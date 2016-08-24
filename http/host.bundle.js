@@ -78578,9 +78578,10 @@
 			{ style: centerStyle },
 			_react2.default.createElement(
 				'div',
-				{ className: 'sk-chasing-dots' },
-				_react2.default.createElement('div', { className: 'sk-child sk-dot1' }),
-				_react2.default.createElement('div', { className: 'sk-child sk-dot2' })
+				{ className: 'spinner' },
+				_react2.default.createElement('div', { className: 'bounce1' }),
+				_react2.default.createElement('div', { className: 'bounce2' }),
+				_react2.default.createElement('div', { className: 'bounce3' })
 			)
 		);
 	}

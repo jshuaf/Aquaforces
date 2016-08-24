@@ -10,9 +10,10 @@ export default function Spinner() {
 	};
 	return (
 		<div style={centerStyle}>
-			<div className="sk-chasing-dots">
-				<div className="sk-child sk-dot1" />
-				<div className="sk-child sk-dot2" />
+			<div className="spinner">
+				<div className="bounce1" />
+				<div className="bounce2" />
+				<div className="bounce3" />
 			</div>
 		</div>
 	);
