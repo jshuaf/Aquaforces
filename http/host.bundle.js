@@ -77663,7 +77663,12 @@
 				var _this2 = this;
 	
 				if (this.props.gameInfo.pending) {
-					return _react2.default.createElement('img', { src: '../img/animations/loading.svg', alt: 'Loading...' });
+					return _react2.default.createElement(
+						'div',
+						{ className: 'sk-chasing-dots' },
+						_react2.default.createElement('div', { className: 'sk-child sk-dot1' }),
+						_react2.default.createElement('div', { className: 'sk-child sk-dot2' })
+					);
 				}
 				switch (this.props.gameInfo.status) {
 					case 'notStarted':
