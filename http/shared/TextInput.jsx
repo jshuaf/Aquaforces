@@ -9,6 +9,10 @@ export default class TextInput extends Component {
 		};
 		autoBind(this);
 	}
+	onChange() {
+		const text = this.node.value;
+		if (this.props.isComplete(text)) this.props.onComplete();
+	}
 	error(errorMessage) {
 		this.setState({ errorMessage });
 	}
@@ -52,11 +56,15 @@ export default class TextInput extends Component {
 				<img src="../img/icons/exclamation.svg" alt="" style={errorIconStyle} />
 				<span style={errorMessageStyle}>{this.state.errorMessage}</span>
 			</div> : undefined;
+
+		const { onComplete, isComplete, ...inputProps } = this.props;
+
 		return (
 			<div className="textInput" style={containerStyle}>
 				<span style={labelStyle}>{this.props.label}</span>
 				<input
-					ref={(i) => { this.node = i; }} style={inputStyle} {...this.props}
+					ref={(i) => { this.node = i; }} style={inputStyle} {...inputProps}
+					onChange={this.onChange}
 				/>
 			{errorDiv}
 			</div>
@@ -67,4 +75,6 @@ export default class TextInput extends Component {
 TextInput.propTypes = {
 	placeholder: PropTypes.string,
 	label: PropTypes.string.isRequired,
+	isComplete: PropTypes.func,
+	onComplete: PropTypes.func,
 };
