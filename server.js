@@ -292,7 +292,7 @@ const serverHandler = o(function* (req, res) {
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath === '/login/google' && !usesIODomain) {
 		// Redirect URI after attempted Google login
-		const tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?clientID=' + config.googleAuth.clientID + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
+		const tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.clientID + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
 		if (req.url.query.error) {
 			yield respondPage('Login Error', req, res, yield, {}, 400);
 			res.write('<h1>Login Error</h1>');
@@ -306,9 +306,9 @@ const serverHandler = o(function* (req, res) {
 			res.write('<p>No authentication code was received. ' + tryagain + '</p>');
 			return res.end(yield fs.readFile('html/a/foot.html', yield));
 		}
-		const googReq = https.request({
-			hostname: 'accounts.google.com',
-			path: '/o/oauth2/token',
+		const googleReq = https.request({
+			hostname: 'www.googleapis.com',
+			path: '/oauth2/v4/token',
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
@@ -335,7 +335,6 @@ const serverHandler = o(function* (req, res) {
 				res.write(errorsHTML([data.error + ': ' + data.error_description]));
 				return res.end(yield fs.readFile('html/a/foot.html', yield));
 			}
-			console.log('/plus/v1/people/me?key=' + encodeURIComponent(data.access_token));
 			const apiReq = https.get({
 				hostname: 'www.googleapis.com',
 				path: '/plus/v1/people/me?access_token=' + encodeURIComponent(data.access_token),
@@ -348,19 +347,18 @@ const serverHandler = o(function* (req, res) {
 				try {
 					apiData = JSON.parse(apiData);
 				} catch (e) {
-					yield respondPage('Login Error', user, req, res, yield, {}, 500);
+					yield respondPage('Login Error', req, res, yield, {}, 500);
 					res.write('<h1>Login Error</h1>');
 					res.write('<p>An invalid response was received from the Google API. ' + tryagain + '</p>');
 					res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
 				if (apiData.error) {
-					yield respondPage('Login Error', user, req, res, yield, {}, 500);
+					yield respondPage('Login Error', req, res, yield, {}, 500);
 					res.write('<h1>Login Error</h1>');
 					res.write('<p>An error was received from the Google API. ' + tryagain + '</p>');
 					res.write(errorsHTML([apiData.error + ': ' + apiData.error_description]));
 					return res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
-				console.log(apiData);
 
 				// Store the user in the database and create a unique token
 				const matchUser = yield dbcs.users.findOne({ googleID: apiData.id }, yield);
@@ -400,14 +398,14 @@ const serverHandler = o(function* (req, res) {
 				res.end();
 			}));
 			apiReq.on('error', o(function* (e) {
-				yield respondPage('Login Error', user, req, res, yield, {}, 500);
+				yield respondPage('Login Error', req, res, yield, {}, 500);
 				res.write('<h1>Login Error</h1>');
 				res.write('<p>HTTP error when connecting to the Google API: ' + e + ' ' + tryagain + '</p>');
 				res.end(yield fs.readFile('html/a/foot.html', yield));
 			}));
 		}));
-		googReq.end('clientID=' + config.googleAuth.clientID + '&clientSecret=' + config.googleAuth.clientSecret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
-		googReq.on('error', o(function* (e) {
+		googleReq.end('client_id=' + config.googleAuth.clientID + '&client_secret=' + config.googleAuth.clientSecret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
+		googleReq.on('error', o(function* (e) {
 			yield respondPage('Login Error', req, res, yield, {}, 500);
 			res.write('<h1>Login Error</h1>');
 			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
