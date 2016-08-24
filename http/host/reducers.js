@@ -26,6 +26,10 @@ function gameInfo(state = initialGameInfoState, action) {
 			status: 'inProgress',
 			pending: false,
 		});
+	case actions.STOP_PENDING:
+		return Object.assign({}, state, {
+			pending: false,
+		});
 	default:
 		return state;
 	}

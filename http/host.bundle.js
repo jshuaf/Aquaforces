@@ -100,6 +100,7 @@
 	
 		switch (message.event) {
 			case 'error':
+				store.dispatch((0, _actions.stopPending)());
 				return sweetAlert(message.title, message.text, 'error');
 			case 'newGameID':
 				document.getElementsByTagName('title')[0].innerHTML = 'Game ' + message.id + ' · Aquaforces';
@@ -77958,6 +77959,7 @@
 	var START_GAME_REQUEST = exports.START_GAME_REQUEST = 'START_GAME_REQUEST';
 	var START_GAME_SUCCESS = exports.START_GAME_SUCCESS = 'START_GAME_SUCCESS';
 	var POPULATE_INITIAL_CREW_DATA = exports.POPULATE_INITIAL_CREW_DATA = 'POPULATE_INITIAL_CREW_DATA';
+	var STOP_PENDING = exports.STOP_PENDING = 'STOP_PENDING';
 	
 	function makeActionCreator(type) {
 		for (var _len = arguments.length, argNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -77987,6 +77989,7 @@
 	var startGameRequest = exports.startGameRequest = makeActionCreator(START_GAME_REQUEST);
 	var startGameSuccess = exports.startGameSuccess = makeActionCreator(START_GAME_SUCCESS);
 	var populateInitialCrewData = exports.populateInitialCrewData = makeActionCreator(POPULATE_INITIAL_CREW_DATA, 'crews');
+	var stopPending = exports.stopPending = makeActionCreator(STOP_PENDING);
 
 /***/ },
 /* 440 */
@@ -78430,6 +78433,10 @@
 			case actions.START_GAME_SUCCESS:
 				return Object.assign({}, state, {
 					status: 'inProgress',
+					pending: false
+				});
+			case actions.STOP_PENDING:
+				return Object.assign({}, state, {
 					pending: false
 				});
 			default:
