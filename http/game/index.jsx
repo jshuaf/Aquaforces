@@ -4,7 +4,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Game from './Game.jsx';
 import gameReducer from './reducers';
-import { joinGameSuccess, joinCrewSuccess, populateInitialGameData, startGame } from './boarding/actions';
+import { joinGameSuccess, joinCrewSuccess, populateInitialGameData, startGame, stopPending } from './boarding/actions';
 
 /* global sweetAlert: true */
 
