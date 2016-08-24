@@ -415,7 +415,7 @@ const serverHandler = o(function* (req, res) {
 		}));
 	} else if (reqPath === '/stats/' && !usesIODomain) {
 		// Rudimentary statistics
-		if (!user.admin) return errorNotFound(req, res);
+		if (!user || !user.admin) return errorNotFound(req, res);
 		yield respondPage('Statistics', req, res, yield, {}, 400);
 		dbcs.gameplays.aggregate({ $match: {} }, { $group: { _id: 'stats', num: { $sum: 1 }, sum: { $sum: '$participants' } } }, o(function* (err, result) {
 			if (err) throw err;
@@ -490,7 +490,6 @@ mongo.connect(config.mongoPath, (err, db) => {
 			});
 			testRes.on('end', () => {
 				console.log('HTTP test passed, starting socket test.'.green);
-				console.log(config.port);
 				const wsc = new WS(`ws://localhost:${config.port}/test`);
 				wsc.on('open', () => {
 					console.log('Connected to socket.');
