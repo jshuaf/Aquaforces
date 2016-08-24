@@ -99,6 +99,10 @@ section {
 	}
 }
 
+body {
+	margin: 0;
+}
+
 input[type=tel], input[type=url], input[type=password], input[type=email], input[type=number], input[type=search], input[type=text], select, textarea, input {
 	color: #212f3c;
 	font-size: 1.5rem;
@@ -544,4 +548,3 @@ h2 {
 	-webkit-animation-name: bounceoutup;
 	animation-name: bounceoutup;
 }
-
