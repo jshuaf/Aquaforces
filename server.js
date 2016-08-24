@@ -281,8 +281,6 @@ const serverHandler = o(function* (req, res) {
 					.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
 					.replaceAll('$host', encodeURIComponent(`http://${req.headers.host}`))
 					.replaceAll('$googleClientID', config.googleAuth.clientID);
-				if (user) data = data.replace(/<a class="signin-link"[\s\S]+?<\/a>/, '<a id="menu-stub">' + html(user.name) + '</a>').replace('<nav>', '<nav class="loggedin">');
-				else data = data.replace('id="filter"', 'id="filter" hidden=""');
 				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
 				res.write(data);
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
@@ -430,7 +428,7 @@ const serverHandler = o(function* (req, res) {
 		});
 		child.stdout.on('end', o(function* () {
 			res.write('</p>');
-			if (user.name) res.write(`<p>You are logged in as <strong>'${user.name}'</strong></p>`);
+			if (user.name) res.write('<p>You are logged in.</strong></p>');
 			else res.write('<p>You are not logged in</p>');
 			res.write(`<p>Current host header is <strong>'${req.headers.host}'</strong></p>`);
 			res.write('<code class="blk" id="socket-test">Connecting to socket…</code>');
