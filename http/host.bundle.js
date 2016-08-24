@@ -77617,6 +77617,10 @@
 	
 	var _GamePlayHost2 = _interopRequireDefault(_GamePlayHost);
 	
+	var _Spinner = __webpack_require__(/*! ../shared/Spinner.jsx */ 444);
+	
+	var _Spinner2 = _interopRequireDefault(_Spinner);
+	
 	var _actions = __webpack_require__(/*! ./actions */ 439);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -77663,12 +77667,7 @@
 				var _this2 = this;
 	
 				if (this.props.gameInfo.pending) {
-					return _react2.default.createElement(
-						'div',
-						{ className: 'sk-chasing-dots' },
-						_react2.default.createElement('div', { className: 'sk-child sk-dot1' }),
-						_react2.default.createElement('div', { className: 'sk-child sk-dot2' })
-					);
+					return _react2.default.createElement(_Spinner2.default, null);
 				}
 				switch (this.props.gameInfo.status) {
 					case 'notStarted':
@@ -78538,6 +78537,46 @@
 	
 	var gameHostReducer = (0, _redux.combineReducers)({ gameInfo: gameInfo, boarding: boarding, gameHost: gameHost });
 	exports.default = gameHostReducer;
+
+/***/ },
+/* 444 */
+/*!*********************************!*\
+  !*** ./http/shared/Spinner.jsx ***!
+  \*********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = Spinner;
+	
+	var _react = __webpack_require__(/*! react */ 174);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function Spinner() {
+		var centerStyle = {
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			width: '100vw',
+			height: '50vh'
+		};
+		return _react2.default.createElement(
+			'div',
+			{ style: centerStyle },
+			_react2.default.createElement(
+				'div',
+				{ className: 'sk-chasing-dots' },
+				_react2.default.createElement('div', { className: 'sk-child sk-dot1' }),
+				_react2.default.createElement('div', { className: 'sk-child sk-dot2' })
+			)
+		);
+	}
 
 /***/ }
 /******/ ]);
