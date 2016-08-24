@@ -33,7 +33,8 @@ const http = require('http'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient,
 	WS = require('ws'),
-	o = require('yield-yield');
+	o = require('yield-yield'),
+	jwt = require('jsonwebtoken');
 	/* eslint-enable one-var */
 
 // Response Pages
@@ -111,6 +112,7 @@ const serverHandler = o(function* (req, res) {
 	const usesIODomain = reqPath.includes('.io');
 
 	// Find the logged-in user
+	// Check that the token was created more recently than 30 days ago
 	const user = yield dbcs.users.findOne({
 		cookie: {
 			$elemMatch: {
@@ -356,38 +358,33 @@ const serverHandler = o(function* (req, res) {
 					yield respondPage('Login Error', req, res, yield, {}, 500);
 					res.write('<h1>Login Error</h1>');
 					res.write('<p>An error was received from the Google API. ' + tryagain + '</p>');
-					res.write(errorsHTML([apiData.error + ': ' + apiData.error_description]));
+					res.write(errorsHTML([apiData.error.message]));
 					return res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
 
 				// Store the user in the database and create a unique token
-				const matchUser = yield dbcs.users.findOne({ googleID: apiData.id }, yield);
+				const decodedToken = jwt.decode(data.id_token);
+				const matchedUser = yield dbcs.users.findOne({ googleID: decodedToken.payload.sub }, yield);
 				const idToken = crypto.randomBytes(128).toString('base64');
-				if (matchUser) {
-					dbcs.users.update({ googleID: apiData.id }, {
+				if (matchedUser) {
+					dbcs.users.update({ googleID: decodedToken.payload.sub }, {
 						$push: {
-							cookie: {
-								token: idToken,
-								created: new Date().getTime(),
-							},
+							cookie: { token: idToken, created: new Date().getTime() },
 						},
-						$set: { googleName: apiData.login },
+						$set: { personalInfo: apiData },
 					});
 				} else {
 					dbcs.users.insert({
 						_id: generateID(),
-						cookie: [{
-							token: idToken,
-							created: new Date().getTime(),
-						}],
-						googleID: apiData.id,
-						name: apiData.displayName,
+						cookie: [{ token: idToken, created: new Date().getTime() }],
+						googleID: decodedToken.payload.sub,
+						personalInfo: apiData,
 					});
 				}
 
-				// Finally, redirect to the host screen if login succeeds
+				// Finally, redirect to the console if login succeeds
 				res.writeHead(303, {
-					Location: '/host/',
+					Location: '/console/',
 					'Set-Cookie': cookie.serialize('id', idToken, {
 						path: '/',
 						expires: new Date(new Date().setDate(new Date().getDate() + 30)),
