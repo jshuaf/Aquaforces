@@ -224,7 +224,7 @@ const serverHandler = o(function* (req, res) {
 			// Redirect user if they're logged in
 			return res.writeHead(303, { Location: '/host/' }) || res.end();
 		}
-		yield respondPage(null, req, res, yield, { inhead: '<link rel="stylesheet" href="/landing.css" />' });
+		yield respondPage(null, req, res, yield, { inhead: '' });
 		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.clientID));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath === '/console/' && !usesIODomain) {
