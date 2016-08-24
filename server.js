@@ -364,10 +364,10 @@ const serverHandler = o(function* (req, res) {
 
 				// Store the user in the database and create a unique token
 				const decodedToken = jwt.decode(data.id_token);
-				const matchedUser = yield dbcs.users.findOne({ googleID: decodedToken.payload.sub }, yield);
+				const matchedUser = yield dbcs.users.findOne({ googleID: decodedToken.sub }, yield);
 				const idToken = crypto.randomBytes(128).toString('base64');
 				if (matchedUser) {
-					dbcs.users.update({ googleID: decodedToken.payload.sub }, {
+					dbcs.users.update({ googleID: decodedToken.sub }, {
 						$push: {
 							cookie: { token: idToken, created: new Date().getTime() },
 						},
@@ -377,7 +377,7 @@ const serverHandler = o(function* (req, res) {
 					dbcs.users.insert({
 						_id: generateID(),
 						cookie: [{ token: idToken, created: new Date().getTime() }],
-						googleID: decodedToken.payload.sub,
+						googleID: decodedToken.sub,
 						personalInfo: apiData,
 					});
 				}
