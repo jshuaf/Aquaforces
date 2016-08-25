@@ -11,7 +11,6 @@ class WhirlpoolFree extends Component {
 	processTap() {
 		this.setState({ tapStreak: this.state.tapStreak + 1 });
 		if (this.state.tapStreak === 5) {
-			console.log('YOU GO!');
 			this.props.socket.send(JSON.stringify({
 				event: 'whirlpoolFiveTapsDetected',
 			}));

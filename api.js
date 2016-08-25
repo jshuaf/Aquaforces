@@ -154,7 +154,6 @@ module.exports = function (req, res, post, user) {
 			} else if (!qset.questions[parseInt(post.num, 10)]) {
 				return res.badRequest('Error: Invalid question number.');
 			}
-			console.log(qset.questions.length);
 			if (!qset.questions.length === 1) {
 				return res.badRequest('Error: You may not remove the only question in a set.');
 			}

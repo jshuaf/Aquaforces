@@ -2,11 +2,9 @@ import { render } from 'react-dom';
 import React from 'react';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-/* eslint-disable import/no-unresolved */
 import Game from './Game.jsx';
-/* eslint-enable import/no-unresolved */
 import gameReducer from './reducers';
-import { joinGameSuccess, joinCrewSuccess, populateInitialGameData, startGame } from './boarding/actions';
+import { joinGameSuccess, joinCrewSuccess, populateInitialGameData, startGame, stopPending } from './boarding/actions';
 
 /* global sweetAlert: true */
 
@@ -29,12 +27,13 @@ socket.onmessage = function (m) {
 	try {
 		message = JSON.parse(m.data);
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return sweetAlert('Socket error.', 'error');
 	}
 
 	switch (message.event) {
 	case 'error':
+		store.dispatch(stopPending());
 		return sweetAlert(message.title, message.text, 'error');
 	case 'joinGame':
 		return store.dispatch(joinGameSuccess(message.gameID, message.username));
@@ -68,7 +67,6 @@ socket.onmessage = function (m) {
 		game.addWhirlpoolQuestion(message.question);
 		break;
 	case 'whirlpoolBonusReceived':
-		console.log('Bonus received');
 		game.setState({ whirlpoolBonus: message.amount });
 		break;
 	case 'whirlpoolConclusion':

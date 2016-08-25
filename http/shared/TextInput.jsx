@@ -1,12 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 
 export default class TextInput extends Component {
 	constructor(props) {
 		super(props);
-		this.error = this.error.bind(this);
 		this.state = {
 			errorMessage: null,
 		};
+		autoBind(this);
+	}
+	onChange() {
+		if (this.props.isComplete && this.props.onComplete) {
+			const text = this.node.value;
+			if (this.props.isComplete(text)) this.props.onComplete();
+		}
 	}
 	error(errorMessage) {
 		this.setState({ errorMessage });
@@ -51,14 +58,19 @@ export default class TextInput extends Component {
 				<img src="../img/icons/exclamation.svg" alt="" style={errorIconStyle} />
 				<span style={errorMessageStyle}>{this.state.errorMessage}</span>
 			</div> : undefined;
+
+		/* eslint-disable no-unused-vars */
+		const { onComplete, isComplete, ...inputProps } = this.props;
+		/* eslint-enable no-unused-vars */
+
 		return (
 			<div className="textInput" style={containerStyle}>
 				<span style={labelStyle}>{this.props.label}</span>
 				<input
-					ref={(i) => { this.node = i; }} style={inputStyle} {...this.props}
+					ref={(i) => { this.node = i; }} style={inputStyle} {...inputProps}
+					onChange={this.onChange}
 				/>
 			{errorDiv}
-				{}
 			</div>
 		);
 	}
@@ -67,4 +79,6 @@ export default class TextInput extends Component {
 TextInput.propTypes = {
 	placeholder: PropTypes.string,
 	label: PropTypes.string.isRequired,
+	isComplete: PropTypes.func,
+	onComplete: PropTypes.func,
 };

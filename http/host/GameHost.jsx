@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionSetPicker from './QuestionSetPicker.jsx';
 import GamePlayHost from './GamePlayHost.jsx';
+import Spinner from '../shared/Spinner.jsx';
+import { questionSetPropTypes } from '../console/QuestionSet.jsx';
 import { newGame, startGameRequest } from './actions';
 
 class GameHostDisplay extends Component {
@@ -24,6 +26,9 @@ class GameHostDisplay extends Component {
 		}));
 	}
 	render() {
+		if (this.props.gameInfo.pending) {
+			return <Spinner />;
+		}
 		switch (this.props.gameInfo.status) {
 		case 'notStarted':
 			return (
@@ -60,24 +65,11 @@ GameHostDisplay.propTypes = {
 	startGameRequest: PropTypes.func.isRequired,
 	gameInfo: PropTypes.shape({
 		status: PropTypes.oneOf(['notStarted', 'boarding', 'inProgress', 'ended']),
+		pending: PropTypes.bool.isRequired,
 		gameID: PropTypes.number,
 	}).isRequired,
 	socket: PropTypes.instanceOf(WebSocket).isRequired,
-	selectedSet: PropTypes.shape({
-		_id: PropTypes.string.isRequired,
-		title: PropTypes.string.isRequired,
-		nextQuestionID: PropTypes.number.isRequired,
-		questions: PropTypes.arrayOf(PropTypes.shape({
-			text: PropTypes.string.isRequired,
-			correctAnswer: PropTypes.string.isRequired,
-			incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
-				text: PropTypes.string.isRequired,
-				id: PropTypes.number.isRequired,
-			})).isRequired,
-			id: PropTypes.number.isRequired,
-		})).isRequired,
-		privacy: PropTypes.bool.isRequired,
-	}),
+	selectedSet: PropTypes.shape(questionSetPropTypes),
 	usersWithoutCrews: PropTypes.arrayOf(PropTypes.string).isRequired,
 	crews: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
 };

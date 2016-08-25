@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import GameHost from './GameHost.jsx';
 import {
 	setGameID, addUserToGame, addUserToCrew,
-	removeUserFromGame, startGameSuccess, populateInitialCrewData } from './actions';
+	removeUserFromGame, startGameSuccess, populateInitialCrewData, stopPending } from './actions';
 import gameHostReducer from './reducers';
 
 /* global sweetAlert: true */
@@ -29,12 +29,13 @@ socket.onmessage = function (m) {
 	try {
 		message = JSON.parse(m.data);
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return sweetAlert('Socket error.', 'error');
 	}
 
 	switch (message.event) {
 	case 'error':
+		store.dispatch(stopPending());
 		return sweetAlert(message.title, message.text, 'error');
 	case 'newGameID':
 		document.getElementsByTagName('title')[0].innerHTML = `Game ${message.id} · Aquaforces`;
