@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux';
 import * as actions from './actions';
 
 const initialQuestionSetState = {
@@ -118,9 +119,5 @@ function questionSets(state = [], action) {
 	}
 }
 
-export default function questionConsoleReducer(state = {}, action) {
-	return {
-		newQuestionSet: newQuestionSet(state.newQuestionSet, action),
-		questionSets: questionSets(state.questionSets, action),
-	};
-}
+const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets });
+export default questionConsoleReducer;
