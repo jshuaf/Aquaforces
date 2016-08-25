@@ -35,7 +35,14 @@ class River extends Component {
 		this.startRiverReflections();
 		// Answers
 		this.updateAnswers();
-		setInterval(this.updateAnswers, 2500);
+		let answerUpdate = setInterval(this.updateAnswers, 2500);
+		window.addEventListener('focus', () => {
+			answerUpdate = setInterval(this.updateAnswers, 2500);
+		}, false);
+
+		window.addEventListener('blur', () => {
+			clearInterval(answerUpdate);
+		}, false);
 	}
 	setRiverWidth() {
 		const river = this.refs.river;
