@@ -2,10 +2,10 @@ module.exports = (tws) => {
 	tws.trysend = (msg) => {
 		try {
 			tws.send(JSON.stringify(msg), (error) => {
-				console.error(error);
+				if (error) console.error('Error sending socket message', error);
 			});
 		} catch (e) {
-			console.error(e);
+			console.error('Error converting message to JSON', msg, e);
 		}
 	};
 
