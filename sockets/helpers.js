@@ -79,17 +79,17 @@ module.exports = (tws) => {
 		const newQuestion = tws.generateNewQuestion();
 		tws.crew().activeQuestions.push({
 			text: newQuestion.text,
-			answer: newQuestion.answer,
+			correctAnswer: newQuestion.correctAnswer,
 			owner: tws,
 		});
 		tws.trysend({
 			event: 'newQuestion',
 			question: newQuestion.text,
 		});
-		const ttws = tws.crew().members[Math.floor(Math.random() * tws.crew().members.length)];
+		const ttws = tws.randomCrewMember();
 		ttws.trysend({
 			event: 'correctAnswer',
-			answer: newQuestion.answer,
+			answer: newQuestion.correctAnswer,
 		});
 		return newQuestion;
 	};

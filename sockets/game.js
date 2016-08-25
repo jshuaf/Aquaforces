@@ -3,7 +3,7 @@ module.exports = (tws, m, games) => {
 	require('./helpers')(tws);
 	/* eslint-enable global-require */
 
-	const maxFuzzyTime = 5000;
+	const maxFuzzyTime = 3000;
 
 	switch (m.event) {
 	case 'joinGame': {
@@ -76,9 +76,9 @@ module.exports = (tws, m, games) => {
 		if (!m.answer) return tws.error('No answer text sent.');
 		const crew = tws.crew();
 
-					// fuzzy answer checking
+		// Fuzzy answer checking
 		crew.recentCorrectAnswers.forEach((pastAnswer) => {
-			if (pastAnswer.time < maxFuzzyTime) {
+			if (Date.now() - pastAnswer.timeAdded < maxFuzzyTime) {
 				if (pastAnswer.text === m.answer) {
 					tws.sendAnswerEvent(true, m.crewNumber, m.answer);
 					if (!tws.crew().rock && !tws.whirlpool) tws.crew().streak += 1;
@@ -91,7 +91,7 @@ module.exports = (tws, m, games) => {
 
 		let correspondingQuestion;
 		tws.crew().activeQuestions.forEach((activeQuestion) => {
-			if (activeQuestion.answer === m.answer) {
+			if (activeQuestion.correctAnswer === m.answer) {
 				correspondingQuestion = activeQuestion;
 				tws.crew().activeQuestions.splice(
 						tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
@@ -109,13 +109,15 @@ module.exports = (tws, m, games) => {
 						});
 					}
 				}
-
-				const newQuestion = correspondingQuestion.owner.addNewQuestion();
-				tws.crew().recentCorrectAnswers.push(newQuestion.answer);
+				tws.crew().recentCorrectAnswers.push({
+					text: correspondingQuestion.correctAnswer,
+					timeAdded: Date.now(),
+				});
+				correspondingQuestion.owner.addNewQuestion();
 			}
 		});
 		if (!correspondingQuestion) {
-						// incorrect answers
+			// Answer selected was incorrect
 			tws.crew().hp -= 5;
 			tws.crew().streak = 0;
 			tws.sendAnswerEvent(false, m.crewNumber, m.answer);
@@ -134,31 +136,31 @@ module.exports = (tws, m, games) => {
 			return tws.error('No question text sent.');
 		}
 
-		let correspondingQuestion = null;
+		let correspondingQuestion;
 		tws.crew().activeQuestions.forEach((activeQuestion) => {
 			if (activeQuestion.text === m.question) {
 				correspondingQuestion = activeQuestion;
 				tws.crew().activeQuestions.splice(
-								tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
-
-				correspondingQuestion.owner.addNewQuestion();
+					tws.crew().activeQuestions.indexOf(correspondingQuestion), 1);
 				tws.crew().streak = 0;
-			} else if (m.event === 'resendAnswer') {
-				tws.checkGameExists();
-				if (typeof m.text !== 'string') {
-					return tws.error('No answer text sent.');
-				}
-				const crew = tws.crew();
-				const ttws = crew.members[Math.floor(Math.random() * crew.members.length)];
-				ttws.trysend({
-					event: 'correctAnswer',
-					answer: m.answer,
-				});
+				return correspondingQuestion.owner.addNewQuestion();
 			}
 		});
 		if (!correspondingQuestion) {
 			tws.error('Unknown question timed out.');
 		}
+		break;
+	}
+	case 'resendAnswer': {
+		tws.checkGameExists();
+		if (typeof m.text !== 'string') {
+			return tws.error('No answer text sent.');
+		}
+		const ttws = tws.randomCrewMember();
+		ttws.trysend({
+			event: 'correctAnswer',
+			answer: m.answer,
+		});
 		break;
 	}
 	case 'whirlpoolQuestionTimeout': {
