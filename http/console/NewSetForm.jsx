@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import Checkbox from '../shared/Checkbox.jsx';
+import { questionSetPropTypes } from './QuestionSet.jsx';
 import { editSetTitle, toggleSetPrivacy, addSet } from './actions';
 
 /* global sweetAlert:true */
@@ -62,20 +63,7 @@ NewSetForm.propTypes = {
 	editSetTitle: PropTypes.func.isRequired,
 	toggleSetPrivacy: PropTypes.func.isRequired,
 	addSet: PropTypes.func.isRequired,
-	newQuestionSet: PropTypes.shape({
-		title: PropTypes.string.isRequired,
-		nextQuestionID: PropTypes.number.isRequired,
-		questions: PropTypes.arrayOf(PropTypes.shape({
-			text: PropTypes.string.isRequired,
-			correctAnswer: PropTypes.string.isRequired,
-			incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
-				text: PropTypes.string.isRequired,
-				id: PropTypes.number.isRequired,
-			})).isRequired,
-			id: PropTypes.number.isRequired,
-		})).isRequired,
-		privacy: PropTypes.bool.isRequired,
-	}),
+	newQuestionSet: PropTypes.shape(questionSetPropTypes),
 };
 
 const mapStateToProps = (state) => ({
