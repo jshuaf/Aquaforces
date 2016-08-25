@@ -29,7 +29,7 @@ class QuestionSetPickerDisplay extends Component {
 	render() {
 		return (
 			<div id="questionSetPicker">
-				<h5>Pick a question set to use.</h5>
+				<h1>Pick a question set</h1>
 				<select ref={(s) => { this.picker = s; }} onChange={this.updateSelectedSet}>
 					{
 						this.props.questionSets.map((questionSet, index) =>

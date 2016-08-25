@@ -29,13 +29,13 @@ class GameHostDisplay extends Component {
 			return (
 				<div id="gameHost">
 					<QuestionSetPicker />
-					<button onClick={this.newGame}>New game</button>
+					<button className="button button-primary" onClick={this.newGame}>New game</button>
 				</div>
 			);
 		case 'boarding':
 			return (
 				<div id="gameHost">
-					<h2>{this.props.gameInfo.gameID}</h2>
+					<h1>Your game ID is: {this.props.gameInfo.gameID}</h1>
 					<h4>Users without crews:</h4>
 					{this.props.usersWithoutCrews.map((user, index) => <p key={index}>{user}</p>)}
 					<h4>Crews:</h4>
@@ -44,7 +44,7 @@ class GameHostDisplay extends Component {
 							<p key={index}>User {user} is in crew {key}</p>
 						)
 					)}
-					<button onClick={this.startGame}>Start game</button>
+					<button className="button button-primary" onClick={this.startGame}>Start game</button>
 				</div>
 			);
 		case 'inProgress':
