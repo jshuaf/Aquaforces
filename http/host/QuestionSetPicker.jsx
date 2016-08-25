@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { questionSetPropTypes } from '../console/QuestionSet.jsx';
 import { populateQuestionSetList, updateSelectedSet } from './actions';
 
 /* global sweetAlert:true */
@@ -48,20 +49,7 @@ class QuestionSetPickerDisplay extends Component {
 QuestionSetPickerDisplay.propTypes = {
 	populateQuestionSetList: PropTypes.func.isRequired,
 	updateSelectedSet: PropTypes.func.isRequired,
-	questionSets: PropTypes.arrayOf(PropTypes.shape({
-		title: PropTypes.string.isRequired,
-		nextQuestionID: PropTypes.number.isRequired,
-		questions: PropTypes.arrayOf(PropTypes.shape({
-			text: PropTypes.string.isRequired,
-			correctAnswer: PropTypes.string.isRequired,
-			incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
-				text: PropTypes.string.isRequired,
-				id: PropTypes.number.isRequired,
-			})).isRequired,
-			id: PropTypes.number.isRequired,
-		})).isRequired,
-		privacy: PropTypes.bool.isRequired,
-	})).isRequired,
+	questionSets: PropTypes.arrayOf(PropTypes.shape(questionSetPropTypes)).isRequired,
 };
 
 const mapStateToProps = (state) => ({

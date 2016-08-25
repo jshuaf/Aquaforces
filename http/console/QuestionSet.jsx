@@ -40,6 +40,7 @@ class QuestionSet extends Component {
 }
 
 export const questionSetPropTypes = {
+	_id: PropTypes.string.isRequired,
 	title: PropTypes.string.isRequired,
 	questions: PropTypes.arrayOf(PropTypes.shape({
 		text: PropTypes.string.isRequired,

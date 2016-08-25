@@ -59,11 +59,13 @@ class NewSetForm extends Component {
 	}
 }
 
+delete questionSetPropTypes._id;
+
 NewSetForm.propTypes = {
 	editSetTitle: PropTypes.func.isRequired,
 	toggleSetPrivacy: PropTypes.func.isRequired,
 	addSet: PropTypes.func.isRequired,
-	newQuestionSet: PropTypes.shape(questionSetPropTypes),
+	newQuestionSet: PropTypes.shape(questionSetPropTypes).isRequired,
 };
 
 const mapStateToProps = (state) => ({
