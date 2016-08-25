@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import QuestionSet, { questionSetPropTypes } from './QuestionSet.jsx';
 import { populateQuestionSetList } from './actions';
-import QuestionSet from './QuestionSet.jsx';
+
+/* global sweetAlert:true */
 
 const request = require('request');
 
@@ -13,8 +15,9 @@ class QuestionSetList extends Component {
 			body: {},
 			json: true,
 			method: 'post',
-		}, (error, response, body) => {
+		}, (error, res, body) => {
 			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			this.props.populateQuestionSetList(body);
 		});
 	}
@@ -44,20 +47,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 QuestionSetList.propTypes = {
 	populateQuestionSetList: PropTypes.func.isRequired,
-	questionSets: PropTypes.arrayOf(PropTypes.shape({
-		title: PropTypes.string.isRequired,
-		nextQuestionID: PropTypes.number.isRequired,
-		questions: PropTypes.arrayOf(PropTypes.shape({
-			text: PropTypes.string.isRequired,
-			correctAnswer: PropTypes.string.isRequired,
-			incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
-				text: PropTypes.string.isRequired,
-				id: PropTypes.number.isRequired,
-			})).isRequired,
-			id: PropTypes.number.isRequired,
-		})).isRequired,
-		privacy: PropTypes.bool.isRequired,
-	})).isRequired,
+	questionSets: PropTypes.arrayOf(
+		PropTypes.shape(questionSetPropTypes)).isRequired,
 };
 
 /* eslint-disable no-class-assign */

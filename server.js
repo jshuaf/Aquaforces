@@ -33,7 +33,8 @@ const http = require('http'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient,
 	WS = require('ws'),
-	o = require('yield-yield');
+	o = require('yield-yield'),
+	jwt = require('jsonwebtoken');
 	/* eslint-enable one-var */
 
 // Response Pages
@@ -63,7 +64,7 @@ const respondPage = o(function* (title, req, res, callback, header, status) {
 			.replace('$inhead', inhead), req.url.pathname, yield));
 		return callback();
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 });
 
@@ -111,6 +112,7 @@ const serverHandler = o(function* (req, res) {
 	const usesIODomain = reqPath.includes('.io');
 
 	// Find the logged-in user
+	// Check that the token was created more recently than 30 days ago
 	const user = yield dbcs.users.findOne({
 		cookie: {
 			$elemMatch: {
@@ -279,8 +281,6 @@ const serverHandler = o(function* (req, res) {
 					.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
 					.replaceAll('$host', encodeURIComponent(`http://${req.headers.host}`))
 					.replaceAll('$googleClientID', config.googleAuth.clientID);
-				if (user) data = data.replace(/<a class="signin-link"[\s\S]+?<\/a>/, '<a id="menu-stub">' + html(user.name) + '</a>').replace('<nav>', '<nav class="loggedin">');
-				else data = data.replace('id="filter"', 'id="filter" hidden=""');
 				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
 				res.write(data);
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
@@ -292,7 +292,7 @@ const serverHandler = o(function* (req, res) {
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath === '/login/google' && !usesIODomain) {
 		// Redirect URI after attempted Google login
-		const tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?clientID=' + config.googleAuth.clientID + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
+		const tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.clientID + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
 		if (req.url.query.error) {
 			yield respondPage('Login Error', req, res, yield, {}, 400);
 			res.write('<h1>Login Error</h1>');
@@ -306,9 +306,9 @@ const serverHandler = o(function* (req, res) {
 			res.write('<p>No authentication code was received. ' + tryagain + '</p>');
 			return res.end(yield fs.readFile('html/a/foot.html', yield));
 		}
-		const googReq = https.request({
-			hostname: 'accounts.google.com',
-			path: '/o/oauth2/token',
+		const googleReq = https.request({
+			hostname: 'www.googleapis.com',
+			path: '/oauth2/v4/token',
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
@@ -335,7 +335,6 @@ const serverHandler = o(function* (req, res) {
 				res.write(errorsHTML([data.error + ': ' + data.error_description]));
 				return res.end(yield fs.readFile('html/a/foot.html', yield));
 			}
-			console.log('/plus/v1/people/me?key=' + encodeURIComponent(data.access_token));
 			const apiReq = https.get({
 				hostname: 'www.googleapis.com',
 				path: '/plus/v1/people/me?access_token=' + encodeURIComponent(data.access_token),
@@ -348,48 +347,42 @@ const serverHandler = o(function* (req, res) {
 				try {
 					apiData = JSON.parse(apiData);
 				} catch (e) {
-					yield respondPage('Login Error', user, req, res, yield, {}, 500);
+					yield respondPage('Login Error', req, res, yield, {}, 500);
 					res.write('<h1>Login Error</h1>');
 					res.write('<p>An invalid response was received from the Google API. ' + tryagain + '</p>');
 					res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
 				if (apiData.error) {
-					yield respondPage('Login Error', user, req, res, yield, {}, 500);
+					yield respondPage('Login Error', req, res, yield, {}, 500);
 					res.write('<h1>Login Error</h1>');
 					res.write('<p>An error was received from the Google API. ' + tryagain + '</p>');
-					res.write(errorsHTML([apiData.error + ': ' + apiData.error_description]));
+					res.write(errorsHTML([apiData.error.message]));
 					return res.end(yield fs.readFile('html/a/foot.html', yield));
 				}
-				console.log(apiData);
 
 				// Store the user in the database and create a unique token
-				const matchUser = yield dbcs.users.findOne({ googleID: apiData.id }, yield);
+				const decodedToken = jwt.decode(data.id_token);
+				const matchedUser = yield dbcs.users.findOne({ googleID: decodedToken.sub }, yield);
 				const idToken = crypto.randomBytes(128).toString('base64');
-				if (matchUser) {
-					dbcs.users.update({ googleID: apiData.id }, {
+				if (matchedUser) {
+					dbcs.users.update({ googleID: decodedToken.sub }, {
 						$push: {
-							cookie: {
-								token: idToken,
-								created: new Date().getTime(),
-							},
+							cookie: { token: idToken, created: new Date().getTime() },
 						},
-						$set: { googleName: apiData.login },
+						$set: { personalInfo: apiData },
 					});
 				} else {
 					dbcs.users.insert({
 						_id: generateID(),
-						cookie: [{
-							token: idToken,
-							created: new Date().getTime(),
-						}],
-						googleID: apiData.id,
-						name: apiData.displayName,
+						cookie: [{ token: idToken, created: new Date().getTime() }],
+						googleID: decodedToken.sub,
+						personalInfo: apiData,
 					});
 				}
 
-				// Finally, redirect to the host screen if login succeeds
+				// Finally, redirect to the console if login succeeds
 				res.writeHead(303, {
-					Location: '/host/',
+					Location: '/console/',
 					'Set-Cookie': cookie.serialize('id', idToken, {
 						path: '/',
 						expires: new Date(new Date().setDate(new Date().getDate() + 30)),
@@ -400,14 +393,14 @@ const serverHandler = o(function* (req, res) {
 				res.end();
 			}));
 			apiReq.on('error', o(function* (e) {
-				yield respondPage('Login Error', user, req, res, yield, {}, 500);
+				yield respondPage('Login Error', req, res, yield, {}, 500);
 				res.write('<h1>Login Error</h1>');
 				res.write('<p>HTTP error when connecting to the Google API: ' + e + ' ' + tryagain + '</p>');
 				res.end(yield fs.readFile('html/a/foot.html', yield));
 			}));
 		}));
-		googReq.end('clientID=' + config.googleAuth.clientID + '&clientSecret=' + config.googleAuth.clientSecret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
-		googReq.on('error', o(function* (e) {
+		googleReq.end('client_id=' + config.googleAuth.clientID + '&client_secret=' + config.googleAuth.clientSecret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
+		googleReq.on('error', o(function* (e) {
 			yield respondPage('Login Error', req, res, yield, {}, 500);
 			res.write('<h1>Login Error</h1>');
 			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
@@ -415,7 +408,7 @@ const serverHandler = o(function* (req, res) {
 		}));
 	} else if (reqPath === '/stats/' && !usesIODomain) {
 		// Rudimentary statistics
-		if (!user.admin) return errorNotFound(req, res);
+		if (!user || !user.admin) return errorNotFound(req, res);
 		yield respondPage('Statistics', req, res, yield, {}, 400);
 		dbcs.gameplays.aggregate({ $match: {} }, { $group: { _id: 'stats', num: { $sum: 1 }, sum: { $sum: '$participants' } } }, o(function* (err, result) {
 			if (err) throw err;
@@ -435,7 +428,7 @@ const serverHandler = o(function* (req, res) {
 		});
 		child.stdout.on('end', o(function* () {
 			res.write('</p>');
-			if (user.name) res.write(`<p>You are logged in as <strong>'${user.name}'</strong></p>`);
+			if (user.name) res.write('<p>You are logged in.</strong></p>');
 			else res.write('<p>You are not logged in</p>');
 			res.write(`<p>Current host header is <strong>'${req.headers.host}'</strong></p>`);
 			res.write('<code class="blk" id="socket-test">Connecting to socket…</code>');
@@ -490,7 +483,6 @@ mongo.connect(config.mongoPath, (err, db) => {
 			});
 			testRes.on('end', () => {
 				console.log('HTTP test passed, starting socket test.'.green);
-				console.log(config.port);
 				const wsc = new WS(`ws://localhost:${config.port}/test`);
 				wsc.on('open', () => {
 					console.log('Connected to socket.');

@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux';
 import * as playActions from './play/actions';
 import * as boardingActions from './boarding/actions';
 
@@ -6,7 +7,7 @@ const initialBoardingState = {
 	gameID: null,
 	username: null,
 	crewNumber: null,
-	pendingRequest: false,
+	pending: false,
 };
 
 function boarding(state = initialBoardingState, action) {
@@ -14,23 +15,27 @@ function boarding(state = initialBoardingState, action) {
 	case boardingActions.JOIN_GAME_REQUEST:
 	case boardingActions.JOIN_CREW_REQUEST:
 		return Object.assign({}, state, {
-			pendingRequest: true,
+			pending: true,
 		});
 	case boardingActions.JOIN_GAME_SUCCESS:
 		return Object.assign({}, state, action, {
-			pendingRequest: false,
+			pending: false,
 			status: 'joiningCrew',
 			type: undefined,
 		});
 	case boardingActions.JOIN_CREW_SUCCESS:
 		return Object.assign({}, state, action, {
-			pendingRequest: false,
+			pending: false,
 			status: 'joined',
 			type: undefined,
 		});
 	case boardingActions.START_GAME:
 		return Object.assign({}, state, {
 			status: 'started',
+		});
+	case boardingActions.STOP_PENDING:
+		return Object.assign({}, state, {
+			pending: false,
 		});
 	default:
 		return state;
@@ -55,9 +60,5 @@ function game(state = initialGameState, action) {
 	}
 }
 
-export default function gameReducer(state = {}, action) {
-	return {
-		boarding: boarding(state.boardingStatus, action),
-		game: game(state.game, action),
-	};
-}
+const gameReducer = combineReducers({ boarding, game });
+export default gameReducer;

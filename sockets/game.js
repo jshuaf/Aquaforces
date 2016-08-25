@@ -171,7 +171,6 @@ module.exports = (tws, m, games) => {
 			status: 'timeout',
 			crewNumber: tws.crewNumber,
 		});
-		console.log(tws.crewNumber);
 		break;
 	}
 	case 'answerPassedThreshold': {
@@ -189,10 +188,6 @@ module.exports = (tws, m, games) => {
 	}
 	case 'whirlpoolFiveTapsDetected': {
 		tws.crew().whirlpool.taps += 5;
-		console.log({
-			event: 'whirlpoolBonusReceived',
-			amount: tws.crew().whirlpool.taps * 1000 / 2 / 5,
-		});
 		tws.crew().whirlpool.stressedPerson.trysend({
 			event: 'whirlpoolBonusReceived',
 			amount: tws.crew().whirlpool.taps * 1000 / 2 / 5,

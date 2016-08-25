@@ -1,12 +1,15 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import TextInput from '../../shared/TextInput.jsx';
+import Spinner from '../../shared/Spinner.jsx';
 import { joinGameRequest, joinCrewRequest } from './actions';
 
 class JoinGameFormDisplay extends Component {
 	constructor(props) {
 		super(props);
-		this.onSubmit = this.onSubmit.bind(this);
+		autoBind(this);
+		this.usernameField = null;
 	}
 	onSubmit() {
 		const formData = {};
@@ -31,6 +34,7 @@ class JoinGameFormDisplay extends Component {
 		}
 	}
 	render() {
+		if (this.props.pending) return <Spinner />;
 		switch (this.props.boardingStatus) {
 		case 'joiningGame':
 		default:
@@ -43,11 +47,13 @@ class JoinGameFormDisplay extends Component {
 						<div className="six columns text-center">
 							<img className="navbar-logo" src="/img/logo-black.svg" alt="Aquaforces" />
 							<TextInput
-								placeholder="1234" label="Game number" name="gameID"
+								placeholder="1234" label="Game number" name="gameID" autoFocus
 								type="number" min="0" max="9999" required autoComplete="off"
+								isComplete={t => t.length === 4}
+								onComplete={() => { if (this.usernameField) this.usernameField.node.focus(); }}
 							/>
 							<TextInput
-								placeholder="Michael Phelps" name="username"
+								placeholder="Michael Phelps" name="username" ref={(u) => { this.usernameField = u; }}
 								label="Username" type="text" required autoComplete="off"
 							/>
 							<input
@@ -73,7 +79,7 @@ class JoinGameFormDisplay extends Component {
 					<div className="row">
 						<div className="four columns text-center">
 							<TextInput
-								type="number" min="1" max="12" autoComplete="off"
+								type="number" min="1" max="12" autoComplete="off" autoFocus
 								label="Crew number" placeholder="4" name="crewNumber"
 							/>
 							<input
@@ -92,10 +98,12 @@ JoinGameFormDisplay.propTypes = {
 	joinGameRequest: PropTypes.func.isRequired,
 	joinCrewRequest: PropTypes.func.isRequired,
 	socket: PropTypes.instanceOf(WebSocket).isRequired,
+	pending: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({
 	boardingStatus: state.boarding.status,
+	pending: state.boarding.pending,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import Checkbox from '../shared/Checkbox.jsx';
+import { questionSetPropTypes } from './QuestionSet.jsx';
 import { editSetTitle, toggleSetPrivacy, addSet } from './actions';
+
+/* global sweetAlert:true */
 
 const request = require('request');
 
@@ -30,8 +33,9 @@ class NewSetForm extends Component {
 			method: 'post',
 			json: true,
 			body: set,
-		}, (error) => {
+		}, (error, res) => {
 			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			this.props.addSet(set);
 		});
 	}
@@ -55,24 +59,13 @@ class NewSetForm extends Component {
 	}
 }
 
+delete questionSetPropTypes._id;
+
 NewSetForm.propTypes = {
 	editSetTitle: PropTypes.func.isRequired,
 	toggleSetPrivacy: PropTypes.func.isRequired,
 	addSet: PropTypes.func.isRequired,
-	newQuestionSet: PropTypes.shape({
-		title: PropTypes.string.isRequired,
-		nextQuestionID: PropTypes.number.isRequired,
-		questions: PropTypes.arrayOf(PropTypes.shape({
-			text: PropTypes.string.isRequired,
-			correctAnswer: PropTypes.string.isRequired,
-			incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
-				text: PropTypes.string.isRequired,
-				id: PropTypes.number.isRequired,
-			})).isRequired,
-			id: PropTypes.number.isRequired,
-		})).isRequired,
-		privacy: PropTypes.bool.isRequired,
-	}),
+	newQuestionSet: PropTypes.shape(questionSetPropTypes).isRequired,
 };
 
 const mapStateToProps = (state) => ({
