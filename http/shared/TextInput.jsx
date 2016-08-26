@@ -24,7 +24,7 @@ export default class TextInput extends Component {
 	render() {
 		const containerStyle = {
 			display: 'block',
-			width: '100%'
+			width: '100%',
 		};
 		const labelStyle = {
 			marginBottom: '2%',
@@ -32,7 +32,7 @@ export default class TextInput extends Component {
 		};
 		const inputStyle = {
 			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'white',
-			width: '100%'
+			width: '100%',
 		};
 		const errorContainerStyle = {
 			display: 'flex',
