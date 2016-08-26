@@ -12,15 +12,15 @@ const config = {
 };
 
 const apiServer = require('./api');
-require('./essentials')();
-require('colors');
-
 // Database Storage
 global.dbcs = {};
 const usedDBCs = ['users', 'gameplays'];
 
 // Dependencies
 /* eslint-disable one-var */
+require('./essentials')();
+require('colors');
+
 const http = require('http'),
 	https = require('https'),
 	CleanCSS = require('clean-css'),
@@ -34,7 +34,8 @@ const http = require('http'),
 	mongo = require('mongodb').MongoClient,
 	WS = require('ws'),
 	o = require('yield-yield'),
-	jwt = require('jsonwebtoken');
+	jwt = require('jsonwebtoken'),
+	express = require('express');
 	/* eslint-enable one-var */
 
 // Response Pages
@@ -95,8 +96,28 @@ const errorForbidden = (req, res, msg) => {
 	}), {}, 403);
 };
 
+const getUser = o(function* (req, res, next) {
+	// Get the current logged-in user
+	req.user = yield dbcs.users.findOne({
+		cookie: {
+			$elemMatch: {
+				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+				created: { $gt: new Date() - 2592000000 },
+			},
+		},
+	}, yield);
+	next();
+});
+
 const cache = {};
 const redirectURLs = ['/host', '/play', '/console', ''];
+
+const app = express();
+app.use(getUser);
+
+app.get('/', (req, res) => {
+	if (req.user) res.redirect(301, '/host/');
+});
 
 const serverHandler = o(function* (req, res) {
 	// Redirect from www.aquaforces.com to aquaforces.com
@@ -113,14 +134,6 @@ const serverHandler = o(function* (req, res) {
 
 	// Find the logged-in user
 	// Check that the token was created more recently than 30 days ago
-	const user = yield dbcs.users.findOne({
-		cookie: {
-			$elemMatch: {
-				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
-				created: { $gt: new Date() - 2592000000 },
-			},
-		},
-	}, yield);
 
 	// MARK: respond based on request URL
 	if (reqPath.substr(0, 5) === '/api/' && !usesIODomain) {
@@ -463,7 +476,8 @@ mongo.connect(config.mongoPath, (err, db) => {
 	// Go through the mongodb data and store it server-side
 	while (i--) db.collection(usedDBCs[i], handleCollection);
 	console.log('Connected to mongodb.'.cyan);
-	const server = http.createServer(serverHandler).listen(config.port);
+	const server = http.createServer().listen(config.port);
+	server.on('request', app);
 	console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
 
 	/* eslint-disable global-require */
