@@ -75,7 +75,7 @@ const redirectURLs = ['/host', '/play', '/console', ''];
 const app = express();
 app.use(getUser);
 app.use(foot);
-app.use('/img', express.static('img'));
+app.use('/img', express.static('http/img'));
 app.use('/a', express.static('http/a'));
 
 app.get('/', (req, res, next) => {
