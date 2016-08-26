@@ -41,61 +41,6 @@ const http = require('http'),
 // Response Pages
 /* eslint-disable max-len */
 
-const respondPage = o(function* (title, req, res, callback, header, status) {
-	// Parse the header
-	if (title) title = html(title);
-	if (!header) header = {};
-	const inhead = (header.inhead || '') + (header.description ? '<meta name="description" content="' + html(header.description) + '" />' : '');
-	const noBG = header.noBG;
-	delete header.inhead;
-	delete header.description;
-	if (typeof header['Content-Type'] !== 'string') header['Content-Type'] = 'application/xhtml+xml; charset=utf-8';
-	if (typeof header['Cache-Control'] !== 'string') header['Cache-Control'] = 'no-cache';
-	if (typeof header['X-Frame-Options'] !== 'string') header['X-Frame-Options'] = 'DENY';
-	if (typeof header.Vary !== 'string') header.Vary = 'Cookie';
-	res.writeHead(status || 200, header);
-
-	// All pages have headers, no navigation
-	const data = (yield fs.readFile('./html/a/head.html', yield)).toString();
-
-	try {
-		res.write(yield addVersionNonces(
-			data.replace('xml:lang="en"', noBG ? 'xml:lang="en" class="no-bg"' : 'xml:lang="en"')
-			.replace('$title', `${title ? `${title} · ` : ''}Aquaforces`)
-			.replace('$inhead', inhead), req.url.pathname, yield));
-		return callback();
-	} catch (e) {
-		console.error(e);
-	}
-});
-
-const errorNotFound = (req, res) => {
-	respondPage('404', req, res, o(function* () {
-		res.write('<h1>Error 404</h1>');
-		res.write('<p>The requested file could not be found.</p>');
-		res.write('<p><a href="javascript:history.go(-1)">Go back</a>.</p>');
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	}), {}, 404);
-};
-
-const errorsHTML = function (errs) {
-	if (errs.length === 1) {
-		return '<div class="error">' + errs[0] + '</div>';
-	} else if (errs.length) {
-		return '<div class="error">\t<ul>\t\t<li>' + errs.join('</li>\t\t<li>') + '</li>\t</ul></div>';
-	}
-	return '';
-};
-
-const errorForbidden = (req, res, msg) => {
-	respondPage('403', req, res, o(function* () {
-		res.write('<h1>Error 403</h1>');
-		res.write(msg || '<p>Permission denied.</p>');
-		res.write('<p><a href="javascript:history.go(-1)">Go back</a>.</p>');
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	}), {}, 403);
-};
-
 const getUser = o(function* (req, res, next) {
 	// Get the current logged-in user
 	req.user = yield dbcs.users.findOne({
@@ -130,6 +75,8 @@ const redirectURLs = ['/host', '/play', '/console', ''];
 const app = express();
 app.use(getUser);
 app.use(foot);
+app.use('/img', express.static('img'));
+app.use('/a', express.static('http/a'));
 
 app.get('/', (req, res, next) => {
 	if (req.user) return res.redirect(302, '/host/');
