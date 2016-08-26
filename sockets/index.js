@@ -15,8 +15,8 @@ module.exports = (server) => {
 					message = JSON.parse(m);
 					if (message) require('./game')(tws, message, games);
 				} catch (e) {
-					console.error(e);
-					return tws.error('Error parsing message');
+					console.error('Error on game socket backend', e);
+					return tws.error('Server error');
 				}
 			});
 
@@ -44,8 +44,8 @@ module.exports = (server) => {
 					message = JSON.parse(m);
 					if (message) require('./host')(tws, message, games);
 				} catch (e) {
-					console.error(e);
-					return tws.error('Error parsing message.');
+					console.error('Error on game host socket backend', e);
+					return tws.error('Server error.');
 				}
 			});
 			tws.on('close', () => {

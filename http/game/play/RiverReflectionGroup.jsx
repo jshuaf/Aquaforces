@@ -26,7 +26,7 @@ class RiverReflectionGroup extends Component {
 		}
 
 		const style = {
-			transform: `translate(${this.props.x}px, ${this.props.y}px)`,
+			transform: `translate3d(${this.props.x}px, ${this.props.y}px, 0px)`,
 			height: `${this.state.height}%`,
 			width: `${this.state.numberOfReflections * 4}%`,
 			maxWidth: `${this.state.numberOfReflections * 20}px`,
