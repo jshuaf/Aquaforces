@@ -110,6 +110,14 @@ app.get('/play', (req, res, next) => {
 	res.send(res.locals.head + playPage + res.locals.foot);
 });
 
+app.get('/host', (req, res, next) => {
+	res.locals.title = 'Start a game';
+	next();
+}, head, (req, res) => {
+	const hostPage = fs.readFileSync('./html/host.html').toString();
+	res.send(res.locals.head + hostPage + res.locals.foot);
+});
+
 app.post('/api/:path', (req, res) => apiServer(req, res));
 
 
