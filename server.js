@@ -38,21 +38,29 @@ const http = require('http'),
 	express = require('express');
 	/* eslint-enable one-var */
 
-// Response Pages
-/* eslint-disable max-len */
-
-const getUser = o(function* (req, res, next) {
-	// Get the current logged-in user
-	req.user = yield dbcs.users.findOne({
-		cookie: {
-			$elemMatch: {
-				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
-				created: { $gt: new Date() - 2592000000 },
+// Server Middleware
+const initialMiddleware = {
+	getUser: o(function* (req, res, next) {
+		// Get the current logged-in user
+		req.user = yield dbcs.users.findOne({
+			cookie: {
+				$elemMatch: {
+					token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+					created: { $gt: new Date() - 2592000000 },
+				},
 			},
-		},
-	}, yield);
-	next();
-});
+		}, yield);
+		next();
+	}),
+	foot: (req, res, next) => {
+		res.locals.foot = fs.readFileSync('./html/a/foot.html').toString();
+		next();
+	},
+	removeWWW: (req, res, next) => {
+		console.log(req.get('host'));
+		next();
+	},
+};
 
 const head = (req, res, next) => {
 	res.locals.head = fs.readFileSync('./html/a/head.html').toString()
@@ -61,20 +69,11 @@ const head = (req, res, next) => {
 	next();
 };
 
-const foot = (req, res, next) => {
-	res.locals.foot = fs.readFileSync('./html/a/foot.html').toString();
-	next();
-};
-
-const stylesheet = path =>
-	`<link rel="stylesheet" href="${path}" />`;
-
 const cache = {};
 const redirectURLs = ['/host', '/play', '/console', ''];
 
 const app = express();
-app.use(getUser);
-app.use(foot);
+Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
 app.use('/img', express.static('http/img'));
 app.use('/a', express.static('http/a'));
 
@@ -87,6 +86,10 @@ app.get('/', (req, res, next) => {
 	const landingPageHTML = landingPage.toString().replaceAll('$host', host)
 		.replaceAll('$googleClientID', config.googleAuth.clientID);
 	res.send(res.locals.head + landingPageHTML + res.locals.foot);
+});
+
+app.get('/api/:apiPath', (req, res, next) => {
+
 });
 
 
