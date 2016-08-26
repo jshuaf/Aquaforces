@@ -80,8 +80,7 @@ const redirectURLs = ['/host', '/play', '/console', ''];
 
 const app = express();
 Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
-app.use('/img', express.static('http/img'));
-app.use('/a', express.static('http/a'));
+app.use(express.static('http'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -96,9 +95,7 @@ app.get('/', (req, res, next) => {
 	res.send(res.locals.head + landingPageHTML + res.locals.foot);
 });
 
-app.all('/api/:path', (req, res) => {
-	return apiServer(req, res);
-});
+app.post('/api/:path', (req, res) => apiServer(req, res));
 
 
 const serverHandler = o(function* (req, res) {
