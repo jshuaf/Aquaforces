@@ -66,6 +66,12 @@ const initialMiddleware = {
 		}
 		next();
 	},
+	redirectIO: (req, res, next) => {
+		const includesIO = req.get('host').includes('.io');
+		if (!includesIO || req.path.includes('/play')) return next();
+		res.redirect(302, `aquaforces.com${req.path}`);
+		next();
+	},
 };
 
 const head = (req, res, next) => {
@@ -95,6 +101,15 @@ app.get('/', (req, res, next) => {
 	res.send(res.locals.head + landingPageHTML + res.locals.foot);
 });
 
+app.get('/play', (req, res, next) => {
+	if (req.get('host').includes('.io')) return res.redirect(301, 'aquaforces.io');
+	res.locals.title = 'Join a game';
+	next();
+}, head, (req, res) => {
+	const playPage = fs.readFileSync('./html/play.html').toString();
+	res.send(res.locals.head + playPage + res.locals.foot);
+});
+
 app.post('/api/:path', (req, res) => apiServer(req, res));
 
 
@@ -110,157 +125,7 @@ const serverHandler = o(function* (req, res) {
 	// Set constants based on request
 	const reqPath = req.url.pathname;
 	const usesIODomain = reqPath.includes('.io');
-
-	// Find the logged-in user
-	// Check that the token was created more recently than 30 days ago
-
-	// MARK: respond based on request URL
-	if (reqPath.substr(0, 5) === '/api/' && !usesIODomain) {
-		// API Request
-		// Slice off the /api
-
-		req.url.pathname = req.url.pathname.substr(4);
-	} else if (reqPath.includes('.')) {
-		// Static file serving
-		let stats;
-		try {
-			stats = yield fs.stat('./http/' + reqPath, yield);
-		} catch (e) {
-			return errorNotFound(req, res);
-		}
-		if (!stats.isFile()) return errorNotFound(req, res);
-		const raw = !req.headers['accept-encoding'] || !req.headers['accept-encoding'].includes('gzip') || req.headers['accept-encoding'].includes('gzip;q=0');
-
-		// Serve from cache
-		if (cache[reqPath]) {
-			res.writeHead(200, {
-				'Content-Encoding': raw ? 'identity' : 'gzip',
-				'Content-Type': (mime[path.extname(reqPath)] || 'text/plain') + '; charset=utf-8',
-				'Cache-Control': 'max-age=6012800',
-				Vary: 'Accept-Encoding',
-				ETag: cache[reqPath].hash,
-			});
-			res.end(cache[reqPath][raw ? 'raw' : 'gzip']);
-			if (cache[reqPath].updated < stats.mtime) {
-				let data;
-				try {
-					data = yield fs.readFile('http' + reqPath, yield);
-				} catch (e) {
-					return;
-				}
-
-				// Handle file types when serving updated file from cache
-				if (path.extname(reqPath) === '.css') {
-					data = new CleanCSS().minify(data).styles;
-				}
-
-				cache[reqPath] = {
-					raw: data,
-					gzip: data === cache[reqPath].raw ? cache[reqPath].gzip : yield zlib.gzip(data, yield),
-					hash: yield getVersionNonce('/', reqPath, yield),
-					updated: stats.mtime,
-				};
-			}
-		} else {
-			// Serve uncached data
-			let data;
-			try {
-				data = yield fs.readFile('http' + reqPath, yield);
-			} catch (e) {
-				return errorNotFound(req, res);
-			}
-
-			// Handle file types when serving updated file from cache
-			if (path.extname(reqPath) === '.css') {
-				data = new CleanCSS().minify(data).styles;
-			}
-
-			cache[reqPath] = {
-				raw: data,
-				gzip: yield zlib.gzip(data, yield),
-				hash: yield getVersionNonce('/', reqPath, yield),
-				updated: stats.mtime,
-			};
-			res.writeHead(200, {
-				'Content-Encoding': raw ? 'identity' : 'gzip',
-				'Content-Type': (mime[path.extname(reqPath)] || 'text/plain') + '; charset=utf-8',
-				'Cache-Control': 'max-age=6012800',
-				Vary: 'Accept-Encoding',
-			});
-			res.end(cache[reqPath][raw ? 'raw' : 'gzip']);
-		}
-	} else if (reqPath === '/play/' || (usesIODomain && reqPath === '/')) {
-		// Gameplay screen
-		yield respondPage('Join a game', req, res, yield);
-		res.write((yield addVersionNonces((yield fs.readFile('./html/play.html', yield)).toString(), reqPath, yield)));
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (reqPath === '/') {
-		// Landing page
-		if (user) {
-			// Redirect user if they're logged in
-			return res.writeHead(303, { Location: '/host/' }) || res.end();
-		}
-		yield respondPage(null, req, res, yield, { inhead: '' });
-		res.write((yield fs.readFile('./html/landing.html', yield)).toString().replaceAll('$host', encodeURIComponent('http://' + req.headers.host)).replaceAll('$googleClientID', config.googleAuth.clientID));
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (reqPath === '/console/' && !usesIODomain) {
-		// Host console
-		yield respondPage('Question Sets', req, res, yield, { inhead: '', noBG: true });
-		const filter = user ? { $or: [{ userID: user._id }, { public: true }] } : { public: true };
-		const q = (req.url.query.q || '').trim();
-		let qsetstr = '';
-		let searchText = '';
-
-		// Edit filter based on search queries
-		q.split(/\s+/).forEach((token) => {
-			if (token === 'is:mine' && user) filter.userID = user._id;
-			if (token === 'is:public') filter.public = true;
-			if (token === 'is:favorite' && user) filter._id = { $in: user.favorites };
-			if (token === '-is:mine' && user) filter.userID = { $not: user._id };
-			if (token === '-is:public') filter.public = false;
-			if (token === '-is:favorite' && user) filter._id = { $not: { $in: user.favorites } };
-			if (!token.includes(':')) searchText += token + ' ';
-		});
-
-		// Perform the search in the database
-		searchText = searchText.trim();
-		if (searchText) filter.$text = { $search: searchText };
-		dbcs.qsets.find(filter, searchText ? { score: { $meta: 'textScore' } } : undefined).sort(searchText ? { score: { $meta: 'textScore' } } : { timeAdded: -1 }).each(o(function* (err, qset) {
-			if (err) throw err;
-
-			// MARK: ugly html insertion, will later be replaced by React
-			if (qset) {
-				qsetstr += '<details class="qset" id="qset-' + qset._id + '"><summary><h2>' + html(qset.title) + '</h2> <small><a class="play">▶Play</a> <a class="dup">Duplicate</a> <a class="delete" title="delete"></a> <a href="#qset-' + qset._id + '" title="permalink">#</a></small></summary><ol>';
-				qset.questions.forEach((question) => {
-					let listr = '<li><span class="q-ctrls"><a class="remove-q" title="delete question"></a> <a class="edit" title="edit question">✎</a></span><h3>' + html(question.text) + '</h3><div><ul class="check-list">';
-					let liestr = '<li class="q-edit" hidden=""><a class="discard" title="discard edits">✕</a><form>';
-					liestr += '<label>Question <input placeholder="What\'s one plus one?" required="" maxlength="144" value="' + html(question.text) + '" /></label>';
-					liestr += '<p>Answers:</p><ul>';
-					question.answers.forEach((answer) => {
-						listr += '<li>' + html(answer) + '</li>';
-						liestr += '<li><input type="checkbox" checked="" /> <input required="" maxlength="64" placeholder="Two" value="' + html(answer) + '" /></li>';
-					});
-					listr += '</ul><ul class="cross-list">';
-					question.incorrectAnswers.forEach((answer) => {
-						listr += '<li>' + html(answer) + '</li>';
-						liestr += '<li><input type="checkbox" /> <input required="" maxlength="64" placeholder="Two" value="' + html(answer) + '" /></li>';
-					});
-					listr += '</ul></div></li>';
-					liestr += '<li><small><a class="more-wrong">+ more</a></small></li></ul><button class="submit-q-edit">Submit Edit</button></form></li>';
-					qsetstr += listr + liestr;
-				});
-				qsetstr += '</ol><a class="new-question">add question</a></details>';
-			} else {
-				let data = (yield fs.readFile('./html/console.html', yield)).toString()
-					.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
-					.replaceAll('$host', encodeURIComponent(`http://${req.headers.host}`))
-					.replaceAll('$googleClientID', config.googleAuth.clientID);
-				if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
-				res.write(data);
-				res.end(yield fs.readFile('./html/a/foot.html', yield));
-			}
-		}));
-	} else if (reqPath === '/host/' && !usesIODomain) {
+	if (reqPath === '/host/' && !usesIODomain) {
 		yield respondPage('Start a game', req, res, yield, {});
 		res.write((yield fs.readFile('./html/host.html', yield)));
 		res.end(yield fs.readFile('./html/a/foot.html', yield));
@@ -415,6 +280,48 @@ const serverHandler = o(function* (req, res) {
 		res.end();
 	} else return errorNotFound(req, res);
 });
+/*
+const filter = user ? { $or: [{ userID: user._id }, { public: true }] } : { public: true };
+const q = (req.url.query.q || '').trim();
+let qsetstr = '';
+let searchText = '';
+
+// Edit filter based on search queries
+q.split(/\s+/).forEach((token) => {
+	if (token === 'is:mine' && user) filter.userID = user._id;
+	if (token === 'is:public') filter.public = true;
+	if (token === 'is:favorite' && user) filter._id = { $in: user.favorites };
+	if (token === '-is:mine' && user) filter.userID = { $not: user._id };
+	if (token === '-is:public') filter.public = false;
+	if (token === '-is:favorite' && user) filter._id = { $not: { $in: user.favorites } };
+	if (!token.includes(':')) searchText += token + ' ';
+});
+
+// Perform the search in the database
+searchText = searchText.trim();
+if (searchText) filter.$text = { $search: searchText };
+dbcs.qsets.find(
+filter, searchText ? { score: {
+$meta: 'textScore' } } : undefined).sort(
+searchText ? { score: { $meta: 'textScore' } } : { timeAdded: -1 }).each(o(function* (err, qset) {
+	if (err) throw err;
+
+	// MARK: ugly html insertion, will later be replaced by React
+	if (qset) {
+		});
+		qsetstr += '</ol><a class="new-question">add question</a></details>';
+	} else {
+		let data = (yield fs.readFile('./html/console.html', yield)).toString()
+			.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
+			.replaceAll('$host', encodeURIComponent(`http://${req.headers.host}`))
+			.replaceAll('$googleClientID', config.googleAuth.clientID);
+		if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
+		res.write(data);
+		res.end(yield fs.readFile('./html/a/foot.html', yield));
+	}
+}));
+*/
+
 
 // MARK: actually start the server
 console.log('Connecting to mongodb…'.cyan);
