@@ -109,15 +109,38 @@ const getUser = o(function* (req, res, next) {
 	next();
 });
 
+const head = (req, res, next) => {
+	res.locals.head = fs.readFileSync('./html/a/head.html').toString()
+		.replaceAll('$inhead', res.locals.inHead)
+		.replaceAll('$title', res.locals.title);
+	next();
+};
+
+const foot = (req, res, next) => {
+	res.locals.foot = fs.readFileSync('./html/a/foot.html').toString();
+	next();
+};
+
 const cache = {};
 const redirectURLs = ['/host', '/play', '/console', ''];
 
 const app = express();
 app.use(getUser);
+app.use(foot);
 
-app.get('/', (req, res) => {
-	if (req.user) res.redirect(301, '/host/');
+app.get('/', (req, res, next) => {
+	if (req.user) return res.redirect(302, '/host/');
+	res.locals.inHead = '';
+	res.locals.title = 'Aquaforces';
+	next();
+}, head, (req, res) => {
+	const host = encodeURIComponent(`http://${req.get('host')}`);
+	const landingPage = fs.readFileSync('./html/landing.html');
+	const landingPageHTML = landingPage.toString().replaceAll('$host', host)
+		.replaceAll('$googleClientID', config.googleAuth.clientID);
+	res.send(res.locals.head + landingPageHTML + res.locals.foot);
 });
+
 
 const serverHandler = o(function* (req, res) {
 	// Redirect from www.aquaforces.com to aquaforces.com
