@@ -35,7 +35,8 @@ const http = require('http'),
 	WS = require('ws'),
 	o = require('yield-yield'),
 	jwt = require('jsonwebtoken'),
-	express = require('express');
+	express = require('express'),
+	bodyParser = require('body-parser');
 	/* eslint-enable one-var */
 
 // Server Middleware
@@ -61,7 +62,7 @@ const initialMiddleware = {
 		if (req.get('host').includes('www.')) {
 			host = host.replaceAll('www.', '');
 			const newURL = `${req.protocol}://${host}${req.originalUrl}`;
-			res.redirect(301, );
+			res.redirect(301, newURL);
 		}
 		next();
 	},
@@ -81,6 +82,8 @@ const app = express();
 Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
 app.use('/img', express.static('http/img'));
 app.use('/a', express.static('http/a'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res, next) => {
 	if (req.user) return res.redirect(302, '/host/');
@@ -93,8 +96,8 @@ app.get('/', (req, res, next) => {
 	res.send(res.locals.head + landingPageHTML + res.locals.foot);
 });
 
-app.get('/api/:apiPath', (req, res, next) => {
-
+app.all('/api/:path', (req, res) => {
+	return apiServer(req, res);
 });
 
 
@@ -120,24 +123,6 @@ const serverHandler = o(function* (req, res) {
 		// Slice off the /api
 
 		req.url.pathname = req.url.pathname.substr(4);
-		if (req.method !== 'POST') return res.writeHead(405) || res.end('Error: Method not allowed. Use POST.');
-		if (url.parse(req.headers.referer || '').host !== req.headers.host) return res.writeHead(409) || res.end('Error: Suspicious request.');
-
-		let post = '';
-		req.on('data', (data) => {
-			if (req.abort) return;
-			post += data;
-			if (post.length > 1e6) {
-				res.writeHead(413);
-				res.end('Error: Request entity too large.');
-				req.abort = true;
-			}
-		});
-		req.on('end', () => {
-			if (req.abort) return;
-			post = JSON.parse(post);
-			apiServer(req, res, post, user);
-		});
 	} else if (reqPath.includes('.')) {
 		// Static file serving
 		let stats;
