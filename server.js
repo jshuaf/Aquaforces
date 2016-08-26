@@ -24,8 +24,6 @@ require('colors');
 const http = require('http'),
 	https = require('https'),
 	fs = require('fs'),
-	spawn = require('child_process').spawn,
-	url = require('url'),
 	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient,
@@ -33,6 +31,7 @@ const http = require('http'),
 	o = require('yield-yield'),
 	jwt = require('jsonwebtoken'),
 	express = require('express'),
+	request = require('request'),
 	bodyParser = require('body-parser');
 	/* eslint-enable one-var */
 
@@ -42,9 +41,9 @@ const initialMiddleware = {
 		// Get the current logged-in user
 		req.user = yield dbcs.users.findOne({
 			cookie: { $elemMatch: {
-					token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
-					created: { $gt: new Date() - 2592000000 },
-			}}
+				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+				created: { $gt: new Date() - 2592000000 },
+			} },
 		}, yield);
 		next();
 	}),
@@ -112,128 +111,68 @@ app.get('/host', (req, res, next) => {
 
 app.post('/api/:path', (req, res) => apiServer(req, res));
 
-
-const serverHandler = o(function* (req, res) {
-	// Set constants based on request
-	const reqPath = req.url.pathname;
-	const usesIODomain = reqPath.includes('.io');
-	if (reqPath === '/login/google' && !usesIODomain) {
-		// Redirect URI after attempted Google login
-		const tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.clientID + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
-		if (req.url.query.error) {
-			yield respondPage('Login Error', req, res, yield, {}, 400);
-			res.write('<h1>Login Error</h1>');
-			res.write('<p>An error was received from Google. ' + tryagain + '</p>');
-			res.write(errorsHTML(['Error: ' + req.url.query.error]));
-			return res.end(yield fs.readFile('html/a/foot.html', yield));
+app.get('/login/google', (req, res) => {
+	if (req.query.error) return res.send(`<p>Error: ${req.query.error}</p>`);
+	if (!req.query.code) return res.send('<p>Error: No code</p>');
+	request({
+		url: 'https://www.googleapis.com/oauth2/v4/token',
+		method: 'post',
+		form: {
+			client_id: config.googleAuth.clientID,
+			client_secret: config.googleAuth.clientSecret,
+			code: req.query.code,
+			redirect_uri: `http://${req.get('host')}/login/google`,
+			grant_type: 'authorization_code',
+		},
+	}, (error, _, body) => {
+		const tokenData = JSON.parse(body);
+		if (error || tokenData.error) {
+			error = error || tokenData.error;
+			console.error(error);
+			return res.send('<p>Error getting token.</p>');
 		}
-		if (!req.url.query.code) {
-			yield respondPage('Login Error', req, res, yield, {}, 400);
-			res.write('<h1>Login Error</h1>');
-			res.write('<p>No authentication code was received. ' + tryagain + '</p>');
-			return res.end(yield fs.readFile('html/a/foot.html', yield));
-		}
-		const googleReq = https.request({
-			hostname: 'www.googleapis.com',
-			path: '/oauth2/v4/token',
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-		}, o(function* (googRes) {
-			let data = '';
-			googRes.on('data', (d) => {
-				data += d;
+		request({
+			url: 'https://www.googleapis.com/plus/v1/people/me',
+			qs: { access_token: body.access_token },
+		}, o(function* (error, _, body) {
+			const apiData = JSON.parse(body);
+			console.log(apiData, tokenData);
+			if (error || apiData.error) {
+				error = error || apiData.error.errors;
+				console.error(error);
+				return res.send('<p>Error accessing Google+ API.</p>');
+			}
+			const decodedToken = jwt.decode(tokenData.id_token);
+			const matchedUser = yield dbcs.users.findOne({ googleID: decodedToken.sub }, yield);
+			const idToken = crypto.randomBytes(128).toString('base64');
+			if (matchedUser) {
+				dbcs.users.update({ googleID: decodedToken.sub }, {
+					$push: {
+						cookie: { token: idToken, created: new Date().getTime() },
+					},
+					$set: { personalInfo: apiData },
+				});
+			} else {
+				dbcs.users.insert({
+					_id: generateID(),
+					cookie: [{ token: idToken, created: new Date().getTime() }],
+					googleID: decodedToken.sub,
+					personalInfo: apiData,
+				});
+			}
+			res.writeHead(303, {
+				Location: '/console/',
+				'Set-Cookie': cookie.serialize('id', idToken, {
+					path: '/',
+					expires: new Date(new Date().setDate(new Date().getDate() + 30)),
+					httpOnly: true,
+					secure: config.secureCookies,
+				}),
 			});
-			yield googRes.on('end', yield);
-			try {
-				data = JSON.parse(data);
-			} catch (e) {
-				yield respondPage('Login Error', req, res, yield, {}, 500);
-				res.write('<h1>Login Error</h1>');
-				res.write('<p>An invalid response was received from Google. ' + tryagain + '</p>');
-				res.end(yield fs.readFile('html/a/foot.html', yield));
-			}
-			if (data.error) {
-				yield respondPage('Login Error', req, res, yield, {}, 500);
-				res.write('<h1>Login Error</h1>');
-				res.write('<p>An error was received from Google. ' + tryagain + '</p>');
-				res.write(errorsHTML([data.error + ': ' + data.error_description]));
-				return res.end(yield fs.readFile('html/a/foot.html', yield));
-			}
-			const apiReq = https.get({
-				hostname: 'www.googleapis.com',
-				path: '/plus/v1/people/me?access_token=' + encodeURIComponent(data.access_token),
-			}, o(function* (apiRes) {
-				let apiData = '';
-				apiRes.on('data', (d) => {
-					apiData += d;
-				});
-				yield apiRes.on('end', yield);
-				try {
-					apiData = JSON.parse(apiData);
-				} catch (e) {
-					yield respondPage('Login Error', req, res, yield, {}, 500);
-					res.write('<h1>Login Error</h1>');
-					res.write('<p>An invalid response was received from the Google API. ' + tryagain + '</p>');
-					res.end(yield fs.readFile('html/a/foot.html', yield));
-				}
-				if (apiData.error) {
-					yield respondPage('Login Error', req, res, yield, {}, 500);
-					res.write('<h1>Login Error</h1>');
-					res.write('<p>An error was received from the Google API. ' + tryagain + '</p>');
-					res.write(errorsHTML([apiData.error.message]));
-					return res.end(yield fs.readFile('html/a/foot.html', yield));
-				}
-
-				// Store the user in the database and create a unique token
-				const decodedToken = jwt.decode(data.id_token);
-				const matchedUser = yield dbcs.users.findOne({ googleID: decodedToken.sub }, yield);
-				const idToken = crypto.randomBytes(128).toString('base64');
-				if (matchedUser) {
-					dbcs.users.update({ googleID: decodedToken.sub }, {
-						$push: {
-							cookie: { token: idToken, created: new Date().getTime() },
-						},
-						$set: { personalInfo: apiData },
-					});
-				} else {
-					dbcs.users.insert({
-						_id: generateID(),
-						cookie: [{ token: idToken, created: new Date().getTime() }],
-						googleID: decodedToken.sub,
-						personalInfo: apiData,
-					});
-				}
-
-				// Finally, redirect to the console if login succeeds
-				res.writeHead(303, {
-					Location: '/console/',
-					'Set-Cookie': cookie.serialize('id', idToken, {
-						path: '/',
-						expires: new Date(new Date().setDate(new Date().getDate() + 30)),
-						httpOnly: true,
-						secure: config.secureCookies,
-					}),
-				});
-				res.end();
-			}));
-			apiReq.on('error', o(function* (e) {
-				yield respondPage('Login Error', req, res, yield, {}, 500);
-				res.write('<h1>Login Error</h1>');
-				res.write('<p>HTTP error when connecting to the Google API: ' + e + ' ' + tryagain + '</p>');
-				res.end(yield fs.readFile('html/a/foot.html', yield));
-			}));
-		}));
-		googleReq.end('client_id=' + config.googleAuth.clientID + '&client_secret=' + config.googleAuth.clientSecret + '&code=' + encodeURIComponent(req.url.query.code) + '&redirect_uri=' + encodeURIComponent('http://' + req.headers.host + '/login/google') + '&grant_type=authorization_code');
-		googleReq.on('error', o(function* (e) {
-			yield respondPage('Login Error', req, res, yield, {}, 500);
-			res.write('<h1>Login Error</h1>');
-			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
-			res.end(yield fs.readFile('html/a/foot.html', yield));
-		}));
-};
+		})
+		);
+	});
+});
 /*
 CONSOLE SEARCHING CODE FOR LATER
 const filter = user ? { $or: [{ userID: user._id }, { public: true }] } : { public: true };
