@@ -111,8 +111,8 @@ const getUser = o(function* (req, res, next) {
 
 const head = (req, res, next) => {
 	res.locals.head = fs.readFileSync('./html/a/head.html').toString()
-		.replaceAll('$inhead', res.locals.inHead)
-		.replaceAll('$title', res.locals.title);
+		.replaceAll('$inhead', res.locals.inHead || '')
+		.replaceAll('$title', res.locals.title || 'Aquaforces');
 	next();
 };
 
@@ -120,6 +120,9 @@ const foot = (req, res, next) => {
 	res.locals.foot = fs.readFileSync('./html/a/foot.html').toString();
 	next();
 };
+
+const stylesheet = path =>
+	`<link rel="stylesheet" href="${path}" />`;
 
 const cache = {};
 const redirectURLs = ['/host', '/play', '/console', ''];
@@ -130,8 +133,6 @@ app.use(foot);
 
 app.get('/', (req, res, next) => {
 	if (req.user) return res.redirect(302, '/host/');
-	res.locals.inHead = '';
-	res.locals.title = 'Aquaforces';
 	next();
 }, head, (req, res) => {
 	const host = encodeURIComponent(`http://${req.get('host')}`);
