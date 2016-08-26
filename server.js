@@ -23,10 +23,7 @@ require('colors');
 
 const http = require('http'),
 	https = require('https'),
-	CleanCSS = require('clean-css'),
-	zlib = require('zlib'),
 	fs = require('fs'),
-	path = require('path'),
 	spawn = require('child_process').spawn,
 	url = require('url'),
 	cookie = require('cookie'),
@@ -44,12 +41,10 @@ const initialMiddleware = {
 	getUser: o(function* (req, res, next) {
 		// Get the current logged-in user
 		req.user = yield dbcs.users.findOne({
-			cookie: {
-				$elemMatch: {
+			cookie: { $elemMatch: {
 					token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
 					created: { $gt: new Date() - 2592000000 },
-				},
-			},
+			}}
 		}, yield);
 		next();
 	}),
@@ -80,9 +75,6 @@ const head = (req, res, next) => {
 		.replaceAll('$title', res.locals.title || 'Aquaforces');
 	next();
 };
-
-const cache = {};
-const redirectURLs = ['/host', '/play', '/console', ''];
 
 const app = express();
 Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
@@ -122,22 +114,10 @@ app.post('/api/:path', (req, res) => apiServer(req, res));
 
 
 const serverHandler = o(function* (req, res) {
-	// Redirect from www.aquaforces.com to aquaforces.com
-	if (req.headers.host.includes('www')) {
-		res.writeHead(301, { Location: '//' + req.headers.host.replace('www.', '') + req.url });
-		res.end();
-	}
-
-	req.url = url.parse(req.url, true);
-
 	// Set constants based on request
 	const reqPath = req.url.pathname;
 	const usesIODomain = reqPath.includes('.io');
-	if (reqPath === '/host/' && !usesIODomain) {
-		yield respondPage('Start a game', req, res, yield, {});
-		res.write((yield fs.readFile('./html/host.html', yield)));
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	} else if (reqPath === '/login/google' && !usesIODomain) {
+	if (reqPath === '/login/google' && !usesIODomain) {
 		// Redirect URI after attempted Google login
 		const tryagain = '<a href="https://accounts.google.com/o/oauth2/v2/auth?client_id=' + config.googleAuth.clientID + '&amp;response_type=code&amp;scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.me&amp;redirect_uri=' + encodeURIComponent('http://' + req.headers.host) + '%2Flogin%2Fgoogle">Try again.</a>';
 		if (req.url.query.error) {
@@ -253,42 +233,9 @@ const serverHandler = o(function* (req, res) {
 			res.write('<p>HTTP error when connecting to Google: ' + e + ' ' + tryagain + '</p>');
 			res.end(yield fs.readFile('html/a/foot.html', yield));
 		}));
-	} else if (reqPath === '/stats/' && !usesIODomain) {
-		// Rudimentary statistics
-		if (!user || !user.admin) return errorNotFound(req, res);
-		yield respondPage('Statistics', req, res, yield, {}, 400);
-		dbcs.gameplays.aggregate({ $match: {} }, { $group: { _id: 'stats', num: { $sum: 1 }, sum: { $sum: '$participants' } } }, o(function* (err, result) {
-			if (err) throw err;
-			res.write('<h1>Aquaforces play statistics</h1>');
-			res.write(`'<p>'${result[0].sum}' users</p>'`);
-			res.write(`'<p>'${result[0].num}' gameplays</p>'`);
-			res.end(yield fs.readFile('html/a/foot.html', yield));
-		}));
-	} else if (reqPath === '/status/') {
-		// A status page to make sure Aquaforces is running
-		yield respondPage('Status', req, res, yield);
-		res.write('<h1>Aquaforces Status</h1>');
-		const child = spawn('git', ['rev-parse', '--short', 'HEAD']);
-		res.write('<p class="green"><strong>Running</strong>, commit #');
-		child.stdout.on('data', (data) => {
-			res.write(data);
-		});
-		child.stdout.on('end', o(function* () {
-			res.write('</p>');
-			if (user.name) res.write('<p>You are logged in.</strong></p>');
-			else res.write('<p>You are not logged in</p>');
-			res.write(`<p>Current host header is <strong>'${req.headers.host}'</strong></p>`);
-			res.write('<code class="blk" id="socket-test">Connecting to socket…</code>');
-			res.write(yield addVersionNonces('<script src="/a/sockettest.js"></script>', reqPath, yield));
-			res.end(yield fs.readFile('html/a/foot.html', yield));
-		}));
-	} else if (redirectURLs.includes(reqPath) && !usesIODomain) {
-		// Redirect URLs without a trailing slash
-		res.writeHead(303, { Location: reqPath + '/' });
-		res.end();
-	} else return errorNotFound(req, res);
-});
+};
 /*
+CONSOLE SEARCHING CODE FOR LATER
 const filter = user ? { $or: [{ userID: user._id }, { public: true }] } : { public: true };
 const q = (req.url.query.q || '').trim();
 let qsetstr = '';
