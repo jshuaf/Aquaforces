@@ -57,7 +57,12 @@ const initialMiddleware = {
 		next();
 	},
 	removeWWW: (req, res, next) => {
-		console.log(req.get('host'));
+		let host = req.get('host');
+		if (req.get('host').includes('www.')) {
+			host = host.replaceAll('www.', '');
+			const newURL = `${req.protocol}://${host}${req.originalUrl}`;
+			res.redirect(301, );
+		}
 		next();
 	},
 };
