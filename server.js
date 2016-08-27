@@ -22,7 +22,6 @@ require('./essentials')();
 require('colors');
 
 const http = require('http'),
-	https = require('https'),
 	fs = require('fs'),
 	cookie = require('cookie'),
 	crypto = require('crypto'),
@@ -125,7 +124,13 @@ app.get('/login/google', (req, res) => {
 			grant_type: 'authorization_code',
 		},
 	}, (error, _, body) => {
-		const tokenData = JSON.parse(body);
+		let tokenData;
+		try {
+			tokenData = JSON.parse(body);
+		} catch (e) {
+			console.error(e);
+			return res.send('<p>Error parsing response.</p>');
+		}
 		if (error || tokenData.error) {
 			error = error || tokenData.error;
 			console.error(error);
@@ -133,15 +138,21 @@ app.get('/login/google', (req, res) => {
 		}
 		request({
 			url: 'https://www.googleapis.com/plus/v1/people/me',
-			qs: { access_token: body.access_token },
+			qs: { access_token: tokenData.access_token },
 		}, o(function* (error, _, body) {
-			const apiData = JSON.parse(body);
-			console.log(apiData, tokenData);
+			let apiData;
+			try {
+				apiData = JSON.parse(body);
+			} catch (e) {
+				console.error(e);
+				return res.send('<p>Error parsing response.</p>');
+			}
 			if (error || apiData.error) {
 				error = error || apiData.error.errors;
 				console.error(error);
 				return res.send('<p>Error accessing Google+ API.</p>');
 			}
+			console.log(apiData);
 			const decodedToken = jwt.decode(tokenData.id_token);
 			const matchedUser = yield dbcs.users.findOne({ googleID: decodedToken.sub }, yield);
 			const idToken = crypto.randomBytes(128).toString('base64');
