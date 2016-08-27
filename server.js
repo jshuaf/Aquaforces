@@ -152,7 +152,6 @@ app.get('/login/google', (req, res) => {
 				console.error(error);
 				return res.send('<p>Error accessing Google+ API.</p>');
 			}
-			console.log(apiData);
 			const decodedToken = jwt.decode(tokenData.id_token);
 			const matchedUser = yield dbcs.users.findOne({ googleID: decodedToken.sub }, yield);
 			const idToken = crypto.randomBytes(128).toString('base64');
@@ -184,49 +183,6 @@ app.get('/login/google', (req, res) => {
 		);
 	});
 });
-/*
-CONSOLE SEARCHING CODE FOR LATER
-const filter = user ? { $or: [{ userID: user._id }, { public: true }] } : { public: true };
-const q = (req.url.query.q || '').trim();
-let qsetstr = '';
-let searchText = '';
-
-// Edit filter based on search queries
-q.split(/\s+/).forEach((token) => {
-	if (token === 'is:mine' && user) filter.userID = user._id;
-	if (token === 'is:public') filter.public = true;
-	if (token === 'is:favorite' && user) filter._id = { $in: user.favorites };
-	if (token === '-is:mine' && user) filter.userID = { $not: user._id };
-	if (token === '-is:public') filter.public = false;
-	if (token === '-is:favorite' && user) filter._id = { $not: { $in: user.favorites } };
-	if (!token.includes(':')) searchText += token + ' ';
-});
-
-// Perform the search in the database
-searchText = searchText.trim();
-if (searchText) filter.$text = { $search: searchText };
-dbcs.qsets.find(
-filter, searchText ? { score: {
-$meta: 'textScore' } } : undefined).sort(
-searchText ? { score: { $meta: 'textScore' } } : { timeAdded: -1 }).each(o(function* (err, qset) {
-	if (err) throw err;
-
-	// MARK: ugly html insertion, will later be replaced by React
-	if (qset) {
-		});
-		qsetstr += '</ol><a class="new-question">add question</a></details>';
-	} else {
-		let data = (yield fs.readFile('./html/console.html', yield)).toString()
-			.replace('$qsets', qsetstr || '<p class="empty-search">No question sets matched your search.</p>')
-			.replaceAll('$host', encodeURIComponent(`http://${req.headers.host}`))
-			.replaceAll('$googleClientID', config.googleAuth.clientID);
-		if (q) data = data.replace('autofocus=""', 'autofocus="" value="' + html(q) + '"');
-		res.write(data);
-		res.end(yield fs.readFile('./html/a/foot.html', yield));
-	}
-}));
-*/
-
 
 // MARK: actually start the server
 console.log('Connecting to mongodb…'.cyan);
