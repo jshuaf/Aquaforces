@@ -30,7 +30,8 @@ const http = require('http'),
 	jwt = require('jsonwebtoken'),
 	express = require('express'),
 	request = require('request'),
-	bodyParser = require('body-parser');
+	bodyParser = require('body-parser'),
+	cookieParser = require('cookie-parser');
 	/* eslint-enable one-var */
 
 // Server Middleware
@@ -66,6 +67,9 @@ const initialMiddleware = {
 	},
 };
 
+const parsers = [bodyParser.json(), bodyParser.urlencoded({ extended: true }),
+	express.static('http'), cookieParser()];
+
 const head = (req, res, next) => {
 	res.locals.head = fs.readFileSync('./html/a/head.html').toString()
 		.replaceAll('$inhead', res.locals.inHead || '')
@@ -75,9 +79,7 @@ const head = (req, res, next) => {
 
 const app = express();
 Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
-app.use(express.static('http'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+parsers.map((parser) => app.use(parser));
 
 app.get('/', (req, res, next) => {
 	if (req.user) return res.redirect(302, '/host/');
@@ -105,6 +107,14 @@ app.get('/host', (req, res, next) => {
 }, head, (req, res) => {
 	const hostPage = fs.readFileSync('./html/host.html').toString();
 	res.send(res.locals.head + hostPage + res.locals.foot);
+});
+
+app.get('/console', (req, res, next) => {
+	res.locals.title = 'Question Sets';
+	next();
+}, head, (req, res) => {
+	const consolePage = fs.readFileSync('./html/console.html').toString();
+	res.send(res.locals.head + consolePage + res.locals.foot);
 });
 
 app.post('/api/:path', (req, res) => apiServer(req, res));
@@ -156,9 +166,7 @@ app.get('/login/google', (req, res) => {
 			const idToken = crypto.randomBytes(128).toString('base64');
 			if (matchedUser) {
 				dbcs.users.update({ googleID: decodedToken.sub }, {
-					$push: {
-						cookie: { token: idToken, created: new Date().getTime() },
-					},
+					$push: { cookie: { token: idToken, created: new Date().getTime() } },
 					$set: { personalInfo: apiData },
 				});
 			} else {
@@ -169,15 +177,13 @@ app.get('/login/google', (req, res) => {
 					personalInfo: apiData,
 				});
 			}
-			res.writeHead(303, {
-				Location: '/console/',
-				'Set-Cookie': cookie.serialize('id', idToken, {
-					path: '/',
-					expires: new Date(new Date().setDate(new Date().getDate() + 30)),
-					httpOnly: true,
-					secure: config.secureCookies,
-				}),
+			res.cookie('id', idToken, {
+				path: '/',
+				expires: new Date(new Date().setDate(new Date().getDate() + 30)), // thirty days
+				httpOnly: true,
+				secure: config.secureCookies,
 			});
+			return res.redirect(303, '/console');
 		})
 		);
 	});
