@@ -2,13 +2,12 @@
 
 const cookie = require('cookie');
 
-module.exports = function (req, res, post, user) {
+module.exports = function (req, res) {
 	res.badRequest = (message) => {
 		res.writeHead(400);
 		return res.end(message);
 	};
-
-	if (req.url.pathname === '/logout') {
+	if (req.params.path === 'logout') {
 		res.writeHead(303, {
 			'Set-Cookie': cookie.serialize('id', '', {
 				path: '/',
@@ -17,23 +16,23 @@ module.exports = function (req, res, post, user) {
 				secure: false,
 			}),
 		});
-		if (user) dbcs.users.update({ _id: user._id }, { $set: { cookie: [] } });
+		if (req.user) dbcs.users.update({ _id: req.user._id }, { $set: { cookie: [] } });
 		res.end();
-	} else if (req.url.pathname === '/new-qset') {
-		if (!post.title) {
+	} else if (req.params.path === 'new-qset') {
+		if (!req.body.title) {
 			return res.badRequest('Error: Set name is required.');
-		} else if (post.title.length > 144) {
+		} else if (req.body.title.length > 144) {
 			return res.badRequest('Error: Set name length should be 144 characters or less.');
-		} else if (!user && post.privacy === true) {
+		} else if (!req.user && req.body.privacy === true) {
 			return res.badRequest('Error: Sets made by users who are not logged in must be public.');
 		}
 
-		if (!(post.questions instanceof Array)) {
+		if (!(req.body.questions instanceof Array)) {
 			return res.badRequest('Error: Questions must be an array.');
 		}
 
-		for (let i = 0; i < post.questions.length; i++) {
-			const q = post.questions[i];
+		for (let i = 0; i < req.body.questions.length; i++) {
+			const q = req.body.questions[i];
 			if (!q.text || !q.correctAnswer || !q.incorrectAnswers) {
 				return res.badRequest(`Error: Question ${i} must have text, a correct answer, and incorrect answers.`);
 			} else if (!(typeof q.correctAnswer === 'string')) {
@@ -61,16 +60,16 @@ module.exports = function (req, res, post, user) {
 		const questionSet = Object.assign({
 			_id: generateID(),
 			timeAdded: new Date().getTime(),
-		}, post);
+		}, req.body);
 
-		if (user) {
-			questionSet.userID = user._id;
-			questionSet.userName = user.name;
+		if (req.user) {
+			questionSet.userID = req.user._id;
+			questionSet.userName = req.user.name;
 		}
 
 		dbcs.qsets.insert(questionSet);
 		res.end(res.writeHead(204));
-	} else if (req.url.pathname === '/get-qsets') {
+	} else if (req.params.path === 'get-qsets') {
 		const qsets = [];
 		dbcs.qsets.find({}).each((err, qset) => {
 			if (qset) qsets.push(qset);
@@ -79,31 +78,31 @@ module.exports = function (req, res, post, user) {
 				return res.end(JSON.stringify(qsets));
 			}
 		});
-	} else if (req.url.pathname === '/delete-qset') {
-		dbcs.qsets.findOne({ _id: post.id }, (err, qset) => {
+	} else if (req.params.path === 'delete-qset') {
+		dbcs.qsets.findOne({ _id: req.body.id }, (err, qset) => {
 			if (err) throw err;
 			if (!qset) {
 				return res.badRequest('Error: Question set not found.');
-			} else if (user && !user.admin && qset.userID !== user._id) {
+			} else if (req.user && !req.user.admin && qset.userID !== req.user._id) {
 				return res.badRequest('Error: You may not delete question sets that aren\'t yours.');
 			}
-			dbcs.qsets.remove({ _id: post.id });
+			dbcs.qsets.remove({ _id: req.body.id });
 			res.end(res.writeHead(204));
 		});
-	} else if (req.url.pathname === '/edit-question') {
-		dbcs.qsets.findOne({ _id: post.id }, (err, qset) => {
+	} else if (req.params.path === 'edit-question') {
+		dbcs.qsets.findOne({ _id: req.body.id }, (err, qset) => {
 			if (err) throw err;
 			if (!qset) {
 				return res.badRequest('Error: Question set not found.');
-			} else if (!user.admin && qset.userID !== user._id) {
+			} else if (!req.user.admin && qset.userID !== req.user._id) {
 				return res.badRequest('Error: You may not edit question sets that aren\'t yours.');
 			}
-			if (post.num !== 'new' && !qset.questions[parseInt(post.num, 10)]) {
+			if (req.body.num !== 'new' && !qset.questions[parseInt(req.body.num, 10)]) {
 				return res.badRequest('Error: Invalid question number.');
 			}
 			let q;
 			try {
-				q = JSON.parse(post.question);
+				q = JSON.parse(req.body.question);
 			} catch (e) {
 				res.badRequest('Invalid JSON in questions.');
 			}
@@ -137,28 +136,28 @@ module.exports = function (req, res, post, user) {
 				answers: q.answers,
 				incorrectAnswers: q.incorrectAnswers,
 			};
-			if (post.num === 'new') qset.questions.push(question);
-			else qset.questions[parseInt(post.num, 10)] = question;
-			dbcs.qsets.update({ _id: post.id }, { $set: { questions: qset.questions } });
+			if (req.body.num === 'new') qset.questions.push(question);
+			else qset.questions[parseInt(req.body.num, 10)] = question;
+			dbcs.qsets.update({ _id: req.body.id }, { $set: { questions: qset.questions } });
 			res.writeHead(204);
 			res.end();
 		});
-	} else if (req.url.pathname === '/remove-question') {
-		dbcs.qsets.findOne({ _id: post.id }, (err, qset) => {
+	} else if (req.params.path === 'remove-question') {
+		dbcs.qsets.findOne({ _id: req.body.id }, (err, qset) => {
 			if (err) throw err;
 			if (!qset) {
 				return res.badRequest('Error: Question set not found.');
 			}
-			if (!user.admin && qset.userID !== user._id) {
+			if (!req.user.admin && qset.userID !== req.user._id) {
 				return res.badRequest('Error: You may not edit question sets that aren\'t yours.');
-			} else if (!qset.questions[parseInt(post.num, 10)]) {
+			} else if (!qset.questions[parseInt(req.body.num, 10)]) {
 				return res.badRequest('Error: Invalid question number.');
 			}
 			if (!qset.questions.length === 1) {
 				return res.badRequest('Error: You may not remove the only question in a set.');
 			}
-			qset.questions.splice(parseInt(post.num, 10), 1);
-			dbcs.qsets.update({ _id: post.id }, { $set: { questions: qset.questions } });
+			qset.questions.splice(parseInt(req.body.num, 10), 1);
+			dbcs.qsets.update({ _id: req.body.id }, { $set: { questions: qset.questions } });
 			res.writeHead(204);
 			res.end();
 		});
