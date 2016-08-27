@@ -26,7 +26,6 @@ const http = require('http'),
 	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient,
-	WS = require('ws'),
 	o = require('yield-yield'),
 	jwt = require('jsonwebtoken'),
 	express = require('express'),
@@ -213,31 +212,4 @@ mongo.connect(config.mongoPath, (err, db) => {
 	require('./sockets/index')(server);
 	/* eslint-enable global-require */
 	console.log('Sockets running on port 3000 over plain WS.'.cyan);
-
-	// Rudimentary tests
-	if (process.argv.indexOf('--test') >= 0) {
-		console.log('Running test, process will terminate when finished.'.yellow);
-		http.get({
-			port: config.port,
-			headers: { host: 'localhost' },
-		}, (testRes) => {
-			testRes.on('data', () => {
-				console.log('Data received'.grey);
-			});
-			testRes.on('end', () => {
-				console.log('HTTP test passed, starting socket test.'.green);
-				const wsc = new WS(`ws://localhost:${config.port}/test`);
-				wsc.on('open', () => {
-					console.log('Connected to socket.');
-				});
-				wsc.on('data', () => {
-					console.log('Data received'.grey);
-				});
-				wsc.on('close', () => {
-					console.log('Things seem to work!'.green);
-					process.exit();
-				});
-			});
-		});
-	}
 });
