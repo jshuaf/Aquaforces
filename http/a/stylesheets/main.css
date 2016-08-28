@@ -1,7 +1,7 @@
 * {
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
-	color: #328BC6;
+	color: #19A8A6;
 }
 
 img {
@@ -91,10 +91,13 @@ body {
 }
 
 input[type=tel], input[type=url], input[type=password], input[type=email], input[type=number], input[type=search], input[type=text], select, textarea, input {
-	color: #212f3c;
+	color: white;
+	background-color: #19A8A6;
 	font-size: 1.5rem;
-	border-radius: 30px;
+	border-radius: 25px;
 	text-align: center;
+	box-shadow: none;
+	border: 1px #19A8A6 solid;
 }
 
 label {
@@ -119,7 +122,7 @@ label {
 .button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
 	border-radius: 30px;
 	margin-top: 10px;
-	background-color: #328BC6;
+	background-color: #ED676C;
 	border: none;
 	letter-spacing: normal;
 	text-transform: none;
@@ -130,6 +133,27 @@ label {
 
 .button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active, .button.button-primary:focus, button.button-primary:focus, input[type=submit].button-primary:focus, input[type=reset].button-primary:focus, input[type=button].button-primary:focus {
 	background-color: #45B3E2;
+}
+
+.button-primary.button-inline, .button-secondary.button-inline {
+	margin-left: 20px;
+}
+
+.inline-blocky > * {
+	display: inline-table;
+	vertical-align: middle;
+}
+
+.button.button-secondary, button.button-secondary, input[type=submit].button-secondary, input[type=reset].button-secondary, input[type=button].button-secondary {
+	border-radius: 30px;
+	margin-top: 10px;
+	background-color: white;
+	border: none;
+	letter-spacing: normal;
+	text-transform: none;
+	font-size: 1.5rem;
+	font-weight: bold;
+	color: #19A8A6;
 }
 
 .navbar-logo {
@@ -534,4 +558,13 @@ h2 {
 .bounceoutup {
 	-webkit-animation-name: bounceoutup;
 	animation-name: bounceoutup;
+}
+
+.questionSetSummary {
+	background-color: #19A8A6;
+	padding: 25px;
+	border-radius: 25px;
+}
+.questionSetSummary > h1, .questionSetSummary > h4 {
+	color: white;
 }

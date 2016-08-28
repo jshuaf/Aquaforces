@@ -24,13 +24,17 @@ class QuestionSetList extends Component {
 	render() {
 		return (
 			<div id="questionSets">
-				<h1>Question Sets</h1>
-				<a className="button button-primary" onClick={this.props.createLink}>Create</a>
-			{
-				this.props.questionSets.map((questionSet, index) =>
-					<QuestionSetSummary {...questionSet} key={index} />
-				)
-			}
+				<div className="inline-blocky">
+					<h1>Question Sets</h1>
+					<a className="button button-primary button-inline" onClick={this.props.createLink}>+ Create</a>
+				</div>
+				<div className="row">
+					{
+						this.props.questionSets.map((questionSet, index) =>
+							<QuestionSetSummary {...questionSet} key={index} />
+						)
+					}
+				</div>
 		</div>
 		);
 	}

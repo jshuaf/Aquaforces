@@ -53,7 +53,7 @@ class NewSetForm extends Component {
 					label="Private set" ref={(c) => { this.checkboxInput = c; }}
 					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
 				/>
-			<input onClick={this.submitQuestionSet} type="submit" name="Submit" />
+			<input onClick={this.submitQuestionSet} type="submit" className="button button-primary" name="Submit" />
 			</form>
 		);
 	}
