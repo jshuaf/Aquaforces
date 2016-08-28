@@ -1,14 +1,19 @@
-import React from 'react';
-import NewSetForm from './NewSetForm.jsx';
-import QuestionSetList from './QuestionSetList.jsx';
+import React, { PropTypes, Component } from 'react';
+import { Link } from 'react-router';
 
-function QuestionConsole() {
+function QuestionConsole({ children }) {
 	return (
 		<div id="questionConsole">
-			<NewSetForm />
-			<QuestionSetList />
+			<h1>Question Console</h1>
+			<Link to="/new">New Set</Link>
+			<Link to="/">View Sets</Link>
+			{children}
 		</div>
 	);
 }
+
+QuestionConsole.propTypes = {
+	children: PropTypes.any.isRequired,
+};
 
 export default QuestionConsole;
