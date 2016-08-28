@@ -5,6 +5,7 @@ import GamePlayHost from './GamePlayHost.jsx';
 import Spinner from '../shared/Spinner.jsx';
 import { questionSetPropTypes } from '../console/QuestionSet.jsx';
 import { newGame, startGameRequest } from './actions';
+import { Header, UnderHeader } from '../shared/Header.jsx';
 
 class GameHostDisplay extends Component {
 	constructor(props) {
@@ -33,6 +34,8 @@ class GameHostDisplay extends Component {
 		case 'notStarted':
 			return (
 				<div id="gameHost">
+					<Header />
+					<UnderHeader />
 					<QuestionSetPicker />
 					<button className="button button-primary" onClick={this.newGame}>New game</button>
 				</div>
@@ -40,6 +43,8 @@ class GameHostDisplay extends Component {
 		case 'boarding':
 			return (
 				<div id="gameHost">
+					<Header />
+					<UnderHeader />
 					<h1>Your game ID is: {this.props.gameInfo.gameID}</h1>
 					<h4>Users without crews:</h4>
 					{this.props.usersWithoutCrews.map((user, index) => <p key={index}>{user}</p>)}

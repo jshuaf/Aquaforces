@@ -42,7 +42,7 @@ class NewSetForm extends Component {
 	render() {
 		return (
 			<form id="new_set" onSubmit={(e) => e.preventDefault()}>
-				<h2>New Question Set</h2>
+				<h3>New Question Set</h3>
 				<TextInput
 					label="Title" placeholder="My Question Set" required
 					ref={(t) => { this.titleInput = t; }}
@@ -53,7 +53,7 @@ class NewSetForm extends Component {
 					label="Private set" ref={(c) => { this.checkboxInput = c; }}
 					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
 				/>
-			<input onClick={this.submitQuestionSet} type="submit" name="Submit" />
+			<input onClick={this.submitQuestionSet} type="submit" className="button button-primary" name="Submit" />
 			</form>
 		);
 	}

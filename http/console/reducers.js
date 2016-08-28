@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import * as actions from './actions';
 
-const initialQuestionSetState = {
+const initialNewSetState = {
 	title: '',
 	nextQuestionID: 2,
 	questions: [{
@@ -17,7 +17,7 @@ const initialQuestionSetState = {
 	privacy: false,
 };
 
-function newQuestionSet(state = initialQuestionSetState, action) {
+function newQuestionSet(state = initialNewSetState, action) {
 	switch (action.type) {
 	case actions.ADD_QUESTION_INPUT:
 		return Object.assign({}, state, {
@@ -107,7 +107,7 @@ function newQuestionSet(state = initialQuestionSetState, action) {
 function questionSets(state = [], action) {
 	switch (action.type) {
 	case actions.POPULATE_QUESTION_SET_LIST:
-		return action.questionSets;
+		return action.questionSets || state;
 	case actions.ADD_SET:
 		return state.concat(action.set);
 	case actions.DELETE_SET:
@@ -119,5 +119,16 @@ function questionSets(state = [], action) {
 	}
 }
 
-const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets });
+const initialQuestionSetState = Object.assign(initialNewSetState, { _id: '', shortID: '' });
+
+function activeQuestionSet(state = initialQuestionSetState, action) {
+	switch (action.type) {
+	case actions.POPULATE_ACTIVE_QUESTION_SET:
+		return action.questionSet || state;
+	default:
+		return state;
+	}
+}
+
+const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets, activeQuestionSet });
 export default questionConsoleReducer;

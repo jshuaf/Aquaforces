@@ -60,6 +60,7 @@ module.exports = function (req, res) {
 		const questionSet = Object.assign({
 			_id: generateID(),
 			timeAdded: new Date().getTime(),
+			shortID: (`${Math.random().toString(36)}00000000000000000`).slice(2, 9),
 		}, req.body);
 
 		if (req.user) {
@@ -77,6 +78,16 @@ module.exports = function (req, res) {
 				res.writeHead(200);
 				return res.end(JSON.stringify(qsets));
 			}
+		});
+	} else if (req.params.path === 'get-qset') {
+		if (!req.body.shortID || typeof req.body.shortID !== 'string') {
+			res.badRequest('Must send the short ID of a set to request.');
+		}
+		dbcs.qsets.findOne({ shortID: req.body.shortID }).then((qset) => {
+			res.writeHead(200);
+			res.end(JSON.stringify(qset));
+		}, () => {
+			res.badRequest('Could not find the question set requested.');
 		});
 	} else if (req.params.path === 'delete-qset') {
 		dbcs.qsets.findOne({ _id: req.body.id }, (err, qset) => {

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import GamePlay from './play/GamePlay.jsx';
 import JoinGameForm from './boarding/JoinGameForm.jsx';
+import { Header, UnderHeader } from '../shared/Header.jsx';
 
 class GameDisplay extends Component {
 	constructor(props) {
@@ -12,9 +13,21 @@ class GameDisplay extends Component {
 		switch (this.props.boardingStatus) {
 		case 'joiningGame':
 		case 'joiningCrew':
-			return <JoinGameForm socket={this.props.socket} />;
+			return (
+				<div>
+					<Header />
+					<UnderHeader />
+					<JoinGameForm socket={this.props.socket} />
+				</div>
+			);
 		case 'joined':
-			return <p>You joined the game.</p>;
+			return (
+				<div>
+					<Header />
+					<UnderHeader />
+					<p>You joined the game.</p>
+				</div>
+			);
 		case 'started':
 			return <GamePlay socket={this.props.socket} ref={this.props.instance} />;
 		default:
