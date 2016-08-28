@@ -109,8 +109,16 @@ app.get('/host', (req, res, next) => {
 	res.send(res.locals.head + hostPage + res.locals.foot);
 });
 
-app.get('/console', (req, res, next) => {
+app.get('/console/*', (req, res, next) => {
 	res.locals.title = 'Question Sets';
+	next();
+}, head, (req, res) => {
+	const consolePage = fs.readFileSync('./html/console.html').toString();
+	res.send(res.locals.head + consolePage + res.locals.foot);
+});
+
+app.get('/set/*', (req, res, next) => {
+	res.locals.title = 'Question Set';
 	next();
 }, head, (req, res) => {
 	const consolePage = fs.readFileSync('./html/console.html').toString();
