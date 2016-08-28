@@ -52,12 +52,12 @@ export const questionSetPropTypes = {
 		id: PropTypes.number.isRequired,
 	})).isRequired,
 	privacy: PropTypes.bool.isRequired,
-	shortID: PropTypes.string.isRequired,
 };
 
 QuestionSet.propTypes = Object.assign({
 	deleteSet: PropTypes.func.isRequired,
 	_id: PropTypes.string.isRequired,
+	shortID: PropTypes.string.isRequired,
 }, questionSetPropTypes);
 
 const mapDispatchToProps = (dispatch) => ({
