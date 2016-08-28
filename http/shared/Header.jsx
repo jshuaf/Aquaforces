@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import colors from '../shared/colors';
 
-export default function Header() {
+export function Header() {
 	const containerStyle = {
 		display: 'flex',
 		alignItems: 'center',
@@ -8,8 +9,9 @@ export default function Header() {
 		position: 'fixed',
 		zIndex: 5,
 		width: '100%',
-		height: '15%',
-		backgroundColor: '#86CF8C',
+		minWidth: '200px',
+		height: '10%',
+		backgroundColor: colors.wasabi,
 	};
 
 	const logoStyle = {
@@ -23,3 +25,18 @@ export default function Header() {
 		</div>
 	);
 }
+
+export function UnderHeader({ children }) {
+	const style = {
+		height: '15vh',
+		width: '100%',
+	};
+
+	return (
+		<div style={style} />
+	);
+}
+
+UnderHeader.propTypes = {
+	children: PropTypes.any,
+};
