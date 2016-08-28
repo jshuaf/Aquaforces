@@ -14,7 +14,7 @@ module.exports = (
 				<Route path="set/:shortID" component={QuestionSet} />
 			</Route>
 			<Route component={QuestionConsole}>
-				<Route path="set/:shortID" compnonent={QuestionSet} />
+				<Route path="set/:shortID" component={QuestionSet} />
 			</Route>
 		</Route>
 	</Router>
