@@ -12,6 +12,14 @@ img {
 	pointer-events: none;
 }
 
+html {
+	background-color: #EBF5FF;
+}
+
+#mountNode {
+	background-color: #EBF5FF;
+}
+
 strong, b {
 	font-weight: bold;
 }
