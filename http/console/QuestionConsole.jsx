@@ -5,8 +5,8 @@ function QuestionConsole({ children }) {
 	return (
 		<div id="questionConsole">
 			<h1>Question Console</h1>
-			<Link to="/new">New Set</Link>
-			<Link to="/">View Sets</Link>
+			<Link to="/console/new">New Set</Link>
+			<Link to="/console/">View Sets</Link>
 			{children}
 		</div>
 	);
