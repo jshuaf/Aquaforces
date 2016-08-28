@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch) => ({
 QuestionSetList.propTypes = {
 	populateQuestionSetList: PropTypes.func.isRequired,
 	questionSets: PropTypes.arrayOf(
-		PropTypes.shape(questionSetPropTypes)).isRequired,
+		PropTypes.shape(questionSetSummaryPropTypes)).isRequired,
 };
 
 /* eslint-disable no-class-assign */
