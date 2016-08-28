@@ -1,6 +1,15 @@
 import { combineReducers } from 'redux';
 import * as actions from './actions';
 
+const initialConsoleState = {
+	displayType: 'list',
+	activeSet: null,
+}
+
+function consoleState(state = initialConsoleState, action) {
+
+}
+
 const initialQuestionSetState = {
 	title: '',
 	nextQuestionID: 2,

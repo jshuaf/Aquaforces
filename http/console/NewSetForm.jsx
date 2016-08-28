@@ -42,7 +42,7 @@ class NewSetForm extends Component {
 	render() {
 		return (
 			<form id="new_set" onSubmit={(e) => e.preventDefault()}>
-				<h2>New Question Set</h2>
+				<h1>New Question Set</h1>
 				<TextInput
 					label="Title" placeholder="My Question Set" required
 					ref={(t) => { this.titleInput = t; }}
