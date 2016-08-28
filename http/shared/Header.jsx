@@ -9,19 +9,29 @@ export function Header() {
 		position: 'fixed',
 		zIndex: 5,
 		width: '100%',
-		minWidth: '200px',
 		height: '10%',
 		backgroundColor: colors.wasabi,
 	};
 
 	const logoStyle = {
 		height: '80%',
-		width: '25%',
+		width: '20%',
+		minWidth: '200px',
+	};
+
+	const linkStyle = {
+		height: '80%',
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
 	};
 
 	return (
 		<div className="header" style={containerStyle}>
 			<img src="../img/logo-black.svg" alt="Aquaforces" style={logoStyle} />
+			<a href="/console" style={linkStyle}><span>Question Sets</span></a>
+			<a href="/host" style={linkStyle}><span>Start a game</span></a>
+			<a href="/play" style={linkStyle}><span>Join a game</span></a>
 		</div>
 	);
 }
