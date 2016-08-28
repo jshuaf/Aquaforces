@@ -9,9 +9,9 @@ class PrimaryButtonRaw extends Component {
 			borderRadius: '99999px',
 			backgroundColor: colors.coral,
 			border: 'none',
-			fontSize: '1.5em',
+			fontSize: '1.3em',
 			color: 'white',
-			fontWeight: 'bold',
+			':hover': { backgroundColor: colors.rosebud },
 		};
 
 		const { children, ...buttonProps } = this.props;
