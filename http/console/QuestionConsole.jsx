@@ -1,12 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
+import Header from '../shared/Header.jsx';
 
 function QuestionConsole({ children }) {
 	return (
 		<div id="questionConsole">
+			<Header />
 			<h1>Question Console</h1>
-			<Link to="/console/new">New Set</Link>
-			<Link to="/console/">View Sets</Link>
+			<Link to="/console/new"><button>New Set</button></Link>
+			<Link to="/console/"><button>View Sets</button></Link>
 			{children}
 		</div>
 	);

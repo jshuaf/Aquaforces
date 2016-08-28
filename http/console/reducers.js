@@ -107,7 +107,7 @@ function newQuestionSet(state = initialNewSetState, action) {
 function questionSets(state = [], action) {
 	switch (action.type) {
 	case actions.POPULATE_QUESTION_SET_LIST:
-		return action.questionSets;
+		return action.questionSets || state;
 	case actions.ADD_SET:
 		return state.concat(action.set);
 	case actions.DELETE_SET:
@@ -124,7 +124,7 @@ const initialQuestionSetState = Object.assign(initialNewSetState, { _id: '', sho
 function activeQuestionSet(state = initialQuestionSetState, action) {
 	switch (action.type) {
 	case actions.POPULATE_ACTIVE_QUESTION_SET:
-		return action.questionSet;
+		return action.questionSet || state;
 	default:
 		return state;
 	}
