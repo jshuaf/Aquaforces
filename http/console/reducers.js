@@ -130,5 +130,14 @@ function activeQuestionSet(state = initialQuestionSetState, action) {
 	}
 }
 
-const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets, activeQuestionSet });
+function currentUser(state = null, action) {
+	switch (action.type) {
+	case actions.AUTHENTICATE_USER:
+		return action.user || state;
+	default:
+		return state;
+	}
+}
+
+const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets, activeQuestionSet, currentUser });
 export default questionConsoleReducer;

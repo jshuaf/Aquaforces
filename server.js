@@ -82,7 +82,7 @@ Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
 parsers.map((parser) => app.use(parser));
 
 app.get('/', (req, res, next) => {
-	if (req.user) return res.redirect(302, '/host/');
+	if (req.user) return res.redirect(302, '/console/');
 	next();
 }, head, (req, res) => {
 	const host = encodeURIComponent(`http://${req.get('host')}`);

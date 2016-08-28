@@ -1,23 +1,48 @@
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Header, UnderHeader } from '../shared/Header.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
+import { authenticateUser } from './reducers';
 
-function QuestionConsole({ children }) {
-	return (
-		<div id="questionConsole">
-			<Header />
-			<UnderHeader />
-				<h1>Question Console</h1>
-				<Link to="/console/new"><PrimaryButton>New Set</PrimaryButton></Link>
-				<Link to="/console/"><PrimaryButton>View Sets</PrimaryButton></Link>
-			{children}
-		</div>
-	);
+const request = require('request');
+
+/* global sweetAlert:true */
+
+class QuestionConsoleDisplay extends Component {
+	componentDidMount() {
+		const url = `${location.protocol}//${location.host}/api/authenticate`;
+		request({ url, method: 'post' }, (error, res, body) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			this.props.authenticateUser(body);
+		});
+	}
+	render() {
+		return (
+			<div id="questionConsole">
+				<Header />
+				<UnderHeader />
+					<h1>Question Console</h1>
+					<Link to="/console/new"><PrimaryButton>New Set</PrimaryButton></Link>
+					<Link to="/console/"><PrimaryButton>View Sets</PrimaryButton></Link>
+				{this.props.children}
+			</div>
+		);
+	}
 }
 
-QuestionConsole.propTypes = {
+QuestionConsoleDisplay.propTypes = {
 	children: PropTypes.any.isRequired,
+	authenticateUser: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+	authenticateUser: (user) => {
+		dispatch(authenticateUser(user));
+	},
+});
+
+const QuestionConsole = connect(null, mapDispatchToProps)(QuestionConsoleDisplay);
 
 export default QuestionConsole;

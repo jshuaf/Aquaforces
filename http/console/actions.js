@@ -12,6 +12,8 @@ export const DELETE_SET = 'DELETE_SET';
 
 export const POPULATE_ACTIVE_QUESTION_SET = 'POPULATE_ACTIVE_QUESTION_SET';
 
+export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
+
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
 		const action = { type };
@@ -35,3 +37,5 @@ export const addSet = makeActionCreator(ADD_SET, 'set');
 export const deleteSet = makeActionCreator(DELETE_SET, 'id');
 
 export const populateActiveQuestionSet = makeActionCreator(POPULATE_ACTIVE_QUESTION_SET, 'questionSet');
+
+export const authenticateUser = makeActionCreator(AUTHENTICATE_USER, 'user');
