@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Question from './Question.jsx';
-import { deleteSet } from './actions';
+import { deleteSet, populateActiveQuestionSet } from './actions';
 
 /* global sweetAlert:true */
 
@@ -13,7 +13,7 @@ class QuestionSet extends Component {
 		this.deleteSet = this.deleteSet.bind(this);
 	}
 	componentDidMount() {
-		const url = `${location.protocol}//${location.host}/api/get-qsets`;
+		const url = `${location.protocol}//${location.host}/api/get-qset`;
 		request({
 			url,
 			body: { shortID: this.props.params.shortID },
@@ -22,7 +22,7 @@ class QuestionSet extends Component {
 		}, (error, res, body) => {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			this.props.populateQuestionSetList(body);
+			this.props.populateActiveQuestionSet(body);
 		});
 	}
 	deleteSet() {
@@ -79,6 +79,9 @@ const mapStateToProps = (state) => state.activeQuestionSet;
 const mapDispatchToProps = (dispatch) => ({
 	deleteSet: (id) => {
 		dispatch(deleteSet(id));
+	},
+	populateActiveQuestionSet: (set) => {
+		dispatch(populateActiveQuestionSet(set));
 	},
 });
 

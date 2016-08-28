@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import * as actions from './actions';
 
-const initialQuestionSetState = {
+const initialNewSetState = {
 	title: '',
 	nextQuestionID: 2,
 	questions: [{
@@ -17,7 +17,7 @@ const initialQuestionSetState = {
 	privacy: false,
 };
 
-function newQuestionSet(state = initialQuestionSetState, action) {
+function newQuestionSet(state = initialNewSetState, action) {
 	switch (action.type) {
 	case actions.ADD_QUESTION_INPUT:
 		return Object.assign({}, state, {
@@ -118,6 +118,8 @@ function questionSets(state = [], action) {
 		return state;
 	}
 }
+
+const initialQuestionSetState = Object.assign(initialNewSetState, { _id: '', shortID: '' });
 
 function activeQuestionSet(state = initialQuestionSetState, action) {
 	switch (action.type) {
