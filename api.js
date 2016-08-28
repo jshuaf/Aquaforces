@@ -60,6 +60,7 @@ module.exports = function (req, res) {
 		const questionSet = Object.assign({
 			_id: generateID(),
 			timeAdded: new Date().getTime(),
+			shortID: (`${Math.random().toString(36)}00000000000000000`).slice(2, 9),
 		}, req.body);
 
 		if (req.user) {
