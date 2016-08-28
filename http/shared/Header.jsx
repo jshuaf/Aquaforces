@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react';
 export default function Header() {
 	const containerStyle = {
 		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-around',
 		position: 'fixed',
 		zIndex: 5,
 		width: '100%',
@@ -17,7 +19,7 @@ export default function Header() {
 
 	return (
 		<div className="header" style={containerStyle}>
-			<img src="img/logo-black.svg" alt="Aquaforces" style={logoStyle} />
+			<img src="../img/logo-black.svg" alt="Aquaforces" style={logoStyle} />
 		</div>
 	);
 }
