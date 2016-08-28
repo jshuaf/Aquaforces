@@ -119,5 +119,14 @@ function questionSets(state = [], action) {
 	}
 }
 
-const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets });
+function activeQuestionSet(state = initialQuestionSetState, action) {
+	switch (action.type) {
+	case actions.POPULATE_ACTIVE_QUESTION_SET:
+		return action.questionSet;
+	default:
+		return state;
+	}
+}
+
+const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets, activeQuestionSet });
 export default questionConsoleReducer;

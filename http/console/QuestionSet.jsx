@@ -12,6 +12,19 @@ class QuestionSet extends Component {
 		super(props);
 		this.deleteSet = this.deleteSet.bind(this);
 	}
+	componentDidMount() {
+		const url = `${location.protocol}//${location.host}/api/get-qsets`;
+		request({
+			url,
+			body: { shortID: this.props.params.shortID },
+			json: true,
+			method: 'post',
+		}, (error, res, body) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			this.props.populateQuestionSetList(body);
+		});
+	}
 	deleteSet() {
 		const url = `${location.protocol}//${location.host}/api/delete-qset`;
 		request({
@@ -61,6 +74,8 @@ QuestionSet.propTypes = Object.assign({
 	shortID: PropTypes.string.isRequired,
 }, questionSetPropTypes);
 
+const mapStateToProps = (state) => state.activeQuestionSet;
+
 const mapDispatchToProps = (dispatch) => ({
 	deleteSet: (id) => {
 		dispatch(deleteSet(id));
@@ -68,7 +83,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 /* eslint-disable no-class-assign */
-QuestionSet = connect(null, mapDispatchToProps)(QuestionSet)
+QuestionSet = connect(mapStateToProps, mapDispatchToProps)(QuestionSet)
 /* eslint-enable no-class-assign */;
 
 export default QuestionSet;

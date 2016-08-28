@@ -78,6 +78,12 @@ module.exports = function (req, res) {
 				return res.end(JSON.stringify(qsets));
 			}
 		});
+	} else if (req.params.path === 'get-qset') {
+		if (!req.body.shortID || typeof req.body.shortID !== 'string') {
+			res.badRequest('Must send the short ID of a set to request.');
+		}
+		const qset = dbcs.qsets.findOne({ shortID: req.body.shortID });
+		console.log(qset);
 	} else if (req.params.path === 'delete-qset') {
 		dbcs.qsets.findOne({ _id: req.body.id }, (err, qset) => {
 			if (err) throw err;

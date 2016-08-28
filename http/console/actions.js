@@ -10,9 +10,7 @@ export const POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
 export const ADD_SET = 'ADD_SET';
 export const DELETE_SET = 'DELETE_SET';
 
-export const VIEW_SET_CREATOR = 'VIEW_SET_CREATOR';
-export const VIEW_SETS_LIST = 'VIEW_SETS_LIST';
-export const VIEW_SET = 'VIEW_SET';
+export const POPULATE_ACTIVE_QUESTION_SET = 'POPULATE_ACTIVE_QUESTION_SET';
 
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
@@ -36,6 +34,4 @@ export const populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_L
 export const addSet = makeActionCreator(ADD_SET, 'set');
 export const deleteSet = makeActionCreator(DELETE_SET, 'id');
 
-export const viewSetCreator = makeActionCreator(VIEW_SET_CREATOR);
-export const viewSetsList = makeActionCreator(VIEW_SETS_LIST);
-export const viewSet = makeActionCreator(VIEW_SET, 'setID');
+export const populateActiveQuestionSet = makeActionCreator(POPULATE_ACTIVE_QUESTION_SET, 'questionSet');
