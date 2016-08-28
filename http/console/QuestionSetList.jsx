@@ -25,7 +25,7 @@ class QuestionSetList extends Component {
 		return (
 			<div id="questionSets">
 				<h1>Question Sets</h1>
-				<a className="button button-primary" href="/console/create">Create</a>
+				<a className="button button-primary" onClick={this.props.createLink}>Create</a>
 			{
 				this.props.questionSets.map((questionSet, index) =>
 					<QuestionSetSummary {...questionSet} key={index} />
