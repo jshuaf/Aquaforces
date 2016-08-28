@@ -1,33 +1,6 @@
 import { combineReducers } from 'redux';
 import * as actions from './actions';
 
-const initialConsoleState = {
-	displayType: 'list',
-	activeSet: null,
-};
-
-function consoleState(state = initialConsoleState, action) {
-	switch (action.type) {
-	case actions.VIEW_SET_CREATOR:
-		return Object.assign({}, state, {
-			displayType: 'create',
-			activeSet: null,
-		});
-	case actions.VIEW_SETS_LIST:
-		return Object.assign({}, state, {
-			displayType: 'list',
-			activeSet: null,
-		});
-	case actions.VIEW_SET:
-		return Object.assign({}, state, {
-			displayType: 'set',
-			activeSet: action.setID,
-		});
-	default:
-		return state;
-	}
-}
-
 const initialQuestionSetState = {
 	title: '',
 	nextQuestionID: 2,
@@ -146,5 +119,5 @@ function questionSets(state = [], action) {
 	}
 }
 
-const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets, consoleState });
+const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets });
 export default questionConsoleReducer;

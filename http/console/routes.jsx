@@ -7,10 +7,15 @@ import QuestionSet from './QuestionSet.jsx';
 
 module.exports = (
 	<Router history={browserHistory}>
-		<Route path="/console" component={QuestionConsole}>
-			<IndexRoute component={QuestionSetList} />
-			<Route path="new" component={NewSetForm} />
+		<Route path="/">
+			<Route path="console" component={QuestionConsole}>
+				<IndexRoute component={QuestionSetList} />
+				<Route path="new" component={NewSetForm} />
+				<Route path="set/:shortID" component={QuestionSet} />
+			</Route>
+			<Route component={QuestionConsole}>
+				<Route path="set/:shortID" compnonent={QuestionSet} />
+			</Route>
 		</Route>
-		<Route path="/set/:shortID" compnonent={QuestionSet} />
-		</Router>
+	</Router>
 );

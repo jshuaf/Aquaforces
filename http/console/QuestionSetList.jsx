@@ -28,7 +28,7 @@ class QuestionSetList extends Component {
 				<h1>Question Sets</h1>
 			{
 				this.props.questionSets.map((questionSet, index) =>
-					<Link to={`/set/${questionSet.shortID}`} key={index}>
+					<Link to={`/console/set/${questionSet.shortID}`} key={index}>
 						<button>{questionSet.title}</button>
 					</Link>
 				)
@@ -51,7 +51,7 @@ const mapDispatchToProps = (dispatch) => ({
 QuestionSetList.propTypes = {
 	populateQuestionSetList: PropTypes.func.isRequired,
 	questionSets: PropTypes.arrayOf(
-		PropTypes.shape(questionSetSummaryPropTypes)).isRequired,
+		PropTypes.shape(questionSetPropTypes)).isRequired,
 };
 
 /* eslint-disable no-class-assign */
