@@ -1,7 +1,7 @@
 * {
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
-	color: #212f3c;
+	color: #328BC6;
 }
 
 img {
@@ -85,21 +85,8 @@ section {
 	width: 50%;
 }
 
-@media (min-width: 800px) {
-	body {
-		background: #bee6f1 url('/img/back.svg') no-repeat center fixed;
-		background-size: cover;
-	}
-}
-
-@media (max-width: 800px) {
-	body {
-		background: #bee6f1 no-repeat center fixed;
-		background-size: cover;
-	}
-}
-
 body {
+	background-color: #fff;
 	margin: 0;
 }
 
@@ -132,7 +119,7 @@ label {
 .button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
 	border-radius: 30px;
 	margin-top: 10px;
-	background-color: #f1c40f;
+	background-color: #328BC6;
 	border: none;
 	letter-spacing: normal;
 	text-transform: none;
@@ -142,7 +129,7 @@ label {
 }
 
 .button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active, .button.button-primary:focus, button.button-primary:focus, input[type=submit].button-primary:focus, input[type=reset].button-primary:focus, input[type=button].button-primary:focus {
-	background-color: #e1b400;
+	background-color: #45B3E2;
 }
 
 .navbar-logo {

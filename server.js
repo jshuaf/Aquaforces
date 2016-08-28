@@ -286,6 +286,14 @@ const serverHandler = o(function* (req, res) {
 				res.end(yield fs.readFile('./html/a/foot.html', yield));
 			}
 		}));
+	} else if (reqPath === '/dashboard/' && !usesIODomain) {
+		if (!user) {
+			// Redirect user if they're not logged in
+			return res.writeHead(303, { Location: '/' }) || res.end();
+		}
+		yield respondPage(null, req, res, yield, { inhead: '' });
+		res.write((yield fs.readFile('./html/dashboard.html', yield)).toString());
+		res.end(yield fs.readFile('./html/a/foot.html', yield));
 	} else if (reqPath === '/host/' && !usesIODomain) {
 		yield respondPage('Start a game', req, res, yield, {});
 		res.write((yield fs.readFile('./html/host.html', yield)));

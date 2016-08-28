@@ -105,7 +105,7 @@ module.exports = o(function* (tws, m, games) {
 					const question = tws.game.questions[questionID];
 					ttws.crew().activeQuestions.push({
 						text: question.text,
-						answer: question.correctAnswer,
+						correctAnswer: question.correctAnswer,
 						owner: ttws,
 					});
 					ttws.trysend({

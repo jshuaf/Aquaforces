@@ -15,7 +15,7 @@ class RiverReflection extends Component {
 			float: 'left',
 			borderRadius: '10000000px',
 			height: `${this.state.height}%`,
-			transform: `translate(${this.props.xOffset}px, ${this.state.yOffset}px)`,
+			transform: `translate3d(${this.props.xOffset}px, ${this.state.yOffset}px, 0px)`,
 			width: `${this.props.width}%`,
 		};
 		return <div style={style} />;

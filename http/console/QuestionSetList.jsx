@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import QuestionSet, { questionSetPropTypes } from './QuestionSet.jsx';
+import QuestionSetSummary, { questionSetSummaryPropTypes } from './QuestionSetSummary.jsx';
 import { populateQuestionSetList } from './actions';
 
 /* global sweetAlert:true */
@@ -25,9 +25,10 @@ class QuestionSetList extends Component {
 		return (
 			<div id="questionSets">
 				<h1>Question Sets</h1>
+				<a className="button button-primary" onClick={this.props.createLink}>Create</a>
 			{
 				this.props.questionSets.map((questionSet, index) =>
-					<QuestionSet {...questionSet} key={index} />
+					<QuestionSetSummary {...questionSet} key={index} />
 				)
 			}
 		</div>
@@ -48,7 +49,7 @@ const mapDispatchToProps = (dispatch) => ({
 QuestionSetList.propTypes = {
 	populateQuestionSetList: PropTypes.func.isRequired,
 	questionSets: PropTypes.arrayOf(
-		PropTypes.shape(questionSetPropTypes)).isRequired,
+		PropTypes.shape(questionSetSummaryPropTypes)).isRequired,
 };
 
 /* eslint-disable no-class-assign */

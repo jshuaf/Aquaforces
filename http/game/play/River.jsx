@@ -32,10 +32,17 @@ class River extends Component {
 	componentDidMount() {
 		// River Reflections
 		this.setRiverWidth();
-		this.startRiverReflections();
+		/* this.startRiverReflections();*/
 		// Answers
 		this.updateAnswers();
-		setInterval(this.updateAnswers, 2500);
+		let answerUpdate = setInterval(this.updateAnswers, 2500);
+		window.addEventListener('focus', () => {
+			answerUpdate = setInterval(this.updateAnswers, 2500);
+		}, false);
+
+		window.addEventListener('blur', () => {
+			clearInterval(answerUpdate);
+		}, false);
 	}
 	setRiverWidth() {
 		const river = this.refs.river;
@@ -226,9 +233,9 @@ class River extends Component {
 				} else {
 					currentGroups[i].y -= (timeSinceLastAnimation / 1000) * (riverHeight / 40);
 				}
-				if (currentGroups[i].y > riverHeight) {
+				if (!hasBottomReflectionGroup && currentGroups[i].y > riverHeight) {
 					hasBottomReflectionGroup = true;
-				} else if (currentGroups[i].y < -riverHeight) {
+				} else if (!hasTopReflectionGroup && currentGroups[i].y < -riverHeight) {
 					hasTopReflectionGroup = true;
 				} else if (currentGroups[i].y < -2 * riverHeight) {
 					this.removeReflectionGroup(currentGroups[i].x);
@@ -384,14 +391,14 @@ class River extends Component {
 			<div className={'river' + this.state.flashClass} ref="river">
 				<div className="answers">
 					{answers}
-					{this.state.riverReflectionGroups.map((riverReflectionGroup) =>
+					{/* {this.state.riverReflectionGroups.map((riverReflectionGroup) =>
 						<RiverReflectionGroup
 							x={riverReflectionGroup.x}
 							y={riverReflectionGroup.y}
 							riverWidth={this.state.riverWidth}
 							key={riverReflectionGroup.key}
 						/>
-					)}
+					)}*/}
 					<Rock y={this.state.rockYPosition} present={this.props.rockPresent} ref="rock" />
 					<Canoe
 						initialImage={this.props.initialImage} ref="canoe"
