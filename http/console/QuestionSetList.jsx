@@ -25,7 +25,7 @@ class QuestionSetList extends Component {
 	render() {
 		return (
 			<div id="questionSets">
-				<h1>Question Sets</h1>
+				<h3>Question Sets</h3>
 			{
 				this.props.questionSets.map((questionSet, index) =>
 					<Link to={`/set/${questionSet.shortID}`} key={index}>
