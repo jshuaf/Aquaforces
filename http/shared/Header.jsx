@@ -13,6 +13,13 @@ export function Header() {
 		backgroundColor: colors.wasabi,
 	};
 
+	const logoContainerStyle = {
+		height: '100%',
+		width: '40%',
+		display: 'flex',
+		alignItems: 'center',
+	};
+
 	const logoStyle = {
 		height: '80%',
 		width: '20%',
@@ -24,14 +31,22 @@ export function Header() {
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
+		textDecoration: 'none',
+		fontSize: '1.4em',
+	};
+
+	const linkTextStyle = {
+		color: colors.midnight,
 	};
 
 	return (
-		<div className="header" style={containerStyle}>
-			<img src="../img/logo-black.svg" alt="Aquaforces" style={logoStyle} />
-			<a href="/console" style={linkStyle}><span>Question Sets</span></a>
-			<a href="/host" style={linkStyle}><span>Start a game</span></a>
-			<a href="/play" style={linkStyle}><span>Join a game</span></a>
+		<div style={containerStyle}>
+			<div style={logoContainerStyle}>
+				<img src="../img/logo-black.svg" alt="Aquaforces" style={logoStyle} />
+			</div>
+			<a href="/console" style={linkStyle}><span style={linkTextStyle}>Question Sets</span></a>
+			<a href="/host" style={linkStyle}><span style={linkTextStyle}>Start a game</span></a>
+			<a href="/play" style={linkStyle}><span style={linkTextStyle}>Join a game</span></a>
 		</div>
 	);
 }

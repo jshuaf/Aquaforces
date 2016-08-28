@@ -14,4 +14,5 @@ module.exports = {
 	lightning: hsvToHex(50, 54, 95),
 	pacific: hsvToHex(180, 94, 71),
 	seaspray: hsvToHex(183, 41, 95),
+	midnight: hsvToHex(210, 35, 31),
 };
