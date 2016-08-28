@@ -14,7 +14,7 @@ const config = {
 const apiServer = require('./api');
 // Database Storage
 global.dbcs = {};
-const usedDBCs = ['users', 'gameplays'];
+const usedDBCs = ['users', 'gameplays', 'qsets'];
 
 // Dependencies
 /* eslint-disable one-var */
@@ -194,12 +194,6 @@ console.log('Connecting to mongodb…'.cyan);
 mongo.connect(config.mongoPath, (err, db) => {
 	if (err) throw err;
 
-	db.createCollection('qsets', (err, collection) => {
-		if (err) throw err;
-		db.createIndex('qsets', { title: 'text' }, {}, () => {});
-		dbcs.qsets = collection;
-	});
-
 	let i = usedDBCs.length;
 
 	function handleCollection(err, collection) {
@@ -208,14 +202,27 @@ mongo.connect(config.mongoPath, (err, db) => {
 	}
 
 	// Go through the mongodb data and store it server-side
-	while (i--) db.collection(usedDBCs[i], handleCollection);
+	while (i--) { db.collection(usedDBCs[i], handleCollection); }
 	console.log('Connected to mongodb.'.cyan);
+	// Patch the model based on updates
+	let updatedCount = 0;
+	dbcs.qsets.find({}).each((err, qset) => {
+		if (qset && !qset.shortID) {
+			const shortID = (Math.random().toString(36) + '00000000000000000').slice(2, 9);
+			dbcs.qsets.update({ _id: qset._id }, { $set: { shortID } });
+			updatedCount += 1;
+		} else if (!qset) {
+			console.log(`Patched ${updatedCount} entries in the database.`.cyan);
+		}
+	});
 	const server = http.createServer().listen(config.port);
 	server.on('request', app);
 	console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
 
-	/* eslint-disable global-require */
+			/* eslint-disable global-require */
 	require('./sockets/index')(server);
-	/* eslint-enable global-require */
+			/* eslint-enable global-require */
 	console.log('Sockets running on port 3000 over plain WS.'.cyan);
+		/* }
+	})*/
 });
