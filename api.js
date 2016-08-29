@@ -1,23 +1,20 @@
 /* global generateID:true dbcs:true config:true*/
-
-const cookie = require('cookie');
-
 module.exports = function (req, res) {
 	res.badRequest = (message) => {
 		res.writeHead(400);
 		return res.end(message);
 	};
-	if (req.params.path === 'logout') {
-		res.writeHead(303, {
-			'Set-Cookie': cookie.serialize('id', '', {
-				path: '/',
-				expires: new Date(new Date().setDate(new Date().getDate() - 30)),
-				httpOnly: true,
-				secure: false,
-			}),
+	if (req.params.path === 'authenticate') {
+		res.send(JSON.stringify(req.user.personalInfo) || null);
+	} else if (req.params.path === 'logout') {
+		res.cookie('id', '', {
+			path: '/',
+			expires: new Date(new Date().setDate(new Date().getDate() - 30)), // thirty days
+			httpOnly: true,
+			secure: config.secureCookies,
 		});
 		if (req.user) dbcs.users.update({ _id: req.user._id }, { $set: { cookie: [] } });
-		res.end();
+		return res.redirect(303, '/console');
 	} else if (req.params.path === 'new-qset') {
 		if (!req.body.title) {
 			return res.badRequest('Error: Set name is required.');

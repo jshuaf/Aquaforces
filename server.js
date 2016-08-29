@@ -191,7 +191,6 @@ app.get('/login/google', (req, res) => {
 				httpOnly: true,
 				secure: config.secureCookies,
 			});
-			return res.redirect(303, '/console');
 		})
 		);
 	});
