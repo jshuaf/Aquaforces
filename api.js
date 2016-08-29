@@ -60,7 +60,7 @@ module.exports = function (req, res) {
 		res.end(res.writeHead(204));
 	} else if (req.params.path === 'get-qsets') {
 		const qsets = [];
-		const ownSetsFilter = { $or: [{ $privacy: false }] };
+		const ownSetsFilter = { $or: [{ privacy: false }] };
 		if (req.user) ownSetsFilter.$or.push({ userID: req.user._id });
 		dbcs.qsets.find(ownSetsFilter).each((err, qset) => {
 			if (qset) qsets.push(qset);
@@ -74,7 +74,7 @@ module.exports = function (req, res) {
 			res.badRequest('Must send the short ID of a set to request.');
 		}
 		dbcs.qsets.findOne({ shortID: req.body.shortID }).then((qset) => {
-			if (!(qset.userID !== req.user._id || !qset.privacy)) {
+			if (!(qset.userID === req.user._id || !qset.privacy)) {
 				return res.badRequest('You don\'t have permission to view this set.');
 			}
 			res.writeHead(200);
