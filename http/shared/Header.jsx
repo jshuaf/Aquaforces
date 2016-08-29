@@ -3,74 +3,94 @@ import Radium from 'radium';
 import colors from '../shared/colors';
 import PrimaryButton from './PrimaryButton.jsx';
 
-function Header({ currentUser }) {
-	const containerStyle = {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		position: 'fixed',
-		zIndex: 5,
-		width: '100%',
-		height: '10%',
-		backgroundColor: colors.wasabi,
-	};
+const request = require('request');
+/* global sweetAlert:true */
 
-	const logoContainerStyle = {
-		height: '100%',
-		width: '30%',
-		display: 'flex',
-		alignItems: 'center',
-	};
+class Header extends Component {
+	logIn() {
+		window.location = `https://accounts.google.com/o/oauth2/v2/auth?
+			client_id=891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com&
+			response_type=code&
+			scope=https://www.googleapis.com/auth/plus.me&
+			redirect_uri=${location.protocol}//${location.host}/login/google`;
+	}
+	logOut() {
+		const url = `${location.protocol}//${location.host}/logout`;
+		request({ url, method: 'post' }, (error, res) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			location.reload();
+		});
+	}
+	render() {
+		const containerStyle = {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'space-around',
+			position: 'fixed',
+			zIndex: 5,
+			width: '100%',
+			height: '10%',
+			backgroundColor: colors.wasabi,
+		};
 
-	const logoStyle = {
-		height: '80%',
-		width: '20%',
-		minWidth: '200px',
-	};
+		const logoContainerStyle = {
+			height: '100%',
+			width: '30%',
+			display: 'flex',
+			alignItems: 'center',
+		};
 
-	const userInfoStyle = {
-		height: '80%',
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		textDecoration: 'none',
-		fontSize: '1.3em',
-		color: colors.midnight,
-	};
+		const logoStyle = {
+			height: '80%',
+			width: '20%',
+			minWidth: '200px',
+		};
 
-	const logoutStyle = {
-		color: colors.midnight,
-		fontSize: '1em',
-		textDecoration: 'none',
-		':hover': { color: colors.pacific },
-		marginLeft: '5px',
-	};
+		const userInfoStyle = {
+			height: '80%',
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			textDecoration: 'none',
+			fontSize: '1.3em',
+			color: colors.midnight,
+		};
 
-	const headerItemStyle = Object.assign({}, userInfoStyle, {
-		':hover': { color: colors.pacific } }
-	);
+		const logoutStyle = {
+			color: colors.midnight,
+			fontSize: '1em',
+			textDecoration: 'none',
+			':hover': { color: colors.pacific },
+			marginLeft: '5px',
+		};
 
-	const linkTextStyle = {
-		color: 'inherit',
-	};
+		const headerItemStyle = Object.assign({}, userInfoStyle, {
+			':hover': { color: colors.pacific } }
+		);
 
-	return (
-		<div style={containerStyle}>
-			<a href="/" style={logoContainerStyle}>
-				<img src="../img/logo-black.svg" alt="Aquaforces" style={logoStyle} />
-			</a>
-			<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
-			<a href="/host" style={headerItemStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
-			<a href="/play" style={headerItemStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
-			{currentUser
-			? <div style={userInfoStyle} key={3}>
-					<span style={linkTextStyle}>Logged in as {currentUser.displayName}</span>
-					<a href="/logout" style={logoutStyle}>(Logout)</a>
-				</div>
-			: <PrimaryButton>Log in</PrimaryButton>
-			}
-		</div>
-	);
+		const linkTextStyle = {
+			color: 'inherit',
+		};
+
+		return (
+			<div style={containerStyle}>
+				<a href="/" style={logoContainerStyle}>
+					<img src="../img/logo-black.svg" alt="Aquaforces" style={logoStyle} />
+				</a>
+				<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
+				<a href="/host" style={headerItemStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
+				<a href="/play" style={headerItemStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
+				{this.props.currentUser
+				? <div style={userInfoStyle} key={3}>
+						<span style={linkTextStyle}>Logged in as {this.props.currentUser.displayName}</span>
+						<a onClick={this.logOut} style={logoutStyle}>(Logout)</a>
+					</div>
+				: <PrimaryButton onClick={this.logIn}>Log in</PrimaryButton>
+				}
+			</div>
+		);
+	}
 }
 
 Header.propTypes = {

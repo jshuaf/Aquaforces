@@ -80,8 +80,8 @@ const mountNode = (req, res, next) => {
 };
 
 const app = express();
-Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
 parsers.map((parser) => app.use(parser));
+Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
 
 app.get('/', (req, res, next) => {
 	if (req.user) return res.redirect(302, '/console/');
@@ -120,6 +120,16 @@ app.get('/set/*', (req, res, next) => {
 }, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 
 app.post('/api/:path', (req, res) => apiServer(req, res));
+
+app.post('/logout', (req, res) => {
+	res.cookie('id', '', {
+		path: '/',
+		expires: new Date(new Date().setDate(new Date().getDate() - 30)),
+		httpOnly: true,
+		secure: config.secureCookies,
+	});
+	if (req.user) dbcs.users.update({ _id: req.user._id }, { $set: { cookie: [] } });
+});
 
 app.get('/login/google', (req, res) => {
 	if (req.query.error) return res.send(`<p>Error: ${req.query.error}</p>`);
@@ -185,6 +195,7 @@ app.get('/login/google', (req, res) => {
 				httpOnly: true,
 				secure: config.secureCookies,
 			});
+			res.redirect(303, '/console');
 		})
 		);
 	});

@@ -5,7 +5,7 @@ module.exports = function (req, res) {
 		return res.end(message);
 	};
 	if (req.params.path === 'authenticate') {
-		res.send(JSON.stringify(req.user.personalInfo) || null);
+		res.send(req.user ? JSON.stringify(req.user.personalInfo) : null);
 	} else if (req.params.path === 'new-qset') {
 		if (!req.body.title) {
 			return res.badRequest('Error: Set name is required.');
