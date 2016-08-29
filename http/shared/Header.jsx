@@ -76,7 +76,9 @@ class Header extends Component {
 		return (
 			<div style={containerStyle}>
 				<a href="/" style={logoContainerStyle}>
-					<img src="../img/logo-black.svg" alt="Aquaforces" style={logoStyle} />
+					<img
+						src={`${location.protocol}//${location.host}/img/logo-black.svg`}
+						alt="Aquaforces" style={logoStyle} />
 				</a>
 				<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
 				<a href="/host" style={headerItemStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>

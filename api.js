@@ -74,7 +74,9 @@ module.exports = function (req, res) {
 			res.badRequest('Must send the short ID of a set to request.');
 		}
 		dbcs.qsets.findOne({ shortID: req.body.shortID }).then((qset) => {
-			if (!(qset.userID === req.user._id || !qset.privacy)) {
+			if (!qset) {
+				return res.badRequest('Question set not found.');
+			} else if (!(qset.userID === req.user._id || !qset.privacy)) {
 				return res.badRequest('You don\'t have permission to view this set.');
 			}
 			res.writeHead(200);
