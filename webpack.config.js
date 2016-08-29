@@ -1,6 +1,9 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
+	cache: true,
+	devtool: 'eval',
 	entry: {
 		host: './http/host/index.jsx',
 		game: './http/game/index.jsx',
@@ -17,6 +20,7 @@ module.exports = {
 				loader: 'babel-loader',
 				include: path.join(__dirname, 'http'),
 				query: {
+					cacheDirectory: true,
 					presets: ['es2015', 'react'],
 					plugins: ['transform-object-rest-spread'],
 				},
@@ -24,7 +28,6 @@ module.exports = {
 			{
 				test: /\.json$/,
 				loader: 'json-loader',
-				include: path.join(__dirname, 'http'),
 			},
 		],
 		noParse: /node_modules\/json-schema\/lib\/validate\.js/,
@@ -35,4 +38,12 @@ module.exports = {
 		net: 'empty',
 		tls: 'empty',
 	},
+	plugins: [
+		new webpack.DllReferencePlugin({
+			context: path.join(__dirname),
+			/* eslint-disable global-require */
+			manifest: require('./dll/vendor-manifest.json'),
+			/* eslint-enable global-require */
+		}),
+	],
 };

@@ -16,6 +16,9 @@ module.exports = {
 			name: '[name]',
 			context: path.resolve(__dirname),
 		}),
+		new webpack.DefinePlugin({
+			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+		}),
 		new webpack.optimize.OccurenceOrderPlugin(),
 		new webpack.optimize.UglifyJsPlugin(),
 	],
@@ -24,9 +27,9 @@ module.exports = {
 			{
 				test: /\.json$/,
 				loader: 'json-loader',
-				include: path.join(__dirname, 'http'),
 			},
 		],
+		noParse: [/fsevents/, /node_modules\/json-schema\/lib\/validate\.js/],
 	},
 	resolve: {
 		root: path.resolve(__dirname),
@@ -37,5 +40,8 @@ module.exports = {
 		fs: 'empty',
 		net: 'empty',
 		tls: 'empty',
+		dns: 'empty',
+		module: 'empty',
+		child_process: 'empty',
 	},
 };

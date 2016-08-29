@@ -75,7 +75,9 @@ const head = (req, res, next) => {
 };
 
 const mountNode = (req, res, next) => {
-	res.locals.html = `<div id="mountNode" /><script src="/${res.locals.bundleName}" />`;
+	res.locals.html = `
+	<div id="mountNode"></div><script src="/dll/dll.vendor.js">
+	</script><script src="/${res.locals.bundleName}"></script>`;
 	next();
 };
 
