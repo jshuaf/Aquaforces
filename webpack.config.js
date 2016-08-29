@@ -15,13 +15,17 @@ module.exports = {
 			{
 				test: /.jsx?$/,
 				loader: 'babel-loader',
-				exclude: /node_modules/,
+				include: path.join(__dirname, 'http'),
 				query: {
 					presets: ['es2015', 'react'],
 					plugins: ['transform-object-rest-spread'],
 				},
 			},
-			{ test: /\.json$/, loader: 'json-loader' },
+			{
+				test: /\.json$/,
+				loader: 'json-loader',
+				include: path.join(__dirname, 'http'),
+			},
 		],
 		noParse: /node_modules\/json-schema\/lib\/validate\.js/,
 	},
