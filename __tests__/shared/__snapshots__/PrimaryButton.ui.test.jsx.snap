@@ -1,0 +1,82 @@
+exports[`PrimaryButton changes the color when hovered 1`] = `
+<button
+  data-radium={true}
+  onMouseEnter={[Function anonymous]}
+  onMouseLeave={[Function anonymous]}
+  style={
+    Object {
+      "backgroundColor": "#ED858A",
+      "border": "none",
+      "borderRadius": "99999px",
+      "color": "white",
+      "fontSize": "1.3em",
+      "height": "40px",
+      "minWidth": "150px"
+    }
+  }>
+  Click me
+</button>
+`;
+
+exports[`PrimaryButton changes the color when hovered 2`] = `
+<button
+  data-radium={true}
+  onMouseEnter={[Function anonymous]}
+  onMouseLeave={[Function anonymous]}
+  style={
+    Object {
+      "backgroundColor": "#F5A2A4",
+      "border": "none",
+      "borderRadius": "99999px",
+      "color": "white",
+      "fontSize": "1.3em",
+      "height": "40px",
+      "minWidth": "150px"
+    }
+  }>
+  Click me
+</button>
+`;
+
+exports[`PrimaryButton changes the color when hovered 3`] = `
+<button
+  data-radium={true}
+  onMouseEnter={[Function anonymous]}
+  onMouseLeave={[Function anonymous]}
+  style={
+    Object {
+      "backgroundColor": "#ED858A",
+      "border": "none",
+      "borderRadius": "99999px",
+      "color": "white",
+      "fontSize": "1.3em",
+      "height": "40px",
+      "minWidth": "150px"
+    }
+  }>
+  Click me
+</button>
+`;
+
+exports[`PrimaryButton renders children passed in 1`] = `
+<button
+  data-radium={true}
+  onMouseEnter={[Function anonymous]}
+  onMouseLeave={[Function anonymous]}
+  style={
+    Object {
+      "backgroundColor": "#ED858A",
+      "border": "none",
+      "borderRadius": "99999px",
+      "color": "white",
+      "fontSize": "1.3em",
+      "height": "40px",
+      "minWidth": "150px"
+    }
+  }>
+  <div
+    className="hello">
+    Hi
+  </div>
+</button>
+`;

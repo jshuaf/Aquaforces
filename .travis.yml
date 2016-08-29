@@ -8,7 +8,7 @@ script:
   - ./node_modules/.bin/nsp check
   - ./node_modules/.bin/eslint . --ext .jsx, .js
   - ./node_modules/.bin/stylelint ./http/*.css ./http/a/stylesheets/*.css -f verbose
-  - ./node_modules/.bin/jest
+  - ./node_modules/.bin/jest -o -u
 cache:
   directories:
     node_modules
