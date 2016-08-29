@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 import Radium from 'radium';
 import colors from '../shared/colors';
 import PrimaryButton from './PrimaryButton.jsx';
@@ -7,6 +8,10 @@ const request = require('request');
 /* global sweetAlert:true */
 
 class Header extends Component {
+	constructor(props) {
+		super(props);
+		autoBind(this);
+	}
 	logIn() {
 		window.location = `https://accounts.google.com/o/oauth2/v2/auth?
 			client_id=891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com&
