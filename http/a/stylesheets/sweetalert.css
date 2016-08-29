@@ -479,7 +479,9 @@ body.stop-scrolling {
 	background-repeat: no-repeat;
 }
 
-/* Animations */
+/*
+ * Animations
+ */
 @-webkit-keyframes showsweetalert {
 	0% {
 		transform: scale(0.7);

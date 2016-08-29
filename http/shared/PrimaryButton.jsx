@@ -12,6 +12,8 @@ class PrimaryButtonRaw extends Component {
 			fontSize: '1.3em',
 			color: 'white',
 			':hover': { backgroundColor: colors.rosebud },
+			height: '40px',
+			minWidth: '150px',
 		};
 
 		const { children, ...buttonProps } = this.props;
