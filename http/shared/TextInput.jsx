@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
+import colors from './colors';
 
 export default class TextInput extends Component {
 	constructor(props) {
@@ -14,6 +15,7 @@ export default class TextInput extends Component {
 			const text = this.node.value;
 			if (this.props.isComplete(text)) this.props.onComplete();
 		}
+		this.props.onChange();
 	}
 	error(errorMessage) {
 		this.setState({ errorMessage });
@@ -32,6 +34,7 @@ export default class TextInput extends Component {
 		};
 		const inputStyle = {
 			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'white',
+			color: colors.midnight,
 			width: '100%',
 		};
 		const errorContainerStyle = {
@@ -80,4 +83,5 @@ TextInput.propTypes = {
 	label: PropTypes.string.isRequired,
 	isComplete: PropTypes.func,
 	onComplete: PropTypes.func,
+	onChange: PropTypes.func,
 };

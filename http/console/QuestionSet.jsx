@@ -21,7 +21,9 @@ class QuestionSet extends Component {
 			method: 'post',
 		}, (error, res, body) => {
 			if (error) return console.error(error);
-			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			if (res.statusCode === 400) {
+				return sweetAlert({ title: res.body, type: 'error' }, () => { location.href = '/console'; });
+			}
 			this.props.populateActiveQuestionSet(body);
 		});
 	}

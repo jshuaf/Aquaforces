@@ -1,23 +1,11 @@
 /* global generateID:true dbcs:true config:true*/
-
-const cookie = require('cookie');
-
 module.exports = function (req, res) {
 	res.badRequest = (message) => {
 		res.writeHead(400);
 		return res.end(message);
 	};
-	if (req.params.path === 'logout') {
-		res.writeHead(303, {
-			'Set-Cookie': cookie.serialize('id', '', {
-				path: '/',
-				expires: new Date(new Date().setDate(new Date().getDate() - 30)),
-				httpOnly: true,
-				secure: false,
-			}),
-		});
-		if (req.user) dbcs.users.update({ _id: req.user._id }, { $set: { cookie: [] } });
-		res.end();
+	if (req.params.path === 'authenticate') {
+		res.send(req.user ? JSON.stringify(req.user.personalInfo) : null);
 	} else if (req.params.path === 'new-qset') {
 		if (!req.body.title) {
 			return res.badRequest('Error: Set name is required.');
@@ -72,7 +60,9 @@ module.exports = function (req, res) {
 		res.end(res.writeHead(204));
 	} else if (req.params.path === 'get-qsets') {
 		const qsets = [];
-		dbcs.qsets.find({}).each((err, qset) => {
+		const ownSetsFilter = { $or: [{ privacy: false }] };
+		if (req.user) ownSetsFilter.$or.push({ userID: req.user._id });
+		dbcs.qsets.find(ownSetsFilter).each((err, qset) => {
 			if (qset) qsets.push(qset);
 			else {
 				res.writeHead(200);
@@ -84,6 +74,11 @@ module.exports = function (req, res) {
 			res.badRequest('Must send the short ID of a set to request.');
 		}
 		dbcs.qsets.findOne({ shortID: req.body.shortID }).then((qset) => {
+			if (!qset) {
+				return res.badRequest('Question set not found.');
+			} else if (!(qset.userID === req.user._id || !qset.privacy)) {
+				return res.badRequest('You don\'t have permission to view this set.');
+			}
 			res.writeHead(200);
 			res.end(JSON.stringify(qset));
 		}, () => {
@@ -130,16 +125,16 @@ module.exports = function (req, res) {
 			}
 			for (let j = 0; j < q.answers.length; j++) {
 				if (typeof q.answers[j] !== 'string') {
-					return res.badRequest('Error: Correct answer ' + j + ' is malformed.');
+					return res.badRequest(`Error: Correct answer ${j} is malformed.`);
 				} else if (q.answers[j].length > 64) {
-					return res.badRequest('Error: Correct answer ' + j + ' is too long.');
+					return res.badRequest(`Error: Correct answer ${j} is too long.`);
 				}
 			}
 			for (let j = 0; j < q.incorrectAnswers.length; j++) {
 				if (typeof q.incorrectAnswers[j] !== 'string') {
-					return res.badRequest('Error: Incorrect answer ' + j + ' is malformed.');
+					return res.badRequest(`Error: Incorrect answer ${j} is malformed.`);
 				} else if (q.incorrectAnswers[j].length > 64) {
-					return res.badRequest('Error: Incorrect answer ' + j + ' is too long.');
+					return res.badRequest(`Error: Incorrect answer ${j} is malformed.`);
 				}
 			}
 			const question = {
