@@ -9,7 +9,7 @@
   "display": "standalone",
   "scripts": {
     "start": "sudo node server",
-    "test": "jest -o -u",
+    "test": "./node_modules/.bin/jest -o -u",
     "build:webpack": "./node_modules/.bin/webpack --config webpack.config.js",
     "build:dll": "./node_modules/.bin/webpack --config webpack.dll.js",
     "build": "npm run build:dll && npm run build:webpack",

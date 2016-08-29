@@ -2,8 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import PrimaryButton from '../../http/shared/PrimaryButton.jsx';
 
-jest.mock('react-dom');
-
 describe('PrimaryButton', () => {
 	it('changes the color when hovered', () => {
 		const component = renderer.create(
@@ -18,6 +16,15 @@ describe('PrimaryButton', () => {
 
 		tree.props.onMouseLeave();
 		tree = component.toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+	it('renders children passed in', () => {
+		const component = renderer.create(
+			<PrimaryButton>
+				<div className="hello">Hi</div>
+			</PrimaryButton>
+		);
+		const tree = component.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
