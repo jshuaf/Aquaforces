@@ -64,6 +64,8 @@
     "stylelint-config-standard": "^12.0.0"
   },
   "jest": {
-    "automock": false
+    "automock": false,
+    "testRegex": "__tests__/.*\\.jsx$",
+    "moduleFileExtensions": ["js", "jsx"]
   }
 }
