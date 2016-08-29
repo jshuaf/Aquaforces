@@ -13,14 +13,14 @@ img {
 }
 
 html {
-	background-color: #EBF5FF;
+	background-color: #ebf5ff;
 }
 
 #mountNode {
-	background-color: #EBF5FF;
+	background-color: #ebf5ff;
 }
 
-strong, b {
+strong,b {
 	font-weight: bold;
 }
 
@@ -32,7 +32,7 @@ section {
 	max-width: 1300px;
 }
 
-.landing-neg > .container > .row > div > *, .landing-neg > .container > .row > div > * > * {
+.landing-neg > .container > .row > div > *,.landing-neg > .container > .row > div > * > * {
 	color: white;
 }
 
@@ -97,14 +97,14 @@ body {
 	margin: 0;
 }
 
-input[type=tel], input[type=url], input[type=password], input[type=email], input[type=number], input[type=search], input[type=text], select, textarea, input {
+input[type=tel],input[type=url],input[type=password],input[type=email],input[type=number],input[type=search],input[type=text],select,textarea,input {
 	color: white;
-	background-color: #19A8A6;
+	background-color: #19a8a6;
 	font-size: 1.5rem;
 	border-radius: 25px;
 	text-align: center;
 	box-shadow: none;
-	border: 1px #19A8A6 solid;
+	border: 1px #19a8a6 solid;
 }
 
 label {
@@ -126,10 +126,10 @@ label {
 	max-width: 50%;
 }
 
-.button.button-primary, button.button-primary, input[type=submit].button-primary, input[type=reset].button-primary, input[type=button].button-primary {
+.button.button-primary,button.button-primary,input[type=submit].button-primary,input[type=reset].button-primary,input[type=button].button-primary {
 	border-radius: 30px;
 	margin-top: 10px;
-	background-color: #ED676C;
+	background-color: #ed676c;
 	border: none;
 	letter-spacing: normal;
 	text-transform: none;
@@ -138,11 +138,11 @@ label {
 	color: white;
 }
 
-.button.button-primary:hover, button.button-primary:hover, input[type=submit].button-primary:hover, input[type=reset].button-primary:hover, input[type=button].button-primary:hover, .button.button-primary:active, button.button-primary:active, input[type=submit].button-primary:active, input[type=reset].button-primary:active, input[type=button].button-primary:active, .button.button-primary:focus, button.button-primary:focus, input[type=submit].button-primary:focus, input[type=reset].button-primary:focus, input[type=button].button-primary:focus {
-	background-color: #45B3E2;
+.button.button-primary:hover,button.button-primary:hover,input[type=submit].button-primary:hover,input[type=reset].button-primary:hover,input[type=button].button-primary:hover,.button.button-primary:active,button.button-primary:active,input[type=submit].button-primary:active,input[type=reset].button-primary:active,input[type=button].button-primary:active,.button.button-primary:focus,button.button-primary:focus,input[type=submit].button-primary:focus,input[type=reset].button-primary:focus,input[type=button].button-primary:focus {
+	background-color: #45b3e2;
 }
 
-.button-primary.button-inline, .button-secondary.button-inline {
+.button-primary.button-inline,.button-secondary.button-inline {
 	margin-left: 20px;
 }
 
@@ -151,7 +151,7 @@ label {
 	vertical-align: middle;
 }
 
-.button.button-secondary, button.button-secondary, input[type=submit].button-secondary, input[type=reset].button-secondary, input[type=button].button-secondary {
+.button.button-secondary,button.button-secondary,input[type=submit].button-secondary,input[type=reset].button-secondary,input[type=button].button-secondary {
 	border-radius: 30px;
 	margin-top: 10px;
 	background-color: white;
@@ -160,7 +160,7 @@ label {
 	text-transform: none;
 	font-size: 1.5rem;
 	font-weight: bold;
-	color: #19A8A6;
+	color: #19a8a6;
 }
 
 .navbar-logo {
@@ -186,7 +186,7 @@ h2 {
 	max-width: 100%;
 }
 
-.pill, .pill > * {
+.pill,.pill > * {
 	background-color: #1e414e;
 	border-radius: 0.5rem;
 	color: white;
@@ -246,7 +246,7 @@ h2 {
 }
 
 @media (min-width: 700px) {
-	.navbar > .columns > p, a {
+	.navbar > .columns > p,a {
 		text-align: right;
 	}
 }
@@ -293,7 +293,7 @@ h2 {
 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
 }
 
-.panel-top > h2, .panel-top > p {
+.panel-top > h2,.panel-top > p {
 	color: #212f3c;
 }
 
@@ -331,7 +331,7 @@ h2 {
 	text-align: center;
 }
 
-.tap-button:hover, .tap-button:active {
+.tap-button:hover,.tap-button:active {
 	color: white;
 	background-color: #f75c4c;
 }
@@ -405,19 +405,19 @@ h2 {
 }
 
 @keyframes shake {
-	10%, 90% {
+	10%,90% {
 		transform: translate3d(-1px, 0, 0);
 	}
 
-	20%, 80% {
+	20%,80% {
 		transform: translate3d(2px, 0, 0);
 	}
 
-	30%, 50%, 70% {
+	30%,50%,70% {
 		transform: translate3d(-4px, 0, 0);
 	}
 
-	40%, 60% {
+	40%,60% {
 		transform: translate3d(4px, 0, 0);
 	}
 }
@@ -452,7 +452,7 @@ h2 {
 }
 
 @-webkit-keyframes bounceindown {
-	from, 60%, 75%, 90%, to {
+	from,60%,75%,90%,to {
 		-webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 		animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 	}
@@ -486,7 +486,7 @@ h2 {
 }
 
 @keyframes bounceindown {
-	from, 60%, 75%, 90%, to {
+	from,60%,75%,90%,to {
 		-webkit-animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 		animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
 	}
@@ -530,7 +530,7 @@ h2 {
 		transform: translate3d(0, -10px, 0);
 	}
 
-	40%, 45% {
+	40%,45% {
 		opacity: 1;
 		-webkit-transform: translate3d(0, 20px, 0);
 		transform: translate3d(0, 20px, 0);
@@ -549,7 +549,7 @@ h2 {
 		transform: translate3d(0, -10px, 0);
 	}
 
-	40%, 45% {
+	40%,45% {
 		opacity: 1;
 		-webkit-transform: translate3d(0, 20px, 0);
 		transform: translate3d(0, 20px, 0);
@@ -568,10 +568,11 @@ h2 {
 }
 
 .questionSetSummary {
-	background-color: #19A8A6;
+	background-color: #19a8a6;
 	padding: 25px;
 	border-radius: 25px;
 }
-.questionSetSummary > h1, .questionSetSummary > h4 {
+
+.questionSetSummary > h1,.questionSetSummary > h4 {
 	color: white;
 }
