@@ -1,6 +1,4 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-undef */
-/* global dbcs:true */
+/* global dbcs:true generateID:true */
 const config = {
 	port: process.argv.includes('--production') ? 80 : 3000,
 	mongoPath: 'mongodb://localhost:27017/Aquaforces',
@@ -23,7 +21,6 @@ require('colors');
 
 const http = require('http'),
 	fs = require('fs'),
-	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient,
 	o = require('yield-yield'),
@@ -40,7 +37,7 @@ const initialMiddleware = {
 		// Get the current logged-in user
 		req.user = yield dbcs.users.findOne({
 			cookie: { $elemMatch: {
-				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+				token: req.cookies.id,
 				created: { $gt: new Date() - 2592000000 },
 			} },
 		}, yield);
@@ -212,7 +209,7 @@ mongo.connect(config.mongoPath, (err, db) => {
 	let updatedCount = 0;
 	dbcs.qsets.find({}).each((err, qset) => {
 		if (qset && !qset.shortID) {
-			const shortID = (Math.random().toString(36) + '00000000000000000').slice(2, 9);
+			const shortID = (`${Math.random().toString(36)}00000000000000000`).slice(2, 9);
 			dbcs.qsets.update({ _id: qset._id }, { $set: { shortID } });
 			updatedCount += 1;
 		} else if (!qset) {
