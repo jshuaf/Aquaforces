@@ -1,6 +1,4 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-undef */
-/* global dbcs:true */
+/* global dbcs:true generateID:true */
 const config = {
 	port: process.argv.includes('--production') ? 80 : 3000,
 	mongoPath: 'mongodb://localhost:27017/Aquaforces',
@@ -23,7 +21,6 @@ require('colors');
 
 const http = require('http'),
 	fs = require('fs'),
-	cookie = require('cookie'),
 	crypto = require('crypto'),
 	mongo = require('mongodb').MongoClient,
 	o = require('yield-yield'),
@@ -40,7 +37,7 @@ const initialMiddleware = {
 		// Get the current logged-in user
 		req.user = yield dbcs.users.findOne({
 			cookie: { $elemMatch: {
-				token: cookie.parse(req.headers.cookie || '').id || 'nomatch',
+				token: req.cookies.id,
 				created: { $gt: new Date() - 2592000000 },
 			} },
 		}, yield);
@@ -77,12 +74,19 @@ const head = (req, res, next) => {
 	next();
 };
 
+const mountNode = (req, res, next) => {
+	res.locals.html = `
+	<div id="mountNode"></div><script src="/dll/dll.vendor.js">
+	</script><script src="/${res.locals.bundleName}"></script>`;
+	next();
+};
+
 const app = express();
-Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
 parsers.map((parser) => app.use(parser));
+Object.keys(initialMiddleware).map((name) => app.use(initialMiddleware[name]));
 
 app.get('/', (req, res, next) => {
-	if (req.user) return res.redirect(302, '/host/');
+	if (req.user) return res.redirect(302, '/console/');
 	next();
 }, head, (req, res) => {
 	const host = encodeURIComponent(`http://${req.get('host')}`);
@@ -95,37 +99,40 @@ app.get('/', (req, res, next) => {
 app.get('/play', (req, res, next) => {
 	if (req.get('host').includes('.io')) return res.redirect(301, 'aquaforces.io');
 	res.locals.title = 'Join a game';
+	res.locals.bundleName = 'game.bundle.js';
 	next();
-}, head, (req, res) => {
-	const playPage = fs.readFileSync('./html/play.html').toString();
-	res.send(res.locals.head + playPage + res.locals.foot);
-});
+}, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 
 app.get('/host', (req, res, next) => {
 	res.locals.title = 'Start a game';
+	res.locals.bundleName = 'host.bundle.js';
 	next();
-}, head, (req, res) => {
-	const hostPage = fs.readFileSync('./html/host.html').toString();
-	res.send(res.locals.head + hostPage + res.locals.foot);
-});
+}, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 
 app.get('/console/*', (req, res, next) => {
 	res.locals.title = 'Question Sets';
+	res.locals.bundleName = 'console.bundle.js';
 	next();
-}, head, (req, res) => {
-	const consolePage = fs.readFileSync('./html/console.html').toString();
-	res.send(res.locals.head + consolePage + res.locals.foot);
-});
+}, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 
 app.get('/set/*', (req, res, next) => {
 	res.locals.title = 'Question Set';
+	res.locals.bundleName = 'console.bundle.js';
 	next();
-}, head, (req, res) => {
-	const consolePage = fs.readFileSync('./html/console.html').toString();
-	res.send(res.locals.head + consolePage + res.locals.foot);
-});
+}, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 
 app.post('/api/:path', (req, res) => apiServer(req, res));
+
+app.post('/logout', (req, res) => {
+	res.cookie('id', '', {
+		path: '/',
+		expires: new Date(new Date().setDate(new Date().getDate() - 30)),
+		httpOnly: true,
+		secure: config.secureCookies,
+	});
+	if (req.user) dbcs.users.update({ _id: req.user._id }, { $set: { cookie: [] } });
+	res.end();
+});
 
 app.get('/login/google', (req, res) => {
 	if (req.query.error) return res.send(`<p>Error: ${req.query.error}</p>`);
@@ -191,7 +198,7 @@ app.get('/login/google', (req, res) => {
 				httpOnly: true,
 				secure: config.secureCookies,
 			});
-			return res.redirect(303, '/console');
+			res.redirect(303, '/console');
 		})
 		);
 	});
@@ -216,7 +223,7 @@ mongo.connect(config.mongoPath, (err, db) => {
 	let updatedCount = 0;
 	dbcs.qsets.find({}).each((err, qset) => {
 		if (qset && !qset.shortID) {
-			const shortID = (Math.random().toString(36) + '00000000000000000').slice(2, 9);
+			const shortID = (`${Math.random().toString(36)}00000000000000000`).slice(2, 9);
 			dbcs.qsets.update({ _id: qset._id }, { $set: { shortID } });
 			updatedCount += 1;
 		} else if (!qset) {

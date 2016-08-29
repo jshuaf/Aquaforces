@@ -59,8 +59,6 @@ class NewSetForm extends Component {
 	}
 }
 
-delete questionSetPropTypes._id;
-
 NewSetForm.propTypes = {
 	editSetTitle: PropTypes.func.isRequired,
 	toggleSetPrivacy: PropTypes.func.isRequired,
