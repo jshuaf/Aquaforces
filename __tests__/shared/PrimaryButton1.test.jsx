@@ -2,6 +2,8 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import PrimaryButton from '../../http/shared/PrimaryButton.jsx';
 
+jest.mock('react-dom');
+
 describe('PrimaryButton', () => {
 	it('changes the color when hovered', () => {
 		const component = renderer.create(
