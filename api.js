@@ -6,15 +6,6 @@ module.exports = function (req, res) {
 	};
 	if (req.params.path === 'authenticate') {
 		res.send(JSON.stringify(req.user.personalInfo) || null);
-	} else if (req.params.path === 'logout') {
-		res.cookie('id', '', {
-			path: '/',
-			expires: new Date(new Date().setDate(new Date().getDate() - 30)), // thirty days
-			httpOnly: true,
-			secure: config.secureCookies,
-		});
-		if (req.user) dbcs.users.update({ _id: req.user._id }, { $set: { cookie: [] } });
-		return res.redirect(303, '/console');
 	} else if (req.params.path === 'new-qset') {
 		if (!req.body.title) {
 			return res.badRequest('Error: Set name is required.');

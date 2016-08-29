@@ -21,7 +21,7 @@ class QuestionConsoleDisplay extends Component {
 	render() {
 		return (
 			<div id="questionConsole">
-				<Header />
+				<Header currentUser={this.props.currentUser} />
 				<UnderHeader />
 					<h1>Question Console</h1>
 					<Link to="/console/new"><PrimaryButton>New Set</PrimaryButton></Link>
@@ -35,7 +35,12 @@ class QuestionConsoleDisplay extends Component {
 QuestionConsoleDisplay.propTypes = {
 	children: PropTypes.any.isRequired,
 	authenticateUser: PropTypes.func.isRequired,
+	currentUser: PropTypes.any,
 };
+
+const mapStateToProps = (state) => ({
+	currentUser: state.currentUser,
+});
 
 const mapDispatchToProps = (dispatch) => ({
 	authenticateUser: (user) => {
@@ -43,6 +48,6 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 });
 
-const QuestionConsole = connect(null, mapDispatchToProps)(QuestionConsoleDisplay);
+const QuestionConsole = connect(mapStateToProps, mapDispatchToProps)(QuestionConsoleDisplay);
 
 export default QuestionConsole;

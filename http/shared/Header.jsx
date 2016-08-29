@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import Radium from 'radium';
 import colors from '../shared/colors';
+import PrimaryButton from './PrimaryButton.jsx';
 
-function Header() {
+function Header({ currentUser }) {
 	const containerStyle = {
 		display: 'flex',
 		alignItems: 'center',
@@ -16,7 +17,7 @@ function Header() {
 
 	const logoContainerStyle = {
 		height: '100%',
-		width: '40%',
+		width: '30%',
 		display: 'flex',
 		alignItems: 'center',
 	};
@@ -27,18 +28,27 @@ function Header() {
 		minWidth: '200px',
 	};
 
-	const linkStyle = {
+	const userInfoStyle = {
 		height: '80%',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
 		textDecoration: 'none',
-		fontSize: '1.4em',
+		fontSize: '1.3em',
 		color: colors.midnight,
-		':hover': {
-			color: colors.pacific,
-		},
 	};
+
+	const logoutStyle = {
+		color: colors.midnight,
+		fontSize: '1em',
+		textDecoration: 'none',
+		':hover': { color: colors.pacific },
+		marginLeft: '5px',
+	};
+
+	const headerItemStyle = Object.assign({}, userInfoStyle, {
+		':hover': { color: colors.pacific } }
+	);
 
 	const linkTextStyle = {
 		color: 'inherit',
@@ -49,12 +59,23 @@ function Header() {
 			<a href="/" style={logoContainerStyle}>
 				<img src="../img/logo-black.svg" alt="Aquaforces" style={logoStyle} />
 			</a>
-			<a href="/console" style={linkStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
-			<a href="/host" style={linkStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
-			<a href="/play" style={linkStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
+			<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
+			<a href="/host" style={headerItemStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
+			<a href="/play" style={headerItemStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
+			{currentUser
+			? <div style={userInfoStyle} key={3}>
+					<span style={linkTextStyle}>Logged in as {currentUser.displayName}</span>
+					<a href="/logout" style={logoutStyle}>(Logout)</a>
+				</div>
+			: <PrimaryButton>Log in</PrimaryButton>
+			}
 		</div>
 	);
 }
+
+Header.propTypes = {
+	currentUser: PropTypes.any,
+};
 
 function UnderHeader() {
 	const style = {
