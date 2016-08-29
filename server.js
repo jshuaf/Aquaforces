@@ -1,7 +1,8 @@
 /* global dbcs:true generateID:true */
 const config = {
 	port: process.argv.includes('--production') ? 80 : 3000,
-	mongoPath: 'mongodb://localhost:27017/Aquaforces',
+	// MongoDB remote ip: 146.148.33.112
+	mongoPath: `mongodb://${process.env.mongoServer || 'localhost:27017'}/Aquaforces`,
 	googleAuth: {
 		clientID: process.argv.includes('--test') ?
 			'' : '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com',
@@ -97,7 +98,10 @@ app.get('/', (req, res, next) => {
 });
 
 app.get('/play', (req, res, next) => {
-	if (req.get('host').includes('.io')) return res.redirect(301, 'aquaforces.io');
+	/*
+		@TODO It will cause error on server. Will replace it using nginx.
+		if (req.get('host').includes('.io')) return res.redirect(301, 'aquaforces.io');
+	*/
 	res.locals.title = 'Join a game';
 	res.locals.bundleName = 'game.bundle.js';
 	next();
