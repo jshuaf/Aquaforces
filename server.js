@@ -129,6 +129,7 @@ app.post('/logout', (req, res) => {
 		secure: config.secureCookies,
 	});
 	if (req.user) dbcs.users.update({ _id: req.user._id }, { $set: { cookie: [] } });
+	res.end();
 });
 
 app.get('/login/google', (req, res) => {
