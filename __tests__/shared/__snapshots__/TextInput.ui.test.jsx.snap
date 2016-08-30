@@ -1,0 +1,33 @@
+exports[`TextInput passes down its props 1`] = `
+<div
+  className="textInput"
+  style={
+    Object {
+      "display": "block",
+      "width": "100%"
+    }
+  }>
+  <span
+    style={
+      Object {
+        "marginBottom": "2%",
+        "marginLeft": "1%"
+      }
+    }>
+    name
+  </span>
+  <input
+    backgroundColor="red"
+    color="blue"
+    label="name"
+    onChange={[Function bound onChange]}
+    placeholder="bobby"
+    style={
+      Object {
+        "backgroundColor": "white",
+        "color": "#33414F",
+        "width": "100%"
+      }
+    } />
+</div>
+`;
