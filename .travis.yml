@@ -9,5 +9,4 @@ script:
   - ./node_modules/.bin/eslint . --ext .jsx, .js
   - ./node_modules/.bin/stylelint ./http/*.css ./http/a/stylesheets/*.css -f verbose
 cache:
-  directories:
-    node_modules
+  directories: node_modules
