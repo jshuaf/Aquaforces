@@ -14,10 +14,7 @@
     "build:dll": "./node_modules/.bin/webpack --config webpack.dll.js",
     "build": "npm run build:dll && npm run build:webpack",
     "dev": "./node_modules/.bin/webpack --config webpack.config.js --watch --progress",
-<<<<<<< HEAD
-=======
     "production": "./node_modules/.bin/webpack -p --optimize-minimize",
->>>>>>> master
     "lint": "./node_modules/.bin/eslint . --ext .jsx, .js"
   },
   "author": "BoniO Interns",
