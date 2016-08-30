@@ -10,11 +10,11 @@ script:
 - "./node_modules/.bin/stylelint ./http/*.css ./http/a/stylesheets/*.css -f verbose"
 before_install:
 - openssl aes-256-cbc -K $encrypted_c27013234f3c_key -iv $encrypted_c27013234f3c_iv
-  -in Aquaforces-574606712a9b.json.enc -out Aquaforces-574606712a9b.json -d
+  -in Aquaforces-d22fa453850b.json.enc -out Aquaforces-d22fa453850b.json -d
 deploy:
   provider: gae
   skip_cleanup: true
-  keyfile: "Aquaforces-574606712a9b.json"
+  keyfile: "Aquaforces-d22fa453850b.json"
   project: aquaforces-141803
   on:
     all_branches: true
