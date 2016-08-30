@@ -10,5 +10,4 @@ script:
   - ./node_modules/.bin/stylelint ./http/*.css ./http/a/stylesheets/*.css -f verbose
   - ./node_modules/.bin/jest -u
 cache:
-  directories:
-    node_modules
+  directories: node_modules

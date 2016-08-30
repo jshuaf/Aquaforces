@@ -5,7 +5,7 @@ module.exports = function (req, res) {
 		return res.end(message);
 	};
 	if (req.params.path === 'authenticate') {
-		res.send(req.user ? JSON.stringify(req.user.personalInfo) : null);
+		res.send(req.user ? JSON.stringify(req.user.personalInfo) : '');
 	} else if (req.params.path === 'new-qset') {
 		if (!req.body.title) {
 			return res.badRequest('Error: Set name is required.');
@@ -65,6 +65,7 @@ module.exports = function (req, res) {
 		dbcs.qsets.find(ownSetsFilter).each((err, qset) => {
 			if (qset) qsets.push(qset);
 			else {
+				res.header('Content-Type', 'application/json');
 				res.writeHead(200);
 				return res.end(JSON.stringify(qsets));
 			}
