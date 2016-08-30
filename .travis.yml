@@ -15,7 +15,8 @@ deploy:
   skip_cleanup: true
   keyfile: ./Aquaforces-574606712a9b.json.enc
   project: aquaforces-141803
-  on: master
+  on:
+    all_branches: true
 cache:
   directories:
     node_modules
