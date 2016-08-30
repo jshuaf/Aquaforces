@@ -11,6 +11,7 @@ script:
 before_install:
 - openssl aes-256-cbc -K $encrypted_c27013234f3c_key -iv $encrypted_c27013234f3c_iv
   -in Aquaforces-574606712a9b.json.enc -out Aquaforces-574606712a9b.json -d
+- gcloud auth activate-service-account --key-file Aquaforces-574606712a9b.json
 deploy:
   provider: gae
   skip_cleanup: true
