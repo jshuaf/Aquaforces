@@ -3,11 +3,12 @@ const webpack = require('webpack');
 
 module.exports = {
 	cache: true,
-	devtool: 'eval',
+	devtool: 'source-map',
 	entry: {
 		host: './http/host/index.jsx',
 		game: './http/game/index.jsx',
 		console: './http/console/index.jsx',
+		main: './http/a/scripts/index.js',
 	},
 	output: {
 		path: path.join(__dirname, '/http'),
