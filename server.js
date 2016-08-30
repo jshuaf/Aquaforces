@@ -236,8 +236,8 @@ mongo.connect(config.mongoPath, (err, db) => {
 			console.log(`Patched ${updatedCount} entries in the database.`.cyan);
 		}
 	});
-	const server = http.createServer().listen(config.port);
-	server.on('request', app);
+	const server = http.createServer(app).listen(config.port);
+
 	console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
 
 			/* eslint-disable global-require */
