@@ -6,5 +6,6 @@ npm-debug.log
 /http/console.bundle.js.map
 /http/host.bundle.js
 /http/host.bundle.js.map
+/http/main.bundle.js
 /http/dll/dll.vendor.js
 /dll/vendor-manifest.json

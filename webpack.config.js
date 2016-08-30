@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
 	cache: true,
-	devtool: 'eval',
+	devtool: 'source-map',
 	entry: {
 		host: './http/host/index.jsx',
 		game: './http/game/index.jsx',

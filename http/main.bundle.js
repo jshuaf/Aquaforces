@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
@@ -45,22 +45,1367 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("'use strict';\n\n__webpack_require__(54);\n\n__webpack_require__(55);\n\n/*****************\n ** WEBPACK FOOTER\n ** ./http/a/scripts/index.js\n ** module id = 0\n ** module chunks = 3\n **/\n//# sourceURL=webpack:///./http/a/scripts/index.js?");
+	'use strict';
+	
+	__webpack_require__(54);
+	
+	__webpack_require__(55);
 
 /***/ },
 
 /***/ 54:
 /***/ function(module, exports) {
 
-	eval("'use strict';\n\nString.prototype.replaceAll = function (find, replace) {\n\tif (typeof find === 'string') return this.split(find).join(replace);\n\tvar t = this,\n\t    i = void 0,\n\t    j = void 0;\n\twhile (typeof (i = find.shift()) === 'string' && typeof (j = replace.shift()) === 'string') {\n\t\tt = t.replaceAll(i || '', j || '');\n\t}return t;\n};\nString.prototype.repeat = function (num) {\n\treturn new Array(++num).join(this);\n};\nNumber.prototype.bound = function (l, h) {\n\treturn isNaN(h) ? Math.min(this, l) : Math.max(Math.min(this, h), l);\n};\nHTMLCollection.prototype.indexOf = NodeList.prototype.indexOf = Array.prototype.indexOf;\nHTMLCollection.prototype.forEach = NodeList.prototype.forEach = Array.prototype.forEach;\nHTMLElement.prototype.insertAfter = function (newEl, refEl) {\n\tif (refEl.nextSibling) refEl.parentNode.insertBefore(newEl, refEl.nextSibling);else refEl.parentNode.appendChild(newEl);\n};\nfunction html(input) {\n\treturn input.toString().replaceAll(['&', '<', '>', '\"', '\\t', '\\n', '\\b'], ['&amp;', '&lt;', '&gt;', '&quot;', '&#9;', '&#10;', '']);\n}\n\nfunction shuffle(array) {\n\tvar currentIndex = array.length,\n\t    temporaryValue = void 0,\n\t    randomIndex = void 0;\n\twhile (currentIndex !== 0) {\n\t\trandomIndex = Math.floor(Math.random() * currentIndex);\n\t\tcurrentIndex -= 1;\n\t\ttemporaryValue = array[currentIndex];\n\t\tarray[currentIndex] = array[randomIndex];\n\t\tarray[randomIndex] = temporaryValue;\n\t}\n\treturn array;\n}\n\n/*****************\n ** WEBPACK FOOTER\n ** ./http/a/scripts/main.js\n ** module id = 54\n ** module chunks = 3\n **/\n//# sourceURL=webpack:///./http/a/scripts/main.js?");
+	'use strict';
+	
+	String.prototype.replaceAll = function (find, replace) {
+		if (typeof find === 'string') return this.split(find).join(replace);
+		var t = this,
+		    i = void 0,
+		    j = void 0;
+		while (typeof (i = find.shift()) === 'string' && typeof (j = replace.shift()) === 'string') {
+			t = t.replaceAll(i || '', j || '');
+		}return t;
+	};
+	String.prototype.repeat = function (num) {
+		return new Array(++num).join(this);
+	};
+	Number.prototype.bound = function (l, h) {
+		return isNaN(h) ? Math.min(this, l) : Math.max(Math.min(this, h), l);
+	};
+	HTMLCollection.prototype.indexOf = NodeList.prototype.indexOf = Array.prototype.indexOf;
+	HTMLCollection.prototype.forEach = NodeList.prototype.forEach = Array.prototype.forEach;
+	HTMLElement.prototype.insertAfter = function (newEl, refEl) {
+		if (refEl.nextSibling) refEl.parentNode.insertBefore(newEl, refEl.nextSibling);else refEl.parentNode.appendChild(newEl);
+	};
+	function html(input) {
+		return input.toString().replaceAll(['&', '<', '>', '"', '\t', '\n', '\b'], ['&amp;', '&lt;', '&gt;', '&quot;', '&#9;', '&#10;', '']);
+	}
+	
+	function shuffle(array) {
+		var currentIndex = array.length,
+		    temporaryValue = void 0,
+		    randomIndex = void 0;
+		while (currentIndex !== 0) {
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
+			temporaryValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = temporaryValue;
+		}
+		return array;
+	}
 
 /***/ },
 
 /***/ 55:
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("var require;var require;var __WEBPACK_AMD_DEFINE_RESULT__;\"use strict\";\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol ? \"symbol\" : typeof obj; };\n\n;(function (window, document, undefined) {\n  \"use strict\";\n\n  (function e(t, n, r) {\n    function s(o, u) {\n      if (!n[o]) {\n        if (!t[o]) {\n          var a = typeof require == \"function\" && require;if (!u && a) return require(o, !0);if (i) return i(o, !0);var f = new Error(\"Cannot find module '\" + o + \"'\");throw f.code = \"MODULE_NOT_FOUND\", f;\n        }var l = n[o] = { exports: {} };t[o][0].call(l.exports, function (e) {\n          var n = t[o][1][e];return s(n ? n : e);\n        }, l, l.exports, e, t, n, r);\n      }return n[o].exports;\n    }var i = typeof require == \"function\" && require;for (var o = 0; o < r.length; o++) {\n      s(r[o]);\n    }return s;\n  })({ 1: [function (require, module, exports) {\n      'use strict';\n\n      var _interopRequireWildcard = function _interopRequireWildcard(obj) {\n        return obj && obj.__esModule ? obj : { 'default': obj };\n      };\n\n      Object.defineProperty(exports, '__esModule', {\n        value: true\n      });\n      // SweetAlert\n      // 2014-2015 (c) - Tristan Edwards\n      // github.com/t4t5/sweetalert\n\n      /*\n       * jQuery-like functions for manipulating the DOM\n       */\n\n      var _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation = require('./modules/handle-dom');\n\n      /*\n       * Handy utilities\n       */\n\n      var _extend$hexToRgb$isIE8$logStr$colorLuminance = require('./modules/utils');\n\n      /*\n       *  Handle sweetAlert's DOM elements\n       */\n\n      var _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition = require('./modules/handle-swal-dom');\n\n      // Handle button events and keyboard events\n\n      var _handleButton$handleConfirm$handleCancel = require('./modules/handle-click');\n\n      var _handleKeyDown = require('./modules/handle-key');\n\n      var _handleKeyDown2 = _interopRequireWildcard(_handleKeyDown);\n\n      // Default values\n\n      var _defaultParams = require('./modules/default-params');\n\n      var _defaultParams2 = _interopRequireWildcard(_defaultParams);\n\n      var _setParameters = require('./modules/set-params');\n\n      var _setParameters2 = _interopRequireWildcard(_setParameters);\n\n      /*\n       * Remember state in cases where opening and handling a modal will fiddle with it.\n       * (We also use window.previousActiveElement as a global variable)\n       */\n      var previousWindowKeyDown;\n      var lastFocusedButton;\n\n      /*\n       * Global sweetAlert function\n       * (this is what the user calls)\n       */\n      var sweetAlert, swal;\n\n      exports['default'] = sweetAlert = swal = function (_swal) {\n        function swal() {\n          return _swal.apply(this, arguments);\n        }\n\n        swal.toString = function () {\n          return _swal.toString();\n        };\n\n        return swal;\n      }(function () {\n        var customizations = arguments[0];\n\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.addClass(document.body, 'stop-scrolling');\n        _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.resetInput();\n\n        /*\n         * Use argument if defined or default value from params object otherwise.\n         * Supports the case where a default value is boolean true and should be\n         * overridden by a corresponding explicit argument which is boolean false.\n         */\n        function argumentOrDefault(key) {\n          var args = customizations;\n          return args[key] === undefined ? _defaultParams2['default'][key] : args[key];\n        }\n\n        if (customizations === undefined) {\n          _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('SweetAlert expects at least 1 attribute!');\n          return false;\n        }\n\n        var params = _extend$hexToRgb$isIE8$logStr$colorLuminance.extend({}, _defaultParams2['default']);\n\n        switch (typeof customizations === \"undefined\" ? \"undefined\" : _typeof(customizations)) {\n\n          // Ex: swal(\"Hello\", \"Just testing\", \"info\");\n          case 'string':\n            params.title = customizations;\n            params.text = arguments[1] || '';\n            params.type = arguments[2] || '';\n            break;\n\n          // Ex: swal({ title:\"Hello\", text: \"Just testing\", type: \"info\" });\n          case 'object':\n            if (customizations.title === undefined) {\n              _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('Missing \"title\" argument!');\n              return false;\n            }\n\n            params.title = customizations.title;\n\n            for (var customName in _defaultParams2['default']) {\n              params[customName] = argumentOrDefault(customName);\n            }\n\n            // Show \"Confirm\" instead of \"OK\" if cancel button is visible\n            params.confirmButtonText = params.showCancelButton ? 'Confirm' : _defaultParams2['default'].confirmButtonText;\n            params.confirmButtonText = argumentOrDefault('confirmButtonText');\n\n            // Callback function when clicking on \"OK\"/\"Cancel\"\n            params.doneFunction = arguments[1] || null;\n\n            break;\n\n          default:\n            _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('Unexpected type of argument! Expected \"string\" or \"object\", got ' + (typeof customizations === \"undefined\" ? \"undefined\" : _typeof(customizations)));\n            return false;\n\n        }\n\n        _setParameters2['default'](params);\n        _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.fixVerticalPosition();\n        _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.openModal(arguments[1]);\n\n        // Modal interactions\n        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();\n\n        /*\n         * Make sure all modal buttons respond to all events\n         */\n        var $buttons = modal.querySelectorAll('button');\n        var buttonEvents = ['onclick', 'onmouseover', 'onmouseout', 'onmousedown', 'onmouseup', 'onfocus'];\n        var onButtonEvent = function onButtonEvent(e) {\n          return _handleButton$handleConfirm$handleCancel.handleButton(e, params, modal);\n        };\n\n        for (var btnIndex = 0; btnIndex < $buttons.length; btnIndex++) {\n          for (var evtIndex = 0; evtIndex < buttonEvents.length; evtIndex++) {\n            var btnEvt = buttonEvents[evtIndex];\n            $buttons[btnIndex][btnEvt] = onButtonEvent;\n          }\n        }\n\n        // Clicking outside the modal dismisses it (if allowed by user)\n        _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getOverlay().onclick = onButtonEvent;\n\n        previousWindowKeyDown = window.onkeydown;\n\n        var onKeyEvent = function onKeyEvent(e) {\n          return _handleKeyDown2['default'](e, params, modal);\n        };\n        window.onkeydown = onKeyEvent;\n\n        window.onfocus = function () {\n          // When the user has focused away and focused back from the whole window.\n          setTimeout(function () {\n            // Put in a timeout to jump out of the event sequence.\n            // Calling focus() in the event sequence confuses things.\n            if (lastFocusedButton !== undefined) {\n              lastFocusedButton.focus();\n              lastFocusedButton = undefined;\n            }\n          }, 0);\n        };\n\n        // Show alert with enabled buttons always\n        swal.enableButtons();\n      });\n\n      /*\n       * Set default params for each popup\n       * @param {Object} userParams\n       */\n      sweetAlert.setDefaults = swal.setDefaults = function (userParams) {\n        if (!userParams) {\n          throw new Error('userParams is required');\n        }\n        if ((typeof userParams === \"undefined\" ? \"undefined\" : _typeof(userParams)) !== 'object') {\n          throw new Error('userParams has to be a object');\n        }\n\n        _extend$hexToRgb$isIE8$logStr$colorLuminance.extend(_defaultParams2['default'], userParams);\n      };\n\n      /*\n       * Animation when closing modal\n       */\n      sweetAlert.close = swal.close = function () {\n        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();\n\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.fadeOut(_sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getOverlay(), 5);\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.fadeOut(modal, 5);\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass(modal, 'showSweetAlert');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.addClass(modal, 'hideSweetAlert');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass(modal, 'visible');\n\n        /*\n         * Reset icon animations\n         */\n        var $successIcon = modal.querySelector('.sa-icon.sa-success');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($successIcon, 'animate');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($successIcon.querySelector('.sa-tip'), 'animateSuccessTip');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($successIcon.querySelector('.sa-long'), 'animateSuccessLong');\n\n        var $errorIcon = modal.querySelector('.sa-icon.sa-error');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($errorIcon, 'animateErrorIcon');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($errorIcon.querySelector('.sa-x-mark'), 'animateXMark');\n\n        var $warningIcon = modal.querySelector('.sa-icon.sa-warning');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($warningIcon, 'pulseWarning');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($warningIcon.querySelector('.sa-body'), 'pulseWarningIns');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($warningIcon.querySelector('.sa-dot'), 'pulseWarningIns');\n\n        // Reset custom class (delay so that UI changes aren't visible)\n        setTimeout(function () {\n          var customClass = modal.getAttribute('data-custom-class');\n          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass(modal, customClass);\n        }, 300);\n\n        // Make page scrollable again\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass(document.body, 'stop-scrolling');\n\n        // Reset the page to its previous state\n        window.onkeydown = previousWindowKeyDown;\n        if (window.previousActiveElement) {\n          window.previousActiveElement.focus();\n        }\n        lastFocusedButton = undefined;\n        clearTimeout(modal.timeout);\n\n        return true;\n      };\n\n      /*\n       * Validation of the input field is done by user\n       * If something is wrong => call showInputError with errorMessage\n       */\n      sweetAlert.showInputError = swal.showInputError = function (errorMessage) {\n        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();\n\n        var $errorIcon = modal.querySelector('.sa-input-error');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.addClass($errorIcon, 'show');\n\n        var $errorContainer = modal.querySelector('.sa-error-container');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.addClass($errorContainer, 'show');\n\n        $errorContainer.querySelector('p').innerHTML = errorMessage;\n\n        setTimeout(function () {\n          sweetAlert.enableButtons();\n        }, 1);\n\n        modal.querySelector('input').focus();\n      };\n\n      /*\n       * Reset input error DOM elements\n       */\n      sweetAlert.resetInputError = swal.resetInputError = function (event) {\n        // If press enter => ignore\n        if (event && event.keyCode === 13) {\n          return false;\n        }\n\n        var $modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();\n\n        var $errorIcon = $modal.querySelector('.sa-input-error');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($errorIcon, 'show');\n\n        var $errorContainer = $modal.querySelector('.sa-error-container');\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($errorContainer, 'show');\n      };\n\n      /*\n       * Disable confirm and cancel buttons\n       */\n      sweetAlert.disableButtons = swal.disableButtons = function (event) {\n        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();\n        var $confirmButton = modal.querySelector('button.confirm');\n        var $cancelButton = modal.querySelector('button.cancel');\n        $confirmButton.disabled = true;\n        $cancelButton.disabled = true;\n      };\n\n      /*\n       * Enable confirm and cancel buttons\n       */\n      sweetAlert.enableButtons = swal.enableButtons = function (event) {\n        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();\n        var $confirmButton = modal.querySelector('button.confirm');\n        var $cancelButton = modal.querySelector('button.cancel');\n        $confirmButton.disabled = false;\n        $cancelButton.disabled = false;\n      };\n\n      if (typeof window !== 'undefined') {\n        // The 'handle-click' module requires\n        // that 'sweetAlert' was set as global.\n        window.sweetAlert = window.swal = sweetAlert;\n      } else {\n        _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('SweetAlert is a frontend module!');\n      }\n      module.exports = exports['default'];\n    }, { \"./modules/default-params\": 2, \"./modules/handle-click\": 3, \"./modules/handle-dom\": 4, \"./modules/handle-key\": 5, \"./modules/handle-swal-dom\": 6, \"./modules/set-params\": 8, \"./modules/utils\": 9 }], 2: [function (require, module, exports) {\n      'use strict';\n\n      Object.defineProperty(exports, '__esModule', {\n        value: true\n      });\n      var defaultParams = {\n        title: '',\n        text: '',\n        type: null,\n        allowOutsideClick: false,\n        showConfirmButton: true,\n        showCancelButton: false,\n        closeOnConfirm: true,\n        closeOnCancel: true,\n        confirmButtonText: 'OK',\n        confirmButtonColor: '#8CD4F5',\n        cancelButtonText: 'Cancel',\n        imageUrl: null,\n        imageSize: null,\n        timer: null,\n        customClass: '',\n        html: false,\n        animation: true,\n        allowEscapeKey: true,\n        inputType: 'text',\n        inputPlaceholder: '',\n        inputValue: '',\n        showLoaderOnConfirm: false\n      };\n\n      exports['default'] = defaultParams;\n      module.exports = exports['default'];\n    }, {}], 3: [function (require, module, exports) {\n      'use strict';\n\n      Object.defineProperty(exports, '__esModule', {\n        value: true\n      });\n\n      var _colorLuminance = require('./utils');\n\n      var _getModal = require('./handle-swal-dom');\n\n      var _hasClass$isDescendant = require('./handle-dom');\n\n      /*\n       * User clicked on \"Confirm\"/\"OK\" or \"Cancel\"\n       */\n      var handleButton = function handleButton(event, params, modal) {\n        var e = event || window.event;\n        var target = e.target || e.srcElement;\n\n        var targetedConfirm = target.className.indexOf('confirm') !== -1;\n        var targetedOverlay = target.className.indexOf('sweet-overlay') !== -1;\n        var modalIsVisible = _hasClass$isDescendant.hasClass(modal, 'visible');\n        var doneFunctionExists = params.doneFunction && modal.getAttribute('data-has-done-function') === 'true';\n\n        // Since the user can change the background-color of the confirm button programmatically,\n        // we must calculate what the color should be on hover/active\n        var normalColor, hoverColor, activeColor;\n        if (targetedConfirm && params.confirmButtonColor) {\n          normalColor = params.confirmButtonColor;\n          hoverColor = _colorLuminance.colorLuminance(normalColor, -0.04);\n          activeColor = _colorLuminance.colorLuminance(normalColor, -0.14);\n        }\n\n        function shouldSetConfirmButtonColor(color) {\n          if (targetedConfirm && params.confirmButtonColor) {\n            target.style.backgroundColor = color;\n          }\n        }\n\n        switch (e.type) {\n          case 'mouseover':\n            shouldSetConfirmButtonColor(hoverColor);\n            break;\n\n          case 'mouseout':\n            shouldSetConfirmButtonColor(normalColor);\n            break;\n\n          case 'mousedown':\n            shouldSetConfirmButtonColor(activeColor);\n            break;\n\n          case 'mouseup':\n            shouldSetConfirmButtonColor(hoverColor);\n            break;\n\n          case 'focus':\n            var $confirmButton = modal.querySelector('button.confirm');\n            var $cancelButton = modal.querySelector('button.cancel');\n\n            if (targetedConfirm) {\n              $cancelButton.style.boxShadow = 'none';\n            } else {\n              $confirmButton.style.boxShadow = 'none';\n            }\n            break;\n\n          case 'click':\n            var clickedOnModal = modal === target;\n            var clickedOnModalChild = _hasClass$isDescendant.isDescendant(modal, target);\n\n            // Ignore click outside if allowOutsideClick is false\n            if (!clickedOnModal && !clickedOnModalChild && modalIsVisible && !params.allowOutsideClick) {\n              break;\n            }\n\n            if (targetedConfirm && doneFunctionExists && modalIsVisible) {\n              handleConfirm(modal, params);\n            } else if (doneFunctionExists && modalIsVisible || targetedOverlay) {\n              handleCancel(modal, params);\n            } else if (_hasClass$isDescendant.isDescendant(modal, target) && target.tagName === 'BUTTON') {\n              sweetAlert.close();\n            }\n            break;\n        }\n      };\n\n      /*\n       *  User clicked on \"Confirm\"/\"OK\"\n       */\n      var handleConfirm = function handleConfirm(modal, params) {\n        var callbackValue = true;\n\n        if (_hasClass$isDescendant.hasClass(modal, 'show-input')) {\n          callbackValue = modal.querySelector('input').value;\n\n          if (!callbackValue) {\n            callbackValue = '';\n          }\n        }\n\n        params.doneFunction(callbackValue);\n\n        if (params.closeOnConfirm) {\n          sweetAlert.close();\n        }\n        // Disable cancel and confirm button if the parameter is true\n        if (params.showLoaderOnConfirm) {\n          sweetAlert.disableButtons();\n        }\n      };\n\n      /*\n       *  User clicked on \"Cancel\"\n       */\n      var handleCancel = function handleCancel(modal, params) {\n        // Check if callback function expects a parameter (to track cancel actions)\n        var functionAsStr = String(params.doneFunction).replace(/\\s/g, '');\n        var functionHandlesCancel = functionAsStr.substring(0, 9) === 'function(' && functionAsStr.substring(9, 10) !== ')';\n\n        if (functionHandlesCancel) {\n          params.doneFunction(false);\n        }\n\n        if (params.closeOnCancel) {\n          sweetAlert.close();\n        }\n      };\n\n      exports['default'] = {\n        handleButton: handleButton,\n        handleConfirm: handleConfirm,\n        handleCancel: handleCancel\n      };\n      module.exports = exports['default'];\n    }, { \"./handle-dom\": 4, \"./handle-swal-dom\": 6, \"./utils\": 9 }], 4: [function (require, module, exports) {\n      'use strict';\n\n      Object.defineProperty(exports, '__esModule', {\n        value: true\n      });\n      var hasClass = function hasClass(elem, className) {\n        return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');\n      };\n\n      var addClass = function addClass(elem, className) {\n        if (!hasClass(elem, className)) {\n          elem.className += ' ' + className;\n        }\n      };\n\n      var removeClass = function removeClass(elem, className) {\n        var newClass = ' ' + elem.className.replace(/[\\t\\r\\n]/g, ' ') + ' ';\n        if (hasClass(elem, className)) {\n          while (newClass.indexOf(' ' + className + ' ') >= 0) {\n            newClass = newClass.replace(' ' + className + ' ', ' ');\n          }\n          elem.className = newClass.replace(/^\\s+|\\s+$/g, '');\n        }\n      };\n\n      var escapeHtml = function escapeHtml(str) {\n        var div = document.createElement('div');\n        div.appendChild(document.createTextNode(str));\n        return div.innerHTML;\n      };\n\n      var _show = function _show(elem) {\n        elem.style.opacity = '';\n        elem.style.display = 'block';\n      };\n\n      var show = function show(elems) {\n        if (elems && !elems.length) {\n          return _show(elems);\n        }\n        for (var i = 0; i < elems.length; ++i) {\n          _show(elems[i]);\n        }\n      };\n\n      var _hide = function _hide(elem) {\n        elem.style.opacity = '';\n        elem.style.display = 'none';\n      };\n\n      var hide = function hide(elems) {\n        if (elems && !elems.length) {\n          return _hide(elems);\n        }\n        for (var i = 0; i < elems.length; ++i) {\n          _hide(elems[i]);\n        }\n      };\n\n      var isDescendant = function isDescendant(parent, child) {\n        var node = child.parentNode;\n        while (node !== null) {\n          if (node === parent) {\n            return true;\n          }\n          node = node.parentNode;\n        }\n        return false;\n      };\n\n      var getTopMargin = function getTopMargin(elem) {\n        elem.style.left = '-9999px';\n        elem.style.display = 'block';\n\n        var height = elem.clientHeight,\n            padding;\n        if (typeof getComputedStyle !== 'undefined') {\n          // IE 8\n          padding = parseInt(getComputedStyle(elem).getPropertyValue('padding-top'), 10);\n        } else {\n          padding = parseInt(elem.currentStyle.padding);\n        }\n\n        elem.style.left = '';\n        elem.style.display = 'none';\n        return '-' + parseInt((height + padding) / 2) + 'px';\n      };\n\n      var fadeIn = function fadeIn(elem, interval) {\n        if (+elem.style.opacity < 1) {\n          interval = interval || 16;\n          elem.style.opacity = 0;\n          elem.style.display = 'block';\n          var last = +new Date();\n          var tick = function (_tick) {\n            function tick() {\n              return _tick.apply(this, arguments);\n            }\n\n            tick.toString = function () {\n              return _tick.toString();\n            };\n\n            return tick;\n          }(function () {\n            elem.style.opacity = +elem.style.opacity + (new Date() - last) / 100;\n            last = +new Date();\n\n            if (+elem.style.opacity < 1) {\n              setTimeout(tick, interval);\n            }\n          });\n          tick();\n        }\n        elem.style.display = 'block'; //fallback IE8\n      };\n\n      var fadeOut = function fadeOut(elem, interval) {\n        interval = interval || 16;\n        elem.style.opacity = 1;\n        var last = +new Date();\n        var tick = function (_tick2) {\n          function tick() {\n            return _tick2.apply(this, arguments);\n          }\n\n          tick.toString = function () {\n            return _tick2.toString();\n          };\n\n          return tick;\n        }(function () {\n          elem.style.opacity = +elem.style.opacity - (new Date() - last) / 100;\n          last = +new Date();\n\n          if (+elem.style.opacity > 0) {\n            setTimeout(tick, interval);\n          } else {\n            elem.style.display = 'none';\n          }\n        });\n        tick();\n      };\n\n      var fireClick = function fireClick(node) {\n        // Taken from http://www.nonobtrusive.com/2011/11/29/programatically-fire-crossbrowser-click-event-with-javascript/\n        // Then fixed for today's Chrome browser.\n        if (typeof MouseEvent === 'function') {\n          // Up-to-date approach\n          var mevt = new MouseEvent('click', {\n            view: window,\n            bubbles: false,\n            cancelable: true\n          });\n          node.dispatchEvent(mevt);\n        } else if (document.createEvent) {\n          // Fallback\n          var evt = document.createEvent('MouseEvents');\n          evt.initEvent('click', false, false);\n          node.dispatchEvent(evt);\n        } else if (document.createEventObject) {\n          node.fireEvent('onclick');\n        } else if (typeof node.onclick === 'function') {\n          node.onclick();\n        }\n      };\n\n      var stopEventPropagation = function stopEventPropagation(e) {\n        // In particular, make sure the space bar doesn't scroll the main window.\n        if (typeof e.stopPropagation === 'function') {\n          e.stopPropagation();\n          e.preventDefault();\n        } else if (window.event && window.event.hasOwnProperty('cancelBubble')) {\n          window.event.cancelBubble = true;\n        }\n      };\n\n      exports.hasClass = hasClass;\n      exports.addClass = addClass;\n      exports.removeClass = removeClass;\n      exports.escapeHtml = escapeHtml;\n      exports._show = _show;\n      exports.show = show;\n      exports._hide = _hide;\n      exports.hide = hide;\n      exports.isDescendant = isDescendant;\n      exports.getTopMargin = getTopMargin;\n      exports.fadeIn = fadeIn;\n      exports.fadeOut = fadeOut;\n      exports.fireClick = fireClick;\n      exports.stopEventPropagation = stopEventPropagation;\n    }, {}], 5: [function (require, module, exports) {\n      'use strict';\n\n      Object.defineProperty(exports, '__esModule', {\n        value: true\n      });\n\n      var _stopEventPropagation$fireClick = require('./handle-dom');\n\n      var _setFocusStyle = require('./handle-swal-dom');\n\n      var handleKeyDown = function handleKeyDown(event, params, modal) {\n        var e = event || window.event;\n        var keyCode = e.keyCode || e.which;\n\n        var $okButton = modal.querySelector('button.confirm');\n        var $cancelButton = modal.querySelector('button.cancel');\n        var $modalButtons = modal.querySelectorAll('button[tabindex]');\n\n        if ([9, 13, 32, 27].indexOf(keyCode) === -1) {\n          // Don't do work on keys we don't care about.\n          return;\n        }\n\n        var $targetElement = e.target || e.srcElement;\n\n        var btnIndex = -1; // Find the button - note, this is a nodelist, not an array.\n        for (var i = 0; i < $modalButtons.length; i++) {\n          if ($targetElement === $modalButtons[i]) {\n            btnIndex = i;\n            break;\n          }\n        }\n\n        if (keyCode === 9) {\n          // TAB\n          if (btnIndex === -1) {\n            // No button focused. Jump to the confirm button.\n            $targetElement = $okButton;\n          } else {\n            // Cycle to the next button\n            if (btnIndex === $modalButtons.length - 1) {\n              $targetElement = $modalButtons[0];\n            } else {\n              $targetElement = $modalButtons[btnIndex + 1];\n            }\n          }\n\n          _stopEventPropagation$fireClick.stopEventPropagation(e);\n          $targetElement.focus();\n\n          if (params.confirmButtonColor) {\n            _setFocusStyle.setFocusStyle($targetElement, params.confirmButtonColor);\n          }\n        } else {\n          if (keyCode === 13) {\n            if ($targetElement.tagName === 'INPUT') {\n              $targetElement = $okButton;\n              $okButton.focus();\n            }\n\n            if (btnIndex === -1) {\n              // ENTER/SPACE clicked outside of a button.\n              $targetElement = $okButton;\n            } else {\n              // Do nothing - let the browser handle it.\n              $targetElement = undefined;\n            }\n          } else if (keyCode === 27 && params.allowEscapeKey === true) {\n            $targetElement = $cancelButton;\n            _stopEventPropagation$fireClick.fireClick($targetElement, e);\n          } else {\n            // Fallback - let the browser handle it.\n            $targetElement = undefined;\n          }\n        }\n      };\n\n      exports['default'] = handleKeyDown;\n      module.exports = exports['default'];\n    }, { \"./handle-dom\": 4, \"./handle-swal-dom\": 6 }], 6: [function (require, module, exports) {\n      'use strict';\n\n      var _interopRequireWildcard = function _interopRequireWildcard(obj) {\n        return obj && obj.__esModule ? obj : { 'default': obj };\n      };\n\n      Object.defineProperty(exports, '__esModule', {\n        value: true\n      });\n\n      var _hexToRgb = require('./utils');\n\n      var _removeClass$getTopMargin$fadeIn$show$addClass = require('./handle-dom');\n\n      var _defaultParams = require('./default-params');\n\n      var _defaultParams2 = _interopRequireWildcard(_defaultParams);\n\n      /*\n       * Add modal + overlay to DOM\n       */\n\n      var _injectedHTML = require('./injected-html');\n\n      var _injectedHTML2 = _interopRequireWildcard(_injectedHTML);\n\n      var modalClass = '.sweet-alert';\n      var overlayClass = '.sweet-overlay';\n\n      var sweetAlertInitialize = function sweetAlertInitialize() {\n        var sweetWrap = document.createElement('div');\n        sweetWrap.innerHTML = _injectedHTML2['default'];\n\n        // Append elements to body\n        while (sweetWrap.firstChild) {\n          document.body.appendChild(sweetWrap.firstChild);\n        }\n      };\n\n      /*\n       * Get DOM element of modal\n       */\n      var getModal = function (_getModal) {\n        function getModal() {\n          return _getModal.apply(this, arguments);\n        }\n\n        getModal.toString = function () {\n          return _getModal.toString();\n        };\n\n        return getModal;\n      }(function () {\n        var $modal = document.querySelector(modalClass);\n\n        if (!$modal) {\n          sweetAlertInitialize();\n          $modal = getModal();\n        }\n\n        return $modal;\n      });\n\n      /*\n       * Get DOM element of input (in modal)\n       */\n      var getInput = function getInput() {\n        var $modal = getModal();\n        if ($modal) {\n          return $modal.querySelector('input');\n        }\n      };\n\n      /*\n       * Get DOM element of overlay\n       */\n      var getOverlay = function getOverlay() {\n        return document.querySelector(overlayClass);\n      };\n\n      /*\n       * Add box-shadow style to button (depending on its chosen bg-color)\n       */\n      var setFocusStyle = function setFocusStyle($button, bgColor) {\n        var rgbColor = _hexToRgb.hexToRgb(bgColor);\n        $button.style.boxShadow = '0 0 2px rgba(' + rgbColor + ', 0.8), inset 0 0 0 1px rgba(0, 0, 0, 0.05)';\n      };\n\n      /*\n       * Animation when opening modal\n       */\n      var openModal = function openModal(callback) {\n        var $modal = getModal();\n        _removeClass$getTopMargin$fadeIn$show$addClass.fadeIn(getOverlay(), 10);\n        _removeClass$getTopMargin$fadeIn$show$addClass.show($modal);\n        _removeClass$getTopMargin$fadeIn$show$addClass.addClass($modal, 'showSweetAlert');\n        _removeClass$getTopMargin$fadeIn$show$addClass.removeClass($modal, 'hideSweetAlert');\n\n        window.previousActiveElement = document.activeElement;\n        var $okButton = $modal.querySelector('button.confirm');\n        $okButton.focus();\n\n        setTimeout(function () {\n          _removeClass$getTopMargin$fadeIn$show$addClass.addClass($modal, 'visible');\n        }, 500);\n\n        var timer = $modal.getAttribute('data-timer');\n\n        if (timer !== 'null' && timer !== '') {\n          var timerCallback = callback;\n          $modal.timeout = setTimeout(function () {\n            var doneFunctionExists = (timerCallback || null) && $modal.getAttribute('data-has-done-function') === 'true';\n            if (doneFunctionExists) {\n              timerCallback(null);\n            } else {\n              sweetAlert.close();\n            }\n          }, timer);\n        }\n      };\n\n      /*\n       * Reset the styling of the input\n       * (for example if errors have been shown)\n       */\n      var resetInput = function resetInput() {\n        var $modal = getModal();\n        var $input = getInput();\n\n        _removeClass$getTopMargin$fadeIn$show$addClass.removeClass($modal, 'show-input');\n        $input.value = _defaultParams2['default'].inputValue;\n        $input.setAttribute('type', _defaultParams2['default'].inputType);\n        $input.setAttribute('placeholder', _defaultParams2['default'].inputPlaceholder);\n\n        resetInputError();\n      };\n\n      var resetInputError = function resetInputError(event) {\n        // If press enter => ignore\n        if (event && event.keyCode === 13) {\n          return false;\n        }\n\n        var $modal = getModal();\n\n        var $errorIcon = $modal.querySelector('.sa-input-error');\n        _removeClass$getTopMargin$fadeIn$show$addClass.removeClass($errorIcon, 'show');\n\n        var $errorContainer = $modal.querySelector('.sa-error-container');\n        _removeClass$getTopMargin$fadeIn$show$addClass.removeClass($errorContainer, 'show');\n      };\n\n      /*\n       * Set \"margin-top\"-property on modal based on its computed height\n       */\n      var fixVerticalPosition = function fixVerticalPosition() {\n        var $modal = getModal();\n        $modal.style.marginTop = _removeClass$getTopMargin$fadeIn$show$addClass.getTopMargin(getModal());\n      };\n\n      exports.sweetAlertInitialize = sweetAlertInitialize;\n      exports.getModal = getModal;\n      exports.getOverlay = getOverlay;\n      exports.getInput = getInput;\n      exports.setFocusStyle = setFocusStyle;\n      exports.openModal = openModal;\n      exports.resetInput = resetInput;\n      exports.resetInputError = resetInputError;\n      exports.fixVerticalPosition = fixVerticalPosition;\n    }, { \"./default-params\": 2, \"./handle-dom\": 4, \"./injected-html\": 7, \"./utils\": 9 }], 7: [function (require, module, exports) {\n      \"use strict\";\n\n      Object.defineProperty(exports, \"__esModule\", {\n        value: true\n      });\n      var injectedHTML =\n\n      // Dark overlay\n      \"<div class=\\\"sweet-overlay\\\" tabIndex=\\\"-1\\\"></div>\" +\n\n      // Modal\n      \"<div class=\\\"sweet-alert\\\">\" +\n\n      // Error icon\n      \"<div class=\\\"sa-icon sa-error\\\">\\n      <span class=\\\"sa-x-mark\\\">\\n        <span class=\\\"sa-line sa-left\\\"></span>\\n        <span class=\\\"sa-line sa-right\\\"></span>\\n      </span>\\n    </div>\" +\n\n      // Warning icon\n      \"<div class=\\\"sa-icon sa-warning\\\">\\n      <span class=\\\"sa-body\\\"></span>\\n      <span class=\\\"sa-dot\\\"></span>\\n    </div>\" +\n\n      // Info icon\n      \"<div class=\\\"sa-icon sa-info\\\"></div>\" +\n\n      // Success icon\n      \"<div class=\\\"sa-icon sa-success\\\">\\n      <span class=\\\"sa-line sa-tip\\\"></span>\\n      <span class=\\\"sa-line sa-long\\\"></span>\\n\\n      <div class=\\\"sa-placeholder\\\"></div>\\n      <div class=\\\"sa-fix\\\"></div>\\n    </div>\" + \"<div class=\\\"sa-icon sa-custom\\\"></div>\" +\n\n      // Title, text and input\n      \"<h2>Title</h2>\\n    <p>Text</p>\\n    <fieldset>\\n      <input type=\\\"text\\\" tabIndex=\\\"3\\\" />\\n      <div class=\\\"sa-input-error\\\"></div>\\n    </fieldset>\" +\n\n      // Input errors\n      \"<div class=\\\"sa-error-container\\\">\\n      <div class=\\\"icon\\\">!</div>\\n      <p>Not valid!</p>\\n    </div>\" +\n\n      // Cancel and confirm buttons\n      \"<div class=\\\"sa-button-container\\\">\\n      <button class=\\\"cancel\\\" tabIndex=\\\"2\\\">Cancel</button>\\n      <div class=\\\"sa-confirm-button-container\\\">\\n        <button class=\\\"confirm\\\" tabIndex=\\\"1\\\">OK</button>\" +\n\n      // Loading animation\n      \"<div class=\\\"la-ball-fall\\\">\\n          <div></div>\\n          <div></div>\\n          <div></div>\\n        </div>\\n      </div>\\n    </div>\" +\n\n      // End of modal\n      \"</div>\";\n\n      exports[\"default\"] = injectedHTML;\n      module.exports = exports[\"default\"];\n    }, {}], 8: [function (require, module, exports) {\n      'use strict';\n\n      Object.defineProperty(exports, '__esModule', {\n        value: true\n      });\n\n      var _isIE8 = require('./utils');\n\n      var _getModal$getInput$setFocusStyle = require('./handle-swal-dom');\n\n      var _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide = require('./handle-dom');\n\n      var alertTypes = ['error', 'warning', 'info', 'success', 'input', 'prompt'];\n\n      /*\n       * Set type, text and actions on modal\n       */\n      var setParameters = function setParameters(params) {\n        var modal = _getModal$getInput$setFocusStyle.getModal();\n\n        var $title = modal.querySelector('h2');\n        var $text = modal.querySelector('p');\n        var $cancelBtn = modal.querySelector('button.cancel');\n        var $confirmBtn = modal.querySelector('button.confirm');\n\n        /*\n         * Title\n         */\n        $title.innerHTML = params.html ? params.title : _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.escapeHtml(params.title).split('\\n').join('<br>');\n\n        /*\n         * Text\n         */\n        $text.innerHTML = params.html ? params.text : _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.escapeHtml(params.text || '').split('\\n').join('<br>');\n        if (params.text) _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.show($text);\n\n        /*\n         * Custom class\n         */\n        if (params.customClass) {\n          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass(modal, params.customClass);\n          modal.setAttribute('data-custom-class', params.customClass);\n        } else {\n          // Find previously set classes and remove them\n          var customClass = modal.getAttribute('data-custom-class');\n          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.removeClass(modal, customClass);\n          modal.setAttribute('data-custom-class', '');\n        }\n\n        /*\n         * Icon\n         */\n        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.hide(modal.querySelectorAll('.sa-icon'));\n\n        if (params.type && !_isIE8.isIE8()) {\n          var _ret = function () {\n\n            var validType = false;\n\n            for (var i = 0; i < alertTypes.length; i++) {\n              if (params.type === alertTypes[i]) {\n                validType = true;\n                break;\n              }\n            }\n\n            if (!validType) {\n              logStr('Unknown alert type: ' + params.type);\n              return {\n                v: false\n              };\n            }\n\n            var typesWithIcons = ['success', 'error', 'warning', 'info'];\n            var $icon = undefined;\n\n            if (typesWithIcons.indexOf(params.type) !== -1) {\n              $icon = modal.querySelector('.sa-icon.' + 'sa-' + params.type);\n              _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.show($icon);\n            }\n\n            var $input = _getModal$getInput$setFocusStyle.getInput();\n\n            // Animate icon\n            switch (params.type) {\n\n              case 'success':\n                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon, 'animate');\n                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-tip'), 'animateSuccessTip');\n                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-long'), 'animateSuccessLong');\n                break;\n\n              case 'error':\n                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon, 'animateErrorIcon');\n                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-x-mark'), 'animateXMark');\n                break;\n\n              case 'warning':\n                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon, 'pulseWarning');\n                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-body'), 'pulseWarningIns');\n                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-dot'), 'pulseWarningIns');\n                break;\n\n              case 'input':\n              case 'prompt':\n                $input.setAttribute('type', params.inputType);\n                $input.value = params.inputValue;\n                $input.setAttribute('placeholder', params.inputPlaceholder);\n                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass(modal, 'show-input');\n                setTimeout(function () {\n                  $input.focus();\n                  $input.addEventListener('keyup', swal.resetInputError);\n                }, 400);\n                break;\n            }\n          }();\n\n          if ((typeof _ret === \"undefined\" ? \"undefined\" : _typeof(_ret)) === 'object') {\n            return _ret.v;\n          }\n        }\n\n        /*\n         * Custom image\n         */\n        if (params.imageUrl) {\n          var $customIcon = modal.querySelector('.sa-icon.sa-custom');\n\n          $customIcon.style.backgroundImage = 'url(' + params.imageUrl + ')';\n          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.show($customIcon);\n\n          var _imgWidth = 80;\n          var _imgHeight = 80;\n\n          if (params.imageSize) {\n            var dimensions = params.imageSize.toString().split('x');\n            var imgWidth = dimensions[0];\n            var imgHeight = dimensions[1];\n\n            if (!imgWidth || !imgHeight) {\n              logStr('Parameter imageSize expects value with format WIDTHxHEIGHT, got ' + params.imageSize);\n            } else {\n              _imgWidth = imgWidth;\n              _imgHeight = imgHeight;\n            }\n          }\n\n          $customIcon.setAttribute('style', $customIcon.getAttribute('style') + 'width:' + _imgWidth + 'px; height:' + _imgHeight + 'px');\n        }\n\n        /*\n         * Show cancel button?\n         */\n        modal.setAttribute('data-has-cancel-button', params.showCancelButton);\n        if (params.showCancelButton) {\n          $cancelBtn.style.display = 'inline-block';\n        } else {\n          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.hide($cancelBtn);\n        }\n\n        /*\n         * Show confirm button?\n         */\n        modal.setAttribute('data-has-confirm-button', params.showConfirmButton);\n        if (params.showConfirmButton) {\n          $confirmBtn.style.display = 'inline-block';\n        } else {\n          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.hide($confirmBtn);\n        }\n\n        /*\n         * Custom text on cancel/confirm buttons\n         */\n        if (params.cancelButtonText) {\n          $cancelBtn.innerHTML = _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.escapeHtml(params.cancelButtonText);\n        }\n        if (params.confirmButtonText) {\n          $confirmBtn.innerHTML = _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.escapeHtml(params.confirmButtonText);\n        }\n\n        /*\n         * Custom color on confirm button\n         */\n        if (params.confirmButtonColor) {\n          // Set confirm button to selected background color\n          $confirmBtn.style.backgroundColor = params.confirmButtonColor;\n\n          // Set the confirm button color to the loading ring\n          $confirmBtn.style.borderLeftColor = params.confirmLoadingButtonColor;\n          $confirmBtn.style.borderRightColor = params.confirmLoadingButtonColor;\n\n          // Set box-shadow to default focused button\n          _getModal$getInput$setFocusStyle.setFocusStyle($confirmBtn, params.confirmButtonColor);\n        }\n\n        /*\n         * Allow outside click\n         */\n        modal.setAttribute('data-allow-outside-click', params.allowOutsideClick);\n\n        /*\n         * Callback function\n         */\n        var hasDoneFunction = params.doneFunction ? true : false;\n        modal.setAttribute('data-has-done-function', hasDoneFunction);\n\n        /*\n         * Animation\n         */\n        if (!params.animation) {\n          modal.setAttribute('data-animation', 'none');\n        } else if (typeof params.animation === 'string') {\n          modal.setAttribute('data-animation', params.animation); // Custom animation\n        } else {\n          modal.setAttribute('data-animation', 'pop');\n        }\n\n        /*\n         * Timer\n         */\n        modal.setAttribute('data-timer', params.timer);\n      };\n\n      exports['default'] = setParameters;\n      module.exports = exports['default'];\n    }, { \"./handle-dom\": 4, \"./handle-swal-dom\": 6, \"./utils\": 9 }], 9: [function (require, module, exports) {\n      'use strict';\n\n      Object.defineProperty(exports, '__esModule', {\n        value: true\n      });\n      /*\n       * Allow user to pass their own params\n       */\n      var extend = function extend(a, b) {\n        for (var key in b) {\n          if (b.hasOwnProperty(key)) {\n            a[key] = b[key];\n          }\n        }\n        return a;\n      };\n\n      /*\n       * Convert HEX codes to RGB values (#000000 -> rgb(0,0,0))\n       */\n      var hexToRgb = function hexToRgb(hex) {\n        var result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);\n        return result ? parseInt(result[1], 16) + ', ' + parseInt(result[2], 16) + ', ' + parseInt(result[3], 16) : null;\n      };\n\n      /*\n       * Check if the user is using Internet Explorer 8 (for fallbacks)\n       */\n      var isIE8 = function isIE8() {\n        return window.attachEvent && !window.addEventListener;\n      };\n\n      /*\n       * IE compatible logging for developers\n       */\n      var logStr = function logStr(string) {\n        if (window.console) {\n          // IE...\n          window.console.log('SweetAlert: ' + string);\n        }\n      };\n\n      /*\n       * Set hover, active and focus-states for buttons \n       * (source: http://www.sitepoint.com/javascript-generate-lighter-darker-color)\n       */\n      var colorLuminance = function colorLuminance(hex, lum) {\n        // Validate hex string\n        hex = String(hex).replace(/[^0-9a-f]/gi, '');\n        if (hex.length < 6) {\n          hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];\n        }\n        lum = lum || 0;\n\n        // Convert to decimal and change luminosity\n        var rgb = '#';\n        var c;\n        var i;\n\n        for (i = 0; i < 3; i++) {\n          c = parseInt(hex.substr(i * 2, 2), 16);\n          c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);\n          rgb += ('00' + c).substr(c.length);\n        }\n\n        return rgb;\n      };\n\n      exports.extend = extend;\n      exports.hexToRgb = hexToRgb;\n      exports.isIE8 = isIE8;\n      exports.logStr = logStr;\n      exports.colorLuminance = colorLuminance;\n    }, {}] }, {}, [1]);\n\n  /*\n   * Use SweetAlert with RequireJS\n   */\n\n  if (true) {\n    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {\n      return sweetAlert;\n    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));\n  } else if (typeof module !== 'undefined' && module.exports) {\n    module.exports = sweetAlert;\n  }\n})(window, document);\n\n/*****************\n ** WEBPACK FOOTER\n ** ./http/a/scripts/sweetalert.js\n ** module id = 55\n ** module chunks = 3\n **/\n//# sourceURL=webpack:///./http/a/scripts/sweetalert.js?");
+	var require;var require;var __WEBPACK_AMD_DEFINE_RESULT__;"use strict";
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	;(function (window, document, undefined) {
+	  "use strict";
+	
+	  (function e(t, n, r) {
+	    function s(o, u) {
+	      if (!n[o]) {
+	        if (!t[o]) {
+	          var a = typeof require == "function" && require;if (!u && a) return require(o, !0);if (i) return i(o, !0);var f = new Error("Cannot find module '" + o + "'");throw f.code = "MODULE_NOT_FOUND", f;
+	        }var l = n[o] = { exports: {} };t[o][0].call(l.exports, function (e) {
+	          var n = t[o][1][e];return s(n ? n : e);
+	        }, l, l.exports, e, t, n, r);
+	      }return n[o].exports;
+	    }var i = typeof require == "function" && require;for (var o = 0; o < r.length; o++) {
+	      s(r[o]);
+	    }return s;
+	  })({ 1: [function (require, module, exports) {
+	      'use strict';
+	
+	      var _interopRequireWildcard = function _interopRequireWildcard(obj) {
+	        return obj && obj.__esModule ? obj : { 'default': obj };
+	      };
+	
+	      Object.defineProperty(exports, '__esModule', {
+	        value: true
+	      });
+	      // SweetAlert
+	      // 2014-2015 (c) - Tristan Edwards
+	      // github.com/t4t5/sweetalert
+	
+	      /*
+	       * jQuery-like functions for manipulating the DOM
+	       */
+	
+	      var _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation = require('./modules/handle-dom');
+	
+	      /*
+	       * Handy utilities
+	       */
+	
+	      var _extend$hexToRgb$isIE8$logStr$colorLuminance = require('./modules/utils');
+	
+	      /*
+	       *  Handle sweetAlert's DOM elements
+	       */
+	
+	      var _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition = require('./modules/handle-swal-dom');
+	
+	      // Handle button events and keyboard events
+	
+	      var _handleButton$handleConfirm$handleCancel = require('./modules/handle-click');
+	
+	      var _handleKeyDown = require('./modules/handle-key');
+	
+	      var _handleKeyDown2 = _interopRequireWildcard(_handleKeyDown);
+	
+	      // Default values
+	
+	      var _defaultParams = require('./modules/default-params');
+	
+	      var _defaultParams2 = _interopRequireWildcard(_defaultParams);
+	
+	      var _setParameters = require('./modules/set-params');
+	
+	      var _setParameters2 = _interopRequireWildcard(_setParameters);
+	
+	      /*
+	       * Remember state in cases where opening and handling a modal will fiddle with it.
+	       * (We also use window.previousActiveElement as a global variable)
+	       */
+	      var previousWindowKeyDown;
+	      var lastFocusedButton;
+	
+	      /*
+	       * Global sweetAlert function
+	       * (this is what the user calls)
+	       */
+	      var sweetAlert, swal;
+	
+	      exports['default'] = sweetAlert = swal = function (_swal) {
+	        function swal() {
+	          return _swal.apply(this, arguments);
+	        }
+	
+	        swal.toString = function () {
+	          return _swal.toString();
+	        };
+	
+	        return swal;
+	      }(function () {
+	        var customizations = arguments[0];
+	
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.addClass(document.body, 'stop-scrolling');
+	        _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.resetInput();
+	
+	        /*
+	         * Use argument if defined or default value from params object otherwise.
+	         * Supports the case where a default value is boolean true and should be
+	         * overridden by a corresponding explicit argument which is boolean false.
+	         */
+	        function argumentOrDefault(key) {
+	          var args = customizations;
+	          return args[key] === undefined ? _defaultParams2['default'][key] : args[key];
+	        }
+	
+	        if (customizations === undefined) {
+	          _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('SweetAlert expects at least 1 attribute!');
+	          return false;
+	        }
+	
+	        var params = _extend$hexToRgb$isIE8$logStr$colorLuminance.extend({}, _defaultParams2['default']);
+	
+	        switch (typeof customizations === "undefined" ? "undefined" : _typeof(customizations)) {
+	
+	          // Ex: swal("Hello", "Just testing", "info");
+	          case 'string':
+	            params.title = customizations;
+	            params.text = arguments[1] || '';
+	            params.type = arguments[2] || '';
+	            break;
+	
+	          // Ex: swal({ title:"Hello", text: "Just testing", type: "info" });
+	          case 'object':
+	            if (customizations.title === undefined) {
+	              _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('Missing "title" argument!');
+	              return false;
+	            }
+	
+	            params.title = customizations.title;
+	
+	            for (var customName in _defaultParams2['default']) {
+	              params[customName] = argumentOrDefault(customName);
+	            }
+	
+	            // Show "Confirm" instead of "OK" if cancel button is visible
+	            params.confirmButtonText = params.showCancelButton ? 'Confirm' : _defaultParams2['default'].confirmButtonText;
+	            params.confirmButtonText = argumentOrDefault('confirmButtonText');
+	
+	            // Callback function when clicking on "OK"/"Cancel"
+	            params.doneFunction = arguments[1] || null;
+	
+	            break;
+	
+	          default:
+	            _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('Unexpected type of argument! Expected "string" or "object", got ' + (typeof customizations === "undefined" ? "undefined" : _typeof(customizations)));
+	            return false;
+	
+	        }
+	
+	        _setParameters2['default'](params);
+	        _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.fixVerticalPosition();
+	        _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.openModal(arguments[1]);
+	
+	        // Modal interactions
+	        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();
+	
+	        /*
+	         * Make sure all modal buttons respond to all events
+	         */
+	        var $buttons = modal.querySelectorAll('button');
+	        var buttonEvents = ['onclick', 'onmouseover', 'onmouseout', 'onmousedown', 'onmouseup', 'onfocus'];
+	        var onButtonEvent = function onButtonEvent(e) {
+	          return _handleButton$handleConfirm$handleCancel.handleButton(e, params, modal);
+	        };
+	
+	        for (var btnIndex = 0; btnIndex < $buttons.length; btnIndex++) {
+	          for (var evtIndex = 0; evtIndex < buttonEvents.length; evtIndex++) {
+	            var btnEvt = buttonEvents[evtIndex];
+	            $buttons[btnIndex][btnEvt] = onButtonEvent;
+	          }
+	        }
+	
+	        // Clicking outside the modal dismisses it (if allowed by user)
+	        _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getOverlay().onclick = onButtonEvent;
+	
+	        previousWindowKeyDown = window.onkeydown;
+	
+	        var onKeyEvent = function onKeyEvent(e) {
+	          return _handleKeyDown2['default'](e, params, modal);
+	        };
+	        window.onkeydown = onKeyEvent;
+	
+	        window.onfocus = function () {
+	          // When the user has focused away and focused back from the whole window.
+	          setTimeout(function () {
+	            // Put in a timeout to jump out of the event sequence.
+	            // Calling focus() in the event sequence confuses things.
+	            if (lastFocusedButton !== undefined) {
+	              lastFocusedButton.focus();
+	              lastFocusedButton = undefined;
+	            }
+	          }, 0);
+	        };
+	
+	        // Show alert with enabled buttons always
+	        swal.enableButtons();
+	      });
+	
+	      /*
+	       * Set default params for each popup
+	       * @param {Object} userParams
+	       */
+	      sweetAlert.setDefaults = swal.setDefaults = function (userParams) {
+	        if (!userParams) {
+	          throw new Error('userParams is required');
+	        }
+	        if ((typeof userParams === "undefined" ? "undefined" : _typeof(userParams)) !== 'object') {
+	          throw new Error('userParams has to be a object');
+	        }
+	
+	        _extend$hexToRgb$isIE8$logStr$colorLuminance.extend(_defaultParams2['default'], userParams);
+	      };
+	
+	      /*
+	       * Animation when closing modal
+	       */
+	      sweetAlert.close = swal.close = function () {
+	        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();
+	
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.fadeOut(_sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getOverlay(), 5);
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.fadeOut(modal, 5);
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass(modal, 'showSweetAlert');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.addClass(modal, 'hideSweetAlert');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass(modal, 'visible');
+	
+	        /*
+	         * Reset icon animations
+	         */
+	        var $successIcon = modal.querySelector('.sa-icon.sa-success');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($successIcon, 'animate');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($successIcon.querySelector('.sa-tip'), 'animateSuccessTip');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($successIcon.querySelector('.sa-long'), 'animateSuccessLong');
+	
+	        var $errorIcon = modal.querySelector('.sa-icon.sa-error');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($errorIcon, 'animateErrorIcon');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($errorIcon.querySelector('.sa-x-mark'), 'animateXMark');
+	
+	        var $warningIcon = modal.querySelector('.sa-icon.sa-warning');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($warningIcon, 'pulseWarning');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($warningIcon.querySelector('.sa-body'), 'pulseWarningIns');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($warningIcon.querySelector('.sa-dot'), 'pulseWarningIns');
+	
+	        // Reset custom class (delay so that UI changes aren't visible)
+	        setTimeout(function () {
+	          var customClass = modal.getAttribute('data-custom-class');
+	          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass(modal, customClass);
+	        }, 300);
+	
+	        // Make page scrollable again
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass(document.body, 'stop-scrolling');
+	
+	        // Reset the page to its previous state
+	        window.onkeydown = previousWindowKeyDown;
+	        if (window.previousActiveElement) {
+	          window.previousActiveElement.focus();
+	        }
+	        lastFocusedButton = undefined;
+	        clearTimeout(modal.timeout);
+	
+	        return true;
+	      };
+	
+	      /*
+	       * Validation of the input field is done by user
+	       * If something is wrong => call showInputError with errorMessage
+	       */
+	      sweetAlert.showInputError = swal.showInputError = function (errorMessage) {
+	        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();
+	
+	        var $errorIcon = modal.querySelector('.sa-input-error');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.addClass($errorIcon, 'show');
+	
+	        var $errorContainer = modal.querySelector('.sa-error-container');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.addClass($errorContainer, 'show');
+	
+	        $errorContainer.querySelector('p').innerHTML = errorMessage;
+	
+	        setTimeout(function () {
+	          sweetAlert.enableButtons();
+	        }, 1);
+	
+	        modal.querySelector('input').focus();
+	      };
+	
+	      /*
+	       * Reset input error DOM elements
+	       */
+	      sweetAlert.resetInputError = swal.resetInputError = function (event) {
+	        // If press enter => ignore
+	        if (event && event.keyCode === 13) {
+	          return false;
+	        }
+	
+	        var $modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();
+	
+	        var $errorIcon = $modal.querySelector('.sa-input-error');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($errorIcon, 'show');
+	
+	        var $errorContainer = $modal.querySelector('.sa-error-container');
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide$isDescendant$getTopMargin$fadeIn$fadeOut$fireClick$stopEventPropagation.removeClass($errorContainer, 'show');
+	      };
+	
+	      /*
+	       * Disable confirm and cancel buttons
+	       */
+	      sweetAlert.disableButtons = swal.disableButtons = function (event) {
+	        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();
+	        var $confirmButton = modal.querySelector('button.confirm');
+	        var $cancelButton = modal.querySelector('button.cancel');
+	        $confirmButton.disabled = true;
+	        $cancelButton.disabled = true;
+	      };
+	
+	      /*
+	       * Enable confirm and cancel buttons
+	       */
+	      sweetAlert.enableButtons = swal.enableButtons = function (event) {
+	        var modal = _sweetAlertInitialize$getModal$getOverlay$getInput$setFocusStyle$openModal$resetInput$fixVerticalPosition.getModal();
+	        var $confirmButton = modal.querySelector('button.confirm');
+	        var $cancelButton = modal.querySelector('button.cancel');
+	        $confirmButton.disabled = false;
+	        $cancelButton.disabled = false;
+	      };
+	
+	      if (typeof window !== 'undefined') {
+	        // The 'handle-click' module requires
+	        // that 'sweetAlert' was set as global.
+	        window.sweetAlert = window.swal = sweetAlert;
+	      } else {
+	        _extend$hexToRgb$isIE8$logStr$colorLuminance.logStr('SweetAlert is a frontend module!');
+	      }
+	      module.exports = exports['default'];
+	    }, { "./modules/default-params": 2, "./modules/handle-click": 3, "./modules/handle-dom": 4, "./modules/handle-key": 5, "./modules/handle-swal-dom": 6, "./modules/set-params": 8, "./modules/utils": 9 }], 2: [function (require, module, exports) {
+	      'use strict';
+	
+	      Object.defineProperty(exports, '__esModule', {
+	        value: true
+	      });
+	      var defaultParams = {
+	        title: '',
+	        text: '',
+	        type: null,
+	        allowOutsideClick: false,
+	        showConfirmButton: true,
+	        showCancelButton: false,
+	        closeOnConfirm: true,
+	        closeOnCancel: true,
+	        confirmButtonText: 'OK',
+	        confirmButtonColor: '#8CD4F5',
+	        cancelButtonText: 'Cancel',
+	        imageUrl: null,
+	        imageSize: null,
+	        timer: null,
+	        customClass: '',
+	        html: false,
+	        animation: true,
+	        allowEscapeKey: true,
+	        inputType: 'text',
+	        inputPlaceholder: '',
+	        inputValue: '',
+	        showLoaderOnConfirm: false
+	      };
+	
+	      exports['default'] = defaultParams;
+	      module.exports = exports['default'];
+	    }, {}], 3: [function (require, module, exports) {
+	      'use strict';
+	
+	      Object.defineProperty(exports, '__esModule', {
+	        value: true
+	      });
+	
+	      var _colorLuminance = require('./utils');
+	
+	      var _getModal = require('./handle-swal-dom');
+	
+	      var _hasClass$isDescendant = require('./handle-dom');
+	
+	      /*
+	       * User clicked on "Confirm"/"OK" or "Cancel"
+	       */
+	      var handleButton = function handleButton(event, params, modal) {
+	        var e = event || window.event;
+	        var target = e.target || e.srcElement;
+	
+	        var targetedConfirm = target.className.indexOf('confirm') !== -1;
+	        var targetedOverlay = target.className.indexOf('sweet-overlay') !== -1;
+	        var modalIsVisible = _hasClass$isDescendant.hasClass(modal, 'visible');
+	        var doneFunctionExists = params.doneFunction && modal.getAttribute('data-has-done-function') === 'true';
+	
+	        // Since the user can change the background-color of the confirm button programmatically,
+	        // we must calculate what the color should be on hover/active
+	        var normalColor, hoverColor, activeColor;
+	        if (targetedConfirm && params.confirmButtonColor) {
+	          normalColor = params.confirmButtonColor;
+	          hoverColor = _colorLuminance.colorLuminance(normalColor, -0.04);
+	          activeColor = _colorLuminance.colorLuminance(normalColor, -0.14);
+	        }
+	
+	        function shouldSetConfirmButtonColor(color) {
+	          if (targetedConfirm && params.confirmButtonColor) {
+	            target.style.backgroundColor = color;
+	          }
+	        }
+	
+	        switch (e.type) {
+	          case 'mouseover':
+	            shouldSetConfirmButtonColor(hoverColor);
+	            break;
+	
+	          case 'mouseout':
+	            shouldSetConfirmButtonColor(normalColor);
+	            break;
+	
+	          case 'mousedown':
+	            shouldSetConfirmButtonColor(activeColor);
+	            break;
+	
+	          case 'mouseup':
+	            shouldSetConfirmButtonColor(hoverColor);
+	            break;
+	
+	          case 'focus':
+	            var $confirmButton = modal.querySelector('button.confirm');
+	            var $cancelButton = modal.querySelector('button.cancel');
+	
+	            if (targetedConfirm) {
+	              $cancelButton.style.boxShadow = 'none';
+	            } else {
+	              $confirmButton.style.boxShadow = 'none';
+	            }
+	            break;
+	
+	          case 'click':
+	            var clickedOnModal = modal === target;
+	            var clickedOnModalChild = _hasClass$isDescendant.isDescendant(modal, target);
+	
+	            // Ignore click outside if allowOutsideClick is false
+	            if (!clickedOnModal && !clickedOnModalChild && modalIsVisible && !params.allowOutsideClick) {
+	              break;
+	            }
+	
+	            if (targetedConfirm && doneFunctionExists && modalIsVisible) {
+	              handleConfirm(modal, params);
+	            } else if (doneFunctionExists && modalIsVisible || targetedOverlay) {
+	              handleCancel(modal, params);
+	            } else if (_hasClass$isDescendant.isDescendant(modal, target) && target.tagName === 'BUTTON') {
+	              sweetAlert.close();
+	            }
+	            break;
+	        }
+	      };
+	
+	      /*
+	       *  User clicked on "Confirm"/"OK"
+	       */
+	      var handleConfirm = function handleConfirm(modal, params) {
+	        var callbackValue = true;
+	
+	        if (_hasClass$isDescendant.hasClass(modal, 'show-input')) {
+	          callbackValue = modal.querySelector('input').value;
+	
+	          if (!callbackValue) {
+	            callbackValue = '';
+	          }
+	        }
+	
+	        params.doneFunction(callbackValue);
+	
+	        if (params.closeOnConfirm) {
+	          sweetAlert.close();
+	        }
+	        // Disable cancel and confirm button if the parameter is true
+	        if (params.showLoaderOnConfirm) {
+	          sweetAlert.disableButtons();
+	        }
+	      };
+	
+	      /*
+	       *  User clicked on "Cancel"
+	       */
+	      var handleCancel = function handleCancel(modal, params) {
+	        // Check if callback function expects a parameter (to track cancel actions)
+	        var functionAsStr = String(params.doneFunction).replace(/\s/g, '');
+	        var functionHandlesCancel = functionAsStr.substring(0, 9) === 'function(' && functionAsStr.substring(9, 10) !== ')';
+	
+	        if (functionHandlesCancel) {
+	          params.doneFunction(false);
+	        }
+	
+	        if (params.closeOnCancel) {
+	          sweetAlert.close();
+	        }
+	      };
+	
+	      exports['default'] = {
+	        handleButton: handleButton,
+	        handleConfirm: handleConfirm,
+	        handleCancel: handleCancel
+	      };
+	      module.exports = exports['default'];
+	    }, { "./handle-dom": 4, "./handle-swal-dom": 6, "./utils": 9 }], 4: [function (require, module, exports) {
+	      'use strict';
+	
+	      Object.defineProperty(exports, '__esModule', {
+	        value: true
+	      });
+	      var hasClass = function hasClass(elem, className) {
+	        return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+	      };
+	
+	      var addClass = function addClass(elem, className) {
+	        if (!hasClass(elem, className)) {
+	          elem.className += ' ' + className;
+	        }
+	      };
+	
+	      var removeClass = function removeClass(elem, className) {
+	        var newClass = ' ' + elem.className.replace(/[\t\r\n]/g, ' ') + ' ';
+	        if (hasClass(elem, className)) {
+	          while (newClass.indexOf(' ' + className + ' ') >= 0) {
+	            newClass = newClass.replace(' ' + className + ' ', ' ');
+	          }
+	          elem.className = newClass.replace(/^\s+|\s+$/g, '');
+	        }
+	      };
+	
+	      var escapeHtml = function escapeHtml(str) {
+	        var div = document.createElement('div');
+	        div.appendChild(document.createTextNode(str));
+	        return div.innerHTML;
+	      };
+	
+	      var _show = function _show(elem) {
+	        elem.style.opacity = '';
+	        elem.style.display = 'block';
+	      };
+	
+	      var show = function show(elems) {
+	        if (elems && !elems.length) {
+	          return _show(elems);
+	        }
+	        for (var i = 0; i < elems.length; ++i) {
+	          _show(elems[i]);
+	        }
+	      };
+	
+	      var _hide = function _hide(elem) {
+	        elem.style.opacity = '';
+	        elem.style.display = 'none';
+	      };
+	
+	      var hide = function hide(elems) {
+	        if (elems && !elems.length) {
+	          return _hide(elems);
+	        }
+	        for (var i = 0; i < elems.length; ++i) {
+	          _hide(elems[i]);
+	        }
+	      };
+	
+	      var isDescendant = function isDescendant(parent, child) {
+	        var node = child.parentNode;
+	        while (node !== null) {
+	          if (node === parent) {
+	            return true;
+	          }
+	          node = node.parentNode;
+	        }
+	        return false;
+	      };
+	
+	      var getTopMargin = function getTopMargin(elem) {
+	        elem.style.left = '-9999px';
+	        elem.style.display = 'block';
+	
+	        var height = elem.clientHeight,
+	            padding;
+	        if (typeof getComputedStyle !== 'undefined') {
+	          // IE 8
+	          padding = parseInt(getComputedStyle(elem).getPropertyValue('padding-top'), 10);
+	        } else {
+	          padding = parseInt(elem.currentStyle.padding);
+	        }
+	
+	        elem.style.left = '';
+	        elem.style.display = 'none';
+	        return '-' + parseInt((height + padding) / 2) + 'px';
+	      };
+	
+	      var fadeIn = function fadeIn(elem, interval) {
+	        if (+elem.style.opacity < 1) {
+	          interval = interval || 16;
+	          elem.style.opacity = 0;
+	          elem.style.display = 'block';
+	          var last = +new Date();
+	          var tick = function (_tick) {
+	            function tick() {
+	              return _tick.apply(this, arguments);
+	            }
+	
+	            tick.toString = function () {
+	              return _tick.toString();
+	            };
+	
+	            return tick;
+	          }(function () {
+	            elem.style.opacity = +elem.style.opacity + (new Date() - last) / 100;
+	            last = +new Date();
+	
+	            if (+elem.style.opacity < 1) {
+	              setTimeout(tick, interval);
+	            }
+	          });
+	          tick();
+	        }
+	        elem.style.display = 'block'; //fallback IE8
+	      };
+	
+	      var fadeOut = function fadeOut(elem, interval) {
+	        interval = interval || 16;
+	        elem.style.opacity = 1;
+	        var last = +new Date();
+	        var tick = function (_tick2) {
+	          function tick() {
+	            return _tick2.apply(this, arguments);
+	          }
+	
+	          tick.toString = function () {
+	            return _tick2.toString();
+	          };
+	
+	          return tick;
+	        }(function () {
+	          elem.style.opacity = +elem.style.opacity - (new Date() - last) / 100;
+	          last = +new Date();
+	
+	          if (+elem.style.opacity > 0) {
+	            setTimeout(tick, interval);
+	          } else {
+	            elem.style.display = 'none';
+	          }
+	        });
+	        tick();
+	      };
+	
+	      var fireClick = function fireClick(node) {
+	        // Taken from http://www.nonobtrusive.com/2011/11/29/programatically-fire-crossbrowser-click-event-with-javascript/
+	        // Then fixed for today's Chrome browser.
+	        if (typeof MouseEvent === 'function') {
+	          // Up-to-date approach
+	          var mevt = new MouseEvent('click', {
+	            view: window,
+	            bubbles: false,
+	            cancelable: true
+	          });
+	          node.dispatchEvent(mevt);
+	        } else if (document.createEvent) {
+	          // Fallback
+	          var evt = document.createEvent('MouseEvents');
+	          evt.initEvent('click', false, false);
+	          node.dispatchEvent(evt);
+	        } else if (document.createEventObject) {
+	          node.fireEvent('onclick');
+	        } else if (typeof node.onclick === 'function') {
+	          node.onclick();
+	        }
+	      };
+	
+	      var stopEventPropagation = function stopEventPropagation(e) {
+	        // In particular, make sure the space bar doesn't scroll the main window.
+	        if (typeof e.stopPropagation === 'function') {
+	          e.stopPropagation();
+	          e.preventDefault();
+	        } else if (window.event && window.event.hasOwnProperty('cancelBubble')) {
+	          window.event.cancelBubble = true;
+	        }
+	      };
+	
+	      exports.hasClass = hasClass;
+	      exports.addClass = addClass;
+	      exports.removeClass = removeClass;
+	      exports.escapeHtml = escapeHtml;
+	      exports._show = _show;
+	      exports.show = show;
+	      exports._hide = _hide;
+	      exports.hide = hide;
+	      exports.isDescendant = isDescendant;
+	      exports.getTopMargin = getTopMargin;
+	      exports.fadeIn = fadeIn;
+	      exports.fadeOut = fadeOut;
+	      exports.fireClick = fireClick;
+	      exports.stopEventPropagation = stopEventPropagation;
+	    }, {}], 5: [function (require, module, exports) {
+	      'use strict';
+	
+	      Object.defineProperty(exports, '__esModule', {
+	        value: true
+	      });
+	
+	      var _stopEventPropagation$fireClick = require('./handle-dom');
+	
+	      var _setFocusStyle = require('./handle-swal-dom');
+	
+	      var handleKeyDown = function handleKeyDown(event, params, modal) {
+	        var e = event || window.event;
+	        var keyCode = e.keyCode || e.which;
+	
+	        var $okButton = modal.querySelector('button.confirm');
+	        var $cancelButton = modal.querySelector('button.cancel');
+	        var $modalButtons = modal.querySelectorAll('button[tabindex]');
+	
+	        if ([9, 13, 32, 27].indexOf(keyCode) === -1) {
+	          // Don't do work on keys we don't care about.
+	          return;
+	        }
+	
+	        var $targetElement = e.target || e.srcElement;
+	
+	        var btnIndex = -1; // Find the button - note, this is a nodelist, not an array.
+	        for (var i = 0; i < $modalButtons.length; i++) {
+	          if ($targetElement === $modalButtons[i]) {
+	            btnIndex = i;
+	            break;
+	          }
+	        }
+	
+	        if (keyCode === 9) {
+	          // TAB
+	          if (btnIndex === -1) {
+	            // No button focused. Jump to the confirm button.
+	            $targetElement = $okButton;
+	          } else {
+	            // Cycle to the next button
+	            if (btnIndex === $modalButtons.length - 1) {
+	              $targetElement = $modalButtons[0];
+	            } else {
+	              $targetElement = $modalButtons[btnIndex + 1];
+	            }
+	          }
+	
+	          _stopEventPropagation$fireClick.stopEventPropagation(e);
+	          $targetElement.focus();
+	
+	          if (params.confirmButtonColor) {
+	            _setFocusStyle.setFocusStyle($targetElement, params.confirmButtonColor);
+	          }
+	        } else {
+	          if (keyCode === 13) {
+	            if ($targetElement.tagName === 'INPUT') {
+	              $targetElement = $okButton;
+	              $okButton.focus();
+	            }
+	
+	            if (btnIndex === -1) {
+	              // ENTER/SPACE clicked outside of a button.
+	              $targetElement = $okButton;
+	            } else {
+	              // Do nothing - let the browser handle it.
+	              $targetElement = undefined;
+	            }
+	          } else if (keyCode === 27 && params.allowEscapeKey === true) {
+	            $targetElement = $cancelButton;
+	            _stopEventPropagation$fireClick.fireClick($targetElement, e);
+	          } else {
+	            // Fallback - let the browser handle it.
+	            $targetElement = undefined;
+	          }
+	        }
+	      };
+	
+	      exports['default'] = handleKeyDown;
+	      module.exports = exports['default'];
+	    }, { "./handle-dom": 4, "./handle-swal-dom": 6 }], 6: [function (require, module, exports) {
+	      'use strict';
+	
+	      var _interopRequireWildcard = function _interopRequireWildcard(obj) {
+	        return obj && obj.__esModule ? obj : { 'default': obj };
+	      };
+	
+	      Object.defineProperty(exports, '__esModule', {
+	        value: true
+	      });
+	
+	      var _hexToRgb = require('./utils');
+	
+	      var _removeClass$getTopMargin$fadeIn$show$addClass = require('./handle-dom');
+	
+	      var _defaultParams = require('./default-params');
+	
+	      var _defaultParams2 = _interopRequireWildcard(_defaultParams);
+	
+	      /*
+	       * Add modal + overlay to DOM
+	       */
+	
+	      var _injectedHTML = require('./injected-html');
+	
+	      var _injectedHTML2 = _interopRequireWildcard(_injectedHTML);
+	
+	      var modalClass = '.sweet-alert';
+	      var overlayClass = '.sweet-overlay';
+	
+	      var sweetAlertInitialize = function sweetAlertInitialize() {
+	        var sweetWrap = document.createElement('div');
+	        sweetWrap.innerHTML = _injectedHTML2['default'];
+	
+	        // Append elements to body
+	        while (sweetWrap.firstChild) {
+	          document.body.appendChild(sweetWrap.firstChild);
+	        }
+	      };
+	
+	      /*
+	       * Get DOM element of modal
+	       */
+	      var getModal = function (_getModal) {
+	        function getModal() {
+	          return _getModal.apply(this, arguments);
+	        }
+	
+	        getModal.toString = function () {
+	          return _getModal.toString();
+	        };
+	
+	        return getModal;
+	      }(function () {
+	        var $modal = document.querySelector(modalClass);
+	
+	        if (!$modal) {
+	          sweetAlertInitialize();
+	          $modal = getModal();
+	        }
+	
+	        return $modal;
+	      });
+	
+	      /*
+	       * Get DOM element of input (in modal)
+	       */
+	      var getInput = function getInput() {
+	        var $modal = getModal();
+	        if ($modal) {
+	          return $modal.querySelector('input');
+	        }
+	      };
+	
+	      /*
+	       * Get DOM element of overlay
+	       */
+	      var getOverlay = function getOverlay() {
+	        return document.querySelector(overlayClass);
+	      };
+	
+	      /*
+	       * Add box-shadow style to button (depending on its chosen bg-color)
+	       */
+	      var setFocusStyle = function setFocusStyle($button, bgColor) {
+	        var rgbColor = _hexToRgb.hexToRgb(bgColor);
+	        $button.style.boxShadow = '0 0 2px rgba(' + rgbColor + ', 0.8), inset 0 0 0 1px rgba(0, 0, 0, 0.05)';
+	      };
+	
+	      /*
+	       * Animation when opening modal
+	       */
+	      var openModal = function openModal(callback) {
+	        var $modal = getModal();
+	        _removeClass$getTopMargin$fadeIn$show$addClass.fadeIn(getOverlay(), 10);
+	        _removeClass$getTopMargin$fadeIn$show$addClass.show($modal);
+	        _removeClass$getTopMargin$fadeIn$show$addClass.addClass($modal, 'showSweetAlert');
+	        _removeClass$getTopMargin$fadeIn$show$addClass.removeClass($modal, 'hideSweetAlert');
+	
+	        window.previousActiveElement = document.activeElement;
+	        var $okButton = $modal.querySelector('button.confirm');
+	        $okButton.focus();
+	
+	        setTimeout(function () {
+	          _removeClass$getTopMargin$fadeIn$show$addClass.addClass($modal, 'visible');
+	        }, 500);
+	
+	        var timer = $modal.getAttribute('data-timer');
+	
+	        if (timer !== 'null' && timer !== '') {
+	          var timerCallback = callback;
+	          $modal.timeout = setTimeout(function () {
+	            var doneFunctionExists = (timerCallback || null) && $modal.getAttribute('data-has-done-function') === 'true';
+	            if (doneFunctionExists) {
+	              timerCallback(null);
+	            } else {
+	              sweetAlert.close();
+	            }
+	          }, timer);
+	        }
+	      };
+	
+	      /*
+	       * Reset the styling of the input
+	       * (for example if errors have been shown)
+	       */
+	      var resetInput = function resetInput() {
+	        var $modal = getModal();
+	        var $input = getInput();
+	
+	        _removeClass$getTopMargin$fadeIn$show$addClass.removeClass($modal, 'show-input');
+	        $input.value = _defaultParams2['default'].inputValue;
+	        $input.setAttribute('type', _defaultParams2['default'].inputType);
+	        $input.setAttribute('placeholder', _defaultParams2['default'].inputPlaceholder);
+	
+	        resetInputError();
+	      };
+	
+	      var resetInputError = function resetInputError(event) {
+	        // If press enter => ignore
+	        if (event && event.keyCode === 13) {
+	          return false;
+	        }
+	
+	        var $modal = getModal();
+	
+	        var $errorIcon = $modal.querySelector('.sa-input-error');
+	        _removeClass$getTopMargin$fadeIn$show$addClass.removeClass($errorIcon, 'show');
+	
+	        var $errorContainer = $modal.querySelector('.sa-error-container');
+	        _removeClass$getTopMargin$fadeIn$show$addClass.removeClass($errorContainer, 'show');
+	      };
+	
+	      /*
+	       * Set "margin-top"-property on modal based on its computed height
+	       */
+	      var fixVerticalPosition = function fixVerticalPosition() {
+	        var $modal = getModal();
+	        $modal.style.marginTop = _removeClass$getTopMargin$fadeIn$show$addClass.getTopMargin(getModal());
+	      };
+	
+	      exports.sweetAlertInitialize = sweetAlertInitialize;
+	      exports.getModal = getModal;
+	      exports.getOverlay = getOverlay;
+	      exports.getInput = getInput;
+	      exports.setFocusStyle = setFocusStyle;
+	      exports.openModal = openModal;
+	      exports.resetInput = resetInput;
+	      exports.resetInputError = resetInputError;
+	      exports.fixVerticalPosition = fixVerticalPosition;
+	    }, { "./default-params": 2, "./handle-dom": 4, "./injected-html": 7, "./utils": 9 }], 7: [function (require, module, exports) {
+	      "use strict";
+	
+	      Object.defineProperty(exports, "__esModule", {
+	        value: true
+	      });
+	      var injectedHTML =
+	
+	      // Dark overlay
+	      "<div class=\"sweet-overlay\" tabIndex=\"-1\"></div>" +
+	
+	      // Modal
+	      "<div class=\"sweet-alert\">" +
+	
+	      // Error icon
+	      "<div class=\"sa-icon sa-error\">\n      <span class=\"sa-x-mark\">\n        <span class=\"sa-line sa-left\"></span>\n        <span class=\"sa-line sa-right\"></span>\n      </span>\n    </div>" +
+	
+	      // Warning icon
+	      "<div class=\"sa-icon sa-warning\">\n      <span class=\"sa-body\"></span>\n      <span class=\"sa-dot\"></span>\n    </div>" +
+	
+	      // Info icon
+	      "<div class=\"sa-icon sa-info\"></div>" +
+	
+	      // Success icon
+	      "<div class=\"sa-icon sa-success\">\n      <span class=\"sa-line sa-tip\"></span>\n      <span class=\"sa-line sa-long\"></span>\n\n      <div class=\"sa-placeholder\"></div>\n      <div class=\"sa-fix\"></div>\n    </div>" + "<div class=\"sa-icon sa-custom\"></div>" +
+	
+	      // Title, text and input
+	      "<h2>Title</h2>\n    <p>Text</p>\n    <fieldset>\n      <input type=\"text\" tabIndex=\"3\" />\n      <div class=\"sa-input-error\"></div>\n    </fieldset>" +
+	
+	      // Input errors
+	      "<div class=\"sa-error-container\">\n      <div class=\"icon\">!</div>\n      <p>Not valid!</p>\n    </div>" +
+	
+	      // Cancel and confirm buttons
+	      "<div class=\"sa-button-container\">\n      <button class=\"cancel\" tabIndex=\"2\">Cancel</button>\n      <div class=\"sa-confirm-button-container\">\n        <button class=\"confirm\" tabIndex=\"1\">OK</button>" +
+	
+	      // Loading animation
+	      "<div class=\"la-ball-fall\">\n          <div></div>\n          <div></div>\n          <div></div>\n        </div>\n      </div>\n    </div>" +
+	
+	      // End of modal
+	      "</div>";
+	
+	      exports["default"] = injectedHTML;
+	      module.exports = exports["default"];
+	    }, {}], 8: [function (require, module, exports) {
+	      'use strict';
+	
+	      Object.defineProperty(exports, '__esModule', {
+	        value: true
+	      });
+	
+	      var _isIE8 = require('./utils');
+	
+	      var _getModal$getInput$setFocusStyle = require('./handle-swal-dom');
+	
+	      var _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide = require('./handle-dom');
+	
+	      var alertTypes = ['error', 'warning', 'info', 'success', 'input', 'prompt'];
+	
+	      /*
+	       * Set type, text and actions on modal
+	       */
+	      var setParameters = function setParameters(params) {
+	        var modal = _getModal$getInput$setFocusStyle.getModal();
+	
+	        var $title = modal.querySelector('h2');
+	        var $text = modal.querySelector('p');
+	        var $cancelBtn = modal.querySelector('button.cancel');
+	        var $confirmBtn = modal.querySelector('button.confirm');
+	
+	        /*
+	         * Title
+	         */
+	        $title.innerHTML = params.html ? params.title : _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.escapeHtml(params.title).split('\n').join('<br>');
+	
+	        /*
+	         * Text
+	         */
+	        $text.innerHTML = params.html ? params.text : _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.escapeHtml(params.text || '').split('\n').join('<br>');
+	        if (params.text) _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.show($text);
+	
+	        /*
+	         * Custom class
+	         */
+	        if (params.customClass) {
+	          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass(modal, params.customClass);
+	          modal.setAttribute('data-custom-class', params.customClass);
+	        } else {
+	          // Find previously set classes and remove them
+	          var customClass = modal.getAttribute('data-custom-class');
+	          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.removeClass(modal, customClass);
+	          modal.setAttribute('data-custom-class', '');
+	        }
+	
+	        /*
+	         * Icon
+	         */
+	        _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.hide(modal.querySelectorAll('.sa-icon'));
+	
+	        if (params.type && !_isIE8.isIE8()) {
+	          var _ret = function () {
+	
+	            var validType = false;
+	
+	            for (var i = 0; i < alertTypes.length; i++) {
+	              if (params.type === alertTypes[i]) {
+	                validType = true;
+	                break;
+	              }
+	            }
+	
+	            if (!validType) {
+	              logStr('Unknown alert type: ' + params.type);
+	              return {
+	                v: false
+	              };
+	            }
+	
+	            var typesWithIcons = ['success', 'error', 'warning', 'info'];
+	            var $icon = undefined;
+	
+	            if (typesWithIcons.indexOf(params.type) !== -1) {
+	              $icon = modal.querySelector('.sa-icon.' + 'sa-' + params.type);
+	              _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.show($icon);
+	            }
+	
+	            var $input = _getModal$getInput$setFocusStyle.getInput();
+	
+	            // Animate icon
+	            switch (params.type) {
+	
+	              case 'success':
+	                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon, 'animate');
+	                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-tip'), 'animateSuccessTip');
+	                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-long'), 'animateSuccessLong');
+	                break;
+	
+	              case 'error':
+	                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon, 'animateErrorIcon');
+	                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-x-mark'), 'animateXMark');
+	                break;
+	
+	              case 'warning':
+	                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon, 'pulseWarning');
+	                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-body'), 'pulseWarningIns');
+	                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass($icon.querySelector('.sa-dot'), 'pulseWarningIns');
+	                break;
+	
+	              case 'input':
+	              case 'prompt':
+	                $input.setAttribute('type', params.inputType);
+	                $input.value = params.inputValue;
+	                $input.setAttribute('placeholder', params.inputPlaceholder);
+	                _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.addClass(modal, 'show-input');
+	                setTimeout(function () {
+	                  $input.focus();
+	                  $input.addEventListener('keyup', swal.resetInputError);
+	                }, 400);
+	                break;
+	            }
+	          }();
+	
+	          if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === 'object') {
+	            return _ret.v;
+	          }
+	        }
+	
+	        /*
+	         * Custom image
+	         */
+	        if (params.imageUrl) {
+	          var $customIcon = modal.querySelector('.sa-icon.sa-custom');
+	
+	          $customIcon.style.backgroundImage = 'url(' + params.imageUrl + ')';
+	          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.show($customIcon);
+	
+	          var _imgWidth = 80;
+	          var _imgHeight = 80;
+	
+	          if (params.imageSize) {
+	            var dimensions = params.imageSize.toString().split('x');
+	            var imgWidth = dimensions[0];
+	            var imgHeight = dimensions[1];
+	
+	            if (!imgWidth || !imgHeight) {
+	              logStr('Parameter imageSize expects value with format WIDTHxHEIGHT, got ' + params.imageSize);
+	            } else {
+	              _imgWidth = imgWidth;
+	              _imgHeight = imgHeight;
+	            }
+	          }
+	
+	          $customIcon.setAttribute('style', $customIcon.getAttribute('style') + 'width:' + _imgWidth + 'px; height:' + _imgHeight + 'px');
+	        }
+	
+	        /*
+	         * Show cancel button?
+	         */
+	        modal.setAttribute('data-has-cancel-button', params.showCancelButton);
+	        if (params.showCancelButton) {
+	          $cancelBtn.style.display = 'inline-block';
+	        } else {
+	          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.hide($cancelBtn);
+	        }
+	
+	        /*
+	         * Show confirm button?
+	         */
+	        modal.setAttribute('data-has-confirm-button', params.showConfirmButton);
+	        if (params.showConfirmButton) {
+	          $confirmBtn.style.display = 'inline-block';
+	        } else {
+	          _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.hide($confirmBtn);
+	        }
+	
+	        /*
+	         * Custom text on cancel/confirm buttons
+	         */
+	        if (params.cancelButtonText) {
+	          $cancelBtn.innerHTML = _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.escapeHtml(params.cancelButtonText);
+	        }
+	        if (params.confirmButtonText) {
+	          $confirmBtn.innerHTML = _hasClass$addClass$removeClass$escapeHtml$_show$show$_hide$hide.escapeHtml(params.confirmButtonText);
+	        }
+	
+	        /*
+	         * Custom color on confirm button
+	         */
+	        if (params.confirmButtonColor) {
+	          // Set confirm button to selected background color
+	          $confirmBtn.style.backgroundColor = params.confirmButtonColor;
+	
+	          // Set the confirm button color to the loading ring
+	          $confirmBtn.style.borderLeftColor = params.confirmLoadingButtonColor;
+	          $confirmBtn.style.borderRightColor = params.confirmLoadingButtonColor;
+	
+	          // Set box-shadow to default focused button
+	          _getModal$getInput$setFocusStyle.setFocusStyle($confirmBtn, params.confirmButtonColor);
+	        }
+	
+	        /*
+	         * Allow outside click
+	         */
+	        modal.setAttribute('data-allow-outside-click', params.allowOutsideClick);
+	
+	        /*
+	         * Callback function
+	         */
+	        var hasDoneFunction = params.doneFunction ? true : false;
+	        modal.setAttribute('data-has-done-function', hasDoneFunction);
+	
+	        /*
+	         * Animation
+	         */
+	        if (!params.animation) {
+	          modal.setAttribute('data-animation', 'none');
+	        } else if (typeof params.animation === 'string') {
+	          modal.setAttribute('data-animation', params.animation); // Custom animation
+	        } else {
+	          modal.setAttribute('data-animation', 'pop');
+	        }
+	
+	        /*
+	         * Timer
+	         */
+	        modal.setAttribute('data-timer', params.timer);
+	      };
+	
+	      exports['default'] = setParameters;
+	      module.exports = exports['default'];
+	    }, { "./handle-dom": 4, "./handle-swal-dom": 6, "./utils": 9 }], 9: [function (require, module, exports) {
+	      'use strict';
+	
+	      Object.defineProperty(exports, '__esModule', {
+	        value: true
+	      });
+	      /*
+	       * Allow user to pass their own params
+	       */
+	      var extend = function extend(a, b) {
+	        for (var key in b) {
+	          if (b.hasOwnProperty(key)) {
+	            a[key] = b[key];
+	          }
+	        }
+	        return a;
+	      };
+	
+	      /*
+	       * Convert HEX codes to RGB values (#000000 -> rgb(0,0,0))
+	       */
+	      var hexToRgb = function hexToRgb(hex) {
+	        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	        return result ? parseInt(result[1], 16) + ', ' + parseInt(result[2], 16) + ', ' + parseInt(result[3], 16) : null;
+	      };
+	
+	      /*
+	       * Check if the user is using Internet Explorer 8 (for fallbacks)
+	       */
+	      var isIE8 = function isIE8() {
+	        return window.attachEvent && !window.addEventListener;
+	      };
+	
+	      /*
+	       * IE compatible logging for developers
+	       */
+	      var logStr = function logStr(string) {
+	        if (window.console) {
+	          // IE...
+	          window.console.log('SweetAlert: ' + string);
+	        }
+	      };
+	
+	      /*
+	       * Set hover, active and focus-states for buttons 
+	       * (source: http://www.sitepoint.com/javascript-generate-lighter-darker-color)
+	       */
+	      var colorLuminance = function colorLuminance(hex, lum) {
+	        // Validate hex string
+	        hex = String(hex).replace(/[^0-9a-f]/gi, '');
+	        if (hex.length < 6) {
+	          hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+	        }
+	        lum = lum || 0;
+	
+	        // Convert to decimal and change luminosity
+	        var rgb = '#';
+	        var c;
+	        var i;
+	
+	        for (i = 0; i < 3; i++) {
+	          c = parseInt(hex.substr(i * 2, 2), 16);
+	          c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
+	          rgb += ('00' + c).substr(c.length);
+	        }
+	
+	        return rgb;
+	      };
+	
+	      exports.extend = extend;
+	      exports.hexToRgb = hexToRgb;
+	      exports.isIE8 = isIE8;
+	      exports.logStr = logStr;
+	      exports.colorLuminance = colorLuminance;
+	    }, {}] }, {}, [1]);
+
+	  /*
+	   * Use SweetAlert with RequireJS
+	   */
+
+	  if (true) {
+	    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	      return sweetAlert;
+	    }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof module !== 'undefined' && module.exports) {
+	    module.exports = sweetAlert;
+	  }
+	})(window, document);
 
 /***/ }
 
 /******/ });
+//# sourceMappingURL=main.bundle.js.map
