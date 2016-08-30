@@ -57,12 +57,14 @@ const initialMiddleware = {
 		}
 		next();
 	},
+	/* @TODO It will cause error on server. Will replace it using nginx.
 	redirectIO: (req, res, next) => {
 		const includesIO = req.get('host').includes('.io');
 		if (!includesIO || req.path.includes('/play')) return next();
 		res.redirect(302, `aquaforces.com${req.path}`);
 		next();
 	},
+	*/
 };
 
 const parsers = [bodyParser.json(), bodyParser.urlencoded({ extended: true }),
@@ -99,8 +101,8 @@ app.get('/', (req, res, next) => {
 
 app.get('/play', (req, res, next) => {
 	/*
-		@TODO It will cause error on server. Will replace it using nginx.
-		if (req.get('host').includes('.io')) return res.redirect(301, 'aquaforces.io');
+	@TODO It will cause error on server. Will replace it using nginx.
+	if (req.get('host').includes('.io')) return res.redirect(301, 'aquaforces.io');
 	*/
 	res.locals.title = 'Join a game';
 	res.locals.bundleName = 'game.bundle.js';
