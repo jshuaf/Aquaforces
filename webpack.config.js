@@ -8,6 +8,7 @@ module.exports = {
 		host: './http/host/index.jsx',
 		game: './http/game/index.jsx',
 		console: './http/console/index.jsx',
+		main: './http/a/scripts/index.js',
 	},
 	output: {
 		path: path.join(__dirname, '/http'),
