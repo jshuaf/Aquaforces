@@ -13,7 +13,6 @@ before_install:
   -in Aquaforces-574606712a9b.json.enc -out Aquaforces-574606712a9b.json -d
 deploy:
   provider: gae
-  
   skip_cleanup: true
   keyfile: "Aquaforces-574606712a9b.json"
   project: aquaforces-141803
