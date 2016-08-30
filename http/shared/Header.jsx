@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 import Radium from 'radium';
 import colors from '../shared/colors';
 import PrimaryButton from './PrimaryButton.jsx';
@@ -6,7 +7,11 @@ import PrimaryButton from './PrimaryButton.jsx';
 const request = require('request');
 /* global sweetAlert:true */
 
-class Header extends Component {
+export class HeaderRaw extends Component {
+	constructor(props) {
+		super(props);
+		autoBind(this);
+	}
 	logIn() {
 		window.location = `https://accounts.google.com/o/oauth2/v2/auth?
 			client_id=891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com&
@@ -95,11 +100,11 @@ class Header extends Component {
 	}
 }
 
-Header.propTypes = {
+HeaderRaw.propTypes = {
 	currentUser: PropTypes.any,
 };
 
-function UnderHeader() {
+export function UnderHeader() {
 	const style = {
 		height: '15vh',
 		width: '100%',
@@ -107,4 +112,4 @@ function UnderHeader() {
 	return <div style={style} />;
 }
 
-module.exports = { Header: new Radium(Header), UnderHeader };
+export const Header = new Radium(HeaderRaw);

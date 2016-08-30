@@ -15,7 +15,7 @@ export default class TextInput extends Component {
 			const text = this.node.value;
 			if (this.props.isComplete(text)) this.props.onComplete();
 		}
-		this.props.onChange();
+		if (this.props.onChange) this.props.onChange();
 	}
 	error(errorMessage) {
 		this.setState({ errorMessage });

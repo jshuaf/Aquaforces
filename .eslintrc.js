@@ -2,7 +2,8 @@ module.exports = {
 	"env": {
 		"browser": true,
 		"node": true,
-		"es6": true
+		"es6": true,
+		"jest": true,
 	},
 	"rules": {
 		"consistent-return": ["off"],
@@ -17,6 +18,7 @@ module.exports = {
 		"react/no-find-dom-node": ["warn"],
 		"react/jsx-closing-bracket-location": ["off"],
 		"func-names": ["off"],
+		"import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
 		"no-mixed-operators": ["error",
 			{
 				"groups": [
