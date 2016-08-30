@@ -1,22 +1,12 @@
 language: node_js
 node_js:
-- stable
+  - stable
 services:
-- mongodb
+  - mongodb
 script:
-- "./node_modules/.bin/snyk test"
-- "./node_modules/.bin/nsp check"
-- "./node_modules/.bin/eslint . --ext .jsx, .js"
-- "./node_modules/.bin/stylelint ./http/*.css ./http/a/stylesheets/*.css -f verbose"
-before_install:
-- openssl aes-256-cbc -K $encrypted_c27013234f3c_key -iv $encrypted_c27013234f3c_iv
-  -in Aquaforces-d22fa453850b.json.enc -out Aquaforces-d22fa453850b.json -d
-deploy:
-  provider: gae
-  skip_cleanup: true
-  keyfile: Aquaforces-d22fa453850b.json
-  project: aquaforces-141803
-  on:
-    all_branches: true
+  - ./node_modules/.bin/snyk test
+  - ./node_modules/.bin/nsp check
+  - ./node_modules/.bin/eslint . --ext .jsx, .js
+  - ./node_modules/.bin/stylelint ./http/*.css ./http/a/stylesheets/*.css -f verbose
 cache:
   directories: node_modules
