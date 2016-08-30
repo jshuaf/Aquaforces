@@ -7,7 +7,7 @@ import PrimaryButton from './PrimaryButton.jsx';
 const request = require('request');
 /* global sweetAlert:true */
 
-class Header extends Component {
+export class HeaderRaw extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
@@ -100,11 +100,11 @@ class Header extends Component {
 	}
 }
 
-Header.propTypes = {
+HeaderRaw.propTypes = {
 	currentUser: PropTypes.any,
 };
 
-function UnderHeader() {
+export function UnderHeader() {
 	const style = {
 		height: '15vh',
 		width: '100%',
@@ -112,4 +112,4 @@ function UnderHeader() {
 	return <div style={style} />;
 }
 
-module.exports = { Header: new Radium(Header), UnderHeader };
+export const Header = new Radium(HeaderRaw);

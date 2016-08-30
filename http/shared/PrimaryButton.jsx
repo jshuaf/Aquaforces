@@ -3,7 +3,7 @@ import Radium from 'radium';
 import colors from './colors';
 
 /* eslint-disable react/prefer-stateless-function */
-class PrimaryButtonRaw extends Component {
+class PrimaryButton extends Component {
 	render() {
 		const style = {
 			borderRadius: '99999px',
@@ -21,10 +21,10 @@ class PrimaryButtonRaw extends Component {
 	}
 }
 
-PrimaryButtonRaw.propTypes = {
+PrimaryButton.propTypes = {
 	children: PropTypes.any,
 };
 
-const PrimaryButton = new Radium(PrimaryButtonRaw);
+const PrimaryButtonRadium = new Radium(PrimaryButton);
 
-export default PrimaryButton;
+export default PrimaryButtonRadium;
