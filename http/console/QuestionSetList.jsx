@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import QuestionSet, { questionSetPropTypes } from './QuestionSet.jsx';
+import { questionSetPropTypes } from './QuestionSet.jsx';
+import SearchBar from './SearchBar.jsx';
 import { populateQuestionSetList } from './actions';
 
 /* global sweetAlert:true */
@@ -26,6 +27,7 @@ class QuestionSetList extends Component {
 		return (
 			<div id="questionSets">
 				<h3>Question Sets</h3>
+				<SearchBar />
 			{
 				this.props.questionSets.map((questionSet, index) =>
 					<Link to={`/set/${questionSet.shortID}`} key={index}>
