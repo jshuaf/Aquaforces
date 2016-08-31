@@ -139,5 +139,26 @@ function currentUser(state = null, action) {
 	}
 }
 
-const questionConsoleReducer = combineReducers({ newQuestionSet, questionSets, activeQuestionSet, currentUser });
+function requests(state = {}, action) {
+	switch (action.type) {
+	case actions.NEW_SEARCH_REQUEST:
+		if (!state.search) {
+			return Object.assign({}, state, {
+				search: action.request,
+			});
+		}
+		return Object.assign({}, state, {
+			search: state.search.concat(action.request),
+		});
+	case actions.CLEAR_SEARCH_REQUESTS:
+		return Object.assign({}, state, {
+			search: [],
+		});
+	default:
+		return state;
+	}
+}
+
+const questionConsoleReducer = combineReducers({
+	newQuestionSet, questionSets, activeQuestionSet, currentUser, requests });
 export default questionConsoleReducer;

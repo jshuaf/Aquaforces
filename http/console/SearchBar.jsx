@@ -2,11 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import autoBind from 'react-autobind';
 import TextInput from '../shared/TextInput.jsx';
-import { populateQuestionSetList } from './actions';
-
-const request = require('request');
-
-/* global sweetAlert:true */
+import { searchQuestionSets } from './thunks';
 
 class SearchBarDisplay extends Component {
 	constructor(props) {
@@ -15,18 +11,7 @@ class SearchBarDisplay extends Component {
 	}
 	search() {
 		const query = this.input.node.value;
-		const url = `${location.protocol}//${location.host}/api/search`;
-		if (!query) return;
-		request({
-			url,
-			body: { query },
-			json: true,
-			method: 'post',
-		}, (error, res) => {
-			if (error) return console.error(error);
-			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			this.props.populateQuestionSetList(res.body);
-		});
+		this.props.searchQuestionSets(query);
 	}
 	render() {
 		return (
@@ -41,12 +26,12 @@ class SearchBarDisplay extends Component {
 }
 
 SearchBarDisplay.propTypes = {
-	populateQuestionSetList: PropTypes.func.isRequired,
+	searchQuestionSets: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-	populateQuestionSetList: (sets) => {
-		dispatch(populateQuestionSetList(sets));
+	searchQuestionSets: (query) => {
+		dispatch(searchQuestionSets(query));
 	},
 });
 

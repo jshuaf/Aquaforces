@@ -14,6 +14,9 @@ export const POPULATE_ACTIVE_QUESTION_SET = 'POPULATE_ACTIVE_QUESTION_SET';
 
 export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
 
+export const CLEAR_SEARCH_REQUESTS = 'CLEAR_SEARCH_REQUESTS';
+export const NEW_SEARCH_REQUEST = 'NEW_SEARCH_REQUEST';
+
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
 		const action = { type };
@@ -39,3 +42,6 @@ export const deleteSet = makeActionCreator(DELETE_SET, 'id');
 export const populateActiveQuestionSet = makeActionCreator(POPULATE_ACTIVE_QUESTION_SET, 'questionSet');
 
 export const authenticateUser = makeActionCreator(AUTHENTICATE_USER, 'user');
+
+export const newSearchRequest = makeActionCreator(NEW_SEARCH_REQUEST, 'request');
+export const clearSearchRequests = makeActionCreator(CLEAR_SEARCH_REQUESTS);
