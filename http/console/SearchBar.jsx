@@ -16,6 +16,8 @@ class SearchBarDisplay extends Component {
 	search() {
 		const query = this.input.node.value;
 		const url = `${location.protocol}//${location.host}/api/search`;
+		if (!query) return;
+		console.log(query);
 		request({
 			url,
 			body: { query },
@@ -24,7 +26,6 @@ class SearchBarDisplay extends Component {
 		}, (error, res) => {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			console.log(res.body);
 			this.props.populateQuestionSetList(res.body);
 		});
 	}
