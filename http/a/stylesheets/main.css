@@ -1,6 +1,7 @@
 * {
 	font-family: 'Source Sans Pro', sans-serif;
 	-webkit-font-smoothing: antialiased;
+	color: #19a8a6;
 }
 
 img {
@@ -13,11 +14,11 @@ img {
 }
 
 html {
-	background-color: #ebf5ff;
+	background-color: #ebfcfc;
 }
 
 #mountNode {
-	background-color: #ebf5ff;
+	background-color: #ebfcfc;
 }
 
 strong,b {
@@ -181,7 +182,17 @@ h1 {
 }
 
 h2 {
-	font-size: 2.5rem;
+	font-size: 4rem;
+	font-weight: bold;
+	max-width: 100%;
+}
+h3 {
+	font-size: 3rem;
+	font-weight: normal;
+	max-width: 100%;
+}
+h4 {
+	font-size: 2rem;
 	font-weight: normal;
 	max-width: 100%;
 }

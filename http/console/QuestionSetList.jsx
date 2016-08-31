@@ -23,8 +23,7 @@ class QuestionSetList extends Component {
 	}
 	render() {
 		return (
-			<div id="questionSets">
-				<h3>Question Sets</h3>
+			<div id="questionSets" className="row">
 			{
 				this.props.questionSets.map((questionSet, index) =>
 					<QuestionSetSummary {...questionSet} key={index} />

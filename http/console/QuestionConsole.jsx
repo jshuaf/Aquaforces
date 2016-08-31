@@ -23,10 +23,14 @@ class QuestionConsoleDisplay extends Component {
 			<div id="questionConsole">
 				<Header currentUser={this.props.currentUser} />
 				<UnderHeader />
-					<h1>Question Console</h1>
-					<Link to="/console/new"><PrimaryButton>New Set</PrimaryButton></Link>
-					<Link to="/console/"><PrimaryButton>View Sets</PrimaryButton></Link>
-				{this.props.children}
+				<div className="container inline-blocky">
+						<h1>Question Console</h1>
+						<Link to="/console/new"><PrimaryButton>New Set</PrimaryButton></Link>
+						<Link to="/console/"><PrimaryButton>View Sets</PrimaryButton></Link>
+				</div>
+				<div className="container">
+					{this.props.children}
+				</div>
 			</div>
 		);
 	}
