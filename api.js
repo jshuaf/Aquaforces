@@ -1,4 +1,6 @@
 /* global generateID:true dbcs:true config:true*/
+const request = require('request');
+
 module.exports = function (req, res) {
 	res.badRequest = (message) => {
 		res.writeHead(400);
@@ -167,6 +169,30 @@ module.exports = function (req, res) {
 			dbcs.qsets.update({ _id: req.body.id }, { $set: { questions: qset.questions } });
 			res.writeHead(204);
 			res.end();
+		});
+	} else if (req.params.path === 'search') {
+		if (!req.body.query) {
+			return res.badRequest('No search query provided.');
+		}
+
+		// Database Search
+		const searchFilter = { $search: req.body.query };
+		const privacyFilter = { $or: [{ privacy: false }] };
+		const qsets = [];
+		if (req.user) privacyFilter.$or.push({ userID: req.user._id });
+		dbcs.qsets.find(searchFilter, privacyFilter).each((err, qset) => {
+			if (qset) {
+				qsets.push(qset);
+			}
+		});
+
+		// Quizlet Search
+		const url = `https://api.quizlet.com/2.0/search/sets?q=${req.body.query}&client_id=${config.quizlet.clientID}`;
+		request({ url }, (error, _, body) => {
+			console.log(body);
+			res.header('Content-Type', 'application/json');
+			res.writeHead(200);
+			return res.end(JSON.stringify(qsets));
 		});
 	} else {
 		res.writeHead(404);
