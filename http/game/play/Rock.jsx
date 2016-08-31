@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 
+/* eslint-disable react/prefer-stateless-function */
 class Rock extends Component {
+/* eslint-enable react/prefer-stateless-function */
 	render() {
 		const rockStyle = {
 			height: '100%',
