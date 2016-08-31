@@ -36,7 +36,7 @@ export class HeaderRaw extends Component {
 			zIndex: 5,
 			width: '100%',
 			height: '10%',
-			backgroundColor: colors.wasabi,
+			backgroundColor: 'none',
 		};
 
 		const logoContainerStyle = {
@@ -59,11 +59,11 @@ export class HeaderRaw extends Component {
 			alignItems: 'center',
 			textDecoration: 'none',
 			fontSize: '1.3em',
-			color: colors.midnight,
+			color: colors.water,
 		};
 
 		const logoutStyle = {
-			color: colors.midnight,
+			color: colors.water,
 			fontSize: '1em',
 			textDecoration: 'none',
 			':hover': { color: colors.pacific },
@@ -75,7 +75,7 @@ export class HeaderRaw extends Component {
 		);
 
 		const linkTextStyle = {
-			color: 'inherit',
+			color: colors.water,
 		};
 
 		return (
