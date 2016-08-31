@@ -37,7 +37,6 @@ class Answer extends Component {
 		let positionY = this.state.position.y;
 		const velocityX = this.state.velocity.vx;
 		let velocityY = this.state.velocity.vy;
-		const offsetWidth = this.state.offsetWidth;
 
 		velocityY += dt * ((Math.random() - 0.5) / 10000);
 		if ((velocityY) < 0.03) velocityY = +velocityY + 0.03;
