@@ -30,10 +30,7 @@ class QuestionSetSummary extends Component {
 			<div className="six columns">
 				<div className="questionSetSummary">
 					<h1 key={-1} className="marginless">{this.props.title}</h1>
-					<h4>
-						{this.props.questions.length} questions
-						({this.props.privacy ? 'Private' : 'Public'})
-					</h4>
+					<h4>{this.props.questions.length} questions ({this.props.privacy ? 'Private' : 'Public'})</h4>
 					<button onClick={this.deleteSet} className="button button-secondary">Delete set</button>
 				</div>
 			</div>
