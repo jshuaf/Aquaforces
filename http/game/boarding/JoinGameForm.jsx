@@ -44,8 +44,7 @@ class JoinGameFormDisplay extends Component {
 					ref={(f) => { this.form = f; }}
 				>
 					<div className="row">
-						<div className="six columns text-center">
-							<img className="navbar-logo" src="/img/logo-black.svg" alt="Aquaforces" />
+						<div className="six columns">
 							<TextInput
 								placeholder="1234" label="Game number" name="gameID" autoFocus
 								type="number" min="0" max="9999" required autoComplete="off"

@@ -106,7 +106,7 @@ HeaderRaw.propTypes = {
 
 export function UnderHeader() {
 	const style = {
-		height: '15vh',
+		height: '12vh',
 		width: '100%',
 	};
 	return <div style={style} />;

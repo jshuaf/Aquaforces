@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Header, UnderHeader } from '../shared/Header.jsx';
-import PrimaryButton from '../shared/PrimaryButton.jsx';
+import PrimaryInlineButton from '../shared/PrimaryInlineButton.jsx';
 import { authenticateUser } from './actions';
 
 const request = require('request');
@@ -25,8 +25,8 @@ class QuestionConsoleDisplay extends Component {
 				<UnderHeader />
 				<div className="container inline-blocky">
 						<h1>Question Console</h1>
-						<Link to="/console/new"><PrimaryButton>New Set</PrimaryButton></Link>
-						<Link to="/console/"><PrimaryButton>View Sets</PrimaryButton></Link>
+						<Link to="/console/new"><PrimaryInlineButton>New Set</PrimaryInlineButton></Link>
+						<Link to="/console/"><PrimaryInlineButton>View Sets</PrimaryInlineButton></Link>
 				</div>
 				<div className="container">
 					{this.props.children}

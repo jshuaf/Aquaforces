@@ -17,15 +17,23 @@ class GameDisplay extends Component {
 				<div>
 					<Header />
 					<UnderHeader />
-					<JoinGameForm socket={this.props.socket} />
-				</div>
+					<div className="container">
+						<div className="row">
+							<JoinGameForm socket={this.props.socket} />
+						</div>
+					</div>
+			</div>
 			);
 		case 'joined':
 			return (
 				<div>
 					<Header />
 					<UnderHeader />
-					<p>You joined the game.</p>
+					<div className="container">
+						<div className="row">
+							<p>You joined the game.</p>
+						</div>
+					</div>
 				</div>
 			);
 		case 'started':
