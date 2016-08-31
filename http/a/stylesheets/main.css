@@ -129,7 +129,7 @@ label {
 
 .button.button-primary,button.button-primary,input[type=submit].button-primary,input[type=reset].button-primary,input[type=button].button-primary {
 	border-radius: 30px;
-	margin-top: 10px;
+	margin: 0 0 0 10px;
 	background-color: #ed676c;
 	border: none;
 	letter-spacing: normal;
@@ -140,7 +140,7 @@ label {
 }
 
 .button.button-primary:hover,button.button-primary:hover,input[type=submit].button-primary:hover,input[type=reset].button-primary:hover,input[type=button].button-primary:hover,.button.button-primary:active,button.button-primary:active,input[type=submit].button-primary:active,input[type=reset].button-primary:active,input[type=button].button-primary:active,.button.button-primary:focus,button.button-primary:focus,input[type=submit].button-primary:focus,input[type=reset].button-primary:focus,input[type=button].button-primary:focus {
-	background-color: #45b3e2;
+	background-color: #dd575c;
 }
 
 .button-primary.button-inline,.button-secondary.button-inline {
@@ -580,10 +580,21 @@ h4 {
 
 .questionSetSummary {
 	background-color: #19a8a6;
-	padding: 25px;
-	border-radius: 25px;
+	padding: 20px;
+	border-radius: 20px;
+	margin-bottom: 20px;
 }
 
-.questionSetSummary > h1,.questionSetSummary > h4 {
+.questionSetSummary > div > div > h2, .questionSetSummary > div > div > h4 {
 	color: white;
+}
+
+.text-right {
+	text-align: right;
+}
+
+@media (max-width: 550px) {
+	.text-right {
+		text-align: left;
+	}
 }

@@ -23,10 +23,12 @@ class QuestionSetList extends Component {
 	}
 	render() {
 		return (
-			<div id="questionSets" className="row">
+			<div id="questionSets">
 			{
 				this.props.questionSets.map((questionSet, index) =>
-					<QuestionSetSummary {...questionSet} key={index} />
+					<div className="row">
+						<QuestionSetSummary {...questionSet} key={index} />
+					</div>
 				)
 			}
 		</div>
