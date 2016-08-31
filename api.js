@@ -1,6 +1,33 @@
 /* global generateID:true dbcs:true config:true*/
 const request = require('request');
 
+function parseQuizletSet(quizletID) {
+	const url = `https://api.quizlet.com/2.0/sets/${quizletID}?client_id=${config.quizlet.clientID}`;
+	return new Promise((resolve, reject) => {
+		request({ url }, (error, res) => {
+			if (error) {
+				console.error(error);
+				reject();
+			}
+			const quizletSet = JSON.parse(res.body);
+			const qset = { title: quizletSet.title, questions: [], privacy: false };
+			const answerPool = quizletSet.terms.map((term) => term.definition);
+			if (answerPool.length < 10) reject();
+			quizletSet.terms.forEach((term) => {
+				const incorrectAnswers = [];
+				while (incorrectAnswers.length < 3) {
+					const randomAnswer = answerPool[Math.floor(Math.random() * answerPool.length)];
+					if (incorrectAnswers.indexOf(randomAnswer) < 0) {
+						incorrectAnswers.push(randomAnswer);
+					}
+				}
+				qset.questions.push({ correctAnswer: term.term, incorrectAnswers });
+			});
+			resolve(qset);
+		});
+	});
+}
+
 module.exports = function (req, res) {
 	res.badRequest = (message) => {
 		res.writeHead(400);
@@ -189,7 +216,10 @@ module.exports = function (req, res) {
 		// Quizlet Search
 		const url = `https://api.quizlet.com/2.0/search/sets?q=${req.body.query}&client_id=${config.quizlet.clientID}`;
 		request({ url }, (error, _, body) => {
-			console.log(body);
+			const quizletSearchResults = JSON.parse(body);
+			quizletSearchResults.sets.forEach(set => {
+				parseQuizletSet(set.id).then(qset => { console.log(qset); qsets.push(qset); });
+			});
 			res.header('Content-Type', 'application/json');
 			res.writeHead(200);
 			return res.end(JSON.stringify(qsets));

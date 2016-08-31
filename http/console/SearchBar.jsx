@@ -1,12 +1,14 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import autoBind from 'react-autobind';
 import TextInput from '../shared/TextInput.jsx';
+import { populateQuestionSetList } from './actions';
 
 const request = require('request');
 
 /* global sweetAlert:true */
 
-export default class SearchBar extends Component {
+class SearchBarDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
@@ -22,6 +24,8 @@ export default class SearchBar extends Component {
 		}, (error, res) => {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			console.log(res.body);
+			this.props.populateQuestionSetList(res.body);
 		});
 	}
 	render() {
@@ -34,3 +38,17 @@ export default class SearchBar extends Component {
 		);
 	}
 }
+
+SearchBarDisplay.propTypes = {
+	populateQuestionSetList: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+	populateQuestionSetList: (sets) => {
+		dispatch(populateQuestionSetList(sets));
+	},
+});
+
+const SearchBar = connect(null, mapDispatchToProps)(SearchBarDisplay);
+
+export default SearchBar;

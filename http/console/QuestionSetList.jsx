@@ -28,13 +28,13 @@ class QuestionSetList extends Component {
 			<div id="questionSets">
 				<h3>Question Sets</h3>
 				<SearchBar />
-			{
-				this.props.questionSets.map((questionSet, index) =>
-					<Link to={`/set/${questionSet.shortID}`} key={index}>
-						<button>{questionSet.title}</button>
-					</Link>
-				)
-			}
+				{
+					this.props.questionSets.map((questionSet, index) =>
+						<Link to={`/set/${questionSet.shortID}`} key={index}>
+							<button>{questionSet.title}</button>
+						</Link>
+					)
+				}
 		</div>
 		);
 	}
