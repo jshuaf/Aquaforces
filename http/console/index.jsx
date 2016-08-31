@@ -1,11 +1,15 @@
 import { render } from 'react-dom';
 import React from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import questionConsoleReducer from './reducers.js';
+import reducer from './reducers.js';
 import routes from './routes.jsx';
 
-const store = createStore(questionConsoleReducer, window.devToolsExtension && window.devToolsExtension());
+const store = createStore(reducer, {}, compose(
+		applyMiddleware(thunk),
+		window.devToolsExtension ? window.devToolsExtension() : f => f
+	));
 
 render(
 	<Provider store={store}>

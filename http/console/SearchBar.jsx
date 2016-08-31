@@ -17,7 +17,6 @@ class SearchBarDisplay extends Component {
 		const query = this.input.node.value;
 		const url = `${location.protocol}//${location.host}/api/search`;
 		if (!query) return;
-		console.log(query);
 		request({
 			url,
 			body: { query },
@@ -31,11 +30,12 @@ class SearchBarDisplay extends Component {
 	}
 	render() {
 		return (
-				<TextInput
-					placeholder="science"
-					ref={(t) => { this.input = t; }}
-					onChange={this.search}
-				/>
+				<form onSubmit={(e) => { e.preventDefault(); this.search(); }}>
+					<TextInput
+						placeholder="science"
+						ref={(t) => { this.input = t; }}
+					/>
+				</form>
 		);
 	}
 }
