@@ -36,8 +36,12 @@ class GameHostDisplay extends Component {
 				<div id="gameHost">
 					<Header />
 					<UnderHeader />
-					<QuestionSetPicker />
-					<button className="button button-primary" onClick={this.newGame}>New game</button>
+					<div className="container">
+						<div className="row">
+							<QuestionSetPicker />
+							<button className="button button-primary" onClick={this.newGame}>New game</button>
+						</div>
+					</div>
 				</div>
 			);
 		case 'boarding':
