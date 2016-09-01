@@ -1,15 +1,10 @@
 /* global dbcs:true */
 
-const config = require('./config');
-const apiServer = require('./api/index');
-
-// Database Storage
-global.dbcs = {};
-const usedDBCs = ['users', 'gameplays', 'qsets'];
-
 // Dependencies
 /* eslint-disable one-var */
 const helpers = require('./helpers');
+const config = require('./config');
+const apiServer = require('./api/index');
 require('colors');
 
 const http = require('http'),
@@ -21,8 +16,31 @@ const http = require('http'),
 	express = require('express'),
 	request = require('request'),
 	bodyParser = require('body-parser'),
+	winston = require('winston'),
 	cookieParser = require('cookie-parser');
 	/* eslint-enable one-var */
+
+// Database Storage
+global.dbcs = {};
+const usedDBCs = ['users', 'gameplays', 'qsets'];
+
+// Server logging
+const logger = new (winston.Logger)({
+	transports: [
+		new (winston.transports.File)({
+			name: 'info-file',
+			filename: 'logs/info.log',
+			level: 'info',
+		}),
+		new (winston.transports.File)({
+			name: 'error-file',
+			filename: 'logs/error.log',
+			level: 'error',
+			handleExceptions: true,
+			humanReadableUnhandledException: true,
+		}),
+	],
+});
 
 // Server Middleware
 const initialMiddleware = {
@@ -150,12 +168,16 @@ app.get('/login/google', (req, res) => {
 		try {
 			tokenData = JSON.parse(body);
 		} catch (e) {
-			console.error(e);
+			logger.error('Error parsing response when requesting Google access token', {
+				error: e, user: req.user,
+			});
 			return res.send('<p>Error parsing response.</p>');
 		}
 		if (error || tokenData.error) {
 			error = error || tokenData.error;
-			console.error(error);
+			logger.error('Error thrown when requesting Google access token', {
+				error, user: req.user,
+			});
 			return res.send('<p>Error getting token.</p>');
 		}
 		request({
@@ -166,12 +188,16 @@ app.get('/login/google', (req, res) => {
 			try {
 				apiData = JSON.parse(body);
 			} catch (e) {
-				console.error(e);
+				logger.error('Error parsing response when requesting Google+ user data', {
+					error: e, user: req.user,
+				});
 				return res.send('<p>Error parsing response.</p>');
 			}
 			if (error || apiData.error) {
 				error = error || apiData.error.errors;
-				console.error(error);
+				logger.error('Error thrown when requesting Google+ user data', {
+					error, user: req.user,
+				});
 				return res.send('<p>Error accessing Google+ API.</p>');
 			}
 			const decodedToken = jwt.decode(tokenData.id_token);

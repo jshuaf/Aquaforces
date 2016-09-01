@@ -39,6 +39,7 @@
     "eslint": "^3.4.0",
     "express": "^4.14.0",
     "history": "^2.0.1",
+    "joi": "^9.0.4",
     "json-loader": "^0.5.4",
     "jsonwebtoken": "^7.1.9",
     "mongodb": "^2.1.18",
@@ -53,6 +54,7 @@
     "redux-thunk": "^2.1.0",
     "request": "^2.74.0",
     "webpack": "^1.13.1",
+    "winston": "^2.2.0",
     "ws": "^1.1.1",
     "yield-yield": "^1.0.1"
   },
