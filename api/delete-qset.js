@@ -9,6 +9,6 @@ module.exports = function (req, res) {
 			return res.badRequest('Error: You may not delete question sets that aren\'t yours.');
 		}
 		dbcs.qsets.remove({ _id: req.body.id });
-		res.end(res.writeHead(204));
+		res.success();
 	});
 };

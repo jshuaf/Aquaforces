@@ -5,6 +5,7 @@
 const helpers = require('./helpers');
 const config = require('./config');
 const apiServer = require('./api/index');
+const logger = require('./logger');
 require('colors');
 
 const http = require('http'),
@@ -16,31 +17,12 @@ const http = require('http'),
 	express = require('express'),
 	request = require('request'),
 	bodyParser = require('body-parser'),
-	winston = require('winston'),
 	cookieParser = require('cookie-parser');
 	/* eslint-enable one-var */
 
 // Database Storage
 global.dbcs = {};
 const usedDBCs = ['users', 'gameplays', 'qsets'];
-
-// Server logging
-const logger = new (winston.Logger)({
-	transports: [
-		new (winston.transports.File)({
-			name: 'info-file',
-			filename: 'logs/info.log',
-			level: 'info',
-		}),
-		new (winston.transports.File)({
-			name: 'error-file',
-			filename: 'logs/error.log',
-			level: 'error',
-			handleExceptions: true,
-			humanReadableUnhandledException: true,
-		}),
-	],
-});
 
 // Server Middleware
 const initialMiddleware = {

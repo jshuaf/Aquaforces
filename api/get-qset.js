@@ -1,5 +1,7 @@
 /* global dbcs: true */
 
+const logger = require('../logger');
+
 module.exports = function (req, res) {
 	if (!req.body.shortID || typeof req.body.shortID !== 'string') {
 		res.badRequest('Must send the short ID of a set to request.');
@@ -12,11 +14,11 @@ module.exports = function (req, res) {
 				return res.badRequest('You don\'t have permission to view this set.');
 			}
 		}
-		res.send(JSON.stringify(qset));
+		res.success(JSON.stringify(qset));
 	}, () => {
 		res.badRequest('Could not find the question set requested.');
 	}).catch((error) => {
-		console.error(error);
+		logger.error('Database find operation failed', { error, req });
 		res.badRequest('Question set not found.');
 	});
 };
