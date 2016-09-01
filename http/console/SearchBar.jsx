@@ -29,11 +29,7 @@ SearchBarDisplay.propTypes = {
 	searchQuestionSets: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-	searchQuestionSets: (query) => {
-		dispatch(searchQuestionSets(query));
-	},
-});
+const mapDispatchToProps = { searchQuestionSets };
 
 const SearchBar = connect(null, mapDispatchToProps)(SearchBarDisplay);
 

@@ -3,6 +3,7 @@ require('react-autobind');
 require('react-dom');
 require('react-redux');
 require('react-router');
+require('redux-thunk');
 require('redux');
 require('request');
 require('ws');

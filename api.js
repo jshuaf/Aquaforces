@@ -2,7 +2,7 @@
 const request = require('request');
 const co = require('co');
 
-function parseQuizletSet(quizletID) {
+function parseQuizletSet(quizletID, q) {
 	const url = `https://api.quizlet.com/2.0/sets/${quizletID}?client_id=${config.quizlet.clientID}`;
 	return new Promise((resolve) => {
 		request({ url }, (error, res) => {
@@ -15,7 +15,9 @@ function parseQuizletSet(quizletID) {
 			const qset = { title: quizletSet.title, questions: [], privacy: false };
 			const answerPool = [];
 			quizletSet.terms.forEach((term) => {
-				if (term.definition.length > 0) answerPool.push(term.definition);
+				if (term.definition.length > 0 && answerPool.indexOf(term.definition) < 0) {
+					answerPool.push(term.definition);
+				}
 			});
 			if (answerPool.length < 10) return resolve('');
 			quizletSet.terms.forEach((term, index) => {
@@ -224,7 +226,7 @@ module.exports = function (req, res) {
 		request(url, (error, _, body) => {
 			if (error) { console.error(error); return; }
 			const quizletSearchResults = JSON.parse(body);
-			const parsedSets = quizletSearchResults.sets.map((set) => parseQuizletSet(set.id));
+			const parsedSets = quizletSearchResults.sets.map((set) => parseQuizletSet(set.id, req.body.query));
 			co(function* () {
 				return yield parsedSets;
 			}).then((sets) => {

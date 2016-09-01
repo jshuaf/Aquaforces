@@ -144,7 +144,7 @@ function requests(state = {}, action) {
 	case actions.NEW_SEARCH_REQUEST:
 		if (!state.search) {
 			return Object.assign({}, state, {
-				search: action.request,
+				search: [action.request],
 			});
 		}
 		return Object.assign({}, state, {
