@@ -45,7 +45,7 @@ class JoinGameFormDisplay extends Component {
 				>
 					<div className="row">
 						<div className="six columns text-center">
-							<img className="navbar-logo" src="/img/logo-black.svg" alt="Aquaforces" />
+							<img className="navbar-logo" src="/img/logo/dark-blue.svg" alt="Aquaforces" />
 							<TextInput
 								placeholder="1234" label="Game number" name="gameID" autoFocus
 								type="number" min="0" max="9999" required autoComplete="off"
