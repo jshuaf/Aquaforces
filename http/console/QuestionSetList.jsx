@@ -4,28 +4,20 @@ import { Link } from 'react-router';
 import { questionSetPropTypes } from './QuestionSet.jsx';
 import SearchBar from './SearchBar.jsx';
 import Spinner from '../shared/Spinner.jsx';
-import { populateQuestionSetList } from './actions';
+import { getQuestionSets } from './thunks';
 
-/* global sweetAlert:true */
-
-const request = require('request');
-
-class QuestionSetList extends Component {
+class QuestionSetListDisplay extends Component {
 	componentDidMount() {
-		const url = `${location.protocol}//${location.host}/api/get-qsets`;
-		request({
-			url,
-			body: {},
-			json: true,
-			method: 'post',
-		}, (error, res, body) => {
-			if (error) return console.error(error);
-			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			this.props.populateQuestionSetList(body);
-		});
+		this.props.getQuestionSets();
 	}
 	render() {
-		if (this.props.searchRequests.length > 0) return <Spinner />;
+		const requestCategories = Object.keys(this.props.requests);
+		for (let i = 0; i < requestCategories.length; i++) {
+			const requestCategory = requestCategories[i];
+			if (this.props.requests[requestCategory].length > 0 && requestCategory !== 'new') {
+				return <Spinner />;
+			}
+		}
 		return (
 			<div id="questionSets">
 				<h3>Question Sets</h3>
@@ -42,26 +34,24 @@ class QuestionSetList extends Component {
 	}
 }
 
-QuestionSetList.propTypes = {
-	populateQuestionSetList: PropTypes.func.isRequired,
+QuestionSetListDisplay.propTypes = {
+	getQuestionSets: PropTypes.func.isRequired,
 	questionSets: PropTypes.arrayOf(
 		PropTypes.shape(questionSetPropTypes)).isRequired,
-	searchRequests: PropTypes.arrayOf(PropTypes.any).isRequired,
+	requests: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 const mapStateToProps = (state) => ({
 	questionSets: state.questionSets,
-	searchRequests: state.requests.search,
+	requests: state.requests,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	populateQuestionSetList: (questionSets) => {
-		dispatch(populateQuestionSetList(questionSets));
+	getQuestionSets: () => {
+		dispatch(getQuestionSets());
 	},
 });
 
-/* eslint-disable no-class-assign */
-QuestionSetList = connect(mapStateToProps, mapDispatchToProps)(QuestionSetList);
-/* eslint-enable no-class-assign */
+const QuestionSetList = connect(mapStateToProps, mapDispatchToProps)(QuestionSetListDisplay);
 
 export default QuestionSetList;

@@ -11,21 +11,21 @@ export function searchQuestionSets(query) {
 		if (getState().requests.search) {
 			getState().requests.search.forEach(req => req.req.destroy());
 		}
-		dispatch(actions.clearSearchRequests());
+		dispatch(actions.clearRequests('search'));
 		const searchRequest = request({ url, body, json: true, method: 'post' }, (error, res) => {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			dispatch(actions.clearSearchRequests());
+			dispatch(actions.clearRequests('search'));
 			return dispatch(actions.populateQuestionSetList(res.body));
 		});
-		dispatch(actions.newSearchRequest(searchRequest, 'questionSetSearch'));
+		dispatch(actions.newRequest(searchRequest, 'questionSetSearch'));
 	};
 }
 
 export function submitQuestionSet(set) {
 	return (dispatch) => {
 		const url = `${location.protocol}//${location.host}/api/new-qset`;
-		request({
+		const createRequest = request({
 			url,
 			method: 'post',
 			json: true,
@@ -34,8 +34,10 @@ export function submitQuestionSet(set) {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			dispatch(actions.clearNewQuestionSet());
+			dispatch(actions.clearRequests('create'));
 			location.href = '/console';
 		});
+		dispatch(actions.newRequest('create', createRequest));
 	};
 }
 
@@ -53,24 +55,40 @@ export function authenticateUser() {
 export function getQuestionSet(shortID) {
 	return (dispatch) => {
 		const url = `${location.protocol}//${location.host}/api/get-qset`;
-		request({ url, body: { shortID }, json: true, method: 'post' }, (error, res) => {
+		const getRequest = request({ url, body: { shortID }, json: true, method: 'post' }, (error, res) => {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) {
 				return sweetAlert({ title: res.body, type: 'error' }, () => { location.href = '/console'; });
 			}
-			console.log('recieved', res.body);
+			dispatch(actions.clearRequests('get'));
 			dispatch(actions.populateActiveQuestionSet(res.body));
 		});
+		dispatch(actions.newRequest('get', getRequest));
 	};
 }
 
 export function deleteQuestionSet(id) {
-	return () => {
+	return (dispatch) => {
 		const url = `${location.protocol}//${location.host}/api/delete-qset`;
-		request({ url, body: { id },	json: true, method: 'post' }, (error, res) => {
+		const editRequest = request({ url, body: { id },	json: true, method: 'post' }, (error, res) => {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			dispatch(actions.clearRequests('edit'));
 			location.href = '/console';
 		});
+		dispatch(actions.newRequest('edit', editRequest));
+	};
+}
+
+export function getQuestionSets() {
+	return (dispatch) => {
+		const url = `${location.protocol}//${location.host}/api/get-qsets`;
+		const searchRequest = request({ url, body: {}, json: true, method: 'post' }, (error, res) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			dispatch(actions.clearRequests('search'));
+			dispatch(actions.populateQuestionSetList(res.body));
+		});
+		dispatch(actions.newRequest('search', searchRequest));
 	};
 }

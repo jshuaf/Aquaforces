@@ -148,18 +148,18 @@ const initialRequestsState = {
 
 function requests(state = initialRequestsState, action) {
 	switch (action.type) {
-	case actions.NEW_SEARCH_REQUEST:
-		if (!state.search) {
+	case actions.NEW_REQUEST:
+		if (!state[action.category]) {
 			return Object.assign({}, state, {
-				search: [action.request],
+				[action.category]: [action.request],
 			});
 		}
 		return Object.assign({}, state, {
-			search: state.search.concat(action.request),
+			[action.category]: state[action.category].concat(action.request),
 		});
-	case actions.CLEAR_SEARCH_REQUESTS:
+	case actions.CLEAR_REQUESTS:
 		return Object.assign({}, state, {
-			search: [],
+			[action.category]: [],
 		});
 	default:
 		return state;
