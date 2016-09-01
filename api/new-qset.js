@@ -41,11 +41,11 @@ module.exports = function (req, res) {
 		}
 	}
 
-	const questionSet = Object.assign({
+	const questionSet = Object.assign(req.body, {
 		_id: helpers.generateID(),
 		timeAdded: new Date().getTime(),
 		shortID: (`${Math.random().toString(36)}00000000000000000`).slice(2, 9),
-	}, req.body);
+	});
 
 	if (req.user) {
 		questionSet.userID = req.user._id;
@@ -53,5 +53,6 @@ module.exports = function (req, res) {
 	}
 
 	dbcs.qsets.insert(questionSet);
+	console.log(questionSet);
 	res.end(res.writeHead(204));
 };

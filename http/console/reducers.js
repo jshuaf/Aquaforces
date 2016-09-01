@@ -100,6 +100,8 @@ function newQuestionSet(state = initialNewSetState, action) {
 		return Object.assign({}, state, {
 			privacy: action.privacy,
 		});
+	case actions.CLEAR_NEW_QUESTION_SET:
+		return initialNewSetState;
 	default:
 		return state;
 	}

@@ -20,3 +20,20 @@ export function searchQuestionSets(query) {
 		dispatch(actions.newSearchRequest(searchRequest, 'questionSetSearch'));
 	};
 }
+
+export function submitQuestionSet(set) {
+	return (dispatch) => {
+		const url = `${location.protocol}//${location.host}/api/new-qset`;
+		request({
+			url,
+			method: 'post',
+			json: true,
+			body: set,
+		}, (error, res) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			dispatch(actions.clearNewQuestionSet());
+			location.href = '/console';
+		});
+	};
+}

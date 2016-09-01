@@ -4,13 +4,10 @@ import QuestionInputGroup from './QuestionInputGroup.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import Checkbox from '../shared/Checkbox.jsx';
 import { questionSetPropTypes } from './QuestionSet.jsx';
-import { editSetTitle, toggleSetPrivacy, addSet } from './actions';
+import { editSetTitle, toggleSetPrivacy } from './actions';
+import { submitQuestionSet } from './thunks';
 
-/* global sweetAlert:true */
-
-const request = require('request');
-
-class NewSetForm extends Component {
+class NewSetFormDisplay extends Component {
 	constructor(props) {
 		super(props);
 		this.submitQuestionSet = this.submitQuestionSet.bind(this);
@@ -27,17 +24,7 @@ class NewSetForm extends Component {
 	submitQuestionSet() {
 		this.verifyQuestionSet();
 		const set = this.props.newQuestionSet;
-		const url = `${location.protocol}//${location.host}/api/new-qset`;
-		request({
-			url,
-			method: 'post',
-			json: true,
-			body: set,
-		}, (error, res) => {
-			if (error) return console.error(error);
-			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			location.href = '/console';
-		});
+		this.props.submitQuestionSet(set);
 	}
 	render() {
 		return (
@@ -61,10 +48,10 @@ class NewSetForm extends Component {
 	}
 }
 
-NewSetForm.propTypes = {
+NewSetFormDisplay.propTypes = {
 	editSetTitle: PropTypes.func.isRequired,
 	toggleSetPrivacy: PropTypes.func.isRequired,
-	addSet: PropTypes.func.isRequired,
+	submitQuestionSet: PropTypes.func.isRequired,
 	newQuestionSet: PropTypes.shape(questionSetPropTypes).isRequired,
 };
 
@@ -79,13 +66,11 @@ const mapDispatchToProps = (dispatch) => ({
 	toggleSetPrivacy: (privacy) => {
 		dispatch(toggleSetPrivacy(privacy));
 	},
-	addSet: (set) => {
-		dispatch(addSet(set));
+	submitQuestionSet: (set) => {
+		dispatch(submitQuestionSet(set));
 	},
 });
 
-/* eslint-disable no-class-assign */
-NewSetForm = connect(mapStateToProps, mapDispatchToProps)(NewSetForm);
-/* eslint-enable no-class-assign */
+const NewSetForm = connect(mapStateToProps, mapDispatchToProps)(NewSetFormDisplay);
 
 export default NewSetForm;
