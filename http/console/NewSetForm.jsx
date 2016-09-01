@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import QuestionInputGroupHandler from './QuestionInputGroup.jsx';
+import QuestionInputGroup from './QuestionInputGroup.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import Checkbox from '../shared/Checkbox.jsx';
 import { questionSetPropTypes } from './QuestionSet.jsx';
@@ -45,12 +45,14 @@ class NewSetForm extends Component {
 				<h3>New Question Set</h3>
 				<TextInput
 					label="Title" placeholder="My Question Set" required
+					value={this.props.newQuestionSet.title}
 					ref={(t) => { this.titleInput = t; }}
 					onChange={() => { this.props.editSetTitle(this.titleInput.node.value); }}
 				/>
-				<QuestionInputGroupHandler />
+				<QuestionInputGroup />
 				<Checkbox
 					label="Private set" ref={(c) => { this.checkboxInput = c; }}
+					checked={this.props.newQuestionSet.privacy}
 					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
 				/>
 			<input onClick={this.submitQuestionSet} type="submit" className="button button-primary" name="Submit" />

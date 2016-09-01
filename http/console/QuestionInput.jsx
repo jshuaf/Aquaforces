@@ -12,12 +12,12 @@ function QuestionInput({ dispatch, question }) {
 		<div className="question_input">
 			<TextInput
 				placeholder="What's nine plus ten?" label="Question" required
-				ref={(component) => { questionTextInput = component; }}
+				ref={(component) => { questionTextInput = component; }} value={question.text}
 				onChange={() => { dispatch(editQuestionText(question.id, questionTextInput.node.value)); }}
 			/>
 			<div className="answers_input">
 				<TextInput
-					placeholder="Twenty one." label="Correct Answer" key={0} required
+					placeholder="Twenty one." label="Correct Answer" key={0} required value={question.correctAnswer}
 					onChange={() => { dispatch(editCorrectAnswer(question.id, correctAnswerInput.node.value)); }}
 					ref={(component) => { correctAnswerInput = component; }}
 				/>
@@ -31,6 +31,7 @@ function QuestionInput({ dispatch, question }) {
 							if (input) dispatch(editIncorrectAnswer(question.id, answer.id, input.node.value));
 						}}
 						ref={(component) => { incorrectAnswerInputs[answer.id] = component; }}
+						value={answer.text}
 					/>)
 			}
 			</div>

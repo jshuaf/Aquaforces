@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { REHYDRATE } from 'redux-persist/constants';
 import * as actions from './actions';
 
 const initialNewSetState = {

@@ -4,7 +4,7 @@ import ExpandButton from '../shared/ExpandButton.jsx';
 import QuestionInput from './QuestionInput.jsx';
 import { addQuestionInput } from './actions';
 
-function QuestionInputGroup({ questions, addQuestionInput }) {
+function QuestionInputGroupDisplay({ questions, addQuestionInput }) {
 	return (
 		<div id="question_input_group">
 			<h3>Questions</h3>
@@ -18,7 +18,7 @@ function QuestionInputGroup({ questions, addQuestionInput }) {
 	);
 }
 
-QuestionInputGroup.propTypes = {
+QuestionInputGroupDisplay.propTypes = {
 	addQuestionInput: PropTypes.func.isRequired,
 	questions: PropTypes.arrayOf(PropTypes.shape({
 		text: PropTypes.string.isRequired,
@@ -41,9 +41,9 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 });
 
-const QuestionInputGroupHandler = connect(
+const QuestionInputGroup = connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(QuestionInputGroup);
+)(QuestionInputGroupDisplay);
 
-export default QuestionInputGroupHandler;
+export default QuestionInputGroup;
