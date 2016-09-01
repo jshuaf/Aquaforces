@@ -1,5 +1,3 @@
-/* global dbcs:true */
-
 const fs = require('fs');
 const responses = {};
 fs.readdirSync('./api').filter(file => file !== 'index.js').forEach((path) => {
