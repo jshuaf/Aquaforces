@@ -3,8 +3,6 @@ import * as actions from './actions';
 const request = require('request');
 /* global sweetAlert:true */
 
-const searchRequests = [];
-
 export function searchQuestionSets(query) {
 	return (dispatch, getState) => {
 		const url = `${location.protocol}//${location.host}/api/search`;
@@ -20,6 +18,5 @@ export function searchQuestionSets(query) {
 			return dispatch(actions.populateQuestionSetList(res.body));
 		});
 		dispatch(actions.newSearchRequest(searchRequest, 'questionSetSearch'));
-		searchRequests.push(searchRequest);
 	};
 }
