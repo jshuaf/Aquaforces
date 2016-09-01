@@ -13,7 +13,11 @@ const store = createStore(reducer, undefined, compose(
 		window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
-persistStore(store);
+const persistConfig = {
+	whitelist: ['newQuestionSet'],
+};
+
+persistStore(store, persistConfig);
 
 render(
 	<Provider store={store}>
