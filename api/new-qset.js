@@ -1,5 +1,7 @@
 /* global dbcs: true */
 
+const helpers = require('../helpers');
+
 module.exports = function (req, res) {
 	if (!req.body.title) {
 		return res.badRequest('Error: Set name is required.');
@@ -40,7 +42,7 @@ module.exports = function (req, res) {
 	}
 
 	const questionSet = Object.assign({
-		_id: generateID(),
+		_id: helpers.generateID(),
 		timeAdded: new Date().getTime(),
 		shortID: (`${Math.random().toString(36)}00000000000000000`).slice(2, 9),
 	}, req.body);

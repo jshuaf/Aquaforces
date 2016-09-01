@@ -3,32 +3,31 @@ const fs = require('fs');
 const path = require('path');
 const o = require('yield-yield');
 
-// Helper functions
 /* eslint-disable no-extend-native */
-module.exports = function () {
-	String.prototype.replaceAll = function (find, replace) {
-		// Replace all occurences of {find} with {replace}
-		if (typeof find === 'string') return this.split(find).join(replace);
-		let t = this;
-		let i = find.shift();
-		let j = replace.shift();
-		while (typeof (i) === 'string' && typeof (j) === 'string') {
-			i = find.shift();
-			j = replace.shift();
-			t = t.replaceAll(i || '', j || '');
-		}
-		return t;
-	};
-	String.prototype.repeat = function (num) {
-		// Repeat a string {num} times
-		return new Array(++num).join(this);
-	};
-	Number.prototype.bound = function (l, h) {
-		return isNaN(h) ? Math.min(this, l) : Math.max(Math.min(this, h), l);
-	};
-	/* eslint-enable no-extend-native */
+String.prototype.replaceAll = function (find, replace) {
+	// Replace all occurences of {find} with {replace}
+	if (typeof find === 'string') return this.split(find).join(replace);
+	let t = this;
+	let i = find.shift();
+	let j = replace.shift();
+	while (typeof (i) === 'string' && typeof (j) === 'string') {
+		i = find.shift();
+		j = replace.shift();
+		t = t.replaceAll(i || '', j || '');
+	}
+	return t;
+};
+String.prototype.repeat = function (num) {
+	// Repeat a string {num} times
+	return new Array(++num).join(this);
+};
+Number.prototype.bound = function (l, h) {
+	return isNaN(h) ? Math.min(this, l) : Math.max(Math.min(this, h), l);
+};
+/* eslint-enable no-extend-native */
 
-	this.mime = {
+module.exports = {
+	mime: {
 		'.html': 'text/html',
 		'.css': 'text/css',
 		'.js': 'text/javascript',
@@ -36,17 +35,17 @@ module.exports = function () {
 		'.svg': 'image/svg+xml',
 		'.mp3': 'audio/mpeg',
 		'.ico': 'image/x-icon',
-	};
+	},
 
-	this.html = function (input) {
+	html(input) {
 		// Parse and convert an HTML string
 		return input.toString().replaceAll(
 			['&', '<', '>', '"', '\t', '\n', '\b'],
 			['&amp;', '&lt;', '&gt;', '&quot;', '&#9;', '&#10;', '']
 		);
-	};
+	},
 
-	this.getVersionNonce = o(function* (pathname, file, callback) {
+	getVersionNonce: o(function* (pathname, file, callback) {
 		// Get a unique cache version number given a file path
 		try {
 			return callback(null, crypto.createHash('md5')
@@ -56,9 +55,9 @@ module.exports = function () {
 		} catch (e) {
 			return callback(e);
 		}
-	});
+	}),
 
-	this.addVersionNonces = o(function* (str, pathname, callback) {
+	addVersionNonces: o(function* (str, pathname, callback) {
 		// Add version nonce to a given file path
 		for (let i = 0; i < str.length; i++) {
 			if (str.substr(i).match(/^\.[A-z]{1,8}"/)) {
@@ -74,9 +73,9 @@ module.exports = function () {
 			}
 		}
 		callback(null, str);
-	});
+	}),
 
-	this.generateID = function () {
+	generateID() {
 		return crypto.randomBytes(21).toString('base64').replaceAll(['+', '/'], ['!', '_']);
-	};
+	},
 };

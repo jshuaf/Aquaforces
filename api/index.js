@@ -1,6 +1,5 @@
 /* global generateID:true dbcs:true config:true*/
 
-
 module.exports = function (req, res) {
 	res.badRequest = (message) => {
 		res.writeHead(400);
@@ -10,7 +9,7 @@ module.exports = function (req, res) {
 		res.send(req.user ? JSON.stringify(req.user.personalInfo) : '');
 	} else {
 		/* eslint-disable global-require */
-		require(`./${req.params.path}.js`);
+		require(`./${req.params.path}.js`)(req, res);
 		/* eslint-enable global-require */
 	}
 	// res.writeHead(404);

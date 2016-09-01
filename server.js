@@ -1,14 +1,15 @@
-/* global dbcs:true generateID:true */
+/* global dbcs:true */
 
 const config = require('./config');
 const apiServer = require('./api/index');
+
 // Database Storage
 global.dbcs = {};
 const usedDBCs = ['users', 'gameplays', 'qsets'];
 
 // Dependencies
 /* eslint-disable one-var */
-require('./essentials')();
+const helpers = require('./helpers');
 require('colors');
 
 const http = require('http'),
@@ -183,7 +184,7 @@ app.get('/login/google', (req, res) => {
 				});
 			} else {
 				dbcs.users.insert({
-					_id: generateID(),
+					_id: helpers.generateID(),
 					cookie: [{ token: idToken, created: new Date().getTime() }],
 					googleID: decodedToken.sub,
 					personalInfo: apiData,
@@ -230,10 +231,9 @@ mongo.connect(config.mongoPath, (err, db) => {
 	const server = http.createServer(app).listen(config.port);
 
 	console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
-
-			/* eslint-disable global-require */
+	/* eslint-disable global-require */
 	require('./sockets/index')(server);
-			/* eslint-enable global-require */
+	/* eslint-enable global-require */
 	console.log('Sockets running on port 3000 over plain WS.'.cyan);
 		/* }
 	})*/
