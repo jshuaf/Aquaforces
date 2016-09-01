@@ -15,6 +15,7 @@ export function searchQuestionSets(query) {
 		const searchRequest = request({ url, body, json: true, method: 'post' }, (error, res) => {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			dispatch(actions.clearSearchRequests());
 			return dispatch(actions.populateQuestionSetList(res.body));
 		});
 		dispatch(actions.newSearchRequest(searchRequest, 'questionSetSearch'));

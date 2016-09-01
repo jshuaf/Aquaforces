@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { questionSetPropTypes } from './QuestionSet.jsx';
 import SearchBar from './SearchBar.jsx';
+import Spinner from '../shared/Spinner.jsx';
 import { populateQuestionSetList } from './actions';
 
 /* global sweetAlert:true */
@@ -24,6 +25,7 @@ class QuestionSetList extends Component {
 		});
 	}
 	render() {
+		if (this.props.searchRequests.length > 0) return <Spinner />;
 		return (
 			<div id="questionSets">
 				<h3>Question Sets</h3>
@@ -40,8 +42,16 @@ class QuestionSetList extends Component {
 	}
 }
 
+QuestionSetList.propTypes = {
+	populateQuestionSetList: PropTypes.func.isRequired,
+	questionSets: PropTypes.arrayOf(
+		PropTypes.shape(questionSetPropTypes)).isRequired,
+	searchRequests: PropTypes.arrayOf(PropTypes.any).isRequired,
+};
+
 const mapStateToProps = (state) => ({
 	questionSets: state.questionSets,
+	searchRequests: state.requests.search,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -49,12 +59,6 @@ const mapDispatchToProps = (dispatch) => ({
 		dispatch(populateQuestionSetList(questionSets));
 	},
 });
-
-QuestionSetList.propTypes = {
-	populateQuestionSetList: PropTypes.func.isRequired,
-	questionSets: PropTypes.arrayOf(
-		PropTypes.shape(questionSetPropTypes)).isRequired,
-};
 
 /* eslint-disable no-class-assign */
 QuestionSetList = connect(mapStateToProps, mapDispatchToProps)(QuestionSetList);

@@ -142,7 +142,11 @@ function currentUser(state = null, action) {
 	}
 }
 
-function requests(state = {}, action) {
+const initialRequestsState = {
+	search: [],
+};
+
+function requests(state = initialRequestsState, action) {
 	switch (action.type) {
 	case actions.NEW_SEARCH_REQUEST:
 		if (!state.search) {
