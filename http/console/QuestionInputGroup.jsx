@@ -13,7 +13,7 @@ function QuestionInputGroupDisplay({ questions, addQuestionInput }) {
 			{questions.map((question) =>
 				<QuestionInput key={question.id} question={question} />
 			)}
-			<ExpandButton onClick={addQuestionInput} />
+			<ExpandButton onClick={addQuestionInput}>{'+ Add a question'}</ExpandButton>
 		</div>
 	);
 }
