@@ -8,8 +8,6 @@ export const TOGGLE_SET_PRIVACY = 'TOGGLE_SET_PRIVACY';
 
 export const POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
 export const CLEAR_NEW_QUESTION_SET = 'CLEAR_NEW_QUESTION_SET';
-export const ADD_SET = 'ADD_SET';
-export const DELETE_SET = 'DELETE_SET';
 
 export const POPULATE_ACTIVE_QUESTION_SET = 'POPULATE_ACTIVE_QUESTION_SET';
 
@@ -38,8 +36,6 @@ export const toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy')
 
 export const populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
 export const clearNewQuestionSet = makeActionCreator(CLEAR_NEW_QUESTION_SET);
-export const addSet = makeActionCreator(ADD_SET, 'set');
-export const deleteSet = makeActionCreator(DELETE_SET, 'id');
 
 export const populateActiveQuestionSet = makeActionCreator(POPULATE_ACTIVE_QUESTION_SET, 'questionSet');
 

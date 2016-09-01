@@ -111,12 +111,6 @@ function questionSets(state = [], action) {
 	switch (action.type) {
 	case actions.POPULATE_QUESTION_SET_LIST:
 		return action.questionSets || state;
-	case actions.ADD_SET:
-		return state.concat(action.set);
-	case actions.DELETE_SET:
-		return state.filter((questionSet) =>
-			questionSet._id !== action.id
-		);
 	default:
 		return state;
 	}
