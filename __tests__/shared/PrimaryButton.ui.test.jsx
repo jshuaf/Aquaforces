@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import renderer from 'react-test-renderer';
 import PrimaryButton from '../../http/shared/PrimaryButton.jsx';
@@ -28,3 +29,4 @@ describe('PrimaryButton', () => {
 		expect(tree).toMatchSnapshot();
 	});
 });
+*/
