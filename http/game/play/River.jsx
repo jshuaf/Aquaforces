@@ -32,7 +32,7 @@ class River extends Component {
 	componentDidMount() {
 		// River Reflections
 		this.setRiverWidth();
-		/* this.startRiverReflections();*/
+		this.startRiverReflections();
 		// Answers
 		this.updateAnswers();
 		let answerUpdate = setInterval(this.updateAnswers, 2500);
@@ -69,9 +69,11 @@ class River extends Component {
 			if (newAnswer) answersToAdd.unshift(newAnswer);
 			let randomData = this.props.answerData[Math.floor(
 				Math.random() * this.props.answerData.length)];
-			while (currentAnswers.indexOf(randomData) >= 0) {
-				randomData = this.props.answerData[Math.floor(
-					Math.random() * this.props.answerData.length)];
+			if (currentAnswers.length * 2 <= this.props.answerData.length) {
+				while (currentAnswers.indexOf(randomData) >= 0) {
+					randomData = this.props.answerData[Math.floor(
+						Math.random() * this.props.answerData.length)];
+				}
 			}
 			newAnswer = randomData;
 		}
@@ -391,14 +393,14 @@ class River extends Component {
 			<div className={'river' + this.state.flashClass} ref="river">
 				<div className="answers">
 					{answers}
-					{/* {this.state.riverReflectionGroups.map((riverReflectionGroup) =>
+					{this.state.riverReflectionGroups.map((riverReflectionGroup) =>
 						<RiverReflectionGroup
 							x={riverReflectionGroup.x}
 							y={riverReflectionGroup.y}
 							riverWidth={this.state.riverWidth}
 							key={riverReflectionGroup.key}
 						/>
-					)}*/}
+					)}
 					<Rock y={this.state.rockYPosition} present={this.props.rockPresent} ref="rock" />
 					<Canoe
 						initialImage={this.props.initialImage} ref="canoe"
