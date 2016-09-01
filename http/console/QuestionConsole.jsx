@@ -3,20 +3,11 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Header, UnderHeader } from '../shared/Header.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
-import { authenticateUser } from './actions';
-
-const request = require('request');
-
-/* global sweetAlert:true */
+import { authenticateUser } from './thunks';
 
 class QuestionConsoleDisplay extends Component {
 	componentDidMount() {
-		const url = `${location.protocol}//${location.host}/api/authenticate`;
-		request({ url, json: true, method: 'post' }, (error, res, body) => {
-			if (error) return console.error(error);
-			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			this.props.authenticateUser(body);
-		});
+		this.props.authenticateUser();
 	}
 	render() {
 		return (
@@ -43,8 +34,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	authenticateUser: (user) => {
-		dispatch(authenticateUser(user));
+	authenticateUser: () => {
+		dispatch(authenticateUser());
 	},
 });
 
