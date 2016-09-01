@@ -49,3 +49,28 @@ export function authenticateUser() {
 		});
 	};
 }
+
+export function getQuestionSet(shortID) {
+	return (dispatch) => {
+		const url = `${location.protocol}//${location.host}/api/get-qset`;
+		request({ url, body: { shortID }, json: true, method: 'post' }, (error, res) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) {
+				return sweetAlert({ title: res.body, type: 'error' }, () => { location.href = '/console'; });
+			}
+			console.log('recieved', res.body);
+			dispatch(actions.populateActiveQuestionSet(res.body));
+		});
+	};
+}
+
+export function deleteQuestionSet(id) {
+	return () => {
+		const url = `${location.protocol}//${location.host}/api/delete-qset`;
+		request({ url, body: { id },	json: true, method: 'post' }, (error, res) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			location.href = '/console';
+		});
+	};
+}

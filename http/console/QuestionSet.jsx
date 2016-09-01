@@ -1,44 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import Question from './Question.jsx';
-import { deleteSet, populateActiveQuestionSet } from './actions';
-
-/* global sweetAlert:true */
-
-const request = require('request');
+import { deleteQuestionSet, getQuestionSet } from './thunks';
 
 class QuestionSet extends Component {
 	constructor(props) {
 		super(props);
-		this.deleteSet = this.deleteSet.bind(this);
+		autoBind(this);
 	}
 	componentDidMount() {
-		const url = `${location.protocol}//${location.host}/api/get-qset`;
-		request({
-			url,
-			body: { shortID: this.props.params.shortID },
-			json: true,
-			method: 'post',
-		}, (error, res, body) => {
-			if (error) return console.error(error);
-			if (res.statusCode === 400) {
-				return sweetAlert({ title: res.body, type: 'error' }, () => { location.href = '/console'; });
-			}
-			this.props.populateActiveQuestionSet(body);
-		});
+		this.props.getQuestionSet(this.props.params.shortID);
 	}
-	deleteSet() {
-		const url = `${location.protocol}//${location.host}/api/delete-qset`;
-		request({
-			url,
-			method: 'post',
-			json: true,
-			body: { id: this.props._id },
-		}, (error, res) => {
-			if (error) return console.error(error);
-			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			this.props.deleteSet(this.props._id);
-		});
+	deleteQuestionSet() {
+		this.props.deleteQuestionSet(this.props._id);
 	}
 	render() {
 		return (
@@ -49,7 +24,7 @@ class QuestionSet extends Component {
 					<Question {...question} key={index} />
 				)}
 				{this.props.privacy ? <span key={-2}>Private set</span> : <span key={-2}>Public set</span>}
-				<button onClick={this.deleteSet}>Delete set </button>
+				<button onClick={this.deleteQuestionSet}>Delete set </button>
 			</div>
 		);
 	}
@@ -70,7 +45,7 @@ export const questionSetPropTypes = {
 };
 
 QuestionSet.propTypes = Object.assign({
-	deleteSet: PropTypes.func.isRequired,
+	deleteQuestionSet: PropTypes.func.isRequired,
 	_id: PropTypes.string.isRequired,
 	shortID: PropTypes.string.isRequired,
 }, questionSetPropTypes);
@@ -78,11 +53,11 @@ QuestionSet.propTypes = Object.assign({
 const mapStateToProps = (state) => state.activeQuestionSet;
 
 const mapDispatchToProps = (dispatch) => ({
-	deleteSet: (id) => {
-		dispatch(deleteSet(id));
+	deleteQuestionSet: (id) => {
+		dispatch(deleteQuestionSet(id));
 	},
-	populateActiveQuestionSet: (set) => {
-		dispatch(populateActiveQuestionSet(set));
+	getQuestionSet: (shortID) => {
+		dispatch(getQuestionSet(shortID));
 	},
 });
 
