@@ -1,3 +1,5 @@
+/* global dbcs: true */
+
 module.exports = function (req, res) {
 	if (!req.body.title) {
 		return res.badRequest('Error: Set name is required.');

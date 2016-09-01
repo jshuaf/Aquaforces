@@ -1,6 +1,5 @@
 /* global generateID:true dbcs:true config:true*/
-const request = require('request');
-const co = require('co');
+
 
 module.exports = function (req, res) {
 	res.badRequest = (message) => {

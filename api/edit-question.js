@@ -1,5 +1,7 @@
 // NOTE: This is old code. Editing functionality has not been implemented yet.
 
+/* global dbcs: true */
+
 module.exports = function (req, res) {
 	dbcs.qsets.findOne({ _id: req.body.id }, (err, qset) => {
 		if (err) throw err;

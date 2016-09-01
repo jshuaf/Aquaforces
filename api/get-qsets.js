@@ -1,4 +1,6 @@
-module.exports = function(req, res) {
+/* global dbcs: true */
+
+module.exports = function (req, res) {
 	const qsets = [];
 	const ownSetsFilter = { $or: [{ privacy: false }] };
 	if (req.user) ownSetsFilter.$or.push({ userID: req.user._id });
@@ -9,4 +11,5 @@ module.exports = function(req, res) {
 			res.writeHead(200);
 			return res.end(JSON.stringify(qsets));
 		}
-}
+	});
+};

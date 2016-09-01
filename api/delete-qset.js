@@ -1,3 +1,5 @@
+/* global dbcs: true */
+
 module.exports = function (req, res) {
 	dbcs.qsets.findOne({ _id: req.body.id }, (err, qset) => {
 		if (err) throw err;

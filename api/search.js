@@ -1,7 +1,10 @@
+/* global dbcs: true */
+
 const request = require('request');
 const co = require('co');
+const config = require('../config');
 
-function parseQuizletSet(quizletID, q) {
+function parseQuizletSet(quizletID) {
 	const url = `https://api.quizlet.com/2.0/sets/${quizletID}?client_id=${config.quizlet.clientID}`;
 	return new Promise((resolve) => {
 		request({ url }, (error, res) => {
@@ -56,7 +59,7 @@ module.exports = function (req, res) {
 	request(url, (error, _, body) => {
 		if (error) { console.error(error); return; }
 		const quizletSearchResults = JSON.parse(body);
-		const parsedSets = quizletSearchResults.sets.map((set) => parseQuizletSet(set.id, req.body.query));
+		const parsedSets = quizletSearchResults.sets.map((set) => parseQuizletSet(set.id));
 		co(function* () {
 			return yield parsedSets;
 		}).then((sets) => {

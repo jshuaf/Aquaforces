@@ -1,3 +1,5 @@
+/* global dbcs: true */
+
 module.exports = function (req, res) {
 	if (!req.body.shortID || typeof req.body.shortID !== 'string') {
 		res.badRequest('Must send the short ID of a set to request.');
