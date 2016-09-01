@@ -36,7 +36,7 @@ class NewSetForm extends Component {
 		}, (error, res) => {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			this.props.addSet(set);
+			location.href = '/console';
 		});
 	}
 	render() {

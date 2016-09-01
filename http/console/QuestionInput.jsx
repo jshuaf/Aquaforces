@@ -34,7 +34,9 @@ function QuestionInput({ dispatch, question }) {
 					/>)
 			}
 			</div>
-			<ExpandButton onClick={() => { dispatch(addAnswerInput(question.id)); }} />
+			<ExpandButton onClick={() => { dispatch(addAnswerInput(question.id)); }}>
+				{'+ Add an incorrect answer'}
+			</ExpandButton>
 		</div>
 	);
 }
