@@ -7,6 +7,8 @@ const Joi = require('joi');
 module.exports = function (req, res) {
 	if (!req.user) return res.badRequest('Cannot create a set when not logged in');
 	const schema = {
+		_id: Joi.only(''),
+		shortID: Joi.only(''),
 		title: Joi.string().max(80).required(),
 		questions: Joi.array().items(Joi.object().keys({
 			text: Joi.string().max(200).required(),
@@ -15,11 +17,10 @@ module.exports = function (req, res) {
 				text: Joi.string().max(200).required(),
 				id: Joi.number().required(),
 			})).min(1).unique((a, b) => a.text === b.text)
-			.not(Joi.ref('correctAnswer'))
 			.required(),
 			id: Joi.number().required(),
 			nextAnswerID: Joi.number(),
-		})).min(10).required(),
+		})).min(1).required(),
 		privacy: Joi.boolean().required(),
 		nextQuestionID: Joi.number(),
 	};
@@ -28,6 +29,7 @@ module.exports = function (req, res) {
 			logger.error(error.details[0].message, error);
 			return res.badRequest('Error: Set not valid.');
 		}
+		/*
 		const questionSet = Object.assign(req.body, {
 			_id: helpers.generateID(),
 			timeAdded: new Date().getTime(),
@@ -40,6 +42,6 @@ module.exports = function (req, res) {
 		}
 
 		dbcs.qsets.insert(questionSet);
-		res.end(res.writeHead(204));
+		res.end(res.writeHead(204));*/
 	});
 };

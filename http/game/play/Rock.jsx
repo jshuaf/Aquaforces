@@ -7,7 +7,7 @@ class Rock extends Component {
 		const rockStyle = {
 			height: '100%',
 		};
-		let containerStyle = {
+		const containerStyle = {
 			textAlign: 'center',
 			height: '12%',
 			margin: '0 auto',

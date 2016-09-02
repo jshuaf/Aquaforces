@@ -50,7 +50,7 @@ class Crew extends Component {
 		}
 	}
 	render() {
-		let style = {
+		const style = {
 			width: '10rem',
 			marginLeft: `${this.props.position * 100}px`,
 			borderRadius: '5px',

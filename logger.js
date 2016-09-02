@@ -5,10 +5,14 @@ module.exports = new (winston.Logger)({
 		new (winston.transports.Console)({
 			name: 'console-errors',
 			level: 'error',
+			prettyPrint: true,
+			colorize: true,
 		}),
 		new (winston.transports.Console)({
 			name: 'console-warnings',
 			level: 'warn',
+			prettyPrint: true,
+			colorize: true,
 		}),
 		new (winston.transports.File)({
 			name: 'info-file',
