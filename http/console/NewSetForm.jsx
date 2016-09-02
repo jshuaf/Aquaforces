@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import autoBind from 'react-autobind';
 import QuestionInputGroup from './QuestionInputGroup.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import Checkbox from '../shared/Checkbox.jsx';
@@ -10,21 +11,22 @@ import { submitQuestionSet } from './thunks';
 class NewSetFormDisplay extends Component {
 	constructor(props) {
 		super(props);
-		this.submitQuestionSet = this.submitQuestionSet.bind(this);
-		this.verifyQuestionSet = this.verifyQuestionSet.bind(this);
+		autoBind(this);
 	}
 	verifyQuestionSet() {
 		const set = this.props.newQuestionSet;
 		if (!set.title) {
 			this.titleInput.error('Need a set title.');
-		} else {
-			this.titleInput.clearError();
+			return false;
 		}
+		this.titleInput.clearError();
+		return true;
 	}
 	submitQuestionSet() {
-		this.verifyQuestionSet();
-		const set = this.props.newQuestionSet;
-		this.props.submitQuestionSet(set);
+		if (this.verifyQuestionSet()) {
+			const set = this.props.newQuestionSet;
+			this.props.submitQuestionSet(set);
+		}
 	}
 	render() {
 		return (
