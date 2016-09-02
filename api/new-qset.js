@@ -44,10 +44,11 @@ module.exports = function (req, res) {
 		}
 	}
 
+	const shortID = (`${Math.random().toString(36)}00000000000000000`).slice(2, 9);
 	const questionSet = Object.assign(req.body, {
 		_id: helpers.generateID(),
 		timeAdded: new Date().getTime(),
-		shortID: (`${Math.random().toString(36)}00000000000000000`).slice(2, 9),
+		shortID,
 	});
 
 	if (req.user) {
@@ -56,5 +57,5 @@ module.exports = function (req, res) {
 	}
 
 	dbcs.qsets.insert(questionSet);
-	res.end(res.writeHead(204));
+	res.success({ shortID });
 };

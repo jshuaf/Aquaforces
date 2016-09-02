@@ -35,7 +35,7 @@ export function submitQuestionSet(set) {
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			dispatch(actions.clearNewQuestionSet());
 			dispatch(actions.clearRequests('create'));
-			location.href = '/console';
+			location.href = `/set/${res.body.shortID}`;
 		});
 		dispatch(actions.newRequest('create', createRequest));
 	};

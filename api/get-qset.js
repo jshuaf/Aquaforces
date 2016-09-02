@@ -18,7 +18,7 @@ module.exports = function (req, res) {
 	}, () => {
 		res.badRequest('Could not find the question set requested.');
 	}).catch((error) => {
-		logger.error('Database find operation failed', { error, req });
+		logger.error('Database find operation failed', { error, body: req.body });
 		res.badRequest('Question set not found.');
 	});
 };

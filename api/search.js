@@ -69,9 +69,7 @@ module.exports = function (req, res) {
 			return yield parsedSets;
 		}).then((sets) => {
 			qsets = qsets.concat(sets.filter(s => s !== ''));
-			res.header('Content-Type', 'application/json');
-			res.writeHead(200);
-			return res.end(JSON.stringify(qsets));
+			return res.success(qsets);
 		});
 	});
 };

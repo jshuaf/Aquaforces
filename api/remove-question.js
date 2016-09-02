@@ -16,7 +16,6 @@ module.exports = function (req, res) {
 		}
 		qset.questions.splice(parseInt(req.body.num, 10), 1);
 		dbcs.qsets.update({ _id: req.body.id }, { $set: { questions: qset.questions } });
-		res.writeHead(204);
-		res.end();
+		res.success();
 	});
 };

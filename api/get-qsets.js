@@ -7,9 +7,7 @@ module.exports = function (req, res) {
 	dbcs.qsets.find(ownSetsFilter).each((err, qset) => {
 		if (qset) qsets.push(qset);
 		else {
-			res.header('Content-Type', 'application/json');
-			res.writeHead(200);
-			return res.end(JSON.stringify(qsets));
+			return res.success(qsets);
 		}
 	});
 };

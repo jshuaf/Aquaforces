@@ -12,12 +12,13 @@ fs.readdirSync('./api').filter(file => file !== 'index.js').forEach((path) => {
 module.exports = function (req, res) {
 	res.badRequest = (message) => {
 		logger.warn('API request was rejected',
-		{ message, userID: req.user ? req.user._id : null });
+		{ message, userID: req.user ? req.user._id : null, path: req.params.path, body: req.body });
 		res.writeHead(400);
 		return res.end(message);
 	};
 	res.success = (data) => {
 		logger.info('API request succeeded', { data, body: req.body, path: req.params.path });
+		res.header('Content-Type', 'application/json');
 		if (data) return res.send(data);
 		return res.end();
 	};
