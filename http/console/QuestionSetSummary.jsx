@@ -27,14 +27,17 @@ class QuestionSetSummary extends Component {
 	}
 	render() {
 		return (
-			<div className="six columns">
+			<div className="eight columns">
 				<div className="questionSetSummary">
-					<h1 key={-1} className="marginless">{this.props.title}</h1>
-					<h4>
-						{this.props.questions.length} questions
-						({this.props.privacy ? 'Private' : 'Public'})
-					</h4>
-					<button onClick={this.deleteSet} className="button button-secondary">Delete set</button>
+					<div className="row">
+						<div className="eight columns">
+							<h2 key={-1} className="marginless">{this.props.title}</h2>
+							<h4>{this.props.questions.length} questions ({this.props.privacy ? 'Private' : 'Public'})</h4>
+						</div>
+						<div className="four columns text-right">
+							<button onClick={this.deleteSet} className="button button-secondary">Delete set</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		);
