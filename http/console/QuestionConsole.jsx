@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Header, UnderHeader } from '../shared/Header.jsx';
-import PrimaryButton from '../shared/PrimaryButton.jsx';
+import PrimaryInlineButton from '../shared/PrimaryInlineButton.jsx';
 import { authenticateUser } from './thunks';
 
 class QuestionConsoleDisplay extends Component {
