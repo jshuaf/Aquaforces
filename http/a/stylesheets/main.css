@@ -579,17 +579,6 @@ h4 {
 	animation-name: bounceoutup;
 }
 
-.questionSetSummary {
-	background-color: #19a8a6;
-	padding: 20px;
-	border-radius: 20px;
-	margin-bottom: 20px;
-}
-
-.questionSetSummary > div > div > h2, .questionSetSummary > div > div > h4 {
-	color: white;
-}
-
 .text-right {
 	text-align: right;
 }

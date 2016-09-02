@@ -35,8 +35,8 @@ export class HeaderRaw extends Component {
 			position: 'fixed',
 			zIndex: 5,
 			width: '100%',
-			height: '10%',
-			backgroundColor: 'none',
+			height: '12%',
+			backgroundColor: colors.ice,
 		};
 
 		const logoContainerStyle = {

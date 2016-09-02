@@ -1,45 +1,47 @@
 import React, { Component, PropTypes } from 'react';
+import autoBind from 'react-autobind';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import Question from './Question.jsx';
-import { deleteSet } from './actions';
+import { deleteQuestionSet } from './thunks';
+import colors from '../shared/colors';
 
-/* global sweetAlert:true */
-
-const request = require('request');
-
-class QuestionSetSummary extends Component {
+class QuestionSetSummaryDisplay extends Component {
 	constructor(props) {
 		super(props);
-		this.deleteSet = this.deleteSet.bind(this);
+		autoBind(this);
 	}
-	deleteSet() {
-		const url = `${location.protocol}//${location.host}/api/delete-qset`;
-		request({
-			url,
-			method: 'post',
-			json: true,
-			body: { id: this.props._id },
-		}, (error, res) => {
-			if (error) return console.error(error);
-			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			this.props.deleteSet(this.props._id);
-		});
+	deleteQuestionSet() {
+		this.props.deleteQuestionSet(this.props._id);
 	}
 	render() {
+		const textStyle = {
+			color: 'white',
+		};
+		const containerStyle = {
+			padding: '20px',
+			borderRadius: '20px',
+			marginBottom: '20px',
+			backgroundColor: colors.pacific,
+		};
 		return (
-			<div className="eight columns">
-				<div className="questionSetSummary">
+				<Link to={`/set/${this.props.shortID}`} style={containerStyle} className="eight columns">
 					<div className="row">
 						<div className="eight columns">
-							<h2 key={-1} className="marginless">{this.props.title}</h2>
-							<h4>{this.props.questions.length} questions ({this.props.privacy ? 'Private' : 'Public'})</h4>
+							<h2 key={-1} className="marginless" style={textStyle}>{this.props.title}</h2>
+							<h4 style={textStyle}>
+								{this.props.questions.length} questions ({this.props.privacy ? 'Private' : 'Public'})
+							</h4>
 						</div>
 						<div className="four columns text-right">
-							<button onClick={this.deleteSet} className="button button-secondary">Delete set</button>
+							<button
+								onClick={this.deleteQuestionSet}
+								className="button button-secondary"
+							>
+								Delete set
+							</button>
 						</div>
 					</div>
-				</div>
-			</div>
+				</Link>
 		);
 	}
 }
@@ -59,19 +61,16 @@ export const questionSetPropTypes = {
 	privacy: PropTypes.bool.isRequired,
 };
 
-QuestionSetSummary.propTypes = Object.assign({
-	deleteSet: PropTypes.func.isRequired,
-	_id: PropTypes.string.isRequired,
+QuestionSetSummaryDisplay.propTypes = Object.assign({
+	deleteQuestionSet: PropTypes.func.isRequired,
 }, questionSetPropTypes);
 
 const mapDispatchToProps = (dispatch) => ({
-	deleteSet: (id) => {
-		dispatch(deleteSet(id));
+	deleteQuestionSet: (id) => {
+		dispatch(deleteQuestionSet(id));
 	},
 });
 
-/* eslint-disable no-class-assign */
-QuestionSetSummary = connect(null, mapDispatchToProps)(QuestionSetSummary)
-/* eslint-enable no-class-assign */;
+const QuestionSetSummary = connect(null, mapDispatchToProps)(QuestionSetSummaryDisplay);
 
 export default QuestionSetSummary;

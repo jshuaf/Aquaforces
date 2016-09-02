@@ -22,13 +22,13 @@ class QuestionSetListDisplay extends Component {
 			<div id="questionSets">
 				<h3>Question Sets</h3>
 				<SearchBar />
-			{
-				this.props.questionSets.map((questionSet, index) =>
-					<div className="row">
-						<QuestionSetSummary {...questionSet} key={index} />
-					</div>
-				)
-			}
+				{
+					this.props.questionSets.map((questionSet, index) =>
+						<div className="row" key={index}>
+							<QuestionSetSummary {...questionSet} />
+						</div>
+					)
+				}
 		</div>
 		);
 	}
