@@ -30,7 +30,7 @@ class NewSetFormDisplay extends Component {
 	}
 	render() {
 		return (
-			<form id="new_set" onSubmit={(e) => e.preventDefault()}>
+			<form id="new_set" onSubmit={(e) => { e.preventDefault(); this.submitQuestionSet(); }}>
 				<h3>New Question Set</h3>
 				<TextInput
 					label="Title" placeholder="My Question Set" required
@@ -44,7 +44,7 @@ class NewSetFormDisplay extends Component {
 					checked={this.props.newQuestionSet.privacy}
 					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
 				/>
-			<input onClick={this.submitQuestionSet} type="submit" className="button button-primary" name="Submit" />
+			<input type="submit" className="button button-primary" name="Submit" />
 			</form>
 		);
 	}

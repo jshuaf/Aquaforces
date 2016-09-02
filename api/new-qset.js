@@ -13,32 +13,33 @@ module.exports = function (req, res) {
 			correctAnswer: Joi.string().max(160).required(),
 			incorrectAnswers: Joi.array().items(Joi.object().keys({
 				text: Joi.string().max(200).required(),
-				id: Joi.string().required(),
+				id: Joi.number().required(),
 			})).min(1).unique((a, b) => a.text === b.text)
 			.not(Joi.ref('correctAnswer'))
 			.required(),
-			id: Joi.string().required(),
+			id: Joi.number().required(),
+			nextAnswerID: Joi.number(),
 		})).min(10).required(),
 		privacy: Joi.boolean().required(),
+		nextQuestionID: Joi.number(),
 	};
 	Joi.validate(req.body, schema, (error) => {
 		if (error) {
-			console.error(error.details[0].message, error._object);
-			return res.badRequest('Error: set not valid.');
+			logger.error(error.details[0].message, error);
+			return res.badRequest('Error: Set not valid.');
 		}
+		const questionSet = Object.assign(req.body, {
+			_id: helpers.generateID(),
+			timeAdded: new Date().getTime(),
+			shortID: (`${Math.random().toString(36)}00000000000000000`).slice(2, 9),
+		});
+
+		if (req.user) {
+			questionSet.userID = req.user._id;
+			questionSet.userName = req.user.name;
+		}
+
+		dbcs.qsets.insert(questionSet);
+		res.end(res.writeHead(204));
 	});
-
-	const questionSet = Object.assign(req.body, {
-		_id: helpers.generateID(),
-		timeAdded: new Date().getTime(),
-		shortID: (`${Math.random().toString(36)}00000000000000000`).slice(2, 9),
-	});
-
-	if (req.user) {
-		questionSet.userID = req.user._id;
-		questionSet.userName = req.user.name;
-	}
-
-	dbcs.qsets.insert(questionSet);
-	res.end(res.writeHead(204));
 };

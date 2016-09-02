@@ -2,6 +2,14 @@ const winston = require('winston');
 
 module.exports = new (winston.Logger)({
 	transports: [
+		new (winston.transports.Console)({
+			name: 'console-errors',
+			level: 'error',
+		}),
+		new (winston.transports.Console)({
+			name: 'console-warnings',
+			level: 'warn',
+		}),
 		new (winston.transports.File)({
 			name: 'info-file',
 			filename: 'logs/info.log',
