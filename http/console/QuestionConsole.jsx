@@ -2,17 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Header, UnderHeader } from '../shared/Header.jsx';
-<<<<<<< HEAD
 import PrimaryButton from '../shared/PrimaryButton.jsx';
 import { authenticateUser } from './thunks';
-=======
-import PrimaryInlineButton from '../shared/PrimaryInlineButton.jsx';
-import { authenticateUser } from './actions';
-
-const request = require('request');
-
-/* global sweetAlert:true */
->>>>>>> master
 
 class QuestionConsoleDisplay extends Component {
 	componentDidMount() {
