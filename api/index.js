@@ -16,11 +16,11 @@ module.exports = function (req, res) {
 		return res.end(message);
 	};
 	res.success = (data) => {
-		logger.info('API request succeeded', { data, req });
+		logger.info('API request succeeded', { data, body: req.body });
 		if (data) return res.send(data);
 		return res.end();
 	};
-	logger.info('Recieved API request', { req });
+	logger.info('Recieved API request', { body: req.body });
 	if (req.params.path === 'authenticate') {
 		res.success(req.user ? JSON.stringify(req.user.personalInfo) : '');
 	} else if (Object.keys(responses).indexOf(req.params.path) >= 0) {
