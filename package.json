@@ -14,7 +14,7 @@
     "build:dll": "./node_modules/.bin/webpack --config webpack.dll.js",
     "build": "npm run build:dll && npm run build:webpack",
     "dev": "./node_modules/.bin/webpack --config webpack.config.js --watch --progress",
-    "production": "./node_modules/.bin/webpack -p --optimize-minimize",
+    "production": "./node_modules/.bin/webpack -p --config webpack.config.js --optimize-minimize",
     "lint": "./node_modules/.bin/eslint . --ext .jsx, .js",
     "clear": "rm -rf ./logs/*"
   },
