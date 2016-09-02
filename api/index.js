@@ -11,22 +11,24 @@ fs.readdirSync('./api').filter(file => file !== 'index.js').forEach((path) => {
 
 module.exports = function (req, res) {
 	res.badRequest = (message) => {
-		logger.warn('API request was rejected', { message, req });
+		logger.warn('API request was rejected',
+		{ message, userID: req.user ? req.user._id : null });
 		res.writeHead(400);
 		return res.end(message);
 	};
 	res.success = (data) => {
-		logger.info('API request succeeded', { data, body: req.body });
+		logger.info('API request succeeded', { data, body: req.body, path: req.params.path });
 		if (data) return res.send(data);
 		return res.end();
 	};
-	logger.info('Recieved API request', { body: req.body });
+	logger.info('Recieved API request', { body: req.body, path: req.params.path });
 	if (req.params.path === 'authenticate') {
 		res.success(req.user ? JSON.stringify(req.user.personalInfo) : '');
 	} else if (Object.keys(responses).indexOf(req.params.path) >= 0) {
 		responses[req.params.path](req, res);
 	} else {
-		logger.warn('Unknown API path was requested', { req });
+		logger.warn('Unknown API path was requested', {
+			path: req.params.path, userID: req.user ? req.user._id : null });
 		res.writeHead(404);
 		return res.end('Error: The API feature requested has not been implemented.');
 	}

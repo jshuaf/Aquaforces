@@ -1,8 +1,28 @@
 /* global dbcs: true */
 
 const helpers = require('../helpers');
+const Joi = require('joi');
 
 module.exports = function (req, res) {
+	if (!req.user) return res.badRequest('Cannot create a set when not logged in');
+	const schema = {
+		title: Joi.string().max(80).required(),
+		questions: Joi.array().items(Joi.object().keys({
+			text: Joi.string().max(200).required(),
+			correctAnswer: Joi.string().max(160).required(),
+			incorrectAnswers: Joi.array().items(Joi.object().keys({
+				text: Joi.string().max(200).required(),
+				id: Joi.string().required(),
+			})).min(1).unique((a, b) => a.text === b.text)
+			.not(Joi.ref('correctAnswer'))
+			.required(),
+			id: Joi.string().required(),
+		})).min(10).required(),
+		privacy: Joi.boolean().required(),
+	};
+	Joi.validate(req.body, schema, (error) => {
+		if (error) console.error(error.details);
+	});
 	if (!req.body.title) {
 		return res.badRequest('Error: Set name is required.');
 	} else if (req.body.title.length > 144) {
