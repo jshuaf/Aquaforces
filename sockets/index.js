@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 
 const ws = require('ws');
+const logger = require('../logger');
 const games = {};
 
 module.exports = (server) => {
@@ -14,8 +15,8 @@ module.exports = (server) => {
 				try {
 					message = JSON.parse(m);
 					if (message) require('./game')(tws, message, games);
-				} catch (e) {
-					console.error('Error on game socket backend', e);
+				} catch (error) {
+					logger.error('Error on game socket backend', error);
 					return tws.error('Server error');
 				}
 			});
@@ -43,8 +44,8 @@ module.exports = (server) => {
 				try {
 					message = JSON.parse(m);
 					if (message) require('./host')(tws, message, games);
-				} catch (e) {
-					console.error('Error on game host socket backend', e);
+				} catch (error) {
+					logger.error('Error on game host socket backend', error);
 					return tws.error('Server error.');
 				}
 			});

@@ -3,13 +3,14 @@
 const request = require('request');
 const co = require('co');
 const config = require('../config');
+const logger = require('../logger');
 
 function parseQuizletSet(quizletID) {
 	const url = `https://api.quizlet.com/2.0/sets/${quizletID}?client_id=${config.quizlet.clientID}`;
 	return new Promise((resolve) => {
 		request({ url }, (error, res) => {
 			if (error) {
-				console.error(error);
+				logger.error('Error when requesting set from Quizlet', { error, quizletID });
 				return resolve(error);
 			}
 			const quizletSet = JSON.parse(res.body);
@@ -57,7 +58,11 @@ module.exports = function (req, res) {
 	// Quizlet Search
 	const url = `https://api.quizlet.com/2.0/search/sets?q=${req.body.query}&client_id=${config.quizlet.clientID}`;
 	request(url, (error, _, body) => {
-		if (error) { console.error(error); return; }
+		if (error) {
+			logger.error('Error when searching Quizlet for set query', { error, query: req.body.query });
+			res.writeHead(200);
+			return res.end(JSON.stringify(qsets));
+		}
 		const quizletSearchResults = JSON.parse(body);
 		const parsedSets = quizletSearchResults.sets.map((set) => parseQuizletSet(set.id));
 		co(function* () {

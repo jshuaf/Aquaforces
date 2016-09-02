@@ -1,11 +1,15 @@
+const logger = require('../logger');
+
 module.exports = (tws) => {
 	tws.trysend = (msg) => {
 		try {
 			tws.send(JSON.stringify(msg), (error) => {
-				if (error) console.error('Error sending socket message', error);
+				if (error) {
+					logger.error('Error sending socket message', error);
+				}
 			});
-		} catch (e) {
-			console.error('Error converting message to JSON', msg, e);
+		} catch (error) {
+			logger.error('Error converting socket message to JSON', msg, error);
 		}
 	};
 

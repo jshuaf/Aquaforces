@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const o = require('yield-yield');
+const logger = require('./logger');
 
 /* eslint-disable no-extend-native */
 String.prototype.replaceAll = function (find, replace) {
@@ -67,8 +68,8 @@ module.exports = {
 				try {
 					str = `${str.substr(0, i)}?v=${(
 						yield this.getVersionNonce(pathname, substr, yield))}${str.substr(i)}`;
-				} catch (e) {
-					console.error(e);
+				} catch (error) {
+					logger.error('Error adding version nonces', error);
 				}
 			}
 		}

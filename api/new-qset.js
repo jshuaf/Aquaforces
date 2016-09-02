@@ -53,6 +53,5 @@ module.exports = function (req, res) {
 	}
 
 	dbcs.qsets.insert(questionSet);
-	console.log(questionSet);
 	res.end(res.writeHead(204));
 };

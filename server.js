@@ -149,9 +149,9 @@ app.get('/login/google', (req, res) => {
 		let tokenData;
 		try {
 			tokenData = JSON.parse(body);
-		} catch (e) {
+		} catch (error) {
 			logger.error('Error parsing response when requesting Google access token', {
-				error: e, user: req.user,
+				error, user: req.user,
 			});
 			return res.send('<p>Error parsing response.</p>');
 		}
@@ -169,9 +169,9 @@ app.get('/login/google', (req, res) => {
 			let apiData;
 			try {
 				apiData = JSON.parse(body);
-			} catch (e) {
+			} catch (error) {
 				logger.error('Error parsing response when requesting Google+ user data', {
-					error: e, user: req.user,
+					error, user: req.user,
 				});
 				return res.send('<p>Error parsing response.</p>');
 			}
