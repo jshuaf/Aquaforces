@@ -36,7 +36,7 @@ class QuestionSetFormDisplay extends Component {
 					ref={(t) => { this.titleInput = t; }}
 					onChange={() => { this.props.editSetTitle(this.titleInput.node.value); }}
 				/>
-				<QuestionInputGroup />
+			<QuestionInputGroup questions={this.props.questionSet.questions} />
 				<Checkbox
 					label="Private set" ref={(c) => { this.checkboxInput = c; }}
 					checked={this.props.questionSet.privacy}

@@ -31,10 +31,6 @@ QuestionInputGroupDisplay.propTypes = {
 	})).isRequired,
 };
 
-const mapStateToProps = (state) => ({
-	questions: state.newQuestionSet.questions,
-});
-
 const mapDispatchToProps = (dispatch) => ({
 	addQuestionInput: () => {
 		dispatch(addQuestionInput());
@@ -42,7 +38,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const QuestionInputGroup = connect(
-	mapStateToProps,
+	null,
 	mapDispatchToProps
 )(QuestionInputGroupDisplay);
 
