@@ -16,19 +16,19 @@ module.exports = new (winston.Logger)({
 		}),
 		new (winston.transports.File)({
 			name: 'info-file',
-			filename: 'logs/info.log',
+			filename: '__logs__/info.log',
 			level: 'info',
 		}),
 		new (winston.transports.File)({
 			name: 'error-file',
-			filename: 'logs/error.log',
+			filename: '__logs__/error.log',
 			level: 'error',
 			handleExceptions: true,
 			humanReadableUnhandledException: true,
 		}),
 		new (winston.transports.File)({
 			name: 'warn-file',
-			filename: 'logs/warnings.log',
+			filename: '__logs__/warnings.log',
 			level: 'warn',
 		}),
 	],
