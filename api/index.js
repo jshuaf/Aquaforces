@@ -3,11 +3,12 @@ const logger = require('../logger');
 
 const responses = {};
 
-fs.readdirSync('./api').filter(file => file !== 'index.js').forEach((path) => {
+fs.readdirSync('./api').filter(
+	file => file !== 'index.js' && file.substr(file.length - 2, file.length) === 'js').forEach((path) => {
 	/* eslint-disable global-require */
-	responses[path.substr(0, path.length - 3)] = require(`./${path}`);
+		responses[path.substr(0, path.length - 3)] = require(`./${path}`);
 	/* eslint-enable global-require */
-});
+	});
 
 module.exports = function (req, res) {
 	res.badRequest = (message) => {

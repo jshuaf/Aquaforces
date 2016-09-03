@@ -3,13 +3,16 @@ import autoBind from 'react-autobind';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { questionSetPropTypes } from './QuestionSet.jsx';
-import { deleteQuestionSet } from './thunks';
+import { importQuestionSet } from './thunks';
 import colors from '../shared/colors';
 
 class QuestionSetSummaryDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
+	}
+	importQuestionSet() {
+		this.props.importQuestionSet(this.props.source);
 	}
 	render() {
 		const textStyle = {
@@ -21,6 +24,23 @@ class QuestionSetSummaryDisplay extends Component {
 			marginBottom: '20px',
 			backgroundColor: colors.pacific,
 		};
+		const importedSetButtons = [
+			<Link to={`/set/${this.props.shortID}`} key={0}>
+			<button className="button button-secondary">
+				View Set
+			</button>
+		</Link>,
+			<Link to={`/set/${this.props.shortID}/edit`} key={1}>
+			<button className="button button-secondary">
+				Edit Set
+			</button>
+		</Link>,
+		];
+		const notImportedSetButtons = [
+			<button className="button button-secondary" onClick={this.importQuestionSet}>
+				Import Set
+			</button>,
+		];
 		return (
 				<div style={containerStyle} className="eight columns">
 					<div className="row">
@@ -34,16 +54,7 @@ class QuestionSetSummaryDisplay extends Component {
 							</h4>
 						</div>
 						<div className="four columns text-right">
-							<Link to={`/set/${this.props.shortID}`}>
-								<button className="button button-secondary">
-									View Set
-								</button>
-							</Link>
-							<Link to={`/set/${this.props.shortID}/edit`}>
-								<button className="button button-secondary">
-									Edit Set
-								</button>
-							</Link>
+							{this.props._id ? importedSetButtons : notImportedSetButtons}
 						</div>
 					</div>
 				</div>
@@ -52,12 +63,12 @@ class QuestionSetSummaryDisplay extends Component {
 }
 
 QuestionSetSummaryDisplay.propTypes = Object.assign({
-	deleteQuestionSet: PropTypes.func.isRequired,
+	importQuestionSet: PropTypes.func.isRequired,
 }, questionSetPropTypes);
 
 const mapDispatchToProps = (dispatch) => ({
-	deleteQuestionSet: (id) => {
-		dispatch(deleteQuestionSet(id));
+	importQuestionSet: (source) => {
+		dispatch(importQuestionSet(source));
 	},
 });
 
