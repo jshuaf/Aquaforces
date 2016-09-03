@@ -29,7 +29,10 @@ class QuestionSetSummaryDisplay extends Component {
 						<div className="eight columns">
 							<h2 key={-1} className="marginless" style={textStyle}>{this.props.title}</h2>
 							<h4 style={textStyle}>
-								{this.props.questions.length} questions ({this.props.privacy ? 'Private' : 'Public'})
+								{this.props.questions.length === 1 ?
+								`1 question (${this.props.privacy ? 'Private' : 'Public'})` :
+								`${this.props.questions.length} questions (${this.props.privacy ? 'Private' : 'Public'})`
+								}
 							</h4>
 						</div>
 						<div className="four columns text-right">
@@ -38,6 +41,11 @@ class QuestionSetSummaryDisplay extends Component {
 								className="button button-secondary"
 							>
 								Delete set
+							</button>
+							<button
+								onClick={this.deleteQuestionSet}
+								className="button button-secondary"
+							>Edit set
 							</button>
 						</div>
 					</div>
