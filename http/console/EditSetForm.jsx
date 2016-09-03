@@ -3,30 +3,34 @@ import { connect } from 'react-redux';
 import QuestionSetForm from './QuestionSetForm.jsx';
 import { questionSetPropTypes } from './QuestionSet.jsx';
 import { editSetTitle, toggleSetPrivacy } from './actions';
+import { getQuestionSet } from './thunks';
 
 /* eslint-disable react/prefer-stateless-function */
-class NewSetFormDisplay extends Component {
+class EditSetFormDisplay extends Component {
 /* eslint-enable react/prefer-stateless-function */
+	componentDidMount() {
+		this.props.getQuestionSet(this.props.params.shortID);
+	}
 	render() {
-		const { newQuestionSet, ...props } = this.props;
+		const { activeQuestionSet, ...props } = this.props;
 		return (
 			<div>
-				<h3>New Question Set</h3>
-				<QuestionSetForm questionSet={newQuestionSet} {...props} />
+				<h3>Edit Question Set</h3>
+				<QuestionSetForm questionSet={activeQuestionSet} {...props} />
 			</div>
 		);
 	}
 }
 
-NewSetFormDisplay.propTypes = {
+EditSetFormDisplay.propTypes = {
 	editSetTitle: PropTypes.func.isRequired,
 	toggleSetPrivacy: PropTypes.func.isRequired,
-	submitQuestionSet: PropTypes.func.isRequired,
-	newQuestionSet: PropTypes.shape(questionSetPropTypes).isRequired,
+	getQuestionSet: PropTypes.func.isRequired,
+	activeQuestionSet: PropTypes.shape(questionSetPropTypes).isRequired,
 };
 
 const mapStateToProps = (state) => ({
-	newQuestionSet: state.newQuestionSet,
+	activeQuestionSet: state.activeQuestionSet,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -36,8 +40,11 @@ const mapDispatchToProps = (dispatch) => ({
 	toggleSetPrivacy: (privacy) => {
 		dispatch(toggleSetPrivacy(privacy));
 	},
+	getQuestionSet: (shortID) => {
+		dispatch(getQuestionSet(shortID));
+	},
 });
 
-const NewSetForm = connect(mapStateToProps, mapDispatchToProps)(NewSetFormDisplay);
+const EditSetForm = connect(mapStateToProps, mapDispatchToProps)(EditSetFormDisplay);
 
-export default NewSetForm;
+export default EditSetForm;

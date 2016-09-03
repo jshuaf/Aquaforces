@@ -1,0 +1,4 @@
+{"message":"API request was rejected","userID":"8sxmGqOJygwsNZDkgJkCMj_sWMGz","path":"get-qset","body":{},"level":"warn","timestamp":"2016-09-03T00:48:55.684Z"}
+{"message":"API request was rejected","userID":"8sxmGqOJygwsNZDkgJkCMj_sWMGz","path":"get-qset","body":{},"level":"warn","timestamp":"2016-09-03T00:48:55.702Z"}
+{"error":{},"body":{},"level":"error","message":"Database find operation failed","timestamp":"2016-09-03T00:48:55.704Z"}
+{"message":"API request was rejected","userID":"8sxmGqOJygwsNZDkgJkCMj_sWMGz","path":"get-qset","body":{},"level":"warn","timestamp":"2016-09-03T00:48:55.704Z"}

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import Question from './Question.jsx';
 import { deleteQuestionSet, getQuestionSet } from './thunks';
 
@@ -25,6 +26,9 @@ class QuestionSet extends Component {
 				)}
 				{this.props.privacy ? <span key={-2}>Private set</span> : <span key={-2}>Public set</span>}
 				<button onClick={this.deleteQuestionSet}>Delete set </button>
+				<Link to={`/set/${this.props.params.shortID}/edit`}>
+					<button onClick={this.editQuestionSet}>Edit set </button>
+				</Link>
 			</div>
 		);
 	}

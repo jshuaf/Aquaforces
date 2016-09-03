@@ -22,6 +22,12 @@ module.exports = function (req, res) {
 		if (data) return res.send(data);
 		return res.end();
 	};
+	res.forbidden = () => {
+		logger.warn('API request forbidden',
+		{ userID: req.user ? req.user._id : null, path: req.params.path, body: req.body });
+		res.writeHead(404);
+		return res.end();
+	};
 	logger.info('Recieved API request', { body: req.body, path: req.params.path });
 	if (req.params.path === 'authenticate') {
 		res.success(req.user ? JSON.stringify(req.user.personalInfo) : '');
