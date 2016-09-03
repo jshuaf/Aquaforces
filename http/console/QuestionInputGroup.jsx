@@ -4,21 +4,21 @@ import ExpandButton from '../shared/ExpandButton.jsx';
 import QuestionInput from './QuestionInput.jsx';
 import { addQuestionInput } from './actions';
 
-function QuestionInputGroup({ questions, addQuestionInput }) {
+function QuestionInputGroupDisplay({ questions, addQuestionInput, mode }) {
 	return (
 		<div id="question_input_group">
 			<h3>Questions</h3>
 			<span style={{ fontStyle: 'italic' }}>Avoid synonyms among answers.</span>
 			<br />
 			{questions.map((question) =>
-				<QuestionInput key={question.id} question={question} />
+				<QuestionInput key={question.id} question={question} mode={mode} />
 			)}
-			<ExpandButton onClick={addQuestionInput}>{'+ Add a question'}</ExpandButton>
+			<ExpandButton onClick={() => { addQuestionInput(mode); }}>{'+ Add a question'}</ExpandButton>
 		</div>
 	);
 }
 
-QuestionInputGroup.propTypes = {
+QuestionInputGroupDisplay.propTypes = {
 	addQuestionInput: PropTypes.func.isRequired,
 	questions: PropTypes.arrayOf(PropTypes.shape({
 		text: PropTypes.string.isRequired,
@@ -29,21 +29,18 @@ QuestionInputGroup.propTypes = {
 		})).isRequired,
 		id: PropTypes.number.isRequired,
 	})).isRequired,
+	mode: PropTypes.oneOf(['edit', 'create']).isRequired,
 };
 
-const mapStateToProps = (state) => ({
-	questions: state.newQuestionSet.questions,
-});
-
 const mapDispatchToProps = (dispatch) => ({
-	addQuestionInput: () => {
-		dispatch(addQuestionInput());
+	addQuestionInput: (mode) => {
+		dispatch(addQuestionInput(mode));
 	},
 });
 
-const QuestionInputGroupHandler = connect(
-	mapStateToProps,
+const QuestionInputGroup = connect(
+	null,
 	mapDispatchToProps
-)(QuestionInputGroup);
+)(QuestionInputGroupDisplay);
 
-export default QuestionInputGroupHandler;
+export default QuestionInputGroup;

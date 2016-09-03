@@ -20,4 +20,5 @@ module.exports = {
 	seaspray: hsvToHex(183, 41, 95),
 	midnight: hsvToHex(210, 35, 31),
 	cloud: hsvToHex(210, 8, 100),
+	ice: hsvToHex(180, 7, 99),
 };

@@ -16,6 +16,9 @@ HTMLElement.prototype.insertAfter = function (newEl, refEl) {
 	if (refEl.nextSibling) refEl.parentNode.insertBefore(newEl, refEl.nextSibling);
 	else refEl.parentNode.appendChild(newEl);
 };
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
 function html(input) {
 	return input.toString().replaceAll(['&', '<', '>', '"', '\t', '\n', '\b'], ['&amp;', '&lt;', '&gt;', '&quot;', '&#9;', '&#10;', '']);
 }

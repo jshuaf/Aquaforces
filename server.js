@@ -1,23 +1,11 @@
-/* global dbcs:true generateID:true */
-const config = {
-	port: process.argv.includes('--production') ? 80 : 3000,
-	// MongoDB remote ip: 146.148.33.112
-	mongoPath: `mongodb://${process.env.mongoServer || 'localhost:27017'}/Aquaforces`,
-	googleAuth: {
-		clientID: process.argv.includes('--test') ?
-			'' : '891213696392-0aliq8ihim1nrfv67i787cg82paftg26.apps.googleusercontent.com',
-		clientSecret: process.argv.includes('--test') ? '' : 'sW_Qt7Lj63m5Bshun_kdnJvt',
-	},
-};
-
-const apiServer = require('./api');
-// Database Storage
-global.dbcs = {};
-const usedDBCs = ['users', 'gameplays', 'qsets'];
+/* global dbcs:true */
 
 // Dependencies
 /* eslint-disable one-var */
-require('./essentials')();
+const helpers = require('./helpers');
+const config = require('./config');
+const apiServer = require('./api/index');
+const logger = require('./logger');
 require('colors');
 
 const http = require('http'),
@@ -31,6 +19,10 @@ const http = require('http'),
 	bodyParser = require('body-parser'),
 	cookieParser = require('cookie-parser');
 	/* eslint-enable one-var */
+
+// Database Storage
+global.dbcs = {};
+const usedDBCs = ['users', 'gameplays', 'qsets'];
 
 // Server Middleware
 const initialMiddleware = {
@@ -157,13 +149,17 @@ app.get('/login/google', (req, res) => {
 		let tokenData;
 		try {
 			tokenData = JSON.parse(body);
-		} catch (e) {
-			console.error(e);
+		} catch (error) {
+			logger.error('Error parsing response when requesting Google access token', {
+				error, user: req.user,
+			});
 			return res.send('<p>Error parsing response.</p>');
 		}
 		if (error || tokenData.error) {
 			error = error || tokenData.error;
-			console.error(error);
+			logger.error('Error thrown when requesting Google access token', {
+				error, user: req.user,
+			});
 			return res.send('<p>Error getting token.</p>');
 		}
 		request({
@@ -173,13 +169,17 @@ app.get('/login/google', (req, res) => {
 			let apiData;
 			try {
 				apiData = JSON.parse(body);
-			} catch (e) {
-				console.error(e);
+			} catch (error) {
+				logger.error('Error parsing response when requesting Google+ user data', {
+					error, user: req.user,
+				});
 				return res.send('<p>Error parsing response.</p>');
 			}
 			if (error || apiData.error) {
 				error = error || apiData.error.errors;
-				console.error(error);
+				logger.error('Error thrown when requesting Google+ user data', {
+					error, user: req.user,
+				});
 				return res.send('<p>Error accessing Google+ API.</p>');
 			}
 			const decodedToken = jwt.decode(tokenData.id_token);
@@ -192,7 +192,7 @@ app.get('/login/google', (req, res) => {
 				});
 			} else {
 				dbcs.users.insert({
-					_id: generateID(),
+					_id: helpers.generateID(),
 					cookie: [{ token: idToken, created: new Date().getTime() }],
 					googleID: decodedToken.sub,
 					personalInfo: apiData,
@@ -239,10 +239,9 @@ mongo.connect(config.mongoPath, (err, db) => {
 	const server = http.createServer(app).listen(config.port);
 
 	console.log('Aquaforces running on port 3000 over plain HTTP.'.cyan);
-
-			/* eslint-disable global-require */
+	/* eslint-disable global-require */
 	require('./sockets/index')(server);
-			/* eslint-enable global-require */
+	/* eslint-enable global-require */
 	console.log('Sockets running on port 3000 over plain WS.'.cyan);
 		/* }
 	})*/

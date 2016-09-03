@@ -1,3 +1,4 @@
 **/*.bundle.js
 **/*.bundle.js.map
-http/a/*.js
+http/a/scripts/*.js
+http/dll/dll.vendor.js
