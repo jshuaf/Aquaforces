@@ -27,6 +27,10 @@ module.exports = function (req, res) {
 		timeAdded: Joi.date().max(Date.now()),
 		userID: Joi.string(),
 		userName: Joi.string(),
+		source: Joi.object().keys({
+			name: Joi.string(),
+			id: Joi.number(),
+		}).optional(),
 	};
 	const validation = Joi.validate(req.body, schema, { presence: 'required' });
 	if (validation.error) {

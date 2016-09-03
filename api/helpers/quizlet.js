@@ -41,12 +41,13 @@ module.exports = {
 			const incorrectAnswers = [];
 			while (incorrectAnswers.length < 3) {
 				const randomAnswer = qset.answerPool[Math.floor(Math.random() * qset.answerPool.length)];
-				if (incorrectAnswers.indexOf(randomAnswer) < 0 && randomAnswer !== correctAnswer) {
+				if (incorrectAnswers.map(x => x.text).indexOf(randomAnswer) < 0 && randomAnswer !== correctAnswer) {
 					incorrectAnswers.push({ text: randomAnswer, id: incorrectAnswers.length });
 				}
 			}
-			qset.questions.push({ text: term.term, correctAnswer, incorrectAnswers, id: index });
+			qset.questions.push({ text: term.term, correctAnswer, incorrectAnswers, id: index, nextAnswerID: 4 });
 		});
+		qset.nextQuestionID = qset.terms.length;
 		delete qset.answerPool;
 		delete qset.terms;
 		return qset;

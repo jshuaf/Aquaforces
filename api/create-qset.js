@@ -9,8 +9,8 @@ module.exports = function (req, res) {
 
 	// Check basic types and sizes
 	const schema = {
-		_id: Joi.only(''),
-		shortID: Joi.only(''),
+		_id: Joi.valid('').optional(),
+		shortID: Joi.valid('').optional(),
 		title: Joi.string().max(80),
 		questions: Joi.array().items(Joi.object().keys({
 			text: Joi.string().max(200),
@@ -20,10 +20,14 @@ module.exports = function (req, res) {
 				id: Joi.number(),
 			})).min(1),
 			id: Joi.number(),
-			nextAnswerID: Joi.number(),
+			nextAnswerID: Joi.number().optional(),
 		})).min(1),
 		privacy: Joi.boolean(),
-		nextQuestionID: Joi.number(),
+		nextQuestionID: Joi.number().optional(),
+		source: Joi.object().keys({
+			name: Joi.string(),
+			id: Joi.number(),
+		}).optional(),
 	};
 	const validation = Joi.validate(req.body, schema, { presence: 'required' });
 	if (validation.error) {

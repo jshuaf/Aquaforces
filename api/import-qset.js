@@ -4,6 +4,7 @@ const quizlet = require('./helpers/quizlet');
 const logger = require('../logger');
 const Joi = require('joi');
 const helpers = require('../helpers');
+const createSet = require('./create-qset');
 
 module.exports = function (req, res) {
 	const schema = {
@@ -29,14 +30,7 @@ module.exports = function (req, res) {
 	}
 	if (req.body.source.name === 'quizlet') {
 		const qset = quizlet.parseSet(req.body);
-		const shortID = (`${Math.random().toString(36)}00000000000000000`).slice(2, 9);
-		const questionSet = Object.assign({}, qset, {
-			_id: helpers.generateID(),
-			timeAdded: new Date().getTime(),
-			shortID,
-			userID: req.user._id,
-			userName: req.user.personalInfo.displayName,
-		});
-		console.log(questionSet);
+		req.body = qset;
+		return createSet(req, res);
 	}
 };
