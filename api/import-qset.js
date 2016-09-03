@@ -10,9 +10,9 @@ module.exports = function (req, res) {
 		title: Joi.string(),
 		source: Joi.object().keys({
 			name: Joi.string().valid(['quizlet']),
-			id: Joi.string(),
+			id: Joi.number(),
 		}),
-		questions: Joi.array().valid(null),
+		questions: Joi.array().items(Joi.valid(null)),
 		answerPool: Joi.array().items(Joi.string()).min(10),
 		terms: Joi.array().items(Joi.object().keys({
 			id: Joi.number(),
@@ -27,7 +27,7 @@ module.exports = function (req, res) {
 		logger.error('Requested set to import doesn\'t have correct source data', validation.error);
 		return res.badRequest('Error: Could not import set.');
 	}
-	if (req.body.name === 'quizlet') {
+	if (req.body.source.name === 'quizlet') {
 		const qset = quizlet.parseSet(req.body);
 		const shortID = (`${Math.random().toString(36)}00000000000000000`).slice(2, 9);
 		const questionSet = Object.assign({}, qset, {

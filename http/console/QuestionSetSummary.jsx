@@ -12,7 +12,7 @@ class QuestionSetSummaryDisplay extends Component {
 		autoBind(this);
 	}
 	importQuestionSet() {
-		this.props.importQuestionSet(this.props.source);
+		this.props.importQuestionSet(this.props);
 	}
 	render() {
 		let questionSetNote;

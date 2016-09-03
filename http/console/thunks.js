@@ -41,6 +41,24 @@ export function submitQuestionSet(set, mode) {
 	};
 }
 
+export function importQuestionSet(set) {
+	return (dispatch) => {
+		const url = `${location.protocol}//${location.host}/api/import-qset`;
+		const importRequest = request({
+			url,
+			method: 'post',
+			json: true,
+			body: set,
+		}, (error, res) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			dispatch(actions.clearRequests('import'));
+			location.href = `/set/${res.body.shortID}/edit`;
+		});
+		dispatch(actions.newRequest('import', importRequest));
+	};
+}
+
 export function authenticateUser() {
 	return (dispatch) => {
 		const url = `${location.protocol}//${location.host}/api/authenticate`;

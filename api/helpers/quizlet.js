@@ -47,5 +47,8 @@ module.exports = {
 			}
 			qset.questions.push({ text: term.term, correctAnswer, incorrectAnswers, id: index });
 		});
+		delete qset.answerPool;
+		delete qset.terms;
+		return qset;
 	},
 };
