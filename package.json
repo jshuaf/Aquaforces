@@ -16,7 +16,7 @@
     "dev": "./node_modules/.bin/webpack --config webpack.config.js --watch --progress",
     "production": "./node_modules/.bin/webpack -p --config webpack.config.js --optimize-minimize",
     "lint": "./node_modules/.bin/eslint . --ext .jsx, .js",
-    "clear": "rm -rf ./logs/*"
+    "clear": "rm -rf ./__logs__/*"
   },
   "author": "BoniO Interns",
   "repository": {
