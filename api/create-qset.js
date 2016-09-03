@@ -49,12 +49,9 @@ module.exports = function (req, res) {
 		_id: helpers.generateID(),
 		timeAdded: new Date().getTime(),
 		shortID,
+		userID: req.user._id,
+		userName: req.user.personalInfo.displayName,
 	});
-
-	if (req.user) {
-		questionSet.userID = req.user._id;
-		questionSet.userName = req.user.personalInfo.displayName;
-	}
 
 	dbcs.qsets.insert(questionSet);
 	res.success({ shortID });

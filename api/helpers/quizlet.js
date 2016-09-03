@@ -34,6 +34,7 @@ module.exports = {
 	parseSet: (qset) => {
 		Object.assign(qset, {
 			privacy: false,
+			questions: [],
 		});
 		qset.terms.forEach((term, index) => {
 			const correctAnswer = term.definition;
