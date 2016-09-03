@@ -18,7 +18,7 @@ const initialNewSetState = {
 };
 
 function newQuestionSet(state = initialNewSetState, action) {
-	if (action.mode === 'new') {
+	if (action.mode === 'create') {
 		switch (action.type) {
 		case actions.ADD_QUESTION_INPUT:
 			return Object.assign({}, state, {

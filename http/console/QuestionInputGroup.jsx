@@ -29,7 +29,7 @@ QuestionInputGroupDisplay.propTypes = {
 		})).isRequired,
 		id: PropTypes.number.isRequired,
 	})).isRequired,
-	mode: PropTypes.oneOf(['edit', 'new']).isRequired,
+	mode: PropTypes.oneOf(['edit', 'create']).isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({

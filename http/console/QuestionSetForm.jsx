@@ -24,7 +24,7 @@ class QuestionSetFormDisplay extends Component {
 	submitQuestionSet() {
 		if (this.verifyQuestionSet()) {
 			const set = this.props.questionSet;
-			this.props.dispatch(submitQuestionSet(set));
+			this.props.dispatch(submitQuestionSet(set, this.props.mode));
 		}
 	}
 	render() {
@@ -53,7 +53,7 @@ QuestionSetFormDisplay.propTypes = {
 	toggleSetPrivacy: PropTypes.func.isRequired,
 	dispatch: PropTypes.func.isRequired,
 	questionSet: PropTypes.shape(questionSetPropTypes).isRequired,
-	mode: PropTypes.oneOf(['edit', 'new']).isRequired,
+	mode: PropTypes.oneOf(['edit', 'create']).isRequired,
 };
 
 const QuestionSetForm = connect()(QuestionSetFormDisplay);

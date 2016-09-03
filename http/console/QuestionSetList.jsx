@@ -14,7 +14,7 @@ class QuestionSetListDisplay extends Component {
 		const requestCategories = Object.keys(this.props.requests);
 		for (let i = 0; i < requestCategories.length; i++) {
 			const requestCategory = requestCategories[i];
-			if (this.props.requests[requestCategory].length > 0 && requestCategory !== 'new') {
+			if (this.props.requests[requestCategory].length > 0 && requestCategory !== 'create') {
 				return <Spinner />;
 			}
 		}

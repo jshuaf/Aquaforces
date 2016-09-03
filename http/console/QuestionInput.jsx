@@ -53,7 +53,7 @@ QuestionInputDisplay.propTypes = {
 		})).isRequired,
 		id: PropTypes.number.isRequired,
 	}).isRequired,
-	mode: PropTypes.oneOf(['edit', 'new']).isRequired,
+	mode: PropTypes.oneOf(['edit', 'create']).isRequired,
 };
 
 const QuestionInput = connect()(QuestionInputDisplay);

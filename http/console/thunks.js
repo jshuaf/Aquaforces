@@ -22,9 +22,9 @@ export function searchQuestionSets(query) {
 	};
 }
 
-export function submitQuestionSet(set) {
+export function submitQuestionSet(set, mode) {
 	return (dispatch) => {
-		const url = `${location.protocol}//${location.host}/api/new-qset`;
+		const url = `${location.protocol}//${location.host}/api/${mode}-qset`;
 		const createRequest = request({
 			url,
 			method: 'post',
@@ -34,10 +34,10 @@ export function submitQuestionSet(set) {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			dispatch(actions.clearNewQuestionSet());
-			dispatch(actions.clearRequests('create'));
+			dispatch(actions.clearRequests(mode));
 			location.href = `/set/${res.body.shortID}`;
 		});
-		dispatch(actions.newRequest('create', createRequest));
+		dispatch(actions.newRequest(mode, createRequest));
 	};
 }
 
