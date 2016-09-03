@@ -36,7 +36,7 @@ class QuestionSetFormDisplay extends Component {
 					ref={(t) => { this.titleInput = t; }}
 					onChange={() => { this.props.editSetTitle(this.titleInput.node.value); }}
 				/>
-			<QuestionInputGroup questions={this.props.questionSet.questions} />
+			<QuestionInputGroup questions={this.props.questionSet.questions} mode={this.props.mode} />
 				<Checkbox
 					label="Private set" ref={(c) => { this.checkboxInput = c; }}
 					checked={this.props.questionSet.privacy}
@@ -53,6 +53,7 @@ QuestionSetFormDisplay.propTypes = {
 	toggleSetPrivacy: PropTypes.func.isRequired,
 	dispatch: PropTypes.func.isRequired,
 	questionSet: PropTypes.shape(questionSetPropTypes).isRequired,
+	mode: PropTypes.oneOf(['edit', 'new']).isRequired,
 };
 
 const QuestionSetForm = connect()(QuestionSetFormDisplay);

@@ -4,21 +4,21 @@ import ExpandButton from '../shared/ExpandButton.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import { addAnswerInput, editCorrectAnswer, editIncorrectAnswer, editQuestionText } from './actions';
 
-function QuestionInput({ dispatch, question }) {
+function QuestionInputDisplay({ dispatch, question, mode }) {
 	const incorrectAnswerInputs = {};
 	let correctAnswerInput;
 	let questionTextInput;
 	return (
-		<div className="question_input">
+		<div>
 			<TextInput
 				placeholder="What's nine plus ten?" label="Question" required
 				ref={(component) => { questionTextInput = component; }} value={question.text}
-				onChange={() => { dispatch(editQuestionText(question.id, questionTextInput.node.value)); }}
+				onChange={() => { dispatch(editQuestionText(question.id, questionTextInput.node.value, mode)); }}
 			/>
 			<div className="answers_input">
 				<TextInput
 					placeholder="Twenty one." label="Correct Answer" key={0} required value={question.correctAnswer}
-					onChange={() => { dispatch(editCorrectAnswer(question.id, correctAnswerInput.node.value)); }}
+					onChange={() => { dispatch(editCorrectAnswer(question.id, correctAnswerInput.node.value, mode)); }}
 					ref={(component) => { correctAnswerInput = component; }}
 				/>
 			{
@@ -28,21 +28,21 @@ function QuestionInput({ dispatch, question }) {
 						id={answer.id} key={answer.id}
 						onChange={() => {
 							const input = incorrectAnswerInputs[answer.id];
-							if (input) dispatch(editIncorrectAnswer(question.id, answer.id, input.node.value));
+							if (input) dispatch(editIncorrectAnswer(question.id, answer.id, input.node.value, mode));
 						}}
 						ref={(component) => { incorrectAnswerInputs[answer.id] = component; }}
 						value={answer.text}
 					/>)
 			}
 			</div>
-			<ExpandButton onClick={() => { dispatch(addAnswerInput(question.id)); }}>
+			<ExpandButton onClick={() => { dispatch(addAnswerInput(question.id, mode)); }}>
 				{'+ Add an incorrect answer'}
 			</ExpandButton>
 		</div>
 	);
 }
 
-QuestionInput.propTypes = {
+QuestionInputDisplay.propTypes = {
 	dispatch: PropTypes.func.isRequired,
 	question: PropTypes.shape({
 		text: PropTypes.string.isRequired,
@@ -53,10 +53,9 @@ QuestionInput.propTypes = {
 		})).isRequired,
 		id: PropTypes.number.isRequired,
 	}).isRequired,
+	mode: PropTypes.oneOf(['edit', 'new']).isRequired,
 };
 
-/* eslint-disable no-func-assign */
-QuestionInput = connect()(QuestionInput);
-/* eslint-enable no-func-assign */
+const QuestionInput = connect()(QuestionInputDisplay);
 
 export default QuestionInput;

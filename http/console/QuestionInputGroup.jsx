@@ -4,16 +4,16 @@ import ExpandButton from '../shared/ExpandButton.jsx';
 import QuestionInput from './QuestionInput.jsx';
 import { addQuestionInput } from './actions';
 
-function QuestionInputGroupDisplay({ questions, addQuestionInput }) {
+function QuestionInputGroupDisplay({ questions, addQuestionInput, mode }) {
 	return (
 		<div id="question_input_group">
 			<h3>Questions</h3>
 			<span style={{ fontStyle: 'italic' }}>Avoid synonyms among answers.</span>
 			<br />
 			{questions.map((question) =>
-				<QuestionInput key={question.id} question={question} />
+				<QuestionInput key={question.id} question={question} mode={mode} />
 			)}
-			<ExpandButton onClick={addQuestionInput}>{'+ Add a question'}</ExpandButton>
+			<ExpandButton onClick={() => { addQuestionInput(mode); }}>{'+ Add a question'}</ExpandButton>
 		</div>
 	);
 }
@@ -29,11 +29,12 @@ QuestionInputGroupDisplay.propTypes = {
 		})).isRequired,
 		id: PropTypes.number.isRequired,
 	})).isRequired,
+	mode: PropTypes.oneOf(['edit', 'new']).isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-	addQuestionInput: () => {
-		dispatch(addQuestionInput());
+	addQuestionInput: (mode) => {
+		dispatch(addQuestionInput(mode));
 	},
 });
 

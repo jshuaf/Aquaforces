@@ -26,13 +26,13 @@ function makeActionCreator(type, ...argNames) {
 	};
 }
 
-export const addQuestionInput = makeActionCreator(ADD_QUESTION_INPUT);
-export const addAnswerInput = makeActionCreator(ADD_ANSWER_INPUT, 'questionID');
-export const editCorrectAnswer = makeActionCreator(EDIT_CORRECT_ANSWER, 'questionID', 'text');
-export const editIncorrectAnswer = makeActionCreator(EDIT_INCORRECT_ANSWER, 'questionID', 'answerID', 'text');
-export const editQuestionText = makeActionCreator(EDIT_QUESTION_TEXT, 'questionID', 'text');
-export const editSetTitle = makeActionCreator(EDIT_SET_TITLE, 'text');
-export const toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy');
+export const addQuestionInput = makeActionCreator(ADD_QUESTION_INPUT, 'mode');
+export const addAnswerInput = makeActionCreator(ADD_ANSWER_INPUT, 'questionID', 'mode');
+export const editCorrectAnswer = makeActionCreator(EDIT_CORRECT_ANSWER, 'questionID', 'text', 'mode');
+export const editIncorrectAnswer = makeActionCreator(EDIT_INCORRECT_ANSWER, 'questionID', 'answerID', 'text', 'mode');
+export const editQuestionText = makeActionCreator(EDIT_QUESTION_TEXT, 'questionID', 'text', 'mode');
+export const editSetTitle = makeActionCreator(EDIT_SET_TITLE, 'text', 'mode');
+export const toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy', 'mode');
 
 export const populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
 export const clearNewQuestionSet = makeActionCreator(CLEAR_NEW_QUESTION_SET);

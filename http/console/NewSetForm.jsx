@@ -12,7 +12,7 @@ class NewSetFormDisplay extends Component {
 		return (
 			<div>
 				<h3>New Question Set</h3>
-				<QuestionSetForm questionSet={newQuestionSet} {...props} />
+				<QuestionSetForm questionSet={newQuestionSet} {...props} mode="new" />
 			</div>
 		);
 	}
@@ -21,7 +21,6 @@ class NewSetFormDisplay extends Component {
 NewSetFormDisplay.propTypes = {
 	editSetTitle: PropTypes.func.isRequired,
 	toggleSetPrivacy: PropTypes.func.isRequired,
-	submitQuestionSet: PropTypes.func.isRequired,
 	newQuestionSet: PropTypes.shape(questionSetPropTypes).isRequired,
 };
 
@@ -31,10 +30,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	editSetTitle: (text) => {
-		dispatch(editSetTitle(text));
+		dispatch(editSetTitle(text, 'new'));
 	},
 	toggleSetPrivacy: (privacy) => {
-		dispatch(toggleSetPrivacy(privacy));
+		dispatch(toggleSetPrivacy(privacy, 'new'));
 	},
 });
 

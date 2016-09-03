@@ -16,7 +16,7 @@ class EditSetFormDisplay extends Component {
 		return (
 			<div>
 				<h3>Edit Question Set</h3>
-				<QuestionSetForm questionSet={activeQuestionSet} {...props} />
+				<QuestionSetForm questionSet={activeQuestionSet} {...props} mode="edit" />
 			</div>
 		);
 	}
@@ -27,6 +27,7 @@ EditSetFormDisplay.propTypes = {
 	toggleSetPrivacy: PropTypes.func.isRequired,
 	getQuestionSet: PropTypes.func.isRequired,
 	activeQuestionSet: PropTypes.shape(questionSetPropTypes).isRequired,
+	params: PropTypes.any,
 };
 
 const mapStateToProps = (state) => ({
@@ -35,10 +36,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	editSetTitle: (text) => {
-		dispatch(editSetTitle(text));
+		dispatch(editSetTitle(text, 'edit'));
 	},
 	toggleSetPrivacy: (privacy) => {
-		dispatch(toggleSetPrivacy(privacy));
+		dispatch(toggleSetPrivacy(privacy, 'edit'));
 	},
 	getQuestionSet: (shortID) => {
 		dispatch(getQuestionSet(shortID));

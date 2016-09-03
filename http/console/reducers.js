@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
 import * as actions from './actions';
 
 const initialNewSetState = {
@@ -19,87 +18,92 @@ const initialNewSetState = {
 };
 
 function newQuestionSet(state = initialNewSetState, action) {
-	switch (action.type) {
-	case actions.ADD_QUESTION_INPUT:
-		return Object.assign({}, state, {
-			questions: [
-				...state.questions,
-				{
-					text: '',
-					correctAnswer: '',
-					incorrectAnswers: [{
+	if (action.mode === 'new') {
+		switch (action.type) {
+		case actions.ADD_QUESTION_INPUT:
+			return Object.assign({}, state, {
+				questions: [
+					...state.questions,
+					{
 						text: '',
-						id: 1,
-					}],
-					id: state.nextQuestionID,
-					nextAnswerID: 2,
-				},
-			],
-			nextQuestionID: state.nextQuestionID + 1,
-		});
-	case actions.ADD_ANSWER_INPUT:
-		return Object.assign({}, state, {
-			questions: state.questions.map((question) => {
-				if (question.id === action.questionID) {
-					return Object.assign({}, question, {
-						incorrectAnswers: [...question.incorrectAnswers, {
+						correctAnswer: '',
+						incorrectAnswers: [{
 							text: '',
-							id: question.nextAnswerID,
+							id: 1,
 						}],
-						nextAnswerID: question.nextAnswerID + 1,
-					});
-				}
-				return question;
-			}),
-		});
-	case actions.EDIT_CORRECT_ANSWER:
-		return Object.assign({}, state, {
-			questions: state.questions.map((question) => {
-				if (question.id === action.questionID) {
-					return Object.assign({}, question, {
-						correctAnswer: action.text,
-					});
-				}
-				return question;
-			}),
-		});
-	case actions.EDIT_INCORRECT_ANSWER:
-		return Object.assign({}, state, {
-			questions: state.questions.map((question) => {
-				if (question.id === action.questionID) {
-					return Object.assign({}, question, {
-						incorrectAnswers: question.incorrectAnswers.map((incorrectAnswer) => {
-							if (incorrectAnswer.id === action.answerID) {
-								return Object.assign({}, incorrectAnswer, {
-									text: action.text,
-								});
-							}
-							return incorrectAnswer;
-						}),
-					});
-				}
-				return question;
-			}),
-		});
-	case actions.EDIT_QUESTION_TEXT:
-		return Object.assign({}, state, {
-			questions: state.questions.map((question) => {
-				if (question.id === action.questionID) {
-					return Object.assign({}, question, {
-						text: action.text,
-					});
-				}
-				return question;
-			}),
-		});
-	case actions.EDIT_SET_TITLE:
-		return Object.assign({}, state, {
-			title: action.text,
-		});
-	case actions.TOGGLE_SET_PRIVACY:
-		return Object.assign({}, state, {
-			privacy: action.privacy,
-		});
+						id: state.nextQuestionID,
+						nextAnswerID: 2,
+					},
+				],
+				nextQuestionID: state.nextQuestionID + 1,
+			});
+		case actions.ADD_ANSWER_INPUT:
+			return Object.assign({}, state, {
+				questions: state.questions.map((question) => {
+					if (question.id === action.questionID) {
+						return Object.assign({}, question, {
+							incorrectAnswers: [...question.incorrectAnswers, {
+								text: '',
+								id: question.nextAnswerID,
+							}],
+							nextAnswerID: question.nextAnswerID + 1,
+						});
+					}
+					return question;
+				}),
+			});
+		case actions.EDIT_CORRECT_ANSWER:
+			return Object.assign({}, state, {
+				questions: state.questions.map((question) => {
+					if (question.id === action.questionID) {
+						return Object.assign({}, question, {
+							correctAnswer: action.text,
+						});
+					}
+					return question;
+				}),
+			});
+		case actions.EDIT_INCORRECT_ANSWER:
+			return Object.assign({}, state, {
+				questions: state.questions.map((question) => {
+					if (question.id === action.questionID) {
+						return Object.assign({}, question, {
+							incorrectAnswers: question.incorrectAnswers.map((incorrectAnswer) => {
+								if (incorrectAnswer.id === action.answerID) {
+									return Object.assign({}, incorrectAnswer, {
+										text: action.text,
+									});
+								}
+								return incorrectAnswer;
+							}),
+						});
+					}
+					return question;
+				}),
+			});
+		case actions.EDIT_QUESTION_TEXT:
+			return Object.assign({}, state, {
+				questions: state.questions.map((question) => {
+					if (question.id === action.questionID) {
+						return Object.assign({}, question, {
+							text: action.text,
+						});
+					}
+					return question;
+				}),
+			});
+		case actions.EDIT_SET_TITLE:
+			return Object.assign({}, state, {
+				title: action.text,
+			});
+		case actions.TOGGLE_SET_PRIVACY:
+			return Object.assign({}, state, {
+				privacy: action.privacy,
+			});
+		default:
+		}
+	}
+	switch (actions.type) {
 	case actions.CLEAR_NEW_QUESTION_SET:
 		return initialNewSetState;
 	default:
@@ -119,6 +123,91 @@ function questionSets(state = [], action) {
 const initialQuestionSetState = Object.assign(initialNewSetState, { _id: '', shortID: '' });
 
 function activeQuestionSet(state = initialQuestionSetState, action) {
+	if (action.mode === 'edit') {
+		switch (action.type) {
+		case actions.ADD_QUESTION_INPUT:
+			return Object.assign({}, state, {
+				questions: [
+					...state.questions,
+					{
+						text: '',
+						correctAnswer: '',
+						incorrectAnswers: [{
+							text: '',
+							id: 1,
+						}],
+						id: state.nextQuestionID,
+						nextAnswerID: 2,
+					},
+				],
+				nextQuestionID: state.nextQuestionID + 1,
+			});
+		case actions.ADD_ANSWER_INPUT:
+			return Object.assign({}, state, {
+				questions: state.questions.map((question) => {
+					if (question.id === action.questionID) {
+						return Object.assign({}, question, {
+							incorrectAnswers: [...question.incorrectAnswers, {
+								text: '',
+								id: question.nextAnswerID,
+							}],
+							nextAnswerID: question.nextAnswerID + 1,
+						});
+					}
+					return question;
+				}),
+			});
+		case actions.EDIT_CORRECT_ANSWER:
+			return Object.assign({}, state, {
+				questions: state.questions.map((question) => {
+					if (question.id === action.questionID) {
+						return Object.assign({}, question, {
+							correctAnswer: action.text,
+						});
+					}
+					return question;
+				}),
+			});
+		case actions.EDIT_INCORRECT_ANSWER:
+			return Object.assign({}, state, {
+				questions: state.questions.map((question) => {
+					if (question.id === action.questionID) {
+						return Object.assign({}, question, {
+							incorrectAnswers: question.incorrectAnswers.map((incorrectAnswer) => {
+								if (incorrectAnswer.id === action.answerID) {
+									return Object.assign({}, incorrectAnswer, {
+										text: action.text,
+									});
+								}
+								return incorrectAnswer;
+							}),
+						});
+					}
+					return question;
+				}),
+			});
+		case actions.EDIT_QUESTION_TEXT:
+			return Object.assign({}, state, {
+				questions: state.questions.map((question) => {
+					if (question.id === action.questionID) {
+						return Object.assign({}, question, {
+							text: action.text,
+						});
+					}
+					return question;
+				}),
+			});
+		case actions.EDIT_SET_TITLE:
+			return Object.assign({}, state, {
+				title: action.text,
+			});
+		case actions.TOGGLE_SET_PRIVACY:
+			return Object.assign({}, state, {
+				privacy: action.privacy,
+			});
+		default:
+		}
+	}
 	switch (action.type) {
 	case actions.POPULATE_ACTIVE_QUESTION_SET:
 		return action.questionSet || state;
