@@ -9,8 +9,8 @@ module.exports = function (req, res) {
 
 	// Check basic types and sizes
 	const schema = {
-		_id: Joi.only(''),
-		shortID: Joi.only(''),
+		_id: Joi.string(),
+		shortID: Joi.string(),
 		title: Joi.string().max(80),
 		questions: Joi.array().items(Joi.object().keys({
 			text: Joi.string().max(200),
@@ -24,6 +24,9 @@ module.exports = function (req, res) {
 		})).min(1),
 		privacy: Joi.boolean(),
 		nextQuestionID: Joi.number(),
+		timeAdded: Joi.date().max(Date.now()),
+		userID: Joi.string(),
+		userName: Joi.string(),
 	};
 	const validation = Joi.validate(req.body, schema, { presence: 'required' });
 	if (validation.error) {
@@ -44,18 +47,10 @@ module.exports = function (req, res) {
 		}
 	}
 
-	const shortID = (`${Math.random().toString(36)}00000000000000000`).slice(2, 9);
-	const questionSet = Object.assign(req.body, {
-		_id: helpers.generateID(),
-		timeAdded: new Date().getTime(),
-		shortID,
+	dbcs.qsets.update({ _id: req.body._id }, req.body).then(() => {
+		res.success({ shortID: req.body.shortID });
+	}).catch((error) => {
+		logger.error('Database update operation failed', { error, body: req.body });
+		res.badRequest('Question set not found.');
 	});
-
-	if (req.user) {
-		questionSet.userID = req.user._id;
-		questionSet.userName = req.user.personalInfo.displayName;
-	}
-
-	dbcs.qsets.insert(questionSet);
-	res.success({ shortID });
 };
