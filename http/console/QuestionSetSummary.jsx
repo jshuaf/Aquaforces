@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { questionSetPropTypes } from './QuestionSet.jsx';
 import { deleteQuestionSet } from './thunks';
 import colors from '../shared/colors';
 
@@ -9,9 +10,6 @@ class QuestionSetSummaryDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
-	}
-	deleteQuestionSet() {
-		this.props.deleteQuestionSet(this.props._id);
 	}
 	render() {
 		const textStyle = {
@@ -24,7 +22,7 @@ class QuestionSetSummaryDisplay extends Component {
 			backgroundColor: colors.pacific,
 		};
 		return (
-				<Link to={`/set/${this.props.shortID}`} style={containerStyle} className="eight columns">
+				<div style={containerStyle} className="eight columns">
 					<div className="row">
 						<div className="eight columns">
 							<h2 key={-1} className="marginless" style={textStyle}>{this.props.title}</h2>
@@ -36,38 +34,22 @@ class QuestionSetSummaryDisplay extends Component {
 							</h4>
 						</div>
 						<div className="four columns text-right">
-							<button
-								onClick={this.deleteQuestionSet}
-								className="button button-secondary"
-							>
-								Delete set
-							</button>
-							<button
-								onClick={this.deleteQuestionSet}
-								className="button button-secondary"
-							>Edit set
-							</button>
+							<Link to={`/set/${this.props.shortID}`}>
+								<button className="button button-secondary">
+									View Set
+								</button>
+							</Link>
+							<Link to={`/set/${this.props.shortID}/edit`}>
+								<button className="button button-secondary">
+									Edit Set
+								</button>
+							</Link>
 						</div>
 					</div>
-				</Link>
+				</div>
 		);
 	}
 }
-
-export const questionSetPropTypes = {
-	_id: PropTypes.string.isRequired,
-	title: PropTypes.string.isRequired,
-	questions: PropTypes.arrayOf(PropTypes.shape({
-		text: PropTypes.string.isRequired,
-		correctAnswer: PropTypes.string.isRequired,
-		incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
-			text: PropTypes.string.isRequired,
-			id: PropTypes.number.isRequired,
-		})).isRequired,
-		id: PropTypes.number.isRequired,
-	})).isRequired,
-	privacy: PropTypes.bool.isRequired,
-};
 
 QuestionSetSummaryDisplay.propTypes = Object.assign({
 	deleteQuestionSet: PropTypes.func.isRequired,

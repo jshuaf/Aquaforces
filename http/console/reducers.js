@@ -103,7 +103,7 @@ function newQuestionSet(state = initialNewSetState, action) {
 		default:
 		}
 	}
-	switch (actions.type) {
+	switch (action.type) {
 	case actions.CLEAR_NEW_QUESTION_SET:
 		return initialNewSetState;
 	default:

@@ -18,7 +18,7 @@ export function searchQuestionSets(query) {
 			dispatch(actions.clearRequests('search'));
 			return dispatch(actions.populateQuestionSetList(res.body));
 		});
-		dispatch(actions.newRequest(searchRequest, 'questionSetSearch'));
+		dispatch(actions.newRequest('search', searchRequest));
 	};
 }
 
@@ -33,7 +33,7 @@ export function submitQuestionSet(set, mode) {
 		}, (error, res) => {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			dispatch(actions.clearNewQuestionSet());
+			if (mode === 'create') dispatch(actions.clearNewQuestionSet());
 			dispatch(actions.clearRequests(mode));
 			location.href = `/set/${res.body.shortID}`;
 		});
