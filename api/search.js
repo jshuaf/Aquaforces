@@ -31,7 +31,7 @@ module.exports = function (req, res) {
 			return res.end(JSON.stringify(qsets));
 		}
 		const quizletSearchResults = JSON.parse(body);
-		const parsedSets = quizletSearchResults.sets.map((set) => quizlet.parseSet(set.id));
+		const parsedSets = quizletSearchResults.sets.map((set) => quizlet.getSet(set.id));
 		co(function* () {
 			return yield parsedSets;
 		}).then((sets) => {

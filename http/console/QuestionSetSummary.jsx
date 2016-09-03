@@ -15,6 +15,15 @@ class QuestionSetSummaryDisplay extends Component {
 		this.props.importQuestionSet(this.props.source);
 	}
 	render() {
+		let questionSetNote;
+		if (this.props.privacy === false) {
+			questionSetNote = '(Public)';
+		} else if (this.props.privacy) {
+			questionSetNote = '(Private)';
+		} else if (this.props.source) {
+			questionSetNote = `(${this.props.source.name.capitalize()})`;
+		}
+
 		const textStyle = {
 			color: 'white',
 		};
@@ -48,8 +57,9 @@ class QuestionSetSummaryDisplay extends Component {
 							<h2 key={-1} className="marginless" style={textStyle}>{this.props.title}</h2>
 							<h4 style={textStyle}>
 								{this.props.questions.length === 1 ?
-								`1 question (${this.props.privacy ? 'Private' : 'Public'})` :
-								`${this.props.questions.length} questions (${this.props.privacy ? 'Private' : 'Public'})`
+								`1 question ${questionSetNote}` :
+								`${this.props.questions.length}
+									questions ${questionSetNote}`
 								}
 							</h4>
 						</div>
