@@ -80,7 +80,7 @@ export default class TextInput extends Component {
 
 TextInput.propTypes = {
 	placeholder: PropTypes.string,
-	label: PropTypes.string.isRequired,
+	label: PropTypes.string,
 	isComplete: PropTypes.func,
 	onComplete: PropTypes.func,
 	onChange: PropTypes.func,

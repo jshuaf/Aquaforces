@@ -35,8 +35,8 @@ export class HeaderRaw extends Component {
 			position: 'fixed',
 			zIndex: 5,
 			width: '100%',
-			height: '10%',
-			backgroundColor: 'none',
+			height: '12%',
+			backgroundColor: colors.ice,
 		};
 
 		const logoContainerStyle = {
@@ -82,7 +82,7 @@ export class HeaderRaw extends Component {
 			<div style={containerStyle}>
 				<a href="/" style={logoContainerStyle}>
 					<img
-						src={`${location.protocol}//${location.host}/img/logo-black.svg`}
+						src={`${location.protocol}//${location.host}/img/logo/dark-blue.svg`}
 						alt="Aquaforces" style={logoStyle} />
 				</a>
 				<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>

@@ -7,12 +7,14 @@ export const EDIT_SET_TITLE = 'EDIT_SET_TITLE';
 export const TOGGLE_SET_PRIVACY = 'TOGGLE_SET_PRIVACY';
 
 export const POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
-export const ADD_SET = 'ADD_SET';
-export const DELETE_SET = 'DELETE_SET';
+export const CLEAR_NEW_QUESTION_SET = 'CLEAR_NEW_QUESTION_SET';
 
 export const POPULATE_ACTIVE_QUESTION_SET = 'POPULATE_ACTIVE_QUESTION_SET';
 
 export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
+
+export const CLEAR_REQUESTS = 'CLEAR_REQUESTS';
+export const NEW_REQUEST = 'NEW_REQUEST';
 
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
@@ -24,18 +26,20 @@ function makeActionCreator(type, ...argNames) {
 	};
 }
 
-export const addQuestionInput = makeActionCreator(ADD_QUESTION_INPUT);
-export const addAnswerInput = makeActionCreator(ADD_ANSWER_INPUT, 'questionID');
-export const editCorrectAnswer = makeActionCreator(EDIT_CORRECT_ANSWER, 'questionID', 'text');
-export const editIncorrectAnswer = makeActionCreator(EDIT_INCORRECT_ANSWER, 'questionID', 'answerID', 'text');
-export const editQuestionText = makeActionCreator(EDIT_QUESTION_TEXT, 'questionID', 'text');
-export const editSetTitle = makeActionCreator(EDIT_SET_TITLE, 'text');
-export const toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy');
+export const addQuestionInput = makeActionCreator(ADD_QUESTION_INPUT, 'mode');
+export const addAnswerInput = makeActionCreator(ADD_ANSWER_INPUT, 'questionID', 'mode');
+export const editCorrectAnswer = makeActionCreator(EDIT_CORRECT_ANSWER, 'questionID', 'text', 'mode');
+export const editIncorrectAnswer = makeActionCreator(EDIT_INCORRECT_ANSWER, 'questionID', 'answerID', 'text', 'mode');
+export const editQuestionText = makeActionCreator(EDIT_QUESTION_TEXT, 'questionID', 'text', 'mode');
+export const editSetTitle = makeActionCreator(EDIT_SET_TITLE, 'text', 'mode');
+export const toggleSetPrivacy = makeActionCreator(TOGGLE_SET_PRIVACY, 'privacy', 'mode');
 
 export const populateQuestionSetList = makeActionCreator(POPULATE_QUESTION_SET_LIST, 'questionSets');
-export const addSet = makeActionCreator(ADD_SET, 'set');
-export const deleteSet = makeActionCreator(DELETE_SET, 'id');
+export const clearNewQuestionSet = makeActionCreator(CLEAR_NEW_QUESTION_SET);
 
 export const populateActiveQuestionSet = makeActionCreator(POPULATE_ACTIVE_QUESTION_SET, 'questionSet');
 
 export const authenticateUser = makeActionCreator(AUTHENTICATE_USER, 'user');
+
+export const newRequest = makeActionCreator(NEW_REQUEST, 'category', 'request');
+export const clearRequests = makeActionCreator(CLEAR_REQUESTS, 'category');

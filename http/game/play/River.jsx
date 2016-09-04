@@ -375,7 +375,7 @@ class River extends Component {
 		return river.getBoundingClientRect();
 	}
 	render() {
-		let answers = [];
+		const answers = [];
 
 		for (let i = 0; i < this.state.answers.length; i++) {
 			answers.push(<Answer

@@ -9,7 +9,7 @@ module.exports = {
 		"consistent-return": ["off"],
 		"import/newline-after-import": ["off"],
 		"indent": ["error", "tab"],
-		"max-len": ["error", 2000],
+		"max-len": ["error", 120],
 		"no-console": ["off"],
 		"react/jsx-indent": ["off"],
 		"react/prop-types": ["warn"],

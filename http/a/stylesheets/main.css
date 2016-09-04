@@ -51,7 +51,7 @@ section {
 
 @media (min-width: 800px) {
 	.landing-river {
-		background: url('/img/back-bottom.svg') no-repeat center top;
+		background: url('/img/backgrounds/calm-sea.svg') no-repeat center top;
 		background-size: cover;
 	}
 }
@@ -577,17 +577,6 @@ h4 {
 .bounceoutup {
 	-webkit-animation-name: bounceoutup;
 	animation-name: bounceoutup;
-}
-
-.questionSetSummary {
-	background-color: #19a8a6;
-	padding: 20px;
-	border-radius: 20px;
-	margin-bottom: 20px;
-}
-
-.questionSetSummary > div > div > h2, .questionSetSummary > div > div > h4 {
-	color: white;
 }
 
 .text-right {
