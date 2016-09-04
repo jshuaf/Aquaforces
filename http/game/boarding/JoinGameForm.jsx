@@ -51,6 +51,10 @@ class JoinGameFormDisplay extends Component {
 								isComplete={t => t.length === 4}
 								onComplete={() => { if (this.usernameField) this.usernameField.node.focus(); }}
 							/>
+						</div>
+					</div>
+					<div className="row">
+						<div className="six columns">
 							<TextInput
 								placeholder="Michael Phelps" name="username" ref={(u) => { this.usernameField = u; }}
 								label="Username" type="text" required autoComplete="off"

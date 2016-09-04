@@ -11,7 +11,7 @@ class CreateSetFormDisplay extends Component {
 		const { newQuestionSet, ...props } = this.props;
 		return (
 			<div>
-				<h3>New Question Set</h3>
+				<h3 className="marginless">New Question Set</h3>
 				<QuestionSetForm questionSet={newQuestionSet} {...props} mode="create" />
 			</div>
 		);

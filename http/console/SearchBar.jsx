@@ -14,11 +14,14 @@ class SearchBarDisplay extends Component {
 		this.props.searchQuestionSets(query);
 	}
 	render() {
+		const formStyles = {
+			marginBottom: 0,
+		};
 		return (
-				<form onSubmit={(e) => { e.preventDefault(); this.search(); }}>
+				<form onSubmit={(e) => { e.preventDefault(); this.search(); }} style={formStyles}>
 					<TextInput
-						placeholder="science"
-						label="Search for sets"
+						placeholder="Science"
+						label="Search"
 						ref={(t) => { this.input = t; }}
 					/>
 				</form>
