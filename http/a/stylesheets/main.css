@@ -59,6 +59,7 @@ section {
 @media (max-width: 800px) {
 	.mobileless {
 		display: none;
+		visibility: hidden;
 	}
 }
 
@@ -255,12 +256,6 @@ h4 {
 	border-radius: 4rem;
 	font-size: 20px;
 	cursor: pointer;
-}
-
-@media (min-width: 700px) {
-	.navbar > .columns > p,a {
-		text-align: right;
-	}
 }
 
 .studentselect > li {
@@ -586,5 +581,13 @@ h4 {
 @media (max-width: 550px) {
 	.text-right {
 		text-align: left;
+	}
+}
+
+@media (min-width: 800px) {
+	.mobile-only {
+		display: none !important;
+		width: 0;
+		visibility: hidden;
 	}
 }
