@@ -42,6 +42,7 @@ export default class TextInput extends Component {
 			borderRight: 'none',
 			borderTop: 'none',
 			borderBottom: '2px solid #19a8a6',
+			borderRadius: 0,
 			fontSize: '1.3em',
 			display: 'inline-table',
 		};
