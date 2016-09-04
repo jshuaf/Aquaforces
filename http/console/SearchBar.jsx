@@ -18,7 +18,6 @@ class SearchBarDisplay extends Component {
 				<form onSubmit={(e) => { e.preventDefault(); this.search(); }}>
 					<TextInput
 						placeholder="science"
-						label="Search for sets"
 						ref={(t) => { this.input = t; }}
 					/>
 				</form>

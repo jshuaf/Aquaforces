@@ -26,16 +26,22 @@ export default class TextInput extends Component {
 	render() {
 		const containerStyle = {
 			display: 'block',
-			width: '100%',
+			width: this.props.width ? this.props.width : '150px',
 		};
 		const labelStyle = {
 			marginBottom: '2%',
 			marginLeft: '1%',
 		};
 		const inputStyle = {
-			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'white',
-			color: colors.midnight,
+			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'transparent',
+			textAlign: 'center',
+			color: colors.water,
 			width: '100%',
+			borderLeft: 'none',
+			borderRight: 'none',
+			borderTop: 'none',
+			borderBottom: '2px solid #19a8a6',
+			fontSize: '1.3em',
 		};
 		const errorContainerStyle = {
 			display: 'flex',
@@ -81,6 +87,7 @@ export default class TextInput extends Component {
 TextInput.propTypes = {
 	placeholder: PropTypes.string,
 	label: PropTypes.string,
+	width: PropTypes.number,
 	isComplete: PropTypes.func,
 	onComplete: PropTypes.func,
 	onChange: PropTypes.func,

@@ -80,7 +80,7 @@ export class HeaderRaw extends Component {
 							<img
 								src={`${location.protocol}//${location.host}/img/logo/new-blue.svg`}
 								alt="Aquaforces" style={logoStyle} className="mobileless" />
-							<a style={headerItemStyle} className="mobile-only"><b>Aquaforces</b></a>
+							<a style={headerItemStyle} key="1444" className="mobile-only"><b>Aquaforces</b></a>
 						</a>
 						<a href="/console" style={headerItemStyle} key={0}><span style={linkStyle}>Sets</span></a>
 						<a href="/host" style={headerItemStyle} key={1}><span style={linkStyle}>Host</span></a>
