@@ -58,7 +58,7 @@
     "webpack": "^1.13.1",
     "winston": "^2.2.0",
     "ws": "^1.1.1",
-    "yield-yield": "^1.0.1"
+    "yield-yield-yield": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",

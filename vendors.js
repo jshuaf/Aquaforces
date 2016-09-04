@@ -7,4 +7,4 @@ require('redux-thunk');
 require('redux');
 require('request');
 require('ws');
-require('yield-yield');
+require('yield-yield-yield');
