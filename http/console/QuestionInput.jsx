@@ -10,6 +10,7 @@ function QuestionInputDisplay({ dispatch, question, mode }) {
 	let questionTextInput;
 	return (
 		<div>
+			<h4 className="marginless"><b>Question {question.id}</b></h4>
 			<TextInput
 				placeholder="What's nine plus ten?" label="Question" required
 				ref={(component) => { questionTextInput = component; }} value={question.text}

@@ -27,6 +27,7 @@ export default class TextInput extends Component {
 		const containerStyle = {
 			display: 'inline-table',
 			width: (this.props.placeholder.length * 8) + 200 + 'px',
+			maxWidth: '100%',
 		};
 		const labelStyle = {
 			marginBottom: '2%',
