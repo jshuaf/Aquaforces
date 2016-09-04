@@ -20,6 +20,7 @@ class QuestionSetListDisplay extends Component {
 		}
 		return (
 			<div id="questionSets">
+				<h3 className="marginless">Your sets</h3>
 				<SearchBar />
 				{
 					this.props.questionSets.map((questionSet, index) =>

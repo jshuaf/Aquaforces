@@ -7,7 +7,7 @@ import { addQuestionInput } from './actions';
 function QuestionInputGroupDisplay({ questions, addQuestionInput, mode }) {
 	return (
 		<div id="question_input_group">
-			<h3>Questions</h3>
+			<h3 className="marginless">Questions</h3>
 			<span style={{ fontStyle: 'italic' }}>Avoid synonyms among answers.</span>
 			<br />
 			{questions.map((question) =>

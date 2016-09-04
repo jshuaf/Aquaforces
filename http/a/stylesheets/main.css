@@ -577,3 +577,13 @@ h4 {
 		visibility: hidden;
 	}
 }
+
+select {
+	color: white;
+	background-color: #19a8a6;
+	font-size: 1.5rem;
+	border-radius: 25px;
+	text-align: center;
+	box-shadow: none;
+	border: 1px #19a8a6 solid;
+}
