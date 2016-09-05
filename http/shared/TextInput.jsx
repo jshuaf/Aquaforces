@@ -25,17 +25,26 @@ export default class TextInput extends Component {
 	}
 	render() {
 		const containerStyle = {
-			display: 'block',
-			width: '100%',
+			display: 'inline-table',
+			width: (this.props.placeholder.length * 8) + 200 + 'px',
+			maxWidth: '100%',
 		};
 		const labelStyle = {
 			marginBottom: '2%',
-			marginLeft: '1%',
+			display: 'inline-table',
 		};
 		const inputStyle = {
-			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'white',
-			color: colors.midnight,
+			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'transparent',
+			textAlign: 'left',
+			color: colors.water,
 			width: '100%',
+			borderLeft: 'none',
+			borderRight: 'none',
+			borderTop: 'none',
+			borderBottom: '2px solid #19a8a6',
+			borderRadius: 0,
+			fontSize: '1.3em',
+			display: 'inline-table',
 		};
 		const errorContainerStyle = {
 			display: 'flex',
@@ -67,7 +76,7 @@ export default class TextInput extends Component {
 
 		return (
 			<div className="textInput" style={containerStyle}>
-				<span style={labelStyle}>{this.props.label}</span>
+				<span style={labelStyle}><b>{this.props.label}</b></span>
 				<input
 					ref={(i) => { this.node = i; }} style={inputStyle} {...inputProps}
 					onChange={this.onChange}

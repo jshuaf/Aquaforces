@@ -14,11 +14,11 @@ img {
 }
 
 html {
-	background-color: #ebfcfc;
+	background-color: #fff;
 }
 
 #mountNode {
-	background-color: #ebfcfc;
+	background-color: #fff;
 }
 
 strong,b {
@@ -59,6 +59,7 @@ section {
 @media (max-width: 800px) {
 	.mobileless {
 		display: none;
+		visibility: hidden;
 	}
 }
 
@@ -96,20 +97,6 @@ section {
 body {
 	background-color: #fff;
 	margin: 0;
-}
-
-input[type=tel],input[type=url],input[type=password],input[type=email],input[type=number],input[type=search],input[type=text],select,textarea,input {
-	color: white;
-	background-color: #19a8a6;
-	font-size: 1.5rem;
-	border-radius: 25px;
-	text-align: center;
-	box-shadow: none;
-	border: 1px #19a8a6 solid;
-}
-
-label {
-	font-weight: normal;
 }
 
 .navbar {
@@ -255,12 +242,6 @@ h4 {
 	border-radius: 4rem;
 	font-size: 20px;
 	cursor: pointer;
-}
-
-@media (min-width: 700px) {
-	.navbar > .columns > p,a {
-		text-align: right;
-	}
 }
 
 .studentselect > li {
@@ -587,4 +568,22 @@ h4 {
 	.text-right {
 		text-align: left;
 	}
+}
+
+@media (min-width: 800px) {
+	.mobile-only {
+		display: none !important;
+		width: 0;
+		visibility: hidden;
+	}
+}
+
+select {
+	color: white;
+	background-color: #19a8a6;
+	font-size: 1.5rem;
+	border-radius: 25px;
+	text-align: center;
+	box-shadow: none;
+	border: 1px #19a8a6 solid;
 }

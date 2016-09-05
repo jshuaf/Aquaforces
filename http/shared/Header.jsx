@@ -29,34 +29,28 @@ export class HeaderRaw extends Component {
 	}
 	render() {
 		const containerStyle = {
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'space-around',
-			position: 'fixed',
-			zIndex: 5,
-			width: '100%',
-			height: '12%',
-			backgroundColor: colors.ice,
+			textAlign: 'left',
+			marginTop: '25px',
 		};
 
 		const logoContainerStyle = {
-			height: '100%',
-			width: '30%',
-			display: 'flex',
-			alignItems: 'center',
+			display: 'inline-table',
+			alignItems: 'left',
 		};
 
 		const logoStyle = {
 			height: '80%',
-			width: '20%',
-			minWidth: '200px',
+			width: '20vw',
+			maxWidth: '200px',
+			marginRight: '15px',
 		};
 
 		const userInfoStyle = {
 			height: '80%',
-			display: 'flex',
-			justifyContent: 'center',
-			alignItems: 'center',
+			display: 'inline-table',
+			marginRight: '15px',
+			verticalAlign: 'top',
+			alignItems: 'left',
 			textDecoration: 'none',
 			fontSize: '1.3em',
 			color: colors.water,
@@ -74,27 +68,32 @@ export class HeaderRaw extends Component {
 			':hover': { color: colors.pacific } }
 		);
 
-		const linkTextStyle = {
+		const linkStyle = {
 			color: colors.water,
 		};
 
 		return (
-			<div style={containerStyle}>
-				<a href="/" style={logoContainerStyle}>
-					<img
-						src={`${location.protocol}//${location.host}/img/logo/dark-blue.svg`}
-						alt="Aquaforces" style={logoStyle} />
-				</a>
-				<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
-				<a href="/host" style={headerItemStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
-				<a href="/play" style={headerItemStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
-				{this.props.currentUser
-				? <div style={userInfoStyle} key={3}>
-						<span style={linkTextStyle}>Logged in as {this.props.currentUser.displayName}</span>
-						<a onClick={this.logOut} style={logoutStyle}>(Logout)</a>
+			<div className="container" id="header" style={containerStyle}>
+				<div className="row">
+					<div className="twelve columns">
+						<a href="/" style={logoContainerStyle}>
+							<img
+								src={`${location.protocol}//${location.host}/img/logo/new-blue.svg`}
+								alt="Aquaforces" style={logoStyle} className="mobileless" />
+							<a style={headerItemStyle} key="1444" className="mobile-only"><b>Aquaforces</b></a>
+						</a>
+						<a href="/console" style={headerItemStyle} key={0}><span style={linkStyle}>Sets</span></a>
+						<a href="/host" style={headerItemStyle} key={1}><span style={linkStyle}>Host</span></a>
+						<a href="/play" style={headerItemStyle} key={2}><span style={linkStyle}>Join</span></a>
+						{this.props.currentUser
+						? <div style={userInfoStyle} className="mobileless" key={3}>
+								<span style={linkStyle}>{this.props.currentUser.displayName}</span>
+								<a onClick={this.logOut} style={logoutStyle}>(Logout)</a>
+							</div>
+						: <PrimaryButton onClick={this.logIn}>Log in</PrimaryButton>
+						}
 					</div>
-				: <PrimaryButton onClick={this.logIn}>Log in</PrimaryButton>
-				}
+				</div>
 			</div>
 		);
 	}
@@ -106,7 +105,7 @@ HeaderRaw.propTypes = {
 
 export function UnderHeader() {
 	const style = {
-		height: '12vh',
+		height: '2vh',
 		width: '100%',
 	};
 	return <div style={style} />;
