@@ -1,5 +1,5 @@
 /* global dbcs:true */
-const o = require('yield-yield'
+const o = require('yield-yield-yield'
 );
 module.exports = o(function* (tws, m, games) {
 	/* eslint-disable global-require */

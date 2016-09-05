@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const o = require('yield-yield');
+const o = require('yield-yield-yield');
 const logger = require('./logger');
 
 /* eslint-disable no-extend-native */
