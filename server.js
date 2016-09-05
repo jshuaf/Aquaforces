@@ -6,6 +6,8 @@ const helpers = require('./helpers');
 const config = require('./config');
 const apiServer = require('./api/index');
 const logger = require('./logger');
+const assets = require('./stats').assetsByChunkName;
+
 require('colors');
 
 const http = require('http'),
@@ -18,7 +20,7 @@ const http = require('http'),
 	request = require('request'),
 	bodyParser = require('body-parser'),
 	cookieParser = require('cookie-parser');
-	/* eslint-enable one-var */
+/* eslint-enable one-var */
 
 // Database Storage
 global.dbcs = {};
@@ -64,7 +66,10 @@ const parsers = [bodyParser.json(), bodyParser.urlencoded({ extended: true }),
 
 const head = (req, res, next) => {
 	res.locals.head = fs.readFileSync('./html/a/head.html').toString()
-		.replaceAll('$inhead', res.locals.inHead || '')
+		.replaceAll('$inhead', res.locals.inHead ? `
+			<script src="../${assets.main[0]}"></script>
+			${res.locals.inHead}
+		` : '')
 		.replaceAll('$title', res.locals.title || 'Aquaforces');
 	next();
 };
@@ -72,7 +77,7 @@ const head = (req, res, next) => {
 const mountNode = (req, res, next) => {
 	res.locals.html = `
 	<div id="mountNode"></div><script src="/dll/dll.vendor.js">
-	</script><script src="/${res.locals.bundleName}"></script>`;
+	</script><script src="/${assets[res.locals.bundle][0]}"></script>`;
 	next();
 };
 
@@ -97,25 +102,25 @@ app.get('/play', (req, res, next) => {
 	if (req.get('host').includes('.io')) return res.redirect(301, 'aquaforces.io');
 	*/
 	res.locals.title = 'Join a game';
-	res.locals.bundleName = 'game.bundle.js';
+	res.locals.bundle = 'game';
 	next();
 }, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 
 app.get('/host', (req, res, next) => {
 	res.locals.title = 'Start a game';
-	res.locals.bundleName = 'host.bundle.js';
+	res.locals.bundle = 'host';
 	next();
 }, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 
 app.get('/console/*', (req, res, next) => {
 	res.locals.title = 'Question Sets';
-	res.locals.bundleName = 'console.bundle.js';
+	res.locals.bundle = 'console';
 	next();
 }, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 
 app.get('/set/*', (req, res, next) => {
 	res.locals.title = 'Question Set';
-	res.locals.bundleName = 'console.bundle.js';
+	res.locals.bundle = 'console';
 	next();
 }, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 

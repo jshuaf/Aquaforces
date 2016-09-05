@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const fs = require('fs');
 
 module.exports = {
 	cache: true,
@@ -12,7 +13,7 @@ module.exports = {
 	},
 	output: {
 		path: path.join(__dirname, '/http'),
-		filename: '[name].bundle.js',
+		filename: '[name].[hash].bundle.js',
 	},
 	module: {
 		loaders: [
@@ -46,5 +47,12 @@ module.exports = {
 			manifest: require('./dll/vendor-manifest.json'),
 			/* eslint-enable global-require */
 		}),
+		function () {
+			this.plugin('done', (stats) => {
+				fs.writeFileSync(
+				path.join(__dirname, 'stats.json'),
+				JSON.stringify(stats.toJson()));
+			});
+		},
 	],
 };
