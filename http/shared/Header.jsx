@@ -106,12 +106,17 @@ HeaderRaw.propTypes = {
 	currentUser: PropTypes.any,
 };
 
-export function UnderHeader() {
-	const style = {
+export function UnderHeader({ style }) {
+	let currentStyle = {
 		height: '12vh',
 		width: '100%',
 	};
-	return <div style={style} />;
+	if (style) currentStyle = Object.assign({}, currentStyle, style);
+	return <div style={currentStyle} />;
 }
+
+UnderHeader.propTypes = {
+	style: PropTypes.object,
+};
 
 export const Header = new Radium(HeaderRaw);
