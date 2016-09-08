@@ -36,7 +36,7 @@ export class HeaderRaw extends Component {
 			zIndex: 5,
 			width: '100%',
 			height: '12%',
-			backgroundColor: colors.ice,
+			backgroundColor: colors.wasabi,
 		};
 
 		const logoContainerStyle = {
@@ -59,15 +59,16 @@ export class HeaderRaw extends Component {
 			alignItems: 'center',
 			textDecoration: 'none',
 			fontSize: '1.3em',
-			color: colors.water,
+			color: colors.midnight,
 		};
 
 		const logoutStyle = {
-			color: colors.water,
+			color: colors.midnight,
 			fontSize: '1em',
 			textDecoration: 'none',
 			':hover': { color: colors.pacific },
 			marginLeft: '5px',
+			cursor: 'pointer',
 		};
 
 		const headerItemStyle = Object.assign({}, userInfoStyle, {
@@ -75,7 +76,7 @@ export class HeaderRaw extends Component {
 		);
 
 		const linkTextStyle = {
-			color: colors.water,
+			color: 'inherit',
 		};
 
 		return (
