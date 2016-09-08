@@ -1,4 +1,4 @@
 **/*.*.bundle.js
 **/*.*.bundle.js.map
-http/a/scripts/*.js
 http/dll/dll.vendor.js
+http/a/scripts/sweetalert.js

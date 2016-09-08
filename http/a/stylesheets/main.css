@@ -587,3 +587,28 @@ select {
 	box-shadow: none;
 	border: 1px #19a8a6 solid;
 }
+
+/* sweet-alerts */
+div.sweet-alert {
+	background-color: #2C3E50;
+}
+
+span.sa-line.sa-left span.sa-line.sa-right {
+	background-color: #ED858A;
+}
+
+div.sa-icon.sa-error {
+	border-color: #ED858A;
+}
+
+.sweet-alert h2 {
+	color: #EBF5FF;
+}
+
+.sweet-alert p {
+	color: #EBF5FF;
+}
+
+.sa-confirm-button-container > button {
+	background-color: #0AB5B5;
+}
