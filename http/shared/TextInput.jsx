@@ -76,7 +76,7 @@ export default class TextInput extends Component {
 
 		return (
 			<div className="textInput" style={containerStyle}>
-				<span style={labelStyle}><b>{this.props.label}</b></span>
+				{this.props.label ? <span style={labelStyle}><b>{this.props.label}</b></span> : null}
 				<input
 					ref={(i) => { this.node = i; }} style={inputStyle} {...inputProps}
 					onChange={this.onChange}

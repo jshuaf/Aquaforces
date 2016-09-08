@@ -14,14 +14,16 @@ class SearchBarDisplay extends Component {
 		this.props.searchQuestionSets(query);
 	}
 	render() {
-		const formStyles = {
+		const formStyle = {
 			marginBottom: 0,
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
 		};
 		return (
-				<form onSubmit={(e) => { e.preventDefault(); this.search(); }} style={formStyles}>
+				<form onSubmit={(e) => { e.preventDefault(); this.search(); }} style={formStyle}>
 					<TextInput
-						placeholder="Science"
-						label="Search"
+						placeholder="Search for question sets"
 						ref={(t) => { this.input = t; }}
 					/>
 				</form>
@@ -34,7 +36,6 @@ SearchBarDisplay.propTypes = {
 };
 
 const mapDispatchToProps = { searchQuestionSets };
-
 const SearchBar = connect(null, mapDispatchToProps)(SearchBarDisplay);
 
 export default SearchBar;
