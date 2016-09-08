@@ -10,3 +10,4 @@ npm-debug.log
 /http/main.*.bundle.js.map
 /http/dll/dll.vendor.js
 /__logs__/*
+stats.json
