@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
+import Radium from 'radium';
 import colors from './colors';
 
-export default class TextInput extends Component {
+class TextInputDisplay extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -44,15 +45,21 @@ export default class TextInput extends Component {
 			fontSize: '1.3em',
 			textIndent: '4%',
 			padding: '7px 0px 7px 0px',
-			background: "url('/img/icons/search.svg') no-repeat scroll 2%",
 			backgroundSize: '3%',
+			outlineWidth: '0',
+			':focus': {
+				borderColor: colors.pacific,
+			},
 		};
 
 		if (this.props.icon) {
 			inputStyle = Object.assign({}, inputStyle, {
 				textIndent: '8%',
 				padding: '7px 0px 7px 0px',
-				background: `url(${this.props.icon}) no-repeat scroll 2%`,
+				backgroundImage: "url('/img/icons/search.svg')",
+				backgroundRepeat: 'no-repeat',
+				backgroundPosition: '2%',
+				backgroundAttachment: 'scroll',
 				backgroundSize: '3%',
 			});
 		}
@@ -97,7 +104,7 @@ export default class TextInput extends Component {
 	}
 }
 
-TextInput.propTypes = {
+TextInputDisplay.propTypes = {
 	placeholder: PropTypes.string,
 	label: PropTypes.string,
 	isComplete: PropTypes.func,
@@ -107,3 +114,6 @@ TextInput.propTypes = {
 	maxWidth: PropTypes.string,
 	icon: PropTypes.string,
 };
+
+const TextInput = new Radium(TextInputDisplay);
+export default TextInput;
