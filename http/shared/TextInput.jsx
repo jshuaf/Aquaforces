@@ -25,27 +25,37 @@ export default class TextInput extends Component {
 	}
 	render() {
 		const containerStyle = {
-			display: 'inline-table',
-			width: (this.props.placeholder.length * 8) + 200 + 'px',
-			maxWidth: '100%',
+			width: this.props.width || '100%',
+			maxWidth: this.props.maxWidth || '500px',
 		};
 		const labelStyle = {
 			marginBottom: '2%',
 			display: 'inline-table',
 		};
-		const inputStyle = {
+		let inputStyle = {
 			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'transparent',
 			textAlign: 'left',
 			color: colors.water,
 			width: '100%',
-			borderLeft: 'none',
-			borderRight: 'none',
-			borderTop: 'none',
-			borderBottom: '2px solid #19a8a6',
-			borderRadius: 0,
+			borderStyle: 'solid',
+			borderColor: colors.midnight,
+			borderWidth: '0.1px',
+			borderRadius: '9999999px',
 			fontSize: '1.3em',
-			display: 'inline-table',
+			textIndent: '4%',
+			padding: '7px 0px 7px 0px',
+			background: "url('/img/icons/search.svg') no-repeat scroll 2%",
+			backgroundSize: '3%',
 		};
+
+		if (this.props.icon) {
+			inputStyle = Object.assign({}, inputStyle, {
+				textIndent: '8%',
+				padding: '7px 0px 7px 0px',
+				background: `url(${this.props.icon}) no-repeat scroll 2%`,
+				backgroundSize: '3%',
+			});
+		}
 		const errorContainerStyle = {
 			display: 'flex',
 			alignItems: 'center',
@@ -71,7 +81,7 @@ export default class TextInput extends Component {
 			</div> : undefined;
 
 		/* eslint-disable no-unused-vars */
-		const { onComplete, isComplete, ...inputProps } = this.props;
+		const { onComplete, isComplete, width, maxWidth, icon, ...inputProps } = this.props;
 		/* eslint-enable no-unused-vars */
 
 		return (
@@ -93,4 +103,7 @@ TextInput.propTypes = {
 	isComplete: PropTypes.func,
 	onComplete: PropTypes.func,
 	onChange: PropTypes.func,
+	width: PropTypes.string,
+	maxWidth: PropTypes.string,
+	icon: PropTypes.string,
 };

@@ -21,12 +21,14 @@ class SearchBarDisplay extends Component {
 			justifyContent: 'center',
 		};
 		return (
-				<form onSubmit={(e) => { e.preventDefault(); this.search(); }} style={formStyle}>
-					<TextInput
-						placeholder="Search for question sets"
-						ref={(t) => { this.input = t; }}
-					/>
-				</form>
+			<form onSubmit={(e) => { e.preventDefault(); this.search(); }} style={formStyle}>
+				<TextInput
+					placeholder="Search for question sets"
+					ref={(t) => { this.input = t; }}
+					width="550px"
+					icon="/img/icons/search.svg"
+				/>
+			</form>
 		);
 	}
 }

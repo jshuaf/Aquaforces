@@ -35,7 +35,8 @@ export class HeaderRaw extends Component {
 			position: 'fixed',
 			zIndex: 5,
 			width: '100%',
-			height: '12%',
+			height: '11%',
+			minHeight: '60px',
 			backgroundColor: colors.wasabi,
 		};
 
