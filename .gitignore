@@ -9,5 +9,7 @@ npm-debug.log
 /http/main.*.bundle.js
 /http/main.*.bundle.js.map
 /http/dll/dll.vendor.js
+*.bundle.js.map
+*.bundle.js
 /__logs__/*
 stats.json
