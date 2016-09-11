@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
+import Radium from 'radium';
 import colors from './colors';
 
-export default class TextInput extends Component {
+class TextInputDisplay extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -25,26 +26,30 @@ export default class TextInput extends Component {
 	}
 	render() {
 		const containerStyle = {
-			display: 'inline-table',
-			width: (this.props.placeholder.length * 8) + 200 + 'px',
-			maxWidth: '100%',
+			width: this.props.width || '100%',
+			maxWidth: this.props.maxWidth || '500px',
 		};
 		const labelStyle = {
 			marginBottom: '2%',
 			display: 'inline-table',
 		};
-		const inputStyle = {
+		let inputStyle = {
 			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'transparent',
 			textAlign: 'left',
 			color: colors.water,
 			width: '100%',
-			borderLeft: 'none',
-			borderRight: 'none',
-			borderTop: 'none',
-			borderBottom: '2px solid #19a8a6',
-			borderRadius: 0,
+			borderStyle: 'solid',
+			borderColor: colors.midnight,
+			borderWidth: '0.1px',
+			borderRadius: '9999999px',
 			fontSize: '1.3em',
-			display: 'inline-table',
+			textIndent: '4%',
+			padding: '7px 0px 7px 0px',
+			backgroundSize: '3%',
+			outlineWidth: '0',
+			':focus': {
+				borderColor: colors.pacific,
+			},
 		};
 		const errorContainerStyle = {
 			display: 'flex',
@@ -70,13 +75,26 @@ export default class TextInput extends Component {
 				<span style={errorMessageStyle}>{this.state.errorMessage}</span>
 			</div> : undefined;
 
+
+		if (this.props.icon) {
+			inputStyle = Object.assign({}, inputStyle, {
+				textIndent: '8%',
+				padding: '7px 0px 7px 0px',
+				backgroundImage: "url('/img/icons/search.svg')",
+				backgroundRepeat: 'no-repeat',
+				backgroundPosition: '2%',
+				backgroundAttachment: 'scroll',
+				backgroundSize: '3%',
+			});
+		}
+
 		/* eslint-disable no-unused-vars */
-		const { onComplete, isComplete, ...inputProps } = this.props;
+		const { onComplete, isComplete, width, maxWidth, icon, ...inputProps } = this.props;
 		/* eslint-enable no-unused-vars */
 
 		return (
 			<div className="textInput" style={containerStyle}>
-				<span style={labelStyle}><b>{this.props.label}</b></span>
+				{this.props.label ? <span style={labelStyle}><b>{this.props.label}</b></span> : null}
 				<input
 					ref={(i) => { this.node = i; }} style={inputStyle} {...inputProps}
 					onChange={this.onChange}
@@ -87,10 +105,16 @@ export default class TextInput extends Component {
 	}
 }
 
-TextInput.propTypes = {
+TextInputDisplay.propTypes = {
 	placeholder: PropTypes.string,
 	label: PropTypes.string,
 	isComplete: PropTypes.func,
 	onComplete: PropTypes.func,
 	onChange: PropTypes.func,
+	width: PropTypes.string,
+	maxWidth: PropTypes.string,
+	icon: PropTypes.string,
 };
+
+const TextInput = new Radium(TextInputDisplay);
+export default TextInput;

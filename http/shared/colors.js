@@ -8,9 +8,9 @@ module.exports = {
 	wasabi: hsvToHex(125, 35, 81),
 	pistachio: hsvToHex(125, 25, 86),
 	// reds
-	coral: hsvToHex(357, 44, 93),
-	rosebud: hsvToHex(358, 34, 96),
-	cupid: hsvToHex(358, 21, 98),
+	coral: hsvToHex(357, 54, 93),
+	rosebud: hsvToHex(358, 44, 96),
+	cupid: hsvToHex(358, 34, 98),
 	// yellows
 	gold: hsvToHex(48, 61, 93),
 	lemon: hsvToHex(50, 54, 95),

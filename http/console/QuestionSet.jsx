@@ -19,8 +19,7 @@ class QuestionSet extends Component {
 	render() {
 		return (
 			<div className="questionSet">
-				<h3>Question Set</h3>
-				<h4 key={-1}>{this.props.title}</h4>
+				<h2>{this.props.title}</h2>
 				{this.props.questions.map((question, index) =>
 					<Question {...question} key={index} />
 				)}

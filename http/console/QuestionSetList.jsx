@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionSetSummary from './QuestionSetSummary.jsx';
 import { questionSetPropTypes } from './QuestionSet.jsx';
-import SearchBar from './SearchBar.jsx';
 import Spinner from '../shared/Spinner.jsx';
 import { getQuestionSets } from './thunks';
 
@@ -20,8 +19,6 @@ class QuestionSetListDisplay extends Component {
 		}
 		return (
 			<div id="questionSets">
-				<h3 className="marginless">Your sets</h3>
-				<SearchBar />
 				{
 					this.props.questionSets.map((questionSet, index) =>
 						<div className="row" key={index}>

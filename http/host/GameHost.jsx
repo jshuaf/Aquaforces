@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionSetPicker from './QuestionSetPicker.jsx';
 import GamePlayHost from './GamePlayHost.jsx';
+import GameBoarding from './GameBoarding.jsx';
 import Spinner from '../shared/Spinner.jsx';
 import { questionSetPropTypes } from '../console/QuestionSet.jsx';
 import { newGame, startGameRequest } from './actions';
@@ -45,22 +46,7 @@ class GameHostDisplay extends Component {
 				</div>
 			);
 		case 'boarding':
-			return (
-				<div id="gameHost">
-					<Header />
-					<UnderHeader />
-					<h1>Your game ID is: {this.props.gameInfo.gameID}</h1>
-					<h4>Users without crews:</h4>
-					{this.props.usersWithoutCrews.map((user, index) => <p key={index}>{user}</p>)}
-					<h4>Crews:</h4>
-					{Object.keys(this.props.crews).map((key) =>
-						this.props.crews[key].map((user, index) =>
-							<p key={index}>User {user} is in crew {key}</p>
-						)
-					)}
-					<button className="button button-primary" onClick={this.startGame}>Start game</button>
-				</div>
-			);
+			return <GameBoarding startGame={this.startGame} />;
 		case 'inProgress':
 			return <GamePlayHost ref={this.props.instance} />;
 		default:
