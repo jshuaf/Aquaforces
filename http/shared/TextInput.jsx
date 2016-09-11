@@ -51,18 +51,6 @@ class TextInputDisplay extends Component {
 				borderColor: colors.pacific,
 			},
 		};
-
-		if (this.props.icon) {
-			inputStyle = Object.assign({}, inputStyle, {
-				textIndent: '8%',
-				padding: '7px 0px 7px 0px',
-				backgroundImage: "url('/img/icons/search.svg')",
-				backgroundRepeat: 'no-repeat',
-				backgroundPosition: '2%',
-				backgroundAttachment: 'scroll',
-				backgroundSize: '3%',
-			});
-		}
 		const errorContainerStyle = {
 			display: 'flex',
 			alignItems: 'center',
@@ -86,6 +74,19 @@ class TextInputDisplay extends Component {
 				<img src="../img/icons/exclamation.svg" alt="" style={errorIconStyle} />
 				<span style={errorMessageStyle}>{this.state.errorMessage}</span>
 			</div> : undefined;
+
+
+		if (this.props.icon) {
+			inputStyle = Object.assign({}, inputStyle, {
+				textIndent: '8%',
+				padding: '7px 0px 7px 0px',
+				backgroundImage: "url('/img/icons/search.svg')",
+				backgroundRepeat: 'no-repeat',
+				backgroundPosition: '2%',
+				backgroundAttachment: 'scroll',
+				backgroundSize: '3%',
+			});
+		}
 
 		/* eslint-disable no-unused-vars */
 		const { onComplete, isComplete, width, maxWidth, icon, ...inputProps } = this.props;
