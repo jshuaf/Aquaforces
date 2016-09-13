@@ -75,10 +75,8 @@ export class HeaderRaw extends Component {
 		const headerItemStyle = Object.assign({}, userInfoStyle, {
 			':hover': { color: colors.pacific } }
 		);
-
-		const linkTextStyle = {
-			color: 'inherit',
-		};
+		const linkStyle = { color: 'inherit' };
+		const highlightedStyle = { color: 'inherit', fontWeight: 'bold' };
 
 		return (
 			<div style={containerStyle}>
@@ -87,12 +85,16 @@ export class HeaderRaw extends Component {
 						src={`${location.protocol}//${location.host}/img/logo/dark-blue.svg`}
 						alt="Aquaforces" style={logoStyle} />
 				</a>
-				<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
-				<a href="/host" style={headerItemStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
-				<a href="/play" style={headerItemStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
+				<a href="/console" style={headerItemStyle} key={0}>
+					<span style={this.props.location === 'console' ? highlightedStyle : linkStyle}>Question Sets</span>
+				</a>
+				<a href="/host" style={headerItemStyle} key={1}>
+					<span style={this.props.location === 'host' ? highlightedStyle : linkStyle}>Host a game</span>
+				</a>
+				<a href="/play" style={headerItemStyle} key={2}><span style={linkStyle}>Join a game</span></a>
 				{this.props.currentUser
 				? <div style={userInfoStyle} key={3}>
-						<span style={linkTextStyle}>Logged in as {this.props.currentUser.displayName}</span>
+						<span style={linkStyle}>Logged in as {this.props.currentUser.displayName}</span>
 						<a onClick={this.logOut} style={logoutStyle}>(Logout)</a>
 					</div>
 				: <PrimaryButton onClick={this.logIn}>Log in</PrimaryButton>
@@ -104,6 +106,7 @@ export class HeaderRaw extends Component {
 
 HeaderRaw.propTypes = {
 	currentUser: PropTypes.any,
+	location: PropTypes.string.isRequired,
 };
 
 export function UnderHeader({ style }) {

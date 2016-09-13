@@ -50,13 +50,14 @@ module.exports = {
 		function () {
 			this.plugin('done', (stats) => {
 				fs.writeFileSync(path.join(__dirname, 'stats.json'), JSON.stringify(stats.toJson()));
-				const chunkNames = require('./stats').assetsByChunkName
+				const chunkNames = JSON.parse(fs.readFileSync('./stats.json')).assetsByChunkName;
 				const recent = [].concat.apply([], Object.keys(chunkNames)
-					.map(chunkName => chunkNames[chunkName]))
-				const files = fs.readdirSync('./http')
-			  files.filter((name) => {
-					return /\w+\.bundle\.js\.map/.test(name) || /\w+\.bundle\.js/.test(name)
-				}).forEach((file) => {
+					.map(chunkName => chunkNames[chunkName]));
+				const files = fs.readdirSync('./http');
+				console.log(recent);
+				files.filter((name) =>
+					/\w+\.bundle\.js\.map/.test(name) || /\w+\.bundle\.js/.test(name)
+				).forEach((file) => {
 					if (recent.indexOf(file) < 0) {
 						fs.unlink(`./http/${file}`);
 					}

@@ -10,6 +10,8 @@ export const START_GAME_SUCCESS = 'START_GAME_SUCCESS';
 export const POPULATE_INITIAL_CREW_DATA = 'POPULATE_INITIAL_CREW_DATA';
 export const STOP_PENDING = 'STOP_PENDING';
 
+export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
+
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
 		const action = { type };
@@ -31,3 +33,5 @@ export const startGameRequest = makeActionCreator(START_GAME_REQUEST);
 export const startGameSuccess = makeActionCreator(START_GAME_SUCCESS);
 export const populateInitialCrewData = makeActionCreator(POPULATE_INITIAL_CREW_DATA, 'crews');
 export const stopPending = makeActionCreator(STOP_PENDING);
+
+export const authenticateUser = makeActionCreator(AUTHENTICATE_USER, 'user');

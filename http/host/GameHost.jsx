@@ -7,12 +7,16 @@ import Spinner from '../shared/Spinner.jsx';
 import { questionSetPropTypes } from '../console/QuestionSet.jsx';
 import { newGame, startGameRequest } from './actions';
 import { Header, UnderHeader } from '../shared/Header.jsx';
+import { authenticateUser } from './thunks';
 
 class GameHostDisplay extends Component {
 	constructor(props) {
 		super(props);
 		this.newGame = this.newGame.bind(this);
 		this.startGame = this.startGame.bind(this);
+	}
+	componentDidMount() {
+		this.props.authenticateUser();
 	}
 	newGame() {
 		this.props.newGame();
@@ -35,7 +39,7 @@ class GameHostDisplay extends Component {
 		case 'notStarted':
 			return (
 				<div id="gameHost">
-					<Header />
+					<Header location="host" currentUser={this.props.currentUser} />
 					<UnderHeader />
 					<div className="container">
 						<div className="row">
@@ -67,6 +71,8 @@ GameHostDisplay.propTypes = {
 	selectedSet: PropTypes.shape(questionSetPropTypes),
 	usersWithoutCrews: PropTypes.arrayOf(PropTypes.string).isRequired,
 	crews: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+	currentUser: PropTypes.any,
+	authenticateUser: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -74,6 +80,7 @@ const mapStateToProps = (state) => ({
 	selectedSet: state.boarding.selectedSet,
 	usersWithoutCrews: state.boarding.usersWithoutCrews,
 	crews: state.boarding.crews,
+	currentUser: state.currentUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -82,6 +89,9 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 	startGameRequest: () => {
 		dispatch(startGameRequest());
+	},
+	authenticateUser: () => {
+		dispatch(authenticateUser());
 	},
 });
 

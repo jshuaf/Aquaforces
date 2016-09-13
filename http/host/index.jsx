@@ -1,7 +1,8 @@
 import { render } from 'react-dom';
 import React from 'react';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import GameHost from './GameHost.jsx';
 import {
 	setGameID, addUserToGame, addUserToCrew,
@@ -10,7 +11,10 @@ import gameHostReducer from './reducers';
 
 /* global sweetAlert: true */
 
-const store = createStore(gameHostReducer, window.devToolsExtension && window.devToolsExtension());
+const store = createStore(gameHostReducer, undefined, compose(
+	applyMiddleware(thunk),
+	window.devToolsExtension && window.devToolsExtension())
+);
 
 const socketProtocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
 const socketPort = location.port !== 80 ? `:${location.port}` : '';

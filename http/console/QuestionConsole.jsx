@@ -11,7 +11,7 @@ class QuestionConsoleDisplay extends Component {
 	render() {
 		return (
 			<div id="questionConsole">
-				<Header currentUser={this.props.currentUser} />
+				<Header currentUser={this.props.currentUser} location="console" />
 				<UnderHeader style={{ marginBottom: '1%' }} />
 				<div className="container">
 					<QuestionConsoleHeader />
