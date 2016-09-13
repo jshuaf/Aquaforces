@@ -86,6 +86,7 @@ class TextInputDisplay extends Component {
 				backgroundAttachment: 'scroll',
 				backgroundSize: '3%',
 				':focus': {
+					borderColor: colors.pacific,
 					backgroundImage: `url('${this.props.focusedIcon || this.props.icon}')`,
 				},
 			});
