@@ -25,8 +25,10 @@ class SearchBarDisplay extends Component {
 				<TextInput
 					placeholder="Search for question sets"
 					ref={(t) => { this.input = t; }}
-					width="550px"
+					width="100%"
+					maxWidth="none"
 					icon="/img/icons/search.svg"
+					focusedIcon="/img/icons/search-focus.svg"
 				/>
 			</form>
 		);

@@ -80,16 +80,19 @@ class TextInputDisplay extends Component {
 			inputStyle = Object.assign({}, inputStyle, {
 				textIndent: '8%',
 				padding: '7px 0px 7px 0px',
-				backgroundImage: "url('/img/icons/search.svg')",
+				backgroundImage: `url('${this.props.icon}')`,
 				backgroundRepeat: 'no-repeat',
 				backgroundPosition: '2%',
 				backgroundAttachment: 'scroll',
 				backgroundSize: '3%',
+				':focus': {
+					backgroundImage: `url('${this.props.focusedIcon || this.props.icon}')`,
+				},
 			});
 		}
 
 		/* eslint-disable no-unused-vars */
-		const { onComplete, isComplete, width, maxWidth, icon, ...inputProps } = this.props;
+		const { onComplete, isComplete, width, maxWidth, icon, focusedIcon, ...inputProps } = this.props;
 		/* eslint-enable no-unused-vars */
 
 		return (
@@ -114,6 +117,7 @@ TextInputDisplay.propTypes = {
 	width: PropTypes.string,
 	maxWidth: PropTypes.string,
 	icon: PropTypes.string,
+	focusedIcon: PropTypes.string,
 };
 
 const TextInput = new Radium(TextInputDisplay);

@@ -113,6 +113,7 @@ export function UnderHeader({ style }) {
 	let currentStyle = {
 		height: '12vh',
 		width: '100%',
+		minHeight: '60px',
 	};
 	if (style) currentStyle = Object.assign({}, currentStyle, style);
 	return <div style={currentStyle} />;

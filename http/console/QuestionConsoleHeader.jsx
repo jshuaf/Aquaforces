@@ -5,13 +5,7 @@ import PrimaryButton from '../shared/PrimaryButton.jsx';
 
 export default function QuestionConsoleHeader() {
 	const containerStyle = {
-		marginBottom: '0.5%',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-	};
-	const headerStyle = {
-		marginBottom: '1%',
+		marginBottom: '2%',
 	};
 	const linkStyle = {
 		padding: '0 2% 0 2%',
@@ -24,9 +18,11 @@ export default function QuestionConsoleHeader() {
 		padding: 0,
 	};
 	return (
-		<div className="row text-center">
-			<h1 style={headerStyle}>Question Console</h1>
-			<div style={containerStyle}>
+		<div className="row text-center" style={containerStyle}>
+			<div className="nine columns">
+				<SearchBar />
+			</div>
+			<div style={containerStyle} className="three columns">
 				<Link to="/console/new" style={linkStyle}>
 					<PrimaryButton style={buttonStyle}>New Set</PrimaryButton>
 				</Link>
@@ -34,7 +30,6 @@ export default function QuestionConsoleHeader() {
 					<PrimaryButton style={buttonStyle}>My Sets</PrimaryButton>
 				</Link>
 			</div>
-			<SearchBar />
 		</div>
 	);
 }
