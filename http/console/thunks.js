@@ -6,7 +6,8 @@ const request = require('request');
 export function searchQuestionSets(query) {
 	return (dispatch, getState) => {
 		const url = `${location.protocol}//${location.host}/api/search`;
-		const body = { query };
+		const filter = getState().searchFilter;
+		const body = { query, filter };
 		if (!query) return;
 		if (getState().requests.search) {
 			getState().requests.search.forEach(req => req.req.destroy());

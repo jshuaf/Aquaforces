@@ -46,7 +46,7 @@ class QuestionSetSummaryDisplay extends Component {
 		</Link>,
 		];
 		const notImportedSetButtons = [
-			<button className="button button-secondary" onClick={this.importQuestionSet}>
+			<button className="button button-secondary" onClick={this.importQuestionSet} key={0}>
 				Import Set
 			</button>,
 		];
