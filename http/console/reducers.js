@@ -249,6 +249,26 @@ function requests(state = initialRequestsState, action) {
 	}
 }
 
+const initialSearchFilterState = {
+	sources: ['quizlet', 'aquaforces'],
+};
+
+function searchFilter(state = initialSearchFilterState, action) {
+	switch (action.type) {
+	case actions.TOGGLE_SEARCH_FILTER_SOURCE: {
+		let newSources = state.sources.slice();
+		if (newSources.indexOf(action.source) >= 0) {
+			newSources.splice(newSources.indexOf(action.source), 1);
+		} else {
+			newSources = newSources.concat([action.source]);
+		}
+		return Object.assign({}, state, { sources: newSources });
+	}
+	default:
+		return state;
+	}
+}
+
 const questionConsoleReducer = combineReducers({
-	newQuestionSet, questionSets, activeQuestionSet, currentUser, requests });
+	newQuestionSet, questionSets, activeQuestionSet, currentUser, requests, searchFilter });
 export default questionConsoleReducer;

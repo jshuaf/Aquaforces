@@ -16,6 +16,8 @@ export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
 export const CLEAR_REQUESTS = 'CLEAR_REQUESTS';
 export const NEW_REQUEST = 'NEW_REQUEST';
 
+export const TOGGLE_SEARCH_FILTER_SOURCE = 'TOGGLE_SEARCH_FILTER_SOURCE';
+
 function makeActionCreator(type, ...argNames) {
 	return (...args) => {
 		const action = { type };
@@ -43,3 +45,5 @@ export const authenticateUser = makeActionCreator(AUTHENTICATE_USER, 'user');
 
 export const newRequest = makeActionCreator(NEW_REQUEST, 'category', 'request');
 export const clearRequests = makeActionCreator(CLEAR_REQUESTS, 'category');
+
+export const toggleSearchFilterSource = makeActionCreator(TOGGLE_SEARCH_FILTER_SOURCE, 'source');

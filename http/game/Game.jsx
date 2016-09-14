@@ -16,7 +16,7 @@ class GameDisplay extends Component {
 			return (
 				<div>
 					<Header />
-					<UnderHeader />
+				<UnderHeader />/aq
 					<div className="container">
 						<div className="row">
 							<JoinGameForm socket={this.props.socket} />
