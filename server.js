@@ -229,6 +229,10 @@ mongo.connect(config.mongoPath, (err, db) => {
 
 	// Go through the mongodb data and store it server-side
 	while (i--) { db.collection(usedDBCs[i], handleCollection); }
+
+	dbcs.qsets.dropIndexes();
+	dbcs.qsets.createIndex({ '$**': 'text' });
+
 	console.log('Connected to mongodb.'.cyan);
 	// Patch the model based on updates
 	let updatedCount = 0;
