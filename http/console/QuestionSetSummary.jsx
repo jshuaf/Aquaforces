@@ -51,7 +51,7 @@ class QuestionSetSummaryDisplay extends Component {
 			</button>,
 		];
 		return (
-				<div style={containerStyle} className="eight columns">
+				<div style={containerStyle} className="six columns">
 					<div className="row">
 						<div className="eight columns">
 							<h2 key={-1} className="marginless" style={textStyle}>{this.props.title}</h2>

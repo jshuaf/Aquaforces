@@ -17,12 +17,23 @@ class QuestionSetListDisplay extends Component {
 				return <Spinner />;
 			}
 		}
+
+		const summaries = [[]];
+		this.props.questionSets.forEach((questionSet) => {
+			if (summaries[summaries.length - 1].length < 2) {
+				summaries[summaries.length - 1].push(<QuestionSetSummary
+					{...questionSet} key={summaries[summaries.length - 1].length} />);
+			} else {
+				summaries.push([<QuestionSetSummary {...questionSet} key={summaries[summaries.length - 1].length} />]);
+			}
+		});
+		console.log(summaries);
 		return (
 			<div id="questionSets">
 				{
-					this.props.questionSets.map((questionSet, index) =>
+					summaries.map((questionSets, index) =>
 						<div className="row" key={index}>
-							<QuestionSetSummary {...questionSet} />
+							{questionSets}
 						</div>
 					)
 				}
