@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import autoBind from 'react-autobind';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -55,29 +56,37 @@ class QuestionSetSummaryDisplay extends Component {
 			</button>,
 		];
 		return (
-				<div style={containerStyle} className="six columns">
-					<div className="row">
-						<div className="eight columns">
-							<h2 key={-1} className="marginless" style={textStyle}>{this.props.title}</h2>
-							<h4 style={textStyle}>
-								{this.props.questions.length === 1 ?
-								`1 question ${questionSetNote}` :
-								`${this.props.questions.length}
-									questions ${questionSetNote}`
-								}
-							</h4>
+			<ReactCSSTransitionGroup
+				className="six columns"
+				transitionName="pop-up" transitionAppear transitionAppearTimeout={this.props.delay}
+				transitionEnterTimeout={0} transitionLeaveTimeout={0}
+			>
+				<div style={containerStyle}>
+						<div className="row">
+							<div className="eight columns">
+								<h2 key={-1} className="marginless" style={textStyle}>{this.props.title}</h2>
+								<h4 style={textStyle}>
+									{this.props.questions.length === 1 ?
+									`1 question ${questionSetNote}` :
+									`${this.props.questions.length}
+										questions ${questionSetNote}`
+									}
+								</h4>
+							</div>
+							<div className="four columns text-right">
+								{this.props._id ? importedSetButtons : notImportedSetButtons}
+							</div>
 						</div>
-						<div className="four columns text-right">
-							{this.props._id ? importedSetButtons : notImportedSetButtons}
-						</div>
-					</div>
 				</div>
+			</ReactCSSTransitionGroup>
+
 		);
 	}
 }
 
 QuestionSetSummaryDisplay.propTypes = Object.assign({
 	importQuestionSet: PropTypes.func.isRequired,
+	delay: PropTypes.number.isRequired,
 }, questionSetPropTypes);
 
 const mapDispatchToProps = (dispatch) => ({

@@ -47,6 +47,7 @@
     "radium": "^0.18.1",
     "react": "^15.3.0",
     "react-addons-css-transition-group": "^15.3.1",
+    "react-addons-transition-group": "^15.3.1",
     "react-autobind": "^1.0.6",
     "react-dom": "^15.3.0",
     "react-redux": "^4.4.5",

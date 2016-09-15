@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import QuestionSetSummary from './QuestionSetSummary.jsx';
 import { questionSetPropTypes } from './QuestionSet.jsx';
@@ -26,23 +25,13 @@ class QuestionSetListDisplay extends Component {
 			else lastDelay += 100;
 			if (summaries[summaries.length - 1].length < 2) {
 				summaries[summaries.length - 1].push(
-					<ReactCSSTransitionGroup
-						transitionName="pop-up" transitionAppear transitionAppearTimeout={500}
-						transitionEnterTimeout={0} transitionLeaveTimeout={0}
-						key={summaries[summaries.length - 1].length}
-					>
-						<QuestionSetSummary {...questionSet} key={0} />
-					</ReactCSSTransitionGroup>
+					<QuestionSetSummary
+						{...questionSet} key={summaries[summaries.length - 1].length} delay={lastDelay} />
 				);
 			} else {
 				summaries.push([
-					<ReactCSSTransitionGroup
-						transitionName="pop-up hello" transitionAppear transitionAppearTimeout={500}
-						transitionEnterTimeout={0} transitionLeaveTimeout={0}
-						key={summaries[summaries.length - 1].length}
-					>
-						<QuestionSetSummary {...questionSet} key={0} />
-					</ReactCSSTransitionGroup>,
+					<QuestionSetSummary
+						{...questionSet} key={summaries[summaries.length - 1].length} delay={lastDelay} />,
 				]);
 			}
 		});
