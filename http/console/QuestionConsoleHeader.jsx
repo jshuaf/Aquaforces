@@ -12,7 +12,7 @@ class QuestionConsoleHeaderDisplay extends Component {
 		autoBind(this);
 	}
 	viewMySets() {
-		this.props.dispatch(getQuestionSets());
+		this.props.dispatch(getQuestionSets(true));
 	}
 	render() {
 		const containerStyle = {

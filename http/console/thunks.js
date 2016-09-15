@@ -80,7 +80,7 @@ export function deleteQuestionSet(id) {
 	};
 }
 
-export function getQuestionSets() {
+export function getQuestionSets(redirect = false) {
 	return (dispatch) => {
 		const url = `${location.protocol}//${location.host}/api/get-qsets`;
 		const searchRequest = request({ url, body: {}, json: true, method: 'post' }, (error, res) => {
@@ -90,7 +90,7 @@ export function getQuestionSets() {
 			dispatch(actions.populateQuestionSetList(res.body));
 		});
 		dispatch(actions.newRequest('search', searchRequest));
-		return browserHistory.push('/console');
+		if (redirect) return browserHistory.push('/console');
 	};
 }
 
