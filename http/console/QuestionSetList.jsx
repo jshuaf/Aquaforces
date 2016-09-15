@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionSetSummary from './QuestionSetSummary.jsx';
 import { questionSetPropTypes } from './QuestionSet.jsx';
-import { getQuestionSets } from './thunks';
+import { searchQuestionSets } from './thunks';
 
 class QuestionSetListDisplay extends Component {
 	render() {
@@ -47,6 +47,10 @@ const mapStateToProps = (state) => ({
 	questionSets: state.questionSets,
 });
 
-const QuestionSetList = connect(mapStateToProps)(QuestionSetListDisplay);
+const mapDispatchToProps = (dispatch) => ({
+	searchQuestionSets: (query) => dispatch(searchQuestionSets(query)),
+});
+
+const QuestionSetList = connect(mapStateToProps, mapDispatchToProps)(QuestionSetListDisplay);
 
 export default QuestionSetList;

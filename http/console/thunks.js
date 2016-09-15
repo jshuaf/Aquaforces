@@ -100,7 +100,10 @@ export function searchQuestionSets(query) {
 		const body = { query, filter };
 		if (!query) return;
 		if (getState().requests.search) {
-			getState().requests.search.forEach(req => req.req.destroy());
+			getState().requests.search.forEach((req) => {
+				if (req.req) req.req.destroy();
+				else req.abort();
+			});
 		}
 		dispatch(actions.clearRequests('search'));
 		const searchRequest = request({ url, body, json: true, method: 'post' }, (error, res) => {
@@ -108,6 +111,7 @@ export function searchQuestionSets(query) {
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			dispatch(actions.clearRequests('search'));
 			dispatch(actions.populateQuestionSetList(res.body));
+			return browserHistory.push(`/search/${query}`);
 		});
 		dispatch(actions.newRequest('search', searchRequest));
 	};

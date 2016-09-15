@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import SearchBar from './SearchBar.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
 
-export default function QuestionConsoleHeader() {
+export default function QuestionConsoleHeader({ initialQuery }) {
 	const containerStyle = {
 		marginBottom: '2%',
 	};
@@ -20,7 +20,7 @@ export default function QuestionConsoleHeader() {
 	return (
 		<div className="row text-center" style={containerStyle}>
 			<div className="nine columns">
-				<SearchBar />
+				<SearchBar initialQuery={initialQuery} />
 			</div>
 			<div style={containerStyle} className="three columns">
 				<Link to="/console/new" style={linkStyle}>
@@ -33,3 +33,7 @@ export default function QuestionConsoleHeader() {
 		</div>
 	);
 }
+
+QuestionConsoleHeader.propTypes = {
+	initialQuery: PropTypes.string,
+};

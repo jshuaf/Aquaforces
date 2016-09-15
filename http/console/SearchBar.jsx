@@ -42,6 +42,7 @@ class SearchBarDisplay extends Component {
 						maxWidth="none"
 						icon="/img/icons/search-nofocus.svg"
 						focusedIcon="/img/icons/search-focus.svg"
+						value={this.props.initialQuery || ''}
 					/>
 				</form>
 				<div style={logoContainerStyle}>
@@ -67,6 +68,7 @@ SearchBarDisplay.propTypes = {
 	searchQuestionSets: PropTypes.func.isRequired,
 	toggleSearchFilterSource: PropTypes.func.isRequired,
 	searchSources: PropTypes.arrayOf(PropTypes.string).isRequired,
+	initialQuery: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({

@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 import { Header, UnderHeader } from '../shared/Header.jsx';
 import QuestionConsoleHeader from './QuestionConsoleHeader.jsx';
 import Spinner from '../shared/Spinner.jsx';
-import { authenticateUser, getQuestionSets } from './thunks';
+import { authenticateUser, getQuestionSets, searchQuestionSets } from './thunks';
 
 class QuestionConsoleDisplay extends Component {
 	componentDidMount() {
 		this.props.authenticateUser();
 		this.props.getQuestionSets();
+		if (this.props.params.query) {
+			this.props.searchQuestionSets(this.props.params.query);
+		}
 	}
 	render() {
 		let spinner = false;
@@ -24,7 +27,7 @@ class QuestionConsoleDisplay extends Component {
 				<Header currentUser={this.props.currentUser} location="console" />
 				<UnderHeader style={{ marginBottom: '1%' }} />
 				<div className="container">
-					<QuestionConsoleHeader />
+					<QuestionConsoleHeader initialQuery={this.props.params.query} />
 					{spinner ? <Spinner /> : this.props.children}
 				</div>
 			</div>
@@ -38,6 +41,8 @@ QuestionConsoleDisplay.propTypes = {
 	currentUser: PropTypes.any,
 	requests: PropTypes.objectOf(PropTypes.any).isRequired,
 	getQuestionSets: PropTypes.func.isRequired,
+	searchQuestionSets: PropTypes.func.isRequired,
+	params: PropTypes.shape({ query: PropTypes.string }),
 };
 
 const mapStateToProps = (state) => ({
@@ -46,12 +51,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	authenticateUser: () => {
-		dispatch(authenticateUser());
-	},
-	getQuestionSets: () => {
-		dispatch(getQuestionSets());
-	},
+	authenticateUser: () => { dispatch(authenticateUser()); },
+	getQuestionSets: () => { dispatch(getQuestionSets()); },
+	searchQuestionSets: (query) => { dispatch(searchQuestionSets(query)); },
 });
 
 const QuestionConsole = connect(mapStateToProps, mapDispatchToProps)(QuestionConsoleDisplay);

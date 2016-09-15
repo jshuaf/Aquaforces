@@ -124,6 +124,12 @@ app.get('/set/*', (req, res, next) => {
 	next();
 }, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
 
+app.get('/search/*', (req, res, next) => {
+	res.locals.title = 'Search';
+	res.locals.bundle = 'console';
+	next();
+}, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
+
 app.post('/api/:path', (req, res) => apiServer(req, res));
 
 app.post('/logout', (req, res) => {
