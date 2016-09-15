@@ -90,6 +90,7 @@ export function getQuestionSets() {
 			dispatch(actions.populateQuestionSetList(res.body));
 		});
 		dispatch(actions.newRequest('search', searchRequest));
+		return browserHistory.push('/console');
 	};
 }
 

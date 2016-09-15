@@ -43,6 +43,7 @@ QuestionConsoleDisplay.propTypes = {
 	currentUser: PropTypes.any,
 	requests: PropTypes.objectOf(PropTypes.any).isRequired,
 	getQuestionSets: PropTypes.func.isRequired,
+	getQuestionSet: PropTypes.func.isRequired,
 	searchQuestionSets: PropTypes.func.isRequired,
 	params: PropTypes.shape({ query: PropTypes.string }),
 };
