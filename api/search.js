@@ -31,13 +31,11 @@ module.exports = function (req, res) {
 		const privacyFilter = { $or: [{ privacy: false }] };
 		if (req.user) privacyFilter.$or.push({ userID: req.user._id });
 		const filter = Object.assign(searchFilter, privacyFilter);
-		console.log(filter);
 		dbcs.qsets.find(filter).each((err, qset) => {
 			if (qset) {
 				qsets.push(qset);
 			}
 		});
-		console.log(qsets);
 	}
 
 	// Quizlet Search

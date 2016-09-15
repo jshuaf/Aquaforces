@@ -19,15 +19,20 @@ class QuestionSetListDisplay extends Component {
 		}
 
 		const summaries = [[]];
+		let lastDelay = 100;
 		this.props.questionSets.forEach((questionSet) => {
+			lastDelay += Math.random() * 50 + 20;
 			if (summaries[summaries.length - 1].length < 2) {
 				summaries[summaries.length - 1].push(<QuestionSetSummary
-					{...questionSet} key={summaries[summaries.length - 1].length} />);
+					{...questionSet} key={summaries[summaries.length - 1].length}
+					delay={lastDelay} />);
 			} else {
-				summaries.push([<QuestionSetSummary {...questionSet} key={summaries[summaries.length - 1].length} />]);
+				summaries.push([<QuestionSetSummary
+					{...questionSet} key={summaries[summaries.length - 1].length}
+					delay={lastDelay} />]);
 			}
 		});
-		console.log(summaries);
+
 		return (
 			<div id="questionSets">
 				{
