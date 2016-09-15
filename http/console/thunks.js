@@ -3,26 +3,6 @@ import * as actions from './actions';
 const request = require('request');
 /* global sweetAlert:true */
 
-export function searchQuestionSets(query) {
-	return (dispatch, getState) => {
-		const url = `${location.protocol}//${location.host}/api/search`;
-		const filter = getState().searchFilter;
-		const body = { query, filter };
-		if (!query) return;
-		if (getState().requests.search) {
-			getState().requests.search.forEach(req => req.req.destroy());
-		}
-		dispatch(actions.clearRequests('search'));
-		const searchRequest = request({ url, body, json: true, method: 'post' }, (error, res) => {
-			if (error) return console.error(error);
-			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			dispatch(actions.clearRequests('search'));
-			return dispatch(actions.populateQuestionSetList(res.body));
-		});
-		dispatch(actions.newRequest('search', searchRequest));
-	};
-}
-
 export function submitQuestionSet(set, mode) {
 	return (dispatch) => {
 		const url = `${location.protocol}//${location.host}/api/${mode}-qset`;
@@ -107,6 +87,26 @@ export function getQuestionSets() {
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			dispatch(actions.clearRequests('search'));
 			dispatch(actions.populateQuestionSetList(res.body));
+		});
+		dispatch(actions.newRequest('search', searchRequest));
+	};
+}
+
+export function searchQuestionSets(query) {
+	return (dispatch, getState) => {
+		const url = `${location.protocol}//${location.host}/api/search`;
+		const filter = getState().searchFilter;
+		const body = { query, filter };
+		if (!query) return getQuestionSets()(dispatch);
+		if (getState().requests.search) {
+			getState().requests.search.forEach(req => req.req.destroy());
+		}
+		dispatch(actions.clearRequests('search'));
+		const searchRequest = request({ url, body, json: true, method: 'post' }, (error, res) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			dispatch(actions.clearRequests('search'));
+			return dispatch(actions.populateQuestionSetList(res.body));
 		});
 		dispatch(actions.newRequest('search', searchRequest));
 	};

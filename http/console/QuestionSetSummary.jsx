@@ -14,17 +14,6 @@ class QuestionSetSummaryDisplay extends Component {
 			additionalStyles: {},
 		};
 	}
-	componentDidMount() {
-		setTimeout(() => {
-			this.setState({
-				additionalStyles: {
-					WebkitAnimation: 'pop-up 1000ms linear both',
-					animation: 'pop-up 1000ms linear both',
-					visibility: 'visible',
-				},
-			});
-		}, this.props.delay);
-	}
 	importQuestionSet() {
 		this.props.importQuestionSet(this.props);
 	}
@@ -46,7 +35,6 @@ class QuestionSetSummaryDisplay extends Component {
 			borderRadius: '20px',
 			marginBottom: '20px',
 			backgroundColor: colors.pacific,
-			visibility: 'hidden',
 		}, this.state.additionalStyles);
 
 		const importedSetButtons = [
@@ -90,7 +78,6 @@ class QuestionSetSummaryDisplay extends Component {
 
 QuestionSetSummaryDisplay.propTypes = Object.assign({
 	importQuestionSet: PropTypes.func.isRequired,
-	delay: PropTypes.number.isRequired,
 }, questionSetPropTypes);
 
 const mapDispatchToProps = (dispatch) => ({

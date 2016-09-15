@@ -613,10 +613,14 @@ div.sa-icon.sa-error {
 	background-color: #0ab5b5;
 }
 
+.pop-up-appear {
+	opacity: 0.1;
+}
 
-.pop-up {
+.pop-up-appear.pop-up-appear-active {
   -webkit-animation: pop-up 900ms linear both;
   animation: pop-up 900ms linear both;
+	opacity: 1.0;
 }
 
 @-webkit-keyframes pop-up {

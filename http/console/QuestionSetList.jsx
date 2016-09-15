@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import QuestionSetSummary from './QuestionSetSummary.jsx';
 import { questionSetPropTypes } from './QuestionSet.jsx';
@@ -19,17 +20,30 @@ class QuestionSetListDisplay extends Component {
 		}
 
 		const summaries = [[]];
-		let lastDelay = 100;
-		this.props.questionSets.forEach((questionSet) => {
-			lastDelay += Math.random() * 50 + 20;
+		let lastDelay = 200;
+		this.props.questionSets.forEach((questionSet, index) => {
+			if (index !== 0) lastDelay += (100 / Math.pow(index, 0.3));
+			else lastDelay += 100;
 			if (summaries[summaries.length - 1].length < 2) {
-				summaries[summaries.length - 1].push(<QuestionSetSummary
-					{...questionSet} key={summaries[summaries.length - 1].length}
-					delay={lastDelay} />);
+				summaries[summaries.length - 1].push(
+					<ReactCSSTransitionGroup
+						transitionName="pop-up" transitionAppear transitionAppearTimeout={500}
+						transitionEnterTimeout={0} transitionLeaveTimeout={0}
+						key={summaries[summaries.length - 1].length}
+					>
+						<QuestionSetSummary {...questionSet} key={0} />
+					</ReactCSSTransitionGroup>
+				);
 			} else {
-				summaries.push([<QuestionSetSummary
-					{...questionSet} key={summaries[summaries.length - 1].length}
-					delay={lastDelay} />]);
+				summaries.push([
+					<ReactCSSTransitionGroup
+						transitionName="pop-up hello" transitionAppear transitionAppearTimeout={500}
+						transitionEnterTimeout={0} transitionLeaveTimeout={0}
+						key={summaries[summaries.length - 1].length}
+					>
+						<QuestionSetSummary {...questionSet} key={0} />
+					</ReactCSSTransitionGroup>,
+				]);
 			}
 		});
 
