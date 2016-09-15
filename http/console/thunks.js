@@ -1,3 +1,4 @@
+import { browserHistory } from 'react-router';
 import * as actions from './actions';
 
 const request = require('request');
@@ -97,7 +98,7 @@ export function searchQuestionSets(query) {
 		const url = `${location.protocol}//${location.host}/api/search`;
 		const filter = getState().searchFilter;
 		const body = { query, filter };
-		if (!query) return getQuestionSets()(dispatch);
+		if (!query) return;
 		if (getState().requests.search) {
 			getState().requests.search.forEach(req => req.req.destroy());
 		}
@@ -106,7 +107,7 @@ export function searchQuestionSets(query) {
 			if (error) return console.error(error);
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			dispatch(actions.clearRequests('search'));
-			return dispatch(actions.populateQuestionSetList(res.body));
+			dispatch(actions.populateQuestionSetList(res.body));
 		});
 		dispatch(actions.newRequest('search', searchRequest));
 	};
