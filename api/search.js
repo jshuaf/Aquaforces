@@ -52,7 +52,7 @@ module.exports = function (req, res) {
 			co(function* () {
 				return yield parsedSets;
 			}).then((sets) => {
-				qsets = qsets.concat(sets.filter(s => s !== '').map(quizlet.parseSet));
+				qsets = qsets.concat(sets.filter(s => s !== ''));
 				return res.success(qsets);
 			});
 		});

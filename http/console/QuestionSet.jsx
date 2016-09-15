@@ -41,7 +41,7 @@ export const questionSetPropTypes = {
 		})).isRequired,
 		id: PropTypes.number.isRequired,
 	})).isRequired,
-	privacy: PropTypes.bool.isRequired,
+	privacy: PropTypes.bool,
 };
 
 QuestionSet.propTypes = Object.assign({

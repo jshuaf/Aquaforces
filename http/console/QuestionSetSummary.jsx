@@ -16,7 +16,10 @@ class QuestionSetSummaryDisplay extends Component {
 		};
 	}
 	importQuestionSet() {
-		this.props.importQuestionSet(this.props);
+		/* eslint-disable no-unused-vars */
+		const { delay, ...props } = this.props;
+		/* eslint-enable no-unused-vars */
+		this.props.importQuestionSet(props);
 	}
 	render() {
 		let questionSetNote;
