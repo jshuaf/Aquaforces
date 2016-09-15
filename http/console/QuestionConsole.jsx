@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Header, UnderHeader } from '../shared/Header.jsx';
 import QuestionConsoleHeader from './QuestionConsoleHeader.jsx';
 import Spinner from '../shared/Spinner.jsx';
-import { authenticateUser, getQuestionSets, searchQuestionSets } from './thunks';
+import { authenticateUser, getQuestionSets, searchQuestionSets, getQuestionSet } from './thunks';
 
 class QuestionConsoleDisplay extends Component {
 	componentDidMount() {
@@ -11,6 +11,8 @@ class QuestionConsoleDisplay extends Component {
 		this.props.getQuestionSets();
 		if (this.props.params.query) {
 			this.props.searchQuestionSets(this.props.params.query);
+		} else if (this.props.params.shortID) {
+			this.props.getQuestionSet(this.props.params.shortID);
 		}
 	}
 	render() {
@@ -54,6 +56,7 @@ const mapDispatchToProps = (dispatch) => ({
 	authenticateUser: () => { dispatch(authenticateUser()); },
 	getQuestionSets: () => { dispatch(getQuestionSets()); },
 	searchQuestionSets: (query) => { dispatch(searchQuestionSets(query)); },
+	getQuestionSet: (shortID) => { dispatch(getQuestionSet(shortID)); },
 });
 
 const QuestionConsole = connect(mapStateToProps, mapDispatchToProps)(QuestionConsoleDisplay);

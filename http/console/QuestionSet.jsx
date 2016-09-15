@@ -10,9 +10,6 @@ class QuestionSet extends Component {
 		super(props);
 		autoBind(this);
 	}
-	componentDidMount() {
-		this.props.getQuestionSet(this.props.params.shortID);
-	}
 	deleteQuestionSet() {
 		this.props.deleteQuestionSet(this.props._id);
 	}

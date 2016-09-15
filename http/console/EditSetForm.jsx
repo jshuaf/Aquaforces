@@ -8,9 +8,6 @@ import { getQuestionSet } from './thunks';
 /* eslint-disable react/prefer-stateless-function */
 class EditSetFormDisplay extends Component {
 /* eslint-enable react/prefer-stateless-function */
-	componentDidMount() {
-		this.props.getQuestionSet(this.props.params.shortID);
-	}
 	render() {
 		const { activeQuestionSet, ...props } = this.props;
 		return (
