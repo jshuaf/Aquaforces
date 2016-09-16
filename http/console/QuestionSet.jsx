@@ -14,13 +14,27 @@ class QuestionSet extends Component {
 		this.props.deleteQuestionSet(this.props._id);
 	}
 	render() {
+		const questionGroups = [[]];
+		this.props.questions.forEach((question) => {
+			if (questionGroups[questionGroups.length - 1].length < 2) {
+				questionGroups[questionGroups.length - 1].push(
+					<Question {...question} key={questionGroups[questionGroups.length - 1]} />
+				);
+			} else {
+				questionGroups.push([
+					<Question {...question} key={questionGroups[questionGroups.length - 1]} />,
+				]);
+			}
+		});
 		return (
 			<div className="questionSet">
 				<h2>{this.props.title}</h2>
-				{this.props.questions.map((question, index) =>
-					<Question {...question} key={index} />
-				)}
 				{this.props.privacy ? <span key={-2}>Private set</span> : <span key={-2}>Public set</span>}
+				{questionGroups.map((questionGroup, index) =>
+					<div className="row" key={index}>
+						{questionGroup}
+					</div>
+				)}
 				<button onClick={this.deleteQuestionSet}>Delete set </button>
 				<Link to={`/set/${this.props.params.shortID}/edit`}>
 					<button onClick={this.editQuestionSet}>Edit set </button>
