@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import PrimaryButton from '../shared/PrimaryButton.jsx';
 import colors from '../shared/colors';
 
 const Question = function ({ text, correctAnswer, incorrectAnswers }) {
@@ -13,6 +14,16 @@ const Question = function ({ text, correctAnswer, incorrectAnswers }) {
 		color: colors.midnight,
 		fontWeight: 'bold',
 	};
+	const buttonStyle = {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '45px',
+		width: '45px',
+		padding: 0,
+		minWidth: 0,
+	};
+	const imageStyle = { margin: '30%' };
 	return (
 		<div style={containerStyle} className="six columns">
 			<div className="row">
@@ -24,8 +35,12 @@ const Question = function ({ text, correctAnswer, incorrectAnswers }) {
 						)}
 				</div>
 				<div className="two columns text-right">
-					<button>Delete Question</button>
-					<button>Edit Question</button>
+					<PrimaryButton style={buttonStyle}>
+						<img src="../img/icons/trash.svg" style={imageStyle} alt="Delete" />
+					</PrimaryButton>
+					<PrimaryButton style={buttonStyle}>
+						<img src="../img/icons/pencil.svg" style={imageStyle} alt="Edit" />
+					</PrimaryButton>
 				</div>
 			</div>
 		</div>
@@ -44,9 +59,10 @@ Question.propTypes = {
 
 const CorrectAnswer = function ({ text }) {
 	const textStyle = { color: colors.midnight };
+	const imageStyle = { paddingRight: '5%' };
 	return (
 		<div>
-			<img src="../img/icons/checkmark.svg" alt="Correct: " />
+			<img src="../img/icons/checkmark.svg" alt="Correct: " style={imageStyle} />
 			<span style={textStyle}>{text}</span>
 		</div>
 	);
@@ -58,9 +74,10 @@ CorrectAnswer.propTypes = {
 
 const IncorrectAnswer = function ({ text }) {
 	const textStyle = { color: colors.midnight };
+	const imageStyle = { paddingRight: '5%' };
 	return (
 		<div>
-			<img src="../img/icons/x.svg" alt="Incorrect: " />
+			<img src="../img/icons/x.svg" alt="Incorrect: " style={imageStyle} />
 			<span style={textStyle}>{text}</span>
 		</div>
 	);

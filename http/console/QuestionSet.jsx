@@ -3,6 +3,7 @@ import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Question from './Question.jsx';
+import PrimaryButton from '../shared/PrimaryButton.jsx';
 import { deleteQuestionSet, getQuestionSet } from './thunks';
 
 class QuestionSet extends Component {
@@ -35,10 +36,8 @@ class QuestionSet extends Component {
 						{questionGroup}
 					</div>
 				)}
-				<button onClick={this.deleteQuestionSet}>Delete set </button>
-				<Link to={`/set/${this.props.params.shortID}/edit`}>
-					<button onClick={this.editQuestionSet}>Edit set </button>
-				</Link>
+				<PrimaryButton onClick={this.deleteQuestionSet}>Delete set </PrimaryButton>
+				<PrimaryButton onClick={this.editQuestionSet}>Edit set </PrimaryButton>
 			</div>
 		);
 	}
