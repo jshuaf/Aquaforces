@@ -6,10 +6,12 @@ const Question = function ({ text, correctAnswer, incorrectAnswers }) {
 		padding: '20px',
 		borderRadius: '20px',
 		marginBottom: '20px',
-		backgroundColor: colors.pacific,
+		border: `2px solid ${colors.midnight}`,
+		backgroundColor: colors.ice,
 	};
 	const textStyle = {
-		color: 'white',
+		color: colors.midnight,
+		fontWeight: 'bold',
 	};
 	return (
 		<div style={containerStyle} className="six columns">
@@ -41,8 +43,13 @@ Question.propTypes = {
 };
 
 const CorrectAnswer = function ({ text }) {
-	const textStyle = { color: 'white' };
-	return <span style={textStyle}>Correct answer: {text}</span>;
+	const textStyle = { color: colors.midnight };
+	return (
+		<div>
+			<img src="../img/icons/checkmark.svg" alt="Correct: " />
+			<span style={textStyle}>{text}</span>
+		</div>
+	);
 };
 
 CorrectAnswer.propTypes = {
@@ -50,8 +57,13 @@ CorrectAnswer.propTypes = {
 };
 
 const IncorrectAnswer = function ({ text }) {
-	const textStyle = { color: 'white' };
-	return <span style={textStyle}>Incorrect answer: {text}</span>;
+	const textStyle = { color: colors.midnight };
+	return (
+		<div>
+			<img src="../img/icons/x.svg" alt="Incorrect: " />
+			<span style={textStyle}>{text}</span>
+		</div>
+	);
 };
 
 IncorrectAnswer.propTypes = {
