@@ -269,6 +269,14 @@ function searchFilter(state = initialSearchFilterState, action) {
 	}
 }
 
+function editingQuestionSet(state = {}, action) {
+	switch (action.type) {
+	default:
+		return state;
+	}
+}
+
 const questionConsoleReducer = combineReducers({
-	newQuestionSet, questionSets, activeQuestionSet, currentUser, requests, searchFilter });
+	newQuestionSet, questionSets, activeQuestionSet, currentUser, requests, searchFilter, editingQuestionSet,
+});
 export default questionConsoleReducer;

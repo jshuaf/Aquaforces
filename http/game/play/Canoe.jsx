@@ -27,7 +27,7 @@ class Canoe extends Component {
 	render() {
 		// shake 0.82s cubic-bezier(.36,.07,.19,.97) both
 		const hp = this.props.hp;
-		let image = '../img/boats-top';
+		let image = '/img/boats-top';
 
 		if (hp > 50) {
 			image += '/canoe-100';

@@ -103,7 +103,7 @@ class River extends Component {
 		sweetAlert({
 			title: "Rock approaching!",
 			text: "Answer questions quickly to avoid being hit!",
-			imageUrl: "../img/obstacles/rock.svg",
+			imageUrl: "/img/obstacles/rock.svg",
 			timer: 2500,
 			showConfirmButton: false
 		}, () => {

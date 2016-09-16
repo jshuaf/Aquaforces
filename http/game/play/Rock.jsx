@@ -17,7 +17,7 @@ class Rock extends Component {
 		if (!this.props.present) containerStyle.display = 'none';
 		return (
 			<div style={containerStyle}>
-				<img src="../img/obstacles/rock.svg" style={rockStyle} alt="" />
+				<img src="/img/obstacles/rock.svg" style={rockStyle} alt="" />
 			</div>
 		);
 	}

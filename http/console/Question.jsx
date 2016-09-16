@@ -34,14 +34,17 @@ const Question = function ({ text, correctAnswer, incorrectAnswers }) {
 							<IncorrectAnswer text={incorrectAnswer.text} key={index} />
 						)}
 				</div>
-				<div className="two columns text-right">
+				{window.location.href.indexOf('/edit') > 0 ?
+					<div className="two columns text-right">
 					<PrimaryButton style={buttonStyle}>
-						<img src="../img/icons/trash.svg" style={imageStyle} alt="Delete" />
+						<img src="/img/icons/trash.svg" style={imageStyle} alt="Delete" />
 					</PrimaryButton>
 					<PrimaryButton style={buttonStyle}>
-						<img src="../img/icons/pencil.svg" style={imageStyle} alt="Edit" />
+						<img src="/img/icons/pencil.svg" style={imageStyle} alt="Edit" />
 					</PrimaryButton>
 				</div>
+				: null
+				}
 			</div>
 		</div>
 	);
@@ -58,11 +61,11 @@ Question.propTypes = {
 };
 
 const CorrectAnswer = function ({ text }) {
-	const textStyle = { color: colors.midnight };
-	const imageStyle = { paddingRight: '5%' };
+	const textStyle = { color: colors.midnight, fontWeight: 'bold' };
+	const imageStyle = { paddingRight: '4%' };
 	return (
 		<div>
-			<img src="../img/icons/checkmark.svg" alt="Correct: " style={imageStyle} />
+			<img src="/img/icons/checkmark.svg" alt="Correct: " style={imageStyle} />
 			<span style={textStyle}>{text}</span>
 		</div>
 	);
@@ -77,7 +80,7 @@ const IncorrectAnswer = function ({ text }) {
 	const imageStyle = { paddingRight: '5%' };
 	return (
 		<div>
-			<img src="../img/icons/x.svg" alt="Incorrect: " style={imageStyle} />
+			<img src="/img/icons/x.svg" alt="Incorrect: " style={imageStyle} />
 			<span style={textStyle}>{text}</span>
 		</div>
 	);

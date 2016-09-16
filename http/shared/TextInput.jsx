@@ -71,7 +71,7 @@ class TextInputDisplay extends Component {
 
 		const errorDiv = this.state.errorMessage ?
 			<div style={errorContainerStyle}>
-				<img src="../img/icons/exclamation.svg" alt="" style={errorIconStyle} />
+				<img src="/img/icons/exclamation.svg" alt="" style={errorIconStyle} />
 				<span style={errorMessageStyle}>{this.state.errorMessage}</span>
 			</div> : undefined;
 

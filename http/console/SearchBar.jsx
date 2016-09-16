@@ -48,12 +48,12 @@ class SearchBarDisplay extends Component {
 				</form>
 				<div style={logoContainerStyle}>
 					<img
-						src={`../img/icons/quizlet-${sources.indexOf('quizlet') >= 0 ? '' : 'no'}selected.png`}
+						src={`/img/icons/quizlet-${sources.indexOf('quizlet') >= 0 ? '' : 'no'}selected.png`}
 						alt="Quizlet" style={quizletStyle}
 						onClick={() => { this.toggleSearchSource('quizlet'); }}
 					/>
 					<img
-						src={`../img/logo/${sources.indexOf('aquaforces') >= 0 ? 'new-blue' : 'noselected'}.svg`}
+						src={`/img/logo/${sources.indexOf('aquaforces') >= 0 ? 'new-blue' : 'noselected'}.svg`}
 						alt="Aquaforces" style={aquaforcesStyle}
 						onClick={() => { this.toggleSearchSource('aquaforces'); }}
 					/>

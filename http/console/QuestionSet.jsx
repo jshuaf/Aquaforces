@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Question from './Question.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
+import { beginEditing } from './actions';
 import { deleteQuestionSet, getQuestionSet } from './thunks';
+import colors from '../shared/colors';
 
-class QuestionSet extends Component {
+class QuestionSetDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
@@ -27,17 +29,22 @@ class QuestionSet extends Component {
 				]);
 			}
 		});
+		const headerStyle = { color: colors.midnight };
 		return (
 			<div className="questionSet">
-				<h2>{this.props.title}</h2>
-				{this.props.privacy ? <span key={-2}>Private set</span> : <span key={-2}>Public set</span>}
+				<div className="row">
+					<h2 style={headerStyle}>{this.props.title}</h2>
+					{this.props.privacy ? <span key={-2}>Private set</span> : <span key={-2}>Public set</span>}
+					<PrimaryButton onClick={this.deleteQuestionSet}>Delete set </PrimaryButton>
+					<Link to={`/set/${this.props.shortID}/edit`}>
+						<PrimaryButton onClick={this.editQuestionSet}>Edit set </PrimaryButton>
+					</Link>
+				</div>
 				{questionGroups.map((questionGroup, index) =>
 					<div className="row" key={index}>
 						{questionGroup}
 					</div>
 				)}
-				<PrimaryButton onClick={this.deleteQuestionSet}>Delete set </PrimaryButton>
-				<PrimaryButton onClick={this.editQuestionSet}>Edit set </PrimaryButton>
 			</div>
 		);
 	}
@@ -57,8 +64,9 @@ export const questionSetPropTypes = {
 	privacy: PropTypes.bool,
 };
 
-QuestionSet.propTypes = Object.assign({
+QuestionSetDisplay.propTypes = Object.assign({
 	deleteQuestionSet: PropTypes.func.isRequired,
+	getQuestionSet: PropTypes.func.isRequired,
 	_id: PropTypes.string.isRequired,
 	shortID: PropTypes.string.isRequired,
 }, questionSetPropTypes);
@@ -74,8 +82,6 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 });
 
-/* eslint-disable no-class-assign */
-QuestionSet = connect(mapStateToProps, mapDispatchToProps)(QuestionSet)
-/* eslint-enable no-class-assign */;
+const QuestionSet = connect(mapStateToProps, mapDispatchToProps)(QuestionSetDisplay);
 
 export default QuestionSet;
