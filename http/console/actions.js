@@ -5,6 +5,7 @@ export const EDIT_INCORRECT_ANSWER = 'EDIT_INCORRECT_ANSWER';
 export const EDIT_QUESTION_TEXT = 'EDIT_QUESTION_TEXT';
 export const EDIT_SET_TITLE = 'EDIT_SET_TITLE';
 export const TOGGLE_SET_PRIVACY = 'TOGGLE_SET_PRIVACY';
+export const DELETE_QUESTION = 'DELETE_QUESTION';
 
 export const POPULATE_QUESTION_SET_LIST = 'POPULATE_QUESTION_SET_LIST';
 export const CLEAR_NEW_QUESTION_SET = 'CLEAR_NEW_QUESTION_SET';
@@ -47,3 +48,4 @@ export const newRequest = makeActionCreator(NEW_REQUEST, 'category', 'request');
 export const clearRequests = makeActionCreator(CLEAR_REQUESTS, 'category');
 
 export const toggleSearchFilterSource = makeActionCreator(TOGGLE_SEARCH_FILTER_SOURCE, 'source');
+export const deleteQuestion = makeActionCreator(DELETE_QUESTION, 'id', 'mode');

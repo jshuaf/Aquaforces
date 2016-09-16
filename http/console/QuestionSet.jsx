@@ -32,14 +32,23 @@ class QuestionSetDisplay extends Component {
 		const headerStyle = { color: colors.midnight };
 		return (
 			<div className="questionSet">
-				<div className="row">
-					<h2 style={headerStyle}>{this.props.title}</h2>
-					{this.props.privacy ? <span key={-2}>Private set</span> : <span key={-2}>Public set</span>}
-					<PrimaryButton onClick={this.deleteQuestionSet}>Delete set </PrimaryButton>
-					<Link to={`/set/${this.props.shortID}/edit`}>
-						<PrimaryButton onClick={this.editQuestionSet}>Edit set </PrimaryButton>
-					</Link>
-				</div>
+					{
+						window.location.href.indexOf('/edit') < 0 ?
+						<div className="row">
+							<h2 style={headerStyle}>{this.props.title}</h2>
+							{this.props.privacy ? <span key={-2}>Private set</span> : <span key={-2}>Public set</span>}
+							<PrimaryButton onClick={this.deleteQuestionSet}>Delete set </PrimaryButton>
+							<Link to={`/set/${this.props.shortID}/edit`}>
+								<PrimaryButton onClick={this.editQuestionSet}>Edit set </PrimaryButton>
+							</Link>
+						</div> :
+						<div className="row">
+							<h2 style={headerStyle}>{this.props.title}</h2>
+							<Link to={`/set/${this.props.shortID}`}>
+								<PrimaryButton>Discard changes </PrimaryButton>
+							</Link>
+						</div>
+					}
 				{questionGroups.map((questionGroup, index) =>
 					<div className="row" key={index}>
 						{questionGroup}

@@ -205,6 +205,16 @@ function activeQuestionSet(state = initialQuestionSetState, action) {
 			return Object.assign({}, state, {
 				privacy: action.privacy,
 			});
+		case actions.DELETE_QUESTION: {
+			const questionToRemove = state.questions.filter((x) => x.id === action.id)[0];
+			const questionIndex = state.questions.indexOf(questionToRemove);
+			const newQuestions = state.questions.slice();
+			newQuestions.splice(questionIndex, 1);
+			console.log(questionIndex);
+			return Object.assign({}, state, {
+				questions: newQuestions,
+			});
+		}
 		default:
 		}
 	}
