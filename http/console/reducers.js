@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import undoable from 'redux-undo';
 import * as actions from './actions';
 
 const initialNewSetState = {
@@ -286,6 +287,6 @@ function editingQuestionSet(state = {}, action) {
 }
 
 const questionConsoleReducer = combineReducers({
-	newQuestionSet, questionSets, activeQuestionSet, currentUser, requests, searchFilter, editingQuestionSet,
+	newQuestionSet, questionSets, activeQuestionSet: undoable(activeQuestionSet), currentUser, requests, searchFilter, editingQuestionSet,
 });
 export default questionConsoleReducer;

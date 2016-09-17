@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { ActionCreators as changes } from 'redux-undo';
 import Question from './Question.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
 import TextInput from '../shared/TextInput.jsx';
@@ -75,6 +76,8 @@ class QuestionSetDisplay extends Component {
 								<PrimaryButton onClick={this.discardChanges}>Discard changes </PrimaryButton>
 							</Link>
 							<PrimaryButton onClick={this.saveChanges}>Save changes </PrimaryButton>
+							<PrimaryButton onClick={this.props.undoLastChange}>Undo</PrimaryButton>
+							<PrimaryButton onClick={this.props.redoLastChange}>Redo</PrimaryButton>
 						</div>
 					}
 				{questionGroups.map((questionGroup, index) =>
@@ -104,11 +107,13 @@ export const questionSetPropTypes = {
 QuestionSetDisplay.propTypes = Object.assign({
 	deleteQuestionSet: PropTypes.func.isRequired,
 	getQuestionSet: PropTypes.func.isRequired,
+	undoLastChange: PropTypes.func.isRequired,
+	redoLastChange: PropTypes.func.isRequired,
 	_id: PropTypes.string.isRequired,
 	shortID: PropTypes.string.isRequired,
 }, questionSetPropTypes);
 
-const mapStateToProps = (state) => state.activeQuestionSet;
+const mapStateToProps = (state) => state.activeQuestionSet.present;
 
 const mapDispatchToProps = {
 	deleteQuestionSet,
@@ -116,6 +121,8 @@ const mapDispatchToProps = {
 	submitQuestionSet,
 	addQuestionInput,
 	editSetTitle,
+	undoLastChange: changes.undo,
+	redoLastChange: changes.redo,
 };
 
 const QuestionSet = connect(mapStateToProps, mapDispatchToProps)(QuestionSetDisplay);
