@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
+import TextInput from '../shared/TextInput.jsx';
 import colors from '../shared/colors';
 import { deleteQuestion } from './actions';
 
@@ -35,6 +36,29 @@ class QuestionDisplay extends Component {
 			minWidth: 0,
 		};
 		const imageStyle = { margin: '30%' };
+		if (this.props.route.path.indexOf('/edit') >= 0) {
+			return (
+				<div style={containerStyle} className="six columns">
+					<div className="row">
+						<div className="ten columns">
+							<TextInput value={this.props.text} />
+								<CorrectAnswer text={this.props.correctAnswer} />
+								{this.props.incorrectAnswers.map((incorrectAnswer, index) =>
+									<IncorrectAnswer text={incorrectAnswer.text} key={index} />
+								)}
+						</div>
+						<div className="two columns text-right">
+							<PrimaryButton style={buttonStyle} onClick={this.deleteQuestion}>
+								<img src="/img/icons/trash.svg" style={imageStyle} alt="Delete" />
+							</PrimaryButton>
+							<PrimaryButton style={buttonStyle}>
+								<img src="/img/icons/pencil.svg" style={imageStyle} alt="Edit" />
+							</PrimaryButton>
+						</div>
+					</div>
+				</div>
+			);
+		}
 		return (
 			<div style={containerStyle} className="six columns">
 				<div className="row">
@@ -45,17 +69,6 @@ class QuestionDisplay extends Component {
 								<IncorrectAnswer text={incorrectAnswer.text} key={index} />
 							)}
 					</div>
-					{this.props.route.path.indexOf('/edit') >= 0 ?
-						<div className="two columns text-right">
-							<PrimaryButton style={buttonStyle} onClick={this.deleteQuestion}>
-								<img src="/img/icons/trash.svg" style={imageStyle} alt="Delete" />
-							</PrimaryButton>
-							<PrimaryButton style={buttonStyle}>
-								<img src="/img/icons/pencil.svg" style={imageStyle} alt="Edit" />
-							</PrimaryButton>
-						</div>
-					: null
-					}
 				</div>
 			</div>
 		);

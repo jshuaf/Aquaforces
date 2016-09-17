@@ -210,7 +210,6 @@ function activeQuestionSet(state = initialQuestionSetState, action) {
 			const questionIndex = state.questions.indexOf(questionToRemove);
 			const newQuestions = state.questions.slice();
 			newQuestions.splice(questionIndex, 1);
-			console.log(questionIndex);
 			return Object.assign({}, state, {
 				questions: newQuestions,
 			});

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Question from './Question.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
-import { deleteQuestionSet, getQuestionSet } from './thunks';
+import { addQuestionInput } from './actions';
+import { deleteQuestionSet, getQuestionSet, submitQuestionSet } from './thunks';
 import colors from '../shared/colors';
 
 class QuestionSetDisplay extends Component {
@@ -17,6 +18,18 @@ class QuestionSetDisplay extends Component {
 	}
 	discardChanges() {
 		this.props.getQuestionSet(this.props.shortID);
+	}
+	saveChanges() {
+		const {
+			/* eslint-disable no-unused-vars */
+			deleteQuestionSet, getQuestionSet, location, params, history,
+			route, routeParams, routes, children, ...props }
+			/* eslint-enable no-unused-vars */
+		= this.props;
+		return this.props.submitQuestionSet(props, 'edit');
+	}
+	addQuestion() {
+		this.props.addQuestionInput('edit');
 	}
 	render() {
 		const questionGroups = [[]];
@@ -52,9 +65,11 @@ class QuestionSetDisplay extends Component {
 						</div> :
 						<div className="row">
 							<h2 style={headerStyle}>{this.props.title}</h2>
+							<PrimaryButton onClick={this.addQuestion}>Add Question</PrimaryButton>
 							<Link to={`/set/${this.props.shortID}`}>
 								<PrimaryButton onClick={this.discardChanges}>Discard changes </PrimaryButton>
 							</Link>
+							<PrimaryButton onClick={this.saveChanges}>Save changes </PrimaryButton>
 						</div>
 					}
 				{questionGroups.map((questionGroup, index) =>
@@ -90,14 +105,12 @@ QuestionSetDisplay.propTypes = Object.assign({
 
 const mapStateToProps = (state) => state.activeQuestionSet;
 
-const mapDispatchToProps = (dispatch) => ({
-	deleteQuestionSet: (id) => {
-		dispatch(deleteQuestionSet(id));
-	},
-	getQuestionSet: (shortID) => {
-		dispatch(getQuestionSet(shortID));
-	},
-});
+const mapDispatchToProps = {
+	deleteQuestionSet,
+	getQuestionSet,
+	submitQuestionSet,
+	addQuestionInput,
+};
 
 const QuestionSet = connect(mapStateToProps, mapDispatchToProps)(QuestionSetDisplay);
 
