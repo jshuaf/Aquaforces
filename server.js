@@ -67,7 +67,7 @@ const parsers = [bodyParser.json(), bodyParser.urlencoded({ extended: true }),
 const head = (req, res, next) => {
 	res.locals.head = fs.readFileSync('./html/a/head.html').toString()
 		.replaceAll('$inhead', `
-			<script src="../${assets.main[0]}"></script>
+			<script src="/${assets.main[0]}"></script>
 			${res.locals.inHead || ''}
 		`)
 		.replaceAll('$title', res.locals.title || 'Aquaforces');

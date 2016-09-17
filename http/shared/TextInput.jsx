@@ -121,6 +121,7 @@ TextInputDisplay.propTypes = {
 	maxWidth: PropTypes.string,
 	icon: PropTypes.string,
 	focusedIcon: PropTypes.string,
+	value: PropTypes.string,
 };
 
 const TextInput = new Radium(TextInputDisplay);
