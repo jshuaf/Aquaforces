@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import colors from '../shared/colors';
-import { deleteQuestion } from './actions';
+import { deleteQuestion, addAnswerInput } from './actions';
 
 class QuestionDisplay extends Component {
 	constructor(props) {
@@ -13,6 +13,9 @@ class QuestionDisplay extends Component {
 	}
 	deleteQuestion() {
 		this.props.deleteQuestion(this.props.id, 'edit');
+	}
+	addIncorrectAnswer() {
+		this.props.addAnswerInput(this.props.id, 'edit');
 	}
 	render() {
 		const containerStyle = {
@@ -51,8 +54,8 @@ class QuestionDisplay extends Component {
 							<PrimaryButton style={buttonStyle} onClick={this.deleteQuestion}>
 								<img src="/img/icons/trash.svg" style={imageStyle} alt="Delete" />
 							</PrimaryButton>
-							<PrimaryButton style={buttonStyle}>
-								<img src="/img/icons/pencil.svg" style={imageStyle} alt="Edit" />
+							<PrimaryButton style={buttonStyle} onClick={this.addIncorrectAnswer}>
+								<img src="/img/icons/plus.svg" style={imageStyle} alt="Add" />
 							</PrimaryButton>
 						</div>
 					</div>
@@ -84,14 +87,11 @@ QuestionDisplay.propTypes = {
 	})).isRequired,
 	id: PropTypes.number,
 	deleteQuestion: PropTypes.func.isRequired,
+	addAnswerInput: PropTypes.func.isRequired,
 	route: PropTypes.any.isRequired,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-	deleteQuestion: (id, mode) => {
-		dispatch(deleteQuestion(id, mode));
-	},
-});
+const mapDispatchToProps = { deleteQuestion, addAnswerInput };
 
 const Question = connect(null, mapDispatchToProps)(QuestionDisplay);
 

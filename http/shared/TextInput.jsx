@@ -12,6 +12,9 @@ class TextInputDisplay extends Component {
 		};
 		autoBind(this);
 	}
+	componentWillReceiveProps(props) {
+		this.setState({ value: props.value });
+	}
 	onChange() {
 		if (this.props.isComplete && this.props.onComplete) {
 			const text = this.node.value;
