@@ -41,10 +41,10 @@ class QuestionDisplay extends Component {
 				<div style={containerStyle} className="six columns">
 					<div className="row">
 						<div className="ten columns">
-							<TextInput value={this.props.text} />
-								<CorrectAnswer text={this.props.correctAnswer} />
+							<TextInput defaultValue={this.props.text} />
+								<CorrectAnswer text={this.props.correctAnswer} route={this.props.route} />
 								{this.props.incorrectAnswers.map((incorrectAnswer, index) =>
-									<IncorrectAnswer text={incorrectAnswer.text} key={index} />
+									<IncorrectAnswer text={incorrectAnswer.text} key={index} route={this.props.route} />
 								)}
 						</div>
 						<div className="two columns text-right">
@@ -64,9 +64,9 @@ class QuestionDisplay extends Component {
 				<div className="row">
 					<div className="ten columns">
 						<h3 style={textStyle}>{this.props.text}</h3>
-							<CorrectAnswer text={this.props.correctAnswer} />
+							<CorrectAnswer text={this.props.correctAnswer} route={this.props.route} />
 							{this.props.incorrectAnswers.map((incorrectAnswer, index) =>
-								<IncorrectAnswer text={incorrectAnswer.text} key={index} />
+								<IncorrectAnswer text={incorrectAnswer.text} key={index} route={this.props.route} />
 							)}
 					</div>
 				</div>
@@ -84,6 +84,7 @@ QuestionDisplay.propTypes = {
 	})).isRequired,
 	id: PropTypes.number,
 	deleteQuestion: PropTypes.func.isRequired,
+	route: PropTypes.any.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -94,34 +95,40 @@ const mapDispatchToProps = (dispatch) => ({
 
 const Question = connect(null, mapDispatchToProps)(QuestionDisplay);
 
-const CorrectAnswer = function ({ text }) {
+const CorrectAnswer = function ({ text, route }) {
 	const textStyle = { color: colors.midnight, fontWeight: 'bold' };
 	const imageStyle = { paddingRight: '4%' };
 	return (
 		<div>
 			<img src="/img/icons/checkmark.svg" alt="Correct: " style={imageStyle} />
-			<span style={textStyle}>{text}</span>
+			{route.path.indexOf('/edit') >= 0 ?
+				<TextInput defaultValue={text} />
+			: <span style={textStyle}>{text}</span>}
 		</div>
 	);
 };
 
 CorrectAnswer.propTypes = {
 	text: PropTypes.string.isRequired,
+	route: PropTypes.any.isRequired,
 };
 
-const IncorrectAnswer = function ({ text }) {
+const IncorrectAnswer = function ({ text, route }) {
 	const textStyle = { color: colors.midnight };
 	const imageStyle = { paddingRight: '5%' };
 	return (
 		<div>
 			<img src="/img/icons/x.svg" alt="Incorrect: " style={imageStyle} />
-			<span style={textStyle}>{text}</span>
+				{route.path.indexOf('/edit') >= 0 ?
+					<TextInput defaultValue={text} />
+				: <span style={textStyle}>{text}</span>}
 		</div>
 	);
 };
 
 IncorrectAnswer.propTypes = {
 	text: PropTypes.string.isRequired,
+	route: PropTypes.any.isRequired,
 };
 
 export default Question;
