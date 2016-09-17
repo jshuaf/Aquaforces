@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Question from './Question.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
-import { addQuestionInput } from './actions';
+import TextInput from '../shared/TextInput.jsx';
+import { addQuestionInput, editSetTitle } from './actions';
 import { deleteQuestionSet, getQuestionSet, submitQuestionSet } from './thunks';
 import colors from '../shared/colors';
 
@@ -64,7 +65,11 @@ class QuestionSetDisplay extends Component {
 							</Link>
 						</div> :
 						<div className="row">
-							<h2 style={headerStyle}>{this.props.title}</h2>
+							<TextInput
+								value={this.props.title}
+								ref={(t) => { this.titleInput = t; }}
+								onChange={() => { this.props.editSetTitle(this.titleInput.node.value, 'edit'); }}
+							/>
 							<PrimaryButton onClick={this.addQuestion}>Add Question</PrimaryButton>
 							<Link to={`/set/${this.props.shortID}`}>
 								<PrimaryButton onClick={this.discardChanges}>Discard changes </PrimaryButton>
@@ -110,6 +115,7 @@ const mapDispatchToProps = {
 	getQuestionSet,
 	submitQuestionSet,
 	addQuestionInput,
+	editSetTitle,
 };
 
 const QuestionSet = connect(mapStateToProps, mapDispatchToProps)(QuestionSetDisplay);
