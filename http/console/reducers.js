@@ -215,6 +215,20 @@ function activeQuestionSet(state = initialQuestionSetState, action) {
 				questions: newQuestions,
 			});
 		}
+		case actions.DELETE_ANSWER: {
+			const question = state.questions.filter((x) => x.id === action.questionID)[0];
+			const questionIndex = state.questions.indexOf(question);
+			const answerToRemove = question.incorrectAnswers.filter((x) => x.id === action.id)[0];
+			const answerIndex = question.incorrectAnswers.indexOf(answerToRemove);
+			const newAnswers = question.incorrectAnswers.slice();
+			newAnswers.splice(answerIndex, 1);
+
+			const newQuestions = state.questions.slice();
+			newQuestions[questionIndex].incorrectAnswers = newAnswers;
+			return Object.assign({}, state, {
+				questions: newQuestions,
+			});
+		}
 		default:
 		}
 	}
@@ -287,6 +301,12 @@ function editingQuestionSet(state = {}, action) {
 }
 
 const questionConsoleReducer = combineReducers({
-	newQuestionSet, questionSets, activeQuestionSet: undoable(activeQuestionSet), currentUser, requests, searchFilter, editingQuestionSet,
+	newQuestionSet,
+	questionSets,
+	activeQuestionSet: undoable(activeQuestionSet),
+	currentUser,
+	requests,
+	searchFilter,
+	editingQuestionSet,
 });
 export default questionConsoleReducer;

@@ -5,7 +5,7 @@ import PrimaryButton from '../shared/PrimaryButton.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import colors from '../shared/colors';
 import { deleteQuestion, addAnswerInput,
-	editQuestionText, editCorrectAnswer, editIncorrectAnswer } from './actions';
+	editQuestionText, editCorrectAnswer, editIncorrectAnswer, deleteAnswer } from './actions';
 
 class QuestionDisplay extends Component {
 	constructor(props) {
@@ -61,7 +61,7 @@ class QuestionDisplay extends Component {
 					</div>
 					<div className="two columns text-right">
 						<PrimaryButton style={buttonStyle} onClick={this.deleteQuestion}>
-							<img src="/img/icons/trash.svg" style={imageStyle} alt="Delete" />
+							<img src="/img/icons/trash-light.svg" style={imageStyle} alt="Delete" />
 						</PrimaryButton>
 						<PrimaryButton style={buttonStyle} onClick={this.addIncorrectAnswer}>
 							<img src="/img/icons/plus.svg" style={imageStyle} alt="Add" />
@@ -134,19 +134,26 @@ CorrectAnswerDisplay.propTypes = {
 
 const CorrectAnswer = connect(null, { editCorrectAnswer })(CorrectAnswerDisplay);
 
-const IncorrectAnswerDisplay = function ({ text, route, questionID, id, editIncorrectAnswer }) {
+const IncorrectAnswerDisplay = function ({ text, route, questionID, id, editIncorrectAnswer, deleteAnswer }) {
 	const textStyle = { color: colors.midnight };
 	const imageStyle = { paddingRight: '5%' };
+	const deleteStyle = { cursor: 'pointer' };
 	let input;
 	return (
 	<div>
 		<img src="/img/icons/x.svg" alt="Incorrect: " style={imageStyle} />
 			{route.path.indexOf('/edit') >= 0 ?
-				<TextInput
-					value={text}
-					onChange={() => { editIncorrectAnswer(questionID, id, input.node.value, 'edit'); }}
-					ref={(t) => { input = t; }}
-				/>
+				<div>
+					<TextInput
+						value={text}
+						onChange={() => { editIncorrectAnswer(questionID, id, input.node.value, 'edit'); }}
+						ref={(t) => { input = t; }}
+					/>
+					<img
+						src="/img/icons/trash-dark.svg" alt="Delete" style={deleteStyle}
+						onClick={() => { deleteAnswer(questionID, id, 'edit'); }}
+						/>
+				</div>
 			: <span style={textStyle}>{text}</span>}
 	</div>
 );
@@ -158,8 +165,9 @@ IncorrectAnswerDisplay.propTypes = {
 	id: PropTypes.number.isRequired,
 	questionID: PropTypes.number.isRequired,
 	editIncorrectAnswer: PropTypes.func.isRequired,
+	deleteAnswer: PropTypes.func.isRequired,
 };
 
-const IncorrectAnswer = connect(null, { editIncorrectAnswer })(IncorrectAnswerDisplay);
+const IncorrectAnswer = connect(null, { editIncorrectAnswer, deleteAnswer })(IncorrectAnswerDisplay);
 
 export default Question;
