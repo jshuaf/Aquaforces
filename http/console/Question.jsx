@@ -45,7 +45,7 @@ class QuestionDisplay extends Component {
 								<IncorrectAnswer text={incorrectAnswer.text} key={index} />
 							)}
 					</div>
-					{window.location.href.indexOf('/edit') >= 0 ?
+					{this.props.route.path.indexOf('/edit') >= 0 ?
 						<div className="two columns text-right">
 							<PrimaryButton style={buttonStyle} onClick={this.deleteQuestion}>
 								<img src="/img/icons/trash.svg" style={imageStyle} alt="Delete" />

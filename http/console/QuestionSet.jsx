@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import Question from './Question.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
-import { beginEditing } from './actions';
 import { deleteQuestionSet, getQuestionSet } from './thunks';
 import colors from '../shared/colors';
 
@@ -16,16 +15,25 @@ class QuestionSetDisplay extends Component {
 	deleteQuestionSet() {
 		this.props.deleteQuestionSet(this.props._id);
 	}
+	discardChanges() {
+		this.props.getQuestionSet(this.props.shortID);
+	}
 	render() {
 		const questionGroups = [[]];
 		this.props.questions.forEach((question) => {
 			if (questionGroups[questionGroups.length - 1].length < 2) {
 				questionGroups[questionGroups.length - 1].push(
-					<Question {...question} key={questionGroups[questionGroups.length - 1]} />
+					<Question
+						{...question} key={questionGroups[questionGroups.length - 1]}
+						route={this.props.route}
+					/>
 				);
 			} else {
 				questionGroups.push([
-					<Question {...question} key={questionGroups[questionGroups.length - 1]} />,
+					<Question
+						{...question} key={questionGroups[questionGroups.length - 1]}
+						route={this.props.route}
+					/>,
 				]);
 			}
 		});
@@ -45,7 +53,7 @@ class QuestionSetDisplay extends Component {
 						<div className="row">
 							<h2 style={headerStyle}>{this.props.title}</h2>
 							<Link to={`/set/${this.props.shortID}`}>
-								<PrimaryButton>Discard changes </PrimaryButton>
+								<PrimaryButton onClick={this.discardChanges}>Discard changes </PrimaryButton>
 							</Link>
 						</div>
 					}
