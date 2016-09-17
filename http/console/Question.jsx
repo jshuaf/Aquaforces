@@ -41,7 +41,7 @@ class QuestionDisplay extends Component {
 				<div style={containerStyle} className="six columns">
 					<div className="row">
 						<div className="ten columns">
-							<TextInput defaultValue={this.props.text} />
+							<TextInput value={this.props.text} />
 								<CorrectAnswer text={this.props.correctAnswer} route={this.props.route} />
 								{this.props.incorrectAnswers.map((incorrectAnswer, index) =>
 									<IncorrectAnswer text={incorrectAnswer.text} key={index} route={this.props.route} />
@@ -102,7 +102,7 @@ const CorrectAnswer = function ({ text, route }) {
 		<div>
 			<img src="/img/icons/checkmark.svg" alt="Correct: " style={imageStyle} />
 			{route.path.indexOf('/edit') >= 0 ?
-				<TextInput defaultValue={text} />
+				<TextInput value={text} />
 			: <span style={textStyle}>{text}</span>}
 		</div>
 	);
@@ -120,7 +120,7 @@ const IncorrectAnswer = function ({ text, route }) {
 		<div>
 			<img src="/img/icons/x.svg" alt="Incorrect: " style={imageStyle} />
 				{route.path.indexOf('/edit') >= 0 ?
-					<TextInput defaultValue={text} />
+					<TextInput value={text} />
 				: <span style={textStyle}>{text}</span>}
 		</div>
 	);

@@ -8,6 +8,7 @@ class TextInputDisplay extends Component {
 		super(props);
 		this.state = {
 			errorMessage: null,
+			value: this.props.value,
 		};
 		autoBind(this);
 	}
@@ -17,6 +18,7 @@ class TextInputDisplay extends Component {
 			if (this.props.isComplete(text)) this.props.onComplete();
 		}
 		if (this.props.onChange) this.props.onChange();
+		this.setState({ value: this.node.value });
 	}
 	error(errorMessage) {
 		this.setState({ errorMessage });
@@ -93,14 +95,14 @@ class TextInputDisplay extends Component {
 		}
 
 		/* eslint-disable no-unused-vars */
-		const { onComplete, isComplete, width, maxWidth, icon, focusedIcon, ...inputProps } = this.props;
+		const { onComplete, isComplete, width, maxWidth, icon, focusedIcon, value, ...inputProps } = this.props;
 		/* eslint-enable no-unused-vars */
 
 		return (
 			<div className="textInput" style={containerStyle}>
 				{this.props.label ? <span style={labelStyle}><b>{this.props.label}</b></span> : null}
 				<input
-					ref={(i) => { this.node = i; }} style={inputStyle} {...inputProps}
+					ref={(i) => { this.node = i; }} style={inputStyle} value={this.state.value} {...inputProps}
 					onChange={this.onChange}
 				/>
 			{errorDiv}
