@@ -220,7 +220,7 @@ function activeQuestionSet(state = initialQuestionSetState, action) {
 			const questionIndex = state.questions.indexOf(question);
 			const answerToRemove = question.incorrectAnswers.filter((x) => x.id === action.id)[0];
 			const answerIndex = question.incorrectAnswers.indexOf(answerToRemove);
-			const newAnswers = question.incorrectAnswers.slice();
+			const newAnswers = state.questions[questionIndex].incorrectAnswers.slice();
 			newAnswers.splice(answerIndex, 1);
 
 			const newQuestions = state.questions.slice();
