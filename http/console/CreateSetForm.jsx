@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionSetForm from './QuestionSetForm.jsx';
-import { questionSetPropTypes } from './QuestionSet.jsx';
+import { questionSetPropTypes } from './QuestionSetView.jsx';
 import { editSetTitle, toggleSetPrivacy } from './actions';
 
 /* eslint-disable react/prefer-stateless-function */

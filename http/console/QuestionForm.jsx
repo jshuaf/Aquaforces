@@ -7,7 +7,7 @@ import colors from '../shared/colors';
 import { deleteQuestion, addAnswerInput,
 	editQuestionText, editCorrectAnswer, editIncorrectAnswer, deleteAnswer } from './actions';
 
-class QuestionDisplay extends Component {
+class QuestionFormDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
@@ -26,10 +26,6 @@ class QuestionDisplay extends Component {
 			border: `2px solid ${colors.midnight}`,
 			backgroundColor: colors.ice,
 		};
-		const textStyle = {
-			color: colors.midnight,
-			fontWeight: 'bold',
-		};
 		const buttonStyle = {
 			display: 'flex',
 			justifyContent: 'center',
@@ -40,8 +36,7 @@ class QuestionDisplay extends Component {
 			minWidth: 0,
 		};
 		const imageStyle = { margin: '30%' };
-		if (this.props.route.path.indexOf('/edit') >= 0) {
-			return (
+		return (
 			<div style={containerStyle} className="six columns">
 				<div className="row">
 					<div className="ten columns">
@@ -51,10 +46,10 @@ class QuestionDisplay extends Component {
 								this.props.editQuestionText(this.props.id, this.titleInput.node.value, 'edit');
 							}}
 						/>
-						<CorrectAnswer text={this.props.correctAnswer} route={this.props.route} id={this.props.id} />
+						<CorrectAnswer text={this.props.correctAnswer} id={this.props.id} />
 							{this.props.incorrectAnswers.map((incorrectAnswer, index) =>
 								<IncorrectAnswer
-									text={incorrectAnswer.text} key={index} route={this.props.route}
+									text={incorrectAnswer.text} key={index}
 									questionID={this.props.id} id={incorrectAnswer.id}
 								/>
 							)}
@@ -70,27 +65,10 @@ class QuestionDisplay extends Component {
 				</div>
 			</div>
 		);
-		}
-		return (
-		<div style={containerStyle} className="six columns">
-			<div className="row">
-				<div className="ten columns">
-					<h3 style={textStyle}>{this.props.text}</h3>
-						<CorrectAnswer text={this.props.correctAnswer} route={this.props.route} id={this.props.id} />
-						{this.props.incorrectAnswers.map((incorrectAnswer, index) =>
-							<IncorrectAnswer
-								text={incorrectAnswer.text} key={index} route={this.props.route}
-								questionID={this.props.id} id={incorrectAnswer.id}
-							/>
-						)}
-				</div>
-			</div>
-		</div>
-	);
 	}
 }
 
-QuestionDisplay.propTypes = {
+QuestionFormDisplay.propTypes = {
 	text: PropTypes.string.isRequired,
 	correctAnswer: PropTypes.string.isRequired,
 	incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
@@ -101,67 +79,58 @@ QuestionDisplay.propTypes = {
 	deleteQuestion: PropTypes.func.isRequired,
 	addAnswerInput: PropTypes.func.isRequired,
 	editQuestionText: PropTypes.func.isRequired,
-	route: PropTypes.any.isRequired,
 };
 
 const mapDispatchToProps = { deleteQuestion, addAnswerInput, editQuestionText };
 
-const Question = connect(null, mapDispatchToProps)(QuestionDisplay);
+const QuestionForm = connect(null, mapDispatchToProps)(QuestionFormDisplay);
 
-const CorrectAnswerDisplay = function ({ text, route, id, editCorrectAnswer }) {
-	const textStyle = { color: colors.midnight, fontWeight: 'bold' };
+const CorrectAnswerDisplay = function ({ text, id, editCorrectAnswer }) {
 	const imageStyle = { paddingRight: '4%' };
 	let input;
 	return (
 	<div>
 		<img src="/img/icons/checkmark.svg" alt="Correct: " style={imageStyle} />
-		{route.path.indexOf('/edit') >= 0 ?
 			<TextInput
 				value={text}
 				onChange={() => { editCorrectAnswer(id, input.node.value, 'edit'); }}
 				ref={(t) => { input = t; }} />
-		: <span style={textStyle}>{text}</span>}
 	</div>
 );
 };
 
 CorrectAnswerDisplay.propTypes = {
 	text: PropTypes.string.isRequired,
-	route: PropTypes.any.isRequired,
 	id: PropTypes.number.isRequired,
 	editCorrectAnswer: PropTypes.func.isRequired,
 };
 
 const CorrectAnswer = connect(null, { editCorrectAnswer })(CorrectAnswerDisplay);
 
-const IncorrectAnswerDisplay = function ({ text, route, questionID, id, editIncorrectAnswer, deleteAnswer }) {
-	const textStyle = { color: colors.midnight };
+const IncorrectAnswerDisplay = function ({ text, questionID, id, editIncorrectAnswer, deleteAnswer }) {
 	const imageStyle = { paddingRight: '5%' };
 	const deleteStyle = { cursor: 'pointer' };
 	let input;
 	return (
 	<div>
 		<img src="/img/icons/x.svg" alt="Incorrect: " style={imageStyle} />
-			{route.path.indexOf('/edit') >= 0 ?
-				<div>
-					<TextInput
-						value={text}
-						onChange={() => { editIncorrectAnswer(questionID, id, input.node.value, 'edit'); }}
-						ref={(t) => { input = t; }}
+      <div>
+				<TextInput
+					value={text}
+					onChange={() => { editIncorrectAnswer(questionID, id, input.node.value, 'edit'); }}
+					ref={(t) => { input = t; }}
+				/>
+				<img
+					src="/img/icons/trash-dark.svg" alt="Delete" style={deleteStyle}
+					onClick={() => { deleteAnswer(questionID, id, 'edit'); }}
 					/>
-					<img
-						src="/img/icons/trash-dark.svg" alt="Delete" style={deleteStyle}
-						onClick={() => { deleteAnswer(questionID, id, 'edit'); }}
-						/>
-				</div>
-			: <span style={textStyle}>{text}</span>}
+			</div>
 	</div>
 );
 };
 
 IncorrectAnswerDisplay.propTypes = {
 	text: PropTypes.string.isRequired,
-	route: PropTypes.any.isRequired,
 	id: PropTypes.number.isRequired,
 	questionID: PropTypes.number.isRequired,
 	editIncorrectAnswer: PropTypes.func.isRequired,
@@ -170,4 +139,4 @@ IncorrectAnswerDisplay.propTypes = {
 
 const IncorrectAnswer = connect(null, { editIncorrectAnswer, deleteAnswer })(IncorrectAnswerDisplay);
 
-export default Question;
+export default QuestionForm;

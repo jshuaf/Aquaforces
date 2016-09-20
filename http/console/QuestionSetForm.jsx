@@ -1,61 +1,112 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 import autoBind from 'react-autobind';
-import QuestionInputGroup from './QuestionInputGroup.jsx';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
+import { ActionCreators as changes } from 'redux-undo';
+import QuestionForm from './QuestionForm.jsx';
+import PrimaryButton from '../shared/PrimaryButton.jsx';
 import TextInput from '../shared/TextInput.jsx';
-import Checkbox from '../shared/Checkbox.jsx';
-import { questionSetPropTypes } from './QuestionSet.jsx';
-import { submitQuestionSet } from './thunks';
+import { addQuestionInput, editSetTitle } from './actions';
+import { deleteQuestionSet, getQuestionSet, submitQuestionSet } from './thunks';
+import colors from '../shared/colors';
 
-class QuestionSetFormDisplay extends Component {
+class QuestionSetDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
 	}
-	verifyQuestionSet() {
-		const set = this.props.questionSet;
-		if (!set.title) {
-			this.titleInput.error('Need a set title.');
-			return false;
-		}
-		this.titleInput.clearError();
-		return true;
+	deleteQuestionSet() {
+		this.props.deleteQuestionSet(this.props._id);
 	}
-	submitQuestionSet() {
-		if (this.verifyQuestionSet()) {
-			const set = this.props.questionSet;
-			this.props.dispatch(submitQuestionSet(set, this.props.mode));
-		}
+	discardChanges() {
+		this.props.getQuestionSet(this.props.shortID);
+	}
+	saveChanges() {
+		const {
+			/* eslint-disable no-unused-vars */
+			deleteQuestionSet, getQuestionSet, location, params, history,
+			route, routeParams, routes, children, ...props }
+			/* eslint-enable no-unused-vars */
+		= this.props;
+		return this.props.submitQuestionSet(props, 'edit');
+	}
+	addQuestion() {
+		this.props.addQuestionInput('edit');
 	}
 	render() {
+		const questionGroups = [[]];
+		this.props.questions.forEach((question) => {
+			if (questionGroups[questionGroups.length - 1].length < 2) {
+				questionGroups[questionGroups.length - 1].push(
+					<QuestionForm {...question} key={questionGroups[questionGroups.length - 1]} />
+				);
+			} else {
+				questionGroups.push([
+					<QuestionForm {...question} key={questionGroups[questionGroups.length - 1]} />,
+				]);
+			}
+		});
 		return (
-			<form onSubmit={(e) => { e.preventDefault(); this.submitQuestionSet(); }}>
-				<TextInput
-					label="Title" placeholder="My Question Set" required
-					value={this.props.questionSet.title}
-					ref={(t) => { this.titleInput = t; }}
-					onChange={() => { this.props.editSetTitle(this.titleInput.node.value); }}
-				/>
-			<QuestionInputGroup questions={this.props.questionSet.questions} mode={this.props.mode} />
-				<Checkbox
-					label="Private set" ref={(c) => { this.checkboxInput = c; }}
-					checked={this.props.questionSet.privacy}
-					onChange={() => { this.props.toggleSetPrivacy(this.checkboxInput.node.checked); }}
-				/>
-			<input type="submit" className="button button-primary" name="Submit" />
-			</form>
+			<div className="questionSet">
+					<div className="row">
+						<TextInput
+							value={this.props.title}
+							ref={(t) => { this.titleInput = t; }}
+							onChange={() => { this.props.editSetTitle(this.titleInput.node.value, 'edit'); }}
+						/>
+						<PrimaryButton onClick={this.addQuestion}>Add Question</PrimaryButton>
+						<Link to={`/set/${this.props.shortID}`}>
+							<PrimaryButton onClick={this.discardChanges}>Discard changes </PrimaryButton>
+						</Link>
+						<PrimaryButton onClick={this.saveChanges}>Save changes </PrimaryButton>
+						<PrimaryButton onClick={this.props.undoLastChange}>Undo</PrimaryButton>
+						<PrimaryButton onClick={this.props.redoLastChange}>Redo</PrimaryButton>
+					</div>
+				{questionGroups.map((questionGroup, index) =>
+					<div className="row" key={index}>
+						{questionGroup}
+					</div>
+				)}
+			</div>
 		);
 	}
 }
 
-QuestionSetFormDisplay.propTypes = {
-	editSetTitle: PropTypes.func.isRequired,
-	toggleSetPrivacy: PropTypes.func.isRequired,
-	dispatch: PropTypes.func.isRequired,
-	questionSet: PropTypes.shape(questionSetPropTypes).isRequired,
-	mode: PropTypes.oneOf(['edit', 'create']).isRequired,
+export const questionSetPropTypes = {
+	title: PropTypes.string.isRequired,
+	questions: PropTypes.arrayOf(PropTypes.shape({
+		text: PropTypes.string.isRequired,
+		correctAnswer: PropTypes.string.isRequired,
+		incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
+			text: PropTypes.string.isRequired,
+			id: PropTypes.number.isRequired,
+		})).isRequired,
+		id: PropTypes.number.isRequired,
+	})).isRequired,
+	privacy: PropTypes.bool,
 };
 
-const QuestionSetForm = connect()(QuestionSetFormDisplay);
+QuestionSetDisplay.propTypes = Object.assign({
+	deleteQuestionSet: PropTypes.func.isRequired,
+	getQuestionSet: PropTypes.func.isRequired,
+	undoLastChange: PropTypes.func.isRequired,
+	redoLastChange: PropTypes.func.isRequired,
+	_id: PropTypes.string.isRequired,
+	shortID: PropTypes.string.isRequired,
+}, questionSetPropTypes);
 
-export default QuestionSetForm;
+const mapStateToProps = (state) => state.activeQuestionSet.present;
+
+const mapDispatchToProps = {
+	deleteQuestionSet,
+	getQuestionSet,
+	submitQuestionSet,
+	addQuestionInput,
+	editSetTitle,
+	undoLastChange: changes.undo,
+	redoLastChange: changes.redo,
+};
+
+const QuestionSet = connect(mapStateToProps, mapDispatchToProps)(QuestionSetDisplay);
+
+export default QuestionSet;
