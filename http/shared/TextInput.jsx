@@ -105,7 +105,7 @@ class TextInputDisplay extends Component {
 			<div className="textInput" style={containerStyle}>
 				{this.props.label ? <span style={labelStyle}><b>{this.props.label}</b></span> : null}
 				<input
-					ref={(i) => { this.node = i; }} style={inputStyle} value={this.state.value} {...inputProps}
+					ref={(i) => { this.node = i; }} style={inputStyle} value={this.state.value || ''} {...inputProps}
 					onChange={this.onChange}
 				/>
 			{errorDiv}

@@ -43,7 +43,7 @@ class SearchBarDisplay extends Component {
 						maxWidth="none"
 						icon="/img/icons/search-nofocus.svg"
 						focusedIcon="/img/icons/search-focus.svg"
-						defaultValue={this.props.initialQuery || ''}
+						value={this.props.initialQuery || ''}
 					/>
 				</form>
 				<div style={logoContainerStyle}>
