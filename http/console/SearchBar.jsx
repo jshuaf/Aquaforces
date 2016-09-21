@@ -16,9 +16,7 @@ class SearchBarDisplay extends Component {
 	render() {
 		const formStyle = {
 			marginBottom: 0,
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'center',
+			textAlign: 'center',
 		};
 		return (
 			<form onSubmit={(e) => { e.preventDefault(); this.search(); }} style={formStyle}>
@@ -28,6 +26,7 @@ class SearchBarDisplay extends Component {
 					width="550px"
 					icon="/img/icons/search.svg"
 				/>
+				<br />
 			</form>
 		);
 	}
