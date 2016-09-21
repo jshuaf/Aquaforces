@@ -4,7 +4,6 @@ import SearchBar from './SearchBar.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
 
 export default function QuestionConsoleHeader() {
-
 	const headerStyle = {
 		marginBottom: '1%',
 	};

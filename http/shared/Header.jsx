@@ -57,7 +57,7 @@ export class HeaderRaw extends Component {
 			marginLeft: '5px',
 		};
 
-		const headerItemStyle = Object.assign({}, userInfoStyle, {
+		const hIStyle = Object.assign({}, userInfoStyle, {
 			':hover': { color: colors.pacific } }
 		);
 
@@ -74,9 +74,9 @@ export class HeaderRaw extends Component {
 								src={`${location.protocol}//${location.host}/img/logo/dark-blue.svg`}
 								alt="Aquaforces" style={logoStyle} />
 						</a>
-						<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
-						<a href="/host" style={headerItemStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
-						<a href="/play" style={headerItemStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
+						<a href="/console" style={hIStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
+						<a href="/host" style={hIStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
+						<a href="/play" style={hIStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
 						{this.props.currentUser
 						? <div style={userInfoStyle} key={3}>
 								<span style={linkTextStyle}>Logged in as {this.props.currentUser.displayName}</span>
