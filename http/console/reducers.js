@@ -301,7 +301,7 @@ function editingQuestionSet(state = {}, action) {
 }
 
 const questionConsoleReducer = combineReducers({
-	newQuestionSet,
+	newQuestionSet: undoable(newQuestionSet),
 	questionSets,
 	activeQuestionSet: undoable(activeQuestionSet),
 	currentUser,

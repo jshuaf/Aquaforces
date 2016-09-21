@@ -4,7 +4,7 @@ import QuestionSetPicker from './QuestionSetPicker.jsx';
 import GamePlayHost from './GamePlayHost.jsx';
 import GameBoarding from './GameBoarding.jsx';
 import Spinner from '../shared/Spinner.jsx';
-import { questionSetPropTypes } from '../console/QuestionSetView.jsx';
+import { questionSetPropTypes } from '../console/ViewQuestionSet.jsx';
 import { newGame, startGameRequest } from './actions';
 import { Header, UnderHeader } from '../shared/Header.jsx';
 import { authenticateUser } from './thunks';

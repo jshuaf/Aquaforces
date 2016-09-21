@@ -3,13 +3,13 @@ import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { ActionCreators as changes } from 'redux-undo';
-import QuestionForm from './QuestionForm.jsx';
+import EditQuestion from './EditQuestion.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import { addQuestionInput, editSetTitle } from './actions';
 import { deleteQuestionSet, getQuestionSet, submitQuestionSet } from './thunks';
 
-class QuestionSetDisplay extends Component {
+class EditQuestionSetDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
@@ -18,33 +18,27 @@ class QuestionSetDisplay extends Component {
 		this.mode = props.route.path.indexOf('/edit') >= 0 ? 'edit' : 'create';
 	}
 	deleteQuestionSet() {
-		this.props.deleteQuestionSet(this.props._id);
+		this.props.deleteQuestionSet(this.props.set._id);
 	}
 	discardChanges() {
-		this.props.getQuestionSet(this.props.shortID);
+		this.props.getQuestionSet(this.props.set.shortID);
 	}
 	saveChanges() {
-		const {
-			/* eslint-disable no-unused-vars */
-			deleteQuestionSet, getQuestionSet, location, params, history,
-			route, routeParams, routes, children, ...props }
-			/* eslint-enable no-unused-vars */
-		= this.props;
-		return this.props.submitQuestionSet(props, this.mode);
+		return this.props.submitQuestionSet(this.props.set, this.mode);
 	}
 	addQuestion() {
 		this.props.addQuestionInput(this.mode);
 	}
 	render() {
 		const questionGroups = [[]];
-		this.props.questions.forEach((question) => {
+		this.props.set.questions.forEach((question) => {
 			if (questionGroups[questionGroups.length - 1].length < 2) {
 				questionGroups[questionGroups.length - 1].push(
-					<QuestionForm {...question} key={questionGroups[questionGroups.length - 1]} />
+					<EditQuestion {...question} key={questionGroups[questionGroups.length - 1]} />
 				);
 			} else {
 				questionGroups.push([
-					<QuestionForm {...question} key={questionGroups[questionGroups.length - 1]} />,
+					<EditQuestion {...question} key={questionGroups[questionGroups.length - 1]} />,
 				]);
 			}
 		});
@@ -52,12 +46,12 @@ class QuestionSetDisplay extends Component {
 			<div className="questionSet">
 					<div className="row">
 						<TextInput
-							value={this.props.title}
+							value={this.props.set.title}
 							ref={(t) => { this.titleInput = t; }}
 							onChange={() => { this.props.editSetTitle(this.titleInput.node.value, this.mode); }}
 						/>
 						<PrimaryButton onClick={this.addQuestion}>Add Question</PrimaryButton>
-						<Link to={`/set/${this.props.shortID}`}>
+						<Link to={`/set/${this.props.set.shortID}`}>
 							<PrimaryButton onClick={this.discardChanges}>Discard changes </PrimaryButton>
 						</Link>
 						<PrimaryButton onClick={this.saveChanges}>Save changes </PrimaryButton>
@@ -88,16 +82,21 @@ export const questionSetPropTypes = {
 	privacy: PropTypes.bool,
 };
 
-QuestionSetDisplay.propTypes = Object.assign({
+EditQuestionSetDisplay.propTypes = {
+	set: PropTypes.shape(Object.assign({
+		_id: PropTypes.string.isRequired,
+		shortID: PropTypes.string.isRequired,
+	}, questionSetPropTypes)),
 	deleteQuestionSet: PropTypes.func.isRequired,
 	getQuestionSet: PropTypes.func.isRequired,
 	undoLastChange: PropTypes.func.isRequired,
 	redoLastChange: PropTypes.func.isRequired,
-	_id: PropTypes.string.isRequired,
-	shortID: PropTypes.string.isRequired,
-}, questionSetPropTypes);
+	addQuestionInput: PropTypes.func.isRequired,
+	submitQuestionSet: PropTypes.func.isRequired,
+	editSetTitle: PropTypes.func.isRequired,
+};
 
-const mapStateToProps = (state) => state.activeQuestionSet.present;
+const mapStateToProps = (state) => ({ set: state.activeQuestionSet.present });
 
 const mapDispatchToProps = {
 	deleteQuestionSet,
@@ -109,6 +108,6 @@ const mapDispatchToProps = {
 	redoLastChange: changes.redo,
 };
 
-const QuestionSet = connect(mapStateToProps, mapDispatchToProps)(QuestionSetDisplay);
+const EditQuestionSet = connect(mapStateToProps, mapDispatchToProps)(EditQuestionSetDisplay);
 
-export default QuestionSet;
+export default EditQuestionSet;

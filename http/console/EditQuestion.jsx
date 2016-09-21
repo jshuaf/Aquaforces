@@ -7,7 +7,7 @@ import colors from '../shared/colors';
 import { deleteQuestion, addAnswerInput,
 	editQuestionText, editCorrectAnswer, editIncorrectAnswer, deleteAnswer } from './actions';
 
-class QuestionFormDisplay extends Component {
+class EditQuestionDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
@@ -68,7 +68,7 @@ class QuestionFormDisplay extends Component {
 	}
 }
 
-QuestionFormDisplay.propTypes = {
+EditQuestionDisplay.propTypes = {
 	text: PropTypes.string.isRequired,
 	correctAnswer: PropTypes.string.isRequired,
 	incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
@@ -83,7 +83,7 @@ QuestionFormDisplay.propTypes = {
 
 const mapDispatchToProps = { deleteQuestion, addAnswerInput, editQuestionText };
 
-const QuestionForm = connect(null, mapDispatchToProps)(QuestionFormDisplay);
+const EditQuestion = connect(null, mapDispatchToProps)(EditQuestionDisplay);
 
 const CorrectAnswerDisplay = function ({ text, id, editCorrectAnswer }) {
 	const imageStyle = { paddingRight: '4%' };
@@ -139,4 +139,4 @@ IncorrectAnswerDisplay.propTypes = {
 
 const IncorrectAnswer = connect(null, { editIncorrectAnswer, deleteAnswer })(IncorrectAnswerDisplay);
 
-export default QuestionForm;
+export default EditQuestion;

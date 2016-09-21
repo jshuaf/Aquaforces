@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import QuestionSetSummary from './QuestionSetSummary.jsx';
-import { questionSetPropTypes } from './QuestionSetView.jsx';
+import { questionSetPropTypes } from './ViewQuestionSet.jsx';
 import { searchQuestionSets } from './thunks';
 
 class QuestionSetListDisplay extends Component {

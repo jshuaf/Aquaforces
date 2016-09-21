@@ -4,7 +4,7 @@ import colors from '../shared/colors';
 import { deleteQuestion, addAnswerInput,
 	editQuestionText } from './actions';
 
-class QuestionViewDisplay extends Component {
+class ViewQuestionDisplay extends Component {
 	render() {
 		const containerStyle = {
 			padding: '20px',
@@ -36,7 +36,7 @@ class QuestionViewDisplay extends Component {
 	}
 }
 
-QuestionViewDisplay.propTypes = {
+ViewQuestionDisplay.propTypes = {
 	text: PropTypes.string.isRequired,
 	correctAnswer: PropTypes.string.isRequired,
 	incorrectAnswers: PropTypes.arrayOf(PropTypes.shape({
@@ -48,7 +48,7 @@ QuestionViewDisplay.propTypes = {
 
 const mapDispatchToProps = { deleteQuestion, addAnswerInput, editQuestionText };
 
-const QuestionView = connect(null, mapDispatchToProps)(QuestionViewDisplay);
+const ViewQuestion = connect(null, mapDispatchToProps)(ViewQuestionDisplay);
 
 const CorrectAnswer = function ({ text }) {
 	const textStyle = { color: colors.midnight, fontWeight: 'bold' };
@@ -83,4 +83,4 @@ IncorrectAnswer.propTypes = {
 	questionID: PropTypes.number.isRequired,
 };
 
-export default QuestionView;
+export default ViewQuestion;

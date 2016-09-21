@@ -3,7 +3,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import autoBind from 'react-autobind';
 import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import { questionSetPropTypes } from './QuestionSetView.jsx';
+import { questionSetPropTypes } from './ViewQuestionSet.jsx';
 import { importQuestionSet, getQuestionSet } from './thunks';
 import colors from '../shared/colors';
 

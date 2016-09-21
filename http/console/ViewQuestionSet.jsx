@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import QuestionView from './QuestionView.jsx';
+import ViewQuestion from './ViewQuestion.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
 import { deleteQuestionSet, getQuestionSet } from './thunks';
 import colors from '../shared/colors';
 
-class QuestionSetViewDisplay extends Component {
+class ViewQuestionSetDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
@@ -23,11 +23,11 @@ class QuestionSetViewDisplay extends Component {
 		this.props.questions.forEach((question) => {
 			if (questionGroups[questionGroups.length - 1].length < 2) {
 				questionGroups[questionGroups.length - 1].push(
-					<QuestionView {...question} key={questionGroups[questionGroups.length - 1]} />
+					<ViewQuestion {...question} key={questionGroups[questionGroups.length - 1]} />
 				);
 			} else {
 				questionGroups.push([
-					<QuestionView {...question} key={questionGroups[questionGroups.length - 1]} />,
+					<ViewQuestion {...question} key={questionGroups[questionGroups.length - 1]} />,
 				]);
 			}
 		});
@@ -66,7 +66,7 @@ export const questionSetPropTypes = {
 	privacy: PropTypes.bool,
 };
 
-QuestionSetViewDisplay.propTypes = Object.assign({
+ViewQuestionSetDisplay.propTypes = Object.assign({
 	deleteQuestionSet: PropTypes.func.isRequired,
 	getQuestionSet: PropTypes.func.isRequired,
 	_id: PropTypes.string.isRequired,
@@ -80,6 +80,6 @@ const mapDispatchToProps = {
 	getQuestionSet,
 };
 
-const QuestionSetView = connect(mapStateToProps, mapDispatchToProps)(QuestionSetViewDisplay);
+const ViewQuestionSet = connect(mapStateToProps, mapDispatchToProps)(ViewQuestionSetDisplay);
 
-export default QuestionSetView;
+export default ViewQuestionSet;
