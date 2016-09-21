@@ -4,38 +4,36 @@ import QuestionSetSummary from './QuestionSetSummary.jsx';
 import { questionSetPropTypes } from './ViewQuestionSet.jsx';
 import { searchQuestionSets } from './thunks';
 
-class QuestionSetListDisplay extends Component {
-	render() {
-		const summaries = [[]];
-		let lastDelay = 200;
-		this.props.questionSets.forEach((questionSet, index) => {
-			if (index !== 0) lastDelay += (100 / Math.pow(index, 0.3));
-			else lastDelay += 100;
-			if (summaries[summaries.length - 1].length < 2) {
-				summaries[summaries.length - 1].push(
-					<QuestionSetSummary
-						{...questionSet} key={summaries[summaries.length - 1].length} delay={lastDelay} />
-				);
-			} else {
-				summaries.push([
-					<QuestionSetSummary
-						{...questionSet} key={summaries[summaries.length - 1].length} delay={lastDelay} />,
-				]);
-			}
-		});
+function QuestionSetListDisplay({ questionSets }) {
+	const summaries = [[]];
+	let lastDelay = 200;
+	questionSets.forEach((questionSet, index) => {
+		if (index !== 0) lastDelay += (100 / Math.pow(index, 0.3));
+		else lastDelay += 100;
+		if (summaries[summaries.length - 1].length < 2) {
+			summaries[summaries.length - 1].push(
+				<QuestionSetSummary
+					{...questionSet} key={summaries[summaries.length - 1].length} delay={lastDelay} />
+			);
+		} else {
+			summaries.push([
+				<QuestionSetSummary
+					{...questionSet} key={summaries[summaries.length - 1].length} delay={lastDelay} />,
+			]);
+		}
+	});
 
-		return (
-			<div id="questionSets">
-				{
-					summaries.map((questionSets, index) =>
-						<div className="row" key={index}>
-							{questionSets}
-						</div>
-					)
-				}
-		</div>
-		);
-	}
+	return (
+		<div id="questionSets">
+			{
+				summaries.map((questionSets, index) =>
+					<div className="row" key={index}>
+						{questionSets}
+					</div>
+				)
+			}
+	</div>
+	);
 }
 
 QuestionSetListDisplay.propTypes = {

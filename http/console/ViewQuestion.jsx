@@ -4,36 +4,34 @@ import colors from '../shared/colors';
 import { deleteQuestion, addAnswerInput,
 	editQuestionText } from './actions';
 
-class ViewQuestionDisplay extends Component {
-	render() {
-		const containerStyle = {
-			padding: '20px',
-			borderRadius: '20px',
-			marginBottom: '20px',
-			border: `2px solid ${colors.midnight}`,
-			backgroundColor: colors.ice,
-		};
-		const textStyle = {
-			color: colors.midnight,
-			fontWeight: 'bold',
-		};
-		return (
-			<div style={containerStyle} className="six columns">
-				<div className="row">
-					<div className="ten columns">
-						<h3 style={textStyle}>{this.props.text}</h3>
-						<CorrectAnswer text={this.props.correctAnswer} id={this.props.id} />
-							{this.props.incorrectAnswers.map((incorrectAnswer, index) =>
-								<IncorrectAnswer
-									text={incorrectAnswer.text} key={index}
-									questionID={this.props.id} id={incorrectAnswer.id}
-								/>
-						)}
-					</div>
+function ViewQuestionDisplay({ text, correctAnswer, id, incorrectAnswers }) {
+	const containerStyle = {
+		padding: '20px',
+		borderRadius: '20px',
+		marginBottom: '20px',
+		border: `2px solid ${colors.midnight}`,
+		backgroundColor: colors.ice,
+	};
+	const textStyle = {
+		color: colors.midnight,
+		fontWeight: 'bold',
+	};
+	return (
+		<div style={containerStyle} className="six columns">
+			<div className="row">
+				<div className="ten columns">
+					<h3 style={textStyle}>{text}</h3>
+					<CorrectAnswer text={correctAnswer} id={id} />
+						{incorrectAnswers.map((incorrectAnswer, index) =>
+							<IncorrectAnswer
+								text={incorrectAnswer.text} key={index}
+								questionID={id} id={incorrectAnswer.id}
+							/>
+					)}
 				</div>
 			</div>
-		);
-	}
+		</div>
+	);
 }
 
 ViewQuestionDisplay.propTypes = {
