@@ -16,8 +16,6 @@ module.exports = (
 			<Route component={QuestionConsole}>
 				<Route path="set/:shortID" component={QuestionSetView} />
 				<Route path="set/:shortID/edit" component={QuestionSetForm} />
-			</Route>
-			<Route component={QuestionConsole}>
 				<Route path="search/:query" component={QuestionSetList} />
 			</Route>
 		</Route>
