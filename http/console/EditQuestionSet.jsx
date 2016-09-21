@@ -50,6 +50,21 @@ class EditQuestionSetDisplay extends Component {
 				]);
 			}
 		});
+
+		const buttonStyle = {	margin: '0 1%' };
+		const imageButtonStyle = Object.assign({}, {
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			height: '45px',
+			width: '45px',
+			padding: 0,
+			minWidth: 0,
+		}, buttonStyle);
+		const buttonContainerStyle = {
+			display: 'flex',
+			alignItems: 'center',
+		};
 		return (
 			<div className="questionSet">
 					<div className="row">
@@ -58,13 +73,23 @@ class EditQuestionSetDisplay extends Component {
 							ref={(t) => { this.titleInput = t; }}
 							onChange={() => { this.props.editSetTitle(this.titleInput.node.value, this.state.mode); }}
 						/>
-						<PrimaryButton onClick={this.addQuestion}>Add Question</PrimaryButton>
-						<Link to={`/set/${this.props.set.shortID}`}>
-							<PrimaryButton onClick={this.discardChanges}>Discard changes </PrimaryButton>
-						</Link>
-						<PrimaryButton onClick={this.saveChanges}>Save changes </PrimaryButton>
-						<PrimaryButton onClick={this.props.undoLastChange}>Undo</PrimaryButton>
-						<PrimaryButton onClick={this.props.redoLastChange}>Redo</PrimaryButton>
+						<div style={buttonContainerStyle}>
+							<PrimaryButton onClick={this.saveChanges} style={buttonStyle}>Save changes </PrimaryButton>
+							<Link to={`/set/${this.props.set.shortID}`}>
+								<PrimaryButton onClick={this.discardChanges} style={buttonStyle}>
+									Discard changes
+								</PrimaryButton>
+							</Link>
+							<PrimaryButton onClick={this.addQuestion} style={imageButtonStyle}>
+								<img src="/img/icons/plus.svg" alt="Add Question" />
+							</PrimaryButton>
+							<PrimaryButton onClick={this.props.undoLastChange} style={imageButtonStyle}>
+								<img src="/img/icons/undo.svg" alt="Undo" />
+							</PrimaryButton>
+							<PrimaryButton onClick={this.props.redoLastChange} style={imageButtonStyle}>
+								<img src="/img/icons/redo.svg" alt="Redo" />
+							</PrimaryButton>
+						</div>
 						<Checkbox
 							label="Private Set" checked={this.props.set.privacy}
 							onChange={(value) => { this.props.toggleSetPrivacy(value, this.state.mode); }}
