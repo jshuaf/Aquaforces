@@ -620,7 +620,7 @@ div.sa-icon.sa-error {
 .pop-up-appear.pop-up-appear-active {
 	-webkit-animation: pop-up 900ms linear both;
 	animation: pop-up 900ms linear both;
-	opacity: 1.0;
+	opacity: 1;
 }
 
 @-webkit-keyframes pop-up {
