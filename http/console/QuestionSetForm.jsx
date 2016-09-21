@@ -8,12 +8,14 @@ import PrimaryButton from '../shared/PrimaryButton.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import { addQuestionInput, editSetTitle } from './actions';
 import { deleteQuestionSet, getQuestionSet, submitQuestionSet } from './thunks';
-import colors from '../shared/colors';
 
 class QuestionSetDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
+	}
+	componentWillReceiveProps(props) {
+		this.mode = props.route.path.indexOf('/edit') >= 0 ? 'edit' : 'create';
 	}
 	deleteQuestionSet() {
 		this.props.deleteQuestionSet(this.props._id);
@@ -28,10 +30,10 @@ class QuestionSetDisplay extends Component {
 			route, routeParams, routes, children, ...props }
 			/* eslint-enable no-unused-vars */
 		= this.props;
-		return this.props.submitQuestionSet(props, 'edit');
+		return this.props.submitQuestionSet(props, this.mode);
 	}
 	addQuestion() {
-		this.props.addQuestionInput('edit');
+		this.props.addQuestionInput(this.mode);
 	}
 	render() {
 		const questionGroups = [[]];
@@ -52,7 +54,7 @@ class QuestionSetDisplay extends Component {
 						<TextInput
 							value={this.props.title}
 							ref={(t) => { this.titleInput = t; }}
-							onChange={() => { this.props.editSetTitle(this.titleInput.node.value, 'edit'); }}
+							onChange={() => { this.props.editSetTitle(this.titleInput.node.value, this.mode); }}
 						/>
 						<PrimaryButton onClick={this.addQuestion}>Add Question</PrimaryButton>
 						<Link to={`/set/${this.props.shortID}`}>
