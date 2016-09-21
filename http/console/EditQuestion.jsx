@@ -13,10 +13,10 @@ class EditQuestionDisplay extends Component {
 		autoBind(this);
 	}
 	deleteQuestion() {
-		this.props.deleteQuestion(this.props.id, 'edit');
+		this.props.deleteQuestion(this.props.id, this.props.mode);
 	}
 	addIncorrectAnswer() {
-		this.props.addAnswerInput(this.props.id, 'edit');
+		this.props.addAnswerInput(this.props.id, this.props.mode);
 	}
 	render() {
 		const containerStyle = {
@@ -43,14 +43,15 @@ class EditQuestionDisplay extends Component {
 						<TextInput
 							value={this.props.text} ref={(t) => { this.titleInput = t; }}
 							onChange={() => {
-								this.props.editQuestionText(this.props.id, this.titleInput.node.value, 'edit');
+								this.props.editQuestionText(this.props.id, this.titleInput.node.value, this.props.mode);
 							}}
 						/>
-						<CorrectAnswer text={this.props.correctAnswer} id={this.props.id} />
+						<CorrectAnswer text={this.props.correctAnswer} id={this.props.id} mode={this.props.mode} />
 							{this.props.incorrectAnswers.map((incorrectAnswer, index) =>
 								<IncorrectAnswer
 									text={incorrectAnswer.text} key={index}
 									questionID={this.props.id} id={incorrectAnswer.id}
+									mode={this.props.mode}
 								/>
 							)}
 					</div>
@@ -79,13 +80,14 @@ EditQuestionDisplay.propTypes = {
 	deleteQuestion: PropTypes.func.isRequired,
 	addAnswerInput: PropTypes.func.isRequired,
 	editQuestionText: PropTypes.func.isRequired,
+	mode: PropTypes.oneOf(['edit', 'create']).isRequired,
 };
 
 const mapDispatchToProps = { deleteQuestion, addAnswerInput, editQuestionText };
 
 const EditQuestion = connect(null, mapDispatchToProps)(EditQuestionDisplay);
 
-const CorrectAnswerDisplay = function ({ text, id, editCorrectAnswer }) {
+const CorrectAnswerDisplay = function ({ text, id, editCorrectAnswer, mode }) {
 	const imageStyle = { paddingRight: '4%' };
 	let input;
 	return (
@@ -93,7 +95,7 @@ const CorrectAnswerDisplay = function ({ text, id, editCorrectAnswer }) {
 		<img src="/img/icons/checkmark.svg" alt="Correct: " style={imageStyle} />
 			<TextInput
 				value={text}
-				onChange={() => { editCorrectAnswer(id, input.node.value, 'edit'); }}
+				onChange={() => { editCorrectAnswer(id, input.node.value, mode); }}
 				ref={(t) => { input = t; }} />
 	</div>
 );
@@ -103,11 +105,12 @@ CorrectAnswerDisplay.propTypes = {
 	text: PropTypes.string.isRequired,
 	id: PropTypes.number.isRequired,
 	editCorrectAnswer: PropTypes.func.isRequired,
+	mode: PropTypes.oneOf(['edit', 'create']).isRequired,
 };
 
 const CorrectAnswer = connect(null, { editCorrectAnswer })(CorrectAnswerDisplay);
 
-const IncorrectAnswerDisplay = function ({ text, questionID, id, editIncorrectAnswer, deleteAnswer }) {
+const IncorrectAnswerDisplay = function ({ text, questionID, id, editIncorrectAnswer, deleteAnswer, mode }) {
 	const imageStyle = { paddingRight: '5%' };
 	const deleteStyle = { cursor: 'pointer' };
 	let input;
@@ -117,12 +120,12 @@ const IncorrectAnswerDisplay = function ({ text, questionID, id, editIncorrectAn
       <div>
 				<TextInput
 					value={text}
-					onChange={() => { editIncorrectAnswer(questionID, id, input.node.value, 'edit'); }}
+					onChange={() => { editIncorrectAnswer(questionID, id, input.node.value, mode); }}
 					ref={(t) => { input = t; }}
 				/>
 				<img
 					src="/img/icons/trash-dark.svg" alt="Delete" style={deleteStyle}
-					onClick={() => { deleteAnswer(questionID, id, 'edit'); }}
+					onClick={() => { deleteAnswer(questionID, id, this.props.mode); }}
 					/>
 			</div>
 	</div>
@@ -135,6 +138,7 @@ IncorrectAnswerDisplay.propTypes = {
 	questionID: PropTypes.number.isRequired,
 	editIncorrectAnswer: PropTypes.func.isRequired,
 	deleteAnswer: PropTypes.func.isRequired,
+	mode: PropTypes.oneOf(['edit', 'create']).isRequired,
 };
 
 const IncorrectAnswer = connect(null, { editIncorrectAnswer, deleteAnswer })(IncorrectAnswerDisplay);

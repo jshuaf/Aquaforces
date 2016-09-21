@@ -1,44 +1,42 @@
 import React, { Component, PropTypes } from 'react';
 import autoBind from 'react-autobind';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { ActionCreators as changes } from 'redux-undo';
 import EditQuestion from './EditQuestion.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
 import TextInput from '../shared/TextInput.jsx';
 import { addQuestionInput, editSetTitle } from './actions';
-import { deleteQuestionSet, getQuestionSet, submitQuestionSet } from './thunks';
+import { submitQuestionSet } from './thunks';
 
 class CreateQuestionSetDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
+		this.state = {
+			mode: props.route.path.indexOf('/edit') >= 0 ? 'edit' : 'create',
+		};
 	}
 	componentWillReceiveProps(props) {
-		this.mode = props.route.path.indexOf('/edit') >= 0 ? 'edit' : 'create';
-	}
-	deleteQuestionSet() {
-		this.props.deleteQuestionSet(this.props.set._id);
-	}
-	discardChanges() {
-		this.props.getQuestionSet(this.props.set.shortID);
+		this.setState({ mode: props.route.path.indexOf('/edit') >= 0 ? 'edit' : 'create' });
 	}
 	saveChanges() {
-		return this.props.submitQuestionSet(this.props.set, this.mode);
+		return this.props.submitQuestionSet(this.props.set, this.state.mode);
 	}
 	addQuestion() {
-		this.props.addQuestionInput(this.mode);
+		this.props.addQuestionInput(this.state.mode);
 	}
 	render() {
 		const questionGroups = [[]];
 		this.props.set.questions.forEach((question) => {
 			if (questionGroups[questionGroups.length - 1].length < 2) {
 				questionGroups[questionGroups.length - 1].push(
-					<EditQuestion {...question} key={questionGroups[questionGroups.length - 1]} />
+					<EditQuestion
+							{...question} key={questionGroups[questionGroups.length - 1]} mode={this.state.mode} />
 				);
 			} else {
 				questionGroups.push([
-					<EditQuestion {...question} key={questionGroups[questionGroups.length - 1]} />,
+					<EditQuestion
+						{...question} key={questionGroups[questionGroups.length - 1]} mode={this.state.mode} />,
 				]);
 			}
 		});
@@ -48,13 +46,10 @@ class CreateQuestionSetDisplay extends Component {
 						<TextInput
 							value={this.props.set.title}
 							ref={(t) => { this.titleInput = t; }}
-							onChange={() => { this.props.editSetTitle(this.titleInput.node.value, this.mode); }}
+							onChange={() => { this.props.editSetTitle(this.titleInput.node.value, this.state.mode); }}
 						/>
 						<PrimaryButton onClick={this.addQuestion}>Add Question</PrimaryButton>
-						<Link to={`/set/${this.props.set.shortID}`}>
-							<PrimaryButton onClick={this.discardChanges}>Discard changes </PrimaryButton>
-						</Link>
-						<PrimaryButton onClick={this.saveChanges}>Save changes </PrimaryButton>
+						<PrimaryButton onClick={this.saveChanges}>Submit Set</PrimaryButton>
 						<PrimaryButton onClick={this.props.undoLastChange}>Undo</PrimaryButton>
 						<PrimaryButton onClick={this.props.redoLastChange}>Redo</PrimaryButton>
 					</div>
@@ -87,8 +82,6 @@ CreateQuestionSetDisplay.propTypes = {
 		_id: PropTypes.string.isRequired,
 		shortID: PropTypes.string.isRequired,
 	}, questionSetPropTypes)),
-	deleteQuestionSet: PropTypes.func.isRequired,
-	getQuestionSet: PropTypes.func.isRequired,
 	undoLastChange: PropTypes.func.isRequired,
 	redoLastChange: PropTypes.func.isRequired,
 	addQuestionInput: PropTypes.func.isRequired,
@@ -99,8 +92,6 @@ CreateQuestionSetDisplay.propTypes = {
 const mapStateToProps = (state) => ({ set: state.newQuestionSet.present });
 
 const mapDispatchToProps = {
-	deleteQuestionSet,
-	getQuestionSet,
 	submitQuestionSet,
 	addQuestionInput,
 	editSetTitle,
