@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import autoBind from 'react-autobind';
-import { Header, UnderHeader } from '../shared/Header.jsx';
+import { Header } from '../shared/Header.jsx';
 
 class GameBoardingDisplay extends Component {
 	constructor(props) {
@@ -12,7 +12,6 @@ class GameBoardingDisplay extends Component {
 		return (
 			<div id="gameHost">
 				<Header />
-				<UnderHeader />
 				<h1>Your game ID is: {this.props.gameID}</h1>
 				<h4>Users without crews:</h4>
 				{this.props.usersWithoutCrews.map((user, index) => <p key={index}>{user}</p>)}

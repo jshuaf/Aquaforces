@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { Header, UnderHeader } from '../shared/Header.jsx';
+import { Header } from '../shared/Header.jsx';
 import QuestionConsoleHeader from './QuestionConsoleHeader.jsx';
 import { authenticateUser } from './thunks';
 
@@ -12,7 +12,6 @@ class QuestionConsoleDisplay extends Component {
 		return (
 			<div id="questionConsole">
 				<Header currentUser={this.props.currentUser} />
-				<UnderHeader style={{ marginBottom: '1%' }} />
 				<div className="container">
 					<QuestionConsoleHeader />
 					{this.props.children}

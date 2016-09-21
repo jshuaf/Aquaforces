@@ -26,30 +26,23 @@ class TextInputDisplay extends Component {
 	}
 	render() {
 		const containerStyle = {
-			width: this.props.width || '100%',
-			maxWidth: this.props.maxWidth || '500px',
+			display: 'block',
+			width: this.props.width ? this.props.width : '150px',
 		};
 		const labelStyle = {
 			marginBottom: '2%',
-			display: 'inline-table',
+			marginLeft: '1%',
 		};
 		let inputStyle = {
 			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'transparent',
 			textAlign: 'left',
 			color: colors.water,
-			width: '100%',
-			borderStyle: 'solid',
-			borderColor: colors.midnight,
-			borderWidth: '0.1px',
-			borderRadius: '9999999px',
+			width: this.props.width ? this.props.width : this.props.placeholder.length * 20 + 50,
+			borderLeft: 'none',
+			borderRight: 'none',
+			borderTop: 'none',
+			borderBottom: '2px solid #19a8a6',
 			fontSize: '1.3em',
-			textIndent: '4%',
-			padding: '7px 0px 7px 0px',
-			backgroundSize: '3%',
-			outlineWidth: '0',
-			':focus': {
-				borderColor: colors.pacific,
-			},
 		};
 		const errorContainerStyle = {
 			display: 'flex',
@@ -111,7 +104,7 @@ TextInputDisplay.propTypes = {
 	isComplete: PropTypes.func,
 	onComplete: PropTypes.func,
 	onChange: PropTypes.func,
-	width: PropTypes.string,
+	width: PropTypes.number,
 	maxWidth: PropTypes.string,
 	icon: PropTypes.string,
 };
