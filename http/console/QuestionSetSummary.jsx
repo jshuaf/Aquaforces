@@ -1,18 +1,33 @@
 import React, { Component, PropTypes } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import autoBind from 'react-autobind';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import { questionSetPropTypes } from './QuestionSet.jsx';
-import { importQuestionSet } from './thunks';
+import { questionSetPropTypes } from './ViewQuestionSet.jsx';
+import { importQuestionSet, getQuestionSet } from './thunks';
 import colors from '../shared/colors';
 
 class QuestionSetSummaryDisplay extends Component {
 	constructor(props) {
 		super(props);
 		autoBind(this);
+		this.state = {
+			additionalStyles: {},
+		};
 	}
 	importQuestionSet() {
-		this.props.importQuestionSet(this.props);
+		/* eslint-disable no-unused-vars */
+		const { delay, ...props } = this.props;
+		/* eslint-enable no-unused-vars */
+		this.props.importQuestionSet(props);
+	}
+	editQuestionSet() {
+		this.props.getQuestionSet(this.props.shortID);
+		browserHistory.push(`/set/${this.props.shortID}/edit`);
+	}
+	viewQuestionSet() {
+		this.props.getQuestionSet(this.props.shortID);
+		browserHistory.push(`/set/${this.props.shortID}`);
 	}
 	render() {
 		let questionSetNote;
@@ -27,31 +42,33 @@ class QuestionSetSummaryDisplay extends Component {
 		const textStyle = {
 			color: 'white',
 		};
-		const containerStyle = {
+		const containerStyle = Object.assign({}, {
 			padding: '20px',
 			borderRadius: '20px',
 			marginBottom: '20px',
 			backgroundColor: colors.pacific,
-		};
+		}, this.state.additionalStyles);
+
 		const importedSetButtons = [
-			<Link to={`/set/${this.props.shortID}`} key={0}>
-			<button className="button button-secondary">
+			<button className="button button-secondary" onClick={this.viewQuestionSet} key={0}>
 				View Set
-			</button>
-		</Link>,
-			<Link to={`/set/${this.props.shortID}/edit`} key={1}>
-			<button className="button button-secondary">
+			</button>,
+			<button className="button button-secondary" onClick={this.editQuestionSet} key={1}>
 				Edit Set
-			</button>
-		</Link>,
+			</button>,
 		];
 		const notImportedSetButtons = [
-			<button className="button button-secondary" onClick={this.importQuestionSet}>
+			<button className="button button-secondary" onClick={this.importQuestionSet} key={0}>
 				Import Set
 			</button>,
 		];
 		return (
-				<div style={containerStyle} className="eight columns">
+			<ReactCSSTransitionGroup
+				className="six columns"
+				transitionName="pop-up" transitionAppear transitionAppearTimeout={this.props.delay}
+				transitionEnterTimeout={0} transitionLeaveTimeout={0}
+			>
+				<div style={containerStyle}>
 					<div className="row">
 						<div className="eight columns">
 							<h2 key={-1} className="marginless" style={textStyle}>{this.props.title}</h2>
@@ -68,17 +85,23 @@ class QuestionSetSummaryDisplay extends Component {
 						</div>
 					</div>
 				</div>
+			</ReactCSSTransitionGroup>
+
 		);
 	}
 }
 
 QuestionSetSummaryDisplay.propTypes = Object.assign({
 	importQuestionSet: PropTypes.func.isRequired,
+	delay: PropTypes.number.isRequired,
 }, questionSetPropTypes);
 
 const mapDispatchToProps = (dispatch) => ({
 	importQuestionSet: (source) => {
 		dispatch(importQuestionSet(source));
+	},
+	getQuestionSet: (shortID) => {
+		dispatch(getQuestionSet(shortID));
 	},
 });
 

@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import undoable from 'redux-undo';
 import * as actions from './actions';
 
 const initialNewSetState = {
@@ -205,6 +206,29 @@ function activeQuestionSet(state = initialQuestionSetState, action) {
 			return Object.assign({}, state, {
 				privacy: action.privacy,
 			});
+		case actions.DELETE_QUESTION: {
+			const questionToRemove = state.questions.filter((x) => x.id === action.id)[0];
+			const questionIndex = state.questions.indexOf(questionToRemove);
+			const newQuestions = state.questions.slice();
+			newQuestions.splice(questionIndex, 1);
+			return Object.assign({}, state, {
+				questions: newQuestions,
+			});
+		}
+		case actions.DELETE_ANSWER: {
+			const question = state.questions.filter((x) => x.id === action.questionID)[0];
+			const questionIndex = state.questions.indexOf(question);
+			const answerToRemove = question.incorrectAnswers.filter((x) => x.id === action.id)[0];
+			const answerIndex = question.incorrectAnswers.indexOf(answerToRemove);
+			const newAnswers = state.questions[questionIndex].incorrectAnswers.slice();
+			newAnswers.splice(answerIndex, 1);
+
+			const newQuestions = state.questions.slice();
+			newQuestions[questionIndex].incorrectAnswers = newAnswers;
+			return Object.assign({}, state, {
+				questions: newQuestions,
+			});
+		}
 		default:
 		}
 	}
@@ -249,6 +273,40 @@ function requests(state = initialRequestsState, action) {
 	}
 }
 
+const initialSearchFilterState = {
+	sources: ['quizlet', 'aquaforces'],
+};
+
+function searchFilter(state = initialSearchFilterState, action) {
+	switch (action.type) {
+	case actions.TOGGLE_SEARCH_FILTER_SOURCE: {
+		let newSources = state.sources.slice();
+		if (newSources.indexOf(action.source) >= 0) {
+			newSources.splice(newSources.indexOf(action.source), 1);
+		} else {
+			newSources = newSources.concat([action.source]);
+		}
+		return Object.assign({}, state, { sources: newSources });
+	}
+	default:
+		return state;
+	}
+}
+
+function editingQuestionSet(state = {}, action) {
+	switch (action.type) {
+	default:
+		return state;
+	}
+}
+
 const questionConsoleReducer = combineReducers({
-	newQuestionSet, questionSets, activeQuestionSet, currentUser, requests });
+	newQuestionSet: undoable(newQuestionSet),
+	questionSets,
+	activeQuestionSet: undoable(activeQuestionSet),
+	currentUser,
+	requests,
+	searchFilter,
+	editingQuestionSet,
+});
 export default questionConsoleReducer;

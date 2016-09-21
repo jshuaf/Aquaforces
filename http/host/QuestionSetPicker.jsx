@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { questionSetPropTypes } from '../console/QuestionSet.jsx';
+import { questionSetPropTypes } from '../console/ViewQuestionSet.jsx';
 import { populateQuestionSetList, updateSelectedSet } from './actions';
 
 /* global sweetAlert:true */

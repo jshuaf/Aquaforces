@@ -1,26 +1,8 @@
+import { browserHistory } from 'react-router';
 import * as actions from './actions';
 
 const request = require('request');
 /* global sweetAlert:true */
-
-export function searchQuestionSets(query) {
-	return (dispatch, getState) => {
-		const url = `${location.protocol}//${location.host}/api/search`;
-		const body = { query };
-		if (!query) return;
-		if (getState().requests.search) {
-			getState().requests.search.forEach(req => req.req.destroy());
-		}
-		dispatch(actions.clearRequests('search'));
-		const searchRequest = request({ url, body, json: true, method: 'post' }, (error, res) => {
-			if (error) return console.error(error);
-			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
-			dispatch(actions.clearRequests('search'));
-			return dispatch(actions.populateQuestionSetList(res.body));
-		});
-		dispatch(actions.newRequest('search', searchRequest));
-	};
-}
 
 export function submitQuestionSet(set, mode) {
 	return (dispatch) => {
@@ -98,7 +80,7 @@ export function deleteQuestionSet(id) {
 	};
 }
 
-export function getQuestionSets() {
+export function getQuestionSets(redirect = false) {
 	return (dispatch) => {
 		const url = `${location.protocol}//${location.host}/api/get-qsets`;
 		const searchRequest = request({ url, body: {}, json: true, method: 'post' }, (error, res) => {
@@ -106,6 +88,31 @@ export function getQuestionSets() {
 			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
 			dispatch(actions.clearRequests('search'));
 			dispatch(actions.populateQuestionSetList(res.body));
+		});
+		dispatch(actions.newRequest('search', searchRequest));
+		if (redirect) return browserHistory.push('/console');
+	};
+}
+
+export function searchQuestionSets(query) {
+	return (dispatch, getState) => {
+		const url = `${location.protocol}//${location.host}/api/search`;
+		const filter = getState().searchFilter;
+		const body = { query, filter };
+		if (!query) return;
+		if (getState().requests.search) {
+			getState().requests.search.forEach((req) => {
+				if (req.req) req.req.destroy();
+				else req.abort();
+			});
+		}
+		dispatch(actions.clearRequests('search'));
+		const searchRequest = request({ url, body, json: true, method: 'post' }, (error, res) => {
+			if (error) return console.error(error);
+			if (res.statusCode === 400) return sweetAlert(res.body, null, 'error');
+			dispatch(actions.clearRequests('search'));
+			dispatch(actions.populateQuestionSetList(res.body));
+			return browserHistory.push(`/search/${query}`);
 		});
 		dispatch(actions.newRequest('search', searchRequest));
 	};

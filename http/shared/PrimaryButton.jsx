@@ -6,14 +6,14 @@ import colors from './colors';
 class PrimaryButton extends Component {
 	render() {
 		let currentStyle = {
-			borderRadius: '30px',
-			backgroundColor: '#ed676c',
+			borderRadius: '99999px',
+			backgroundColor: colors.coral,
 			border: 'none',
-			letterSpacing: 'normal',
-			textTransform: 'none',
-			fontSize: '1.5rem',
-			fontWeight: 'bold',
+			fontSize: '1.3em',
 			color: 'white',
+			':hover': { backgroundColor: colors.rosebud },
+			height: '40px',
+			minWidth: '150px',
 		};
 
 		const { children, style, ...buttonProps } = this.props;

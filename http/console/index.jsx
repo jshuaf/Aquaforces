@@ -14,7 +14,7 @@ const store = createStore(reducer, undefined, compose(
 ));
 
 const persistConfig = {
-	whitelist: ['newQuestionSet', 'activeQuestionSet'],
+	whitelist: ['newQuestionSet'],
 };
 
 persistStore(store, persistConfig);

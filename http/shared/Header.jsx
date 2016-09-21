@@ -3,6 +3,7 @@ import autoBind from 'react-autobind';
 import Radium from 'radium';
 import colors from '../shared/colors';
 import PrimaryButton from './PrimaryButton.jsx';
+import Spinner from './Spinner.jsx';
 
 const request = require('request');
 /* global sweetAlert:true */
@@ -28,64 +29,77 @@ export class HeaderRaw extends Component {
 		});
 	}
 	render() {
-		const headerStyle = {
-			marginTop: '25px',
-			marginBottom: '25px',
+		const containerStyle = {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'space-around',
+			position: 'fixed',
+			zIndex: 5,
+			width: '100%',
+			height: '11%',
+			minHeight: '60px',
+			backgroundColor: colors.wasabi,
+		};
+
+		const logoContainerStyle = {
+			height: '100%',
+			width: '30%',
+			display: 'flex',
+			alignItems: 'center',
 		};
 
 		const logoStyle = {
-			width: '150px',
-			marginRight: '15px',
+			height: '80%',
+			width: '20%',
+			minWidth: '200px',
 		};
 
 		const userInfoStyle = {
 			height: '80%',
-			display: 'inline',
+			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
 			textDecoration: 'none',
 			fontSize: '1.3em',
-			marginRight: '15px',
-			color: colors.pacific,
+			color: colors.midnight,
 		};
 
 		const logoutStyle = {
-			color: colors.pacific,
+			color: colors.midnight,
 			fontSize: '1em',
 			textDecoration: 'none',
-			':hover': { color: colors.water },
+			':hover': { color: colors.pacific },
 			marginLeft: '5px',
+			cursor: 'pointer',
 		};
 
-		const hIStyle = Object.assign({}, userInfoStyle, {
+		const headerItemStyle = Object.assign({}, userInfoStyle, {
 			':hover': { color: colors.pacific } }
 		);
-
-		const linkTextStyle = {
-			color: 'inherit',
-		};
+		const linkStyle = { color: 'inherit' };
+		const highlightedStyle = { color: 'inherit', fontWeight: 'bold' };
 
 		return (
-			<div className="container" style={headerStyle}>
-				<div className="row">
-					<div className="twelve columns">
-						<a href="/">
-							<img
-								src={`${location.protocol}//${location.host}/img/logo/dark-blue.svg`}
-								alt="Aquaforces" style={logoStyle} />
-						</a>
-						<a href="/console" style={hIStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
-						<a href="/host" style={hIStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
-						<a href="/play" style={hIStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
-						{this.props.currentUser
-						? <div style={userInfoStyle} key={3}>
-								<span style={linkTextStyle}>Logged in as {this.props.currentUser.displayName}</span>
-								<a onClick={this.logOut} style={logoutStyle}>(Logout)</a>
-							</div>
-						: <PrimaryButton onClick={this.logIn}>Log in</PrimaryButton>
-						}
+			<div style={containerStyle}>
+				<a href="/" style={logoContainerStyle}>
+					<img
+						src={`${location.protocol}//${location.host}/img/logo/dark-blue.svg`}
+						alt="Aquaforces" style={logoStyle} />
+				</a>
+				<a href="/console" style={headerItemStyle} key={0}>
+					<span style={this.props.location === 'console' ? highlightedStyle : linkStyle}>Question Sets</span>
+				</a>
+				<a href="/host" style={headerItemStyle} key={1}>
+					<span style={this.props.location === 'host' ? highlightedStyle : linkStyle}>Host a game</span>
+				</a>
+				<a href="/play" style={headerItemStyle} key={2}><span style={linkStyle}>Join a game</span></a>
+				{this.props.currentUser
+				? <div style={userInfoStyle} key={3}>
+						<span style={linkStyle}>Logged in as {this.props.currentUser.displayName}</span>
+						<a onClick={this.logOut} style={logoutStyle}>(Logout)</a>
 					</div>
-				</div>
+				: <PrimaryButton onClick={this.logIn}>Log in</PrimaryButton>
+				}
 			</div>
 		);
 	}
@@ -93,5 +107,21 @@ export class HeaderRaw extends Component {
 
 HeaderRaw.propTypes = {
 	currentUser: PropTypes.any,
+	location: PropTypes.string.isRequired,
 };
+
+export function UnderHeader({ style }) {
+	let currentStyle = {
+		height: '12vh',
+		width: '100%',
+		minHeight: '60px',
+	};
+	if (style) currentStyle = Object.assign({}, currentStyle, style);
+	return <div style={currentStyle} />;
+}
+
+UnderHeader.propTypes = {
+	style: PropTypes.object,
+};
+
 export const Header = new Radium(HeaderRaw);

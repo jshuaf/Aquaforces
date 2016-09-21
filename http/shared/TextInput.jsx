@@ -8,8 +8,12 @@ class TextInputDisplay extends Component {
 		super(props);
 		this.state = {
 			errorMessage: null,
+			value: this.props.value,
 		};
 		autoBind(this);
+	}
+	componentWillReceiveProps(props) {
+		this.setState({ value: props.value });
 	}
 	onChange() {
 		if (this.props.isComplete && this.props.onComplete) {
@@ -17,6 +21,7 @@ class TextInputDisplay extends Component {
 			if (this.props.isComplete(text)) this.props.onComplete();
 		}
 		if (this.props.onChange) this.props.onChange();
+		this.setState({ value: this.node.value });
 	}
 	error(errorMessage) {
 		this.setState({ errorMessage });
@@ -26,23 +31,30 @@ class TextInputDisplay extends Component {
 	}
 	render() {
 		const containerStyle = {
-			display: 'block',
-			width: this.props.width ? this.props.width : '150px',
+			width: this.props.width || '100%',
+			maxWidth: this.props.maxWidth || '500px',
 		};
 		const labelStyle = {
 			marginBottom: '2%',
-			marginLeft: '1%',
+			display: 'inline-table',
 		};
 		let inputStyle = {
 			backgroundColor: this.state.errorMessage ? '#FDC5C5' : 'transparent',
 			textAlign: 'left',
 			color: colors.water,
-			width: this.props.width ? this.props.width : this.props.placeholder.length * 20 + 50,
-			borderLeft: 'none',
-			borderRight: 'none',
-			borderTop: 'none',
-			borderBottom: '2px solid #19a8a6',
+			width: '100%',
+			borderStyle: 'solid',
+			borderColor: colors.midnight,
+			borderWidth: '0.1px',
+			borderRadius: '9999999px',
 			fontSize: '1.3em',
+			textIndent: '4%',
+			padding: '7px 0px 7px 0px',
+			backgroundSize: '3%',
+			outlineWidth: '0',
+			':focus': {
+				borderColor: colors.pacific,
+			},
 		};
 		const errorContainerStyle = {
 			display: 'flex',
@@ -64,7 +76,7 @@ class TextInputDisplay extends Component {
 
 		const errorDiv = this.state.errorMessage ?
 			<div style={errorContainerStyle}>
-				<img src="../img/icons/exclamation.svg" alt="" style={errorIconStyle} />
+				<img src="/img/icons/exclamation.svg" alt="" style={errorIconStyle} />
 				<span style={errorMessageStyle}>{this.state.errorMessage}</span>
 			</div> : undefined;
 
@@ -73,23 +85,27 @@ class TextInputDisplay extends Component {
 			inputStyle = Object.assign({}, inputStyle, {
 				textIndent: '8%',
 				padding: '7px 0px 7px 0px',
-				backgroundImage: "url('/img/icons/search.svg')",
+				backgroundImage: `url('${this.props.icon}')`,
 				backgroundRepeat: 'no-repeat',
 				backgroundPosition: '2%',
 				backgroundAttachment: 'scroll',
 				backgroundSize: '3%',
+				':focus': {
+					borderColor: colors.pacific,
+					backgroundImage: `url('${this.props.focusedIcon || this.props.icon}')`,
+				},
 			});
 		}
 
 		/* eslint-disable no-unused-vars */
-		const { onComplete, isComplete, width, maxWidth, icon, ...inputProps } = this.props;
+		const { onComplete, isComplete, width, maxWidth, icon, focusedIcon, value, ...inputProps } = this.props;
 		/* eslint-enable no-unused-vars */
 
 		return (
 			<div className="textInput" style={containerStyle}>
 				{this.props.label ? <span style={labelStyle}><b>{this.props.label}</b></span> : null}
 				<input
-					ref={(i) => { this.node = i; }} style={inputStyle} {...inputProps}
+					ref={(i) => { this.node = i; }} style={inputStyle} value={this.state.value || ''} {...inputProps}
 					onChange={this.onChange}
 				/>
 			{errorDiv}
@@ -104,9 +120,11 @@ TextInputDisplay.propTypes = {
 	isComplete: PropTypes.func,
 	onComplete: PropTypes.func,
 	onChange: PropTypes.func,
-	width: PropTypes.number,
+	width: PropTypes.string,
 	maxWidth: PropTypes.string,
 	icon: PropTypes.string,
+	focusedIcon: PropTypes.string,
+	value: PropTypes.string,
 };
 
 const TextInput = new Radium(TextInputDisplay);

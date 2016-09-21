@@ -67,7 +67,7 @@ const parsers = [bodyParser.json(), bodyParser.urlencoded({ extended: true }),
 const head = (req, res, next) => {
 	res.locals.head = fs.readFileSync('./html/a/head.html').toString()
 		.replaceAll('$inhead', `
-			<script src="../${assets.main[0]}"></script>
+			<script src="/${assets.main[0]}"></script>
 			${res.locals.inHead || ''}
 		`)
 		.replaceAll('$title', res.locals.title || 'Aquaforces');
@@ -120,6 +120,12 @@ app.get('/console/*', (req, res, next) => {
 
 app.get('/set/*', (req, res, next) => {
 	res.locals.title = 'Question Set';
+	res.locals.bundle = 'console';
+	next();
+}, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
+
+app.get('/search/*', (req, res, next) => {
+	res.locals.title = 'Search';
 	res.locals.bundle = 'console';
 	next();
 }, head, mountNode, (req, res) => res.send(res.locals.head + res.locals.html + res.locals.foot));
@@ -229,6 +235,10 @@ mongo.connect(config.mongoPath, (err, db) => {
 
 	// Go through the mongodb data and store it server-side
 	while (i--) { db.collection(usedDBCs[i], handleCollection); }
+
+	dbcs.qsets.dropIndexes();
+	dbcs.qsets.createIndex({ '$**': 'text' });
+
 	console.log('Connected to mongodb.'.cyan);
 	// Patch the model based on updates
 	let updatedCount = 0;

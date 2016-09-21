@@ -115,5 +115,14 @@ function gameHost(state = initialGameHostState, action) {
 	}
 }
 
-const gameHostReducer = combineReducers({ gameInfo, boarding, gameHost });
+function currentUser(state = null, action) {
+	switch (action.type) {
+	case actions.AUTHENTICATE_USER:
+		return action.user || state;
+	default:
+		return state;
+	}
+}
+
+const gameHostReducer = combineReducers({ gameInfo, boarding, gameHost, currentUser });
 export default gameHostReducer;

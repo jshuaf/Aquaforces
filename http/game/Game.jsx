@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import GamePlay from './play/GamePlay.jsx';
 import JoinGameForm from './boarding/JoinGameForm.jsx';
-import { Header } from '../shared/Header.jsx';
+import { Header, UnderHeader } from '../shared/Header.jsx';
 
 class GameDisplay extends Component {
 	constructor(props) {
@@ -16,6 +16,7 @@ class GameDisplay extends Component {
 			return (
 				<div>
 					<Header />
+				<UnderHeader />
 					<div className="container">
 						<div className="row">
 							<JoinGameForm socket={this.props.socket} />
@@ -27,6 +28,7 @@ class GameDisplay extends Component {
 			return (
 				<div>
 					<Header />
+					<UnderHeader />
 					<div className="container">
 						<div className="row">
 							<p>You joined the game.</p>

@@ -5,11 +5,11 @@ export default function Spinner() {
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: '100vw',
-		height: '50vh',
+		width: '100%',
+		height: '50%',
 	};
 	return (
-		<div style={centerStyle}>
+		<div style={centerStyle} className="row">
 			<div className="spinner">
 				<div className="bounce1" />
 				<div className="bounce2" />
