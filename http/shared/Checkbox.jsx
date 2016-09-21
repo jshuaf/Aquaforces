@@ -12,7 +12,7 @@ export default class Checkbox extends Component {
 			<div className="checkbox" style={containerStyle}>
 				<input
 					type="checkbox" ref={(n) => { this.node = n; }}
-					onChange={this.props.onChange} required={this.props.required}
+					onChange={() => { this.props.onChange(this.node.checked); }} required={this.props.required}
 				/>
 				<span>{this.props.label}</span>
 			</div>

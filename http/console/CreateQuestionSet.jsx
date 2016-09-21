@@ -5,7 +5,8 @@ import { ActionCreators as changes } from 'redux-undo';
 import EditQuestion from './EditQuestion.jsx';
 import PrimaryButton from '../shared/PrimaryButton.jsx';
 import TextInput from '../shared/TextInput.jsx';
-import { addQuestionInput, editSetTitle } from './actions';
+import Checkbox from '../shared/Checkbox.jsx';
+import { addQuestionInput, editSetTitle, toggleSetPrivacy } from './actions';
 import { submitQuestionSet } from './thunks';
 
 class CreateQuestionSetDisplay extends Component {
@@ -47,11 +48,16 @@ class CreateQuestionSetDisplay extends Component {
 							value={this.props.set.title}
 							ref={(t) => { this.titleInput = t; }}
 							onChange={() => { this.props.editSetTitle(this.titleInput.node.value, this.state.mode); }}
+							placeholder="Set Title"
 						/>
 						<PrimaryButton onClick={this.addQuestion}>Add Question</PrimaryButton>
 						<PrimaryButton onClick={this.saveChanges}>Submit Set</PrimaryButton>
 						<PrimaryButton onClick={this.props.undoLastChange}>Undo</PrimaryButton>
 						<PrimaryButton onClick={this.props.redoLastChange}>Redo</PrimaryButton>
+						<Checkbox
+							label="Private Set" checked={this.props.set.privacy}
+							onChange={(value) => { this.props.toggleSetPrivacy(value, this.state.mode); }}
+						/>
 					</div>
 				{questionGroups.map((questionGroup, index) =>
 					<div className="row" key={index}>
@@ -87,6 +93,8 @@ CreateQuestionSetDisplay.propTypes = {
 	addQuestionInput: PropTypes.func.isRequired,
 	submitQuestionSet: PropTypes.func.isRequired,
 	editSetTitle: PropTypes.func.isRequired,
+	toggleSetPrivacy: PropTypes.func.isRequired,
+	route: PropTypes.any,
 };
 
 const mapStateToProps = (state) => ({ set: state.newQuestionSet.present });
@@ -97,6 +105,7 @@ const mapDispatchToProps = {
 	editSetTitle,
 	undoLastChange: changes.undo,
 	redoLastChange: changes.redo,
+	toggleSetPrivacy,
 };
 
 const CreateQuestionSet = connect(mapStateToProps, mapDispatchToProps)(CreateQuestionSetDisplay);

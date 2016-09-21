@@ -3,6 +3,7 @@ import autoBind from 'react-autobind';
 import Radium from 'radium';
 import colors from '../shared/colors';
 import PrimaryButton from './PrimaryButton.jsx';
+import Spinner from './Spinner.jsx';
 
 const request = require('request');
 /* global sweetAlert:true */
