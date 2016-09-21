@@ -6,7 +6,7 @@ import GameBoarding from './GameBoarding.jsx';
 import Spinner from '../shared/Spinner.jsx';
 import { questionSetPropTypes } from '../console/QuestionSet.jsx';
 import { newGame, startGameRequest } from './actions';
-import { Header, UnderHeader } from '../shared/Header.jsx';
+import { Header } from '../shared/Header.jsx';
 
 class GameHostDisplay extends Component {
 	constructor(props) {
@@ -36,7 +36,6 @@ class GameHostDisplay extends Component {
 			return (
 				<div id="gameHost">
 					<Header />
-					<UnderHeader />
 					<div className="container">
 						<div className="row">
 							<QuestionSetPicker />

@@ -28,48 +28,33 @@ export class HeaderRaw extends Component {
 		});
 	}
 	render() {
-		const containerStyle = {
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'space-around',
-			position: 'fixed',
-			zIndex: 5,
-			width: '100%',
-			height: '11%',
-			minHeight: '60px',
-			backgroundColor: colors.wasabi,
-		};
-
-		const logoContainerStyle = {
-			height: '100%',
-			width: '30%',
-			display: 'flex',
-			alignItems: 'center',
+		const headerStyle = {
+			marginTop: '25px',
+			marginBottom: '25px',
 		};
 
 		const logoStyle = {
-			height: '80%',
-			width: '20%',
-			minWidth: '200px',
+			width: '150px',
+			marginRight: '15px',
 		};
 
 		const userInfoStyle = {
 			height: '80%',
-			display: 'flex',
+			display: 'inline',
 			justifyContent: 'center',
 			alignItems: 'center',
 			textDecoration: 'none',
 			fontSize: '1.3em',
-			color: colors.midnight,
+			marginRight: '15px',
+			color: colors.pacific,
 		};
 
 		const logoutStyle = {
-			color: colors.midnight,
+			color: colors.pacific,
 			fontSize: '1em',
 			textDecoration: 'none',
-			':hover': { color: colors.pacific },
+			':hover': { color: colors.water },
 			marginLeft: '5px',
-			cursor: 'pointer',
 		};
 
 		const headerItemStyle = Object.assign({}, userInfoStyle, {
@@ -81,22 +66,26 @@ export class HeaderRaw extends Component {
 		};
 
 		return (
-			<div style={containerStyle}>
-				<a href="/" style={logoContainerStyle}>
-					<img
-						src={`${location.protocol}//${location.host}/img/logo/dark-blue.svg`}
-						alt="Aquaforces" style={logoStyle} />
-				</a>
-				<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
-				<a href="/host" style={headerItemStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
-				<a href="/play" style={headerItemStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
-				{this.props.currentUser
-				? <div style={userInfoStyle} key={3}>
-						<span style={linkTextStyle}>Logged in as {this.props.currentUser.displayName}</span>
-						<a onClick={this.logOut} style={logoutStyle}>(Logout)</a>
+			<div className="container" style={headerStyle}>
+				<div className="row">
+					<div className="twelve columns">
+						<a href="/">
+							<img
+								src={`${location.protocol}//${location.host}/img/logo/dark-blue.svg`}
+								alt="Aquaforces" style={logoStyle} />
+						</a>
+						<a href="/console" style={headerItemStyle} key={0}><span style={linkTextStyle}>Question Sets</span></a>
+						<a href="/host" style={headerItemStyle} key={1}><span style={linkTextStyle}>Start a game</span></a>
+						<a href="/play" style={headerItemStyle} key={2}><span style={linkTextStyle}>Join a game</span></a>
+						{this.props.currentUser
+						? <div style={userInfoStyle} key={3}>
+								<span style={linkTextStyle}>Logged in as {this.props.currentUser.displayName}</span>
+								<a onClick={this.logOut} style={logoutStyle}>(Logout)</a>
+							</div>
+						: <PrimaryButton onClick={this.logIn}>Log in</PrimaryButton>
+						}
 					</div>
-				: <PrimaryButton onClick={this.logIn}>Log in</PrimaryButton>
-				}
+				</div>
 			</div>
 		);
 	}
@@ -105,18 +94,4 @@ export class HeaderRaw extends Component {
 HeaderRaw.propTypes = {
 	currentUser: PropTypes.any,
 };
-
-export function UnderHeader({ style }) {
-	let currentStyle = {
-		height: '12vh',
-		width: '100%',
-	};
-	if (style) currentStyle = Object.assign({}, currentStyle, style);
-	return <div style={currentStyle} />;
-}
-
-UnderHeader.propTypes = {
-	style: PropTypes.object,
-};
-
 export const Header = new Radium(HeaderRaw);
