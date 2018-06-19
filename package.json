@@ -42,7 +42,7 @@
     "history": "^2.0.1",
     "joi": "^9.0.4",
     "json-loader": "^0.5.4",
-    "jsonwebtoken": "^7.1.9",
+    "jsonwebtoken": "^8.0.0",
     "mongodb": "^2.1.18",
     "radium": "^0.18.1",
     "react": "^15.3.0",
