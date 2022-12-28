@@ -28,7 +28,7 @@
     "npm": "3.10.3"
   },
   "dependencies": {
-    "babel-loader": "^6.2.4",
+    "babel-loader": "^8.2.4",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
@@ -42,7 +42,7 @@
     "history": "^2.0.1",
     "joi": "^9.0.4",
     "json-loader": "^0.5.4",
-    "jsonwebtoken": "^7.1.9",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^2.1.18",
     "radium": "^0.18.1",
     "react": "^15.3.0",
@@ -58,7 +58,7 @@
     "redux-thunk": "^2.1.0",
     "redux-undo": "^1.0.0-beta9",
     "request": "^2.74.0",
-    "webpack": "^1.13.1",
+    "webpack": "^5.0.0",
     "winston": "^2.2.0",
     "ws": "^1.1.1",
     "yield-yield-yield": "^1.0.0"
